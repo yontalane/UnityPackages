@@ -18,13 +18,19 @@ namespace DEF
 
         public FloatRange() : this(0f) { }
 
+        /// <summary>
+        /// The midpoint between the range's min and max values.
+        /// </summary>
         public float Mid => Mathf.Lerp(min, max, 0.5f);
 
+        /// <summary>
+        /// A random float between the range's min and max values.
+        /// </summary>
         public float Random => Mathf.Lerp(min, max, UnityEngine.Random.value);
 
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
     }
-    
+
     [System.Serializable]
     public class IntRange
     {
@@ -41,8 +47,14 @@ namespace DEF
 
         public IntRange() : this(0) { }
 
+        /// <summary>
+        /// The midpoint (rounded to the nearest integer) between the range's min and max values.
+        /// </summary>
         public int Mid => Mathf.RoundToInt(Mathf.Lerp((float)min, (float)max, 0.5f));
 
+        /// <summary>
+        /// A random int between the range's min and max values.
+        /// </summary>
         public int Random => Mathf.RoundToInt(Mathf.Lerp((float)min, (float)max, UnityEngine.Random.value));
 
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
