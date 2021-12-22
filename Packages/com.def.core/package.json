@@ -1,0 +1,24 @@
+{
+  "name": "com.def.core",
+  "version": "1.0.0",
+  "displayName": "Core (DEF)",
+  "description": "A useful library for personal projects.",
+  "unity": "2020.3",
+  "unityRelease": "25f1",
+  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/tree/main/Packages/Core/Documentation~/index.html",
+  "keywords": [
+    "core",
+    "framework",
+    "utils",
+    "util",
+    "utility",
+    "utilities",
+    "math"
+  ],
+  "author": {
+    "name": "David Frankel",
+    "email": "unitypackages@davidfrankel.com",
+    "url": "https://www.davidfrankel.com/tech-art/"
+  },
+  "type": "library"
+}
