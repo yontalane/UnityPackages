@@ -5,7 +5,7 @@
   "description": "A useful library for personal projects.",
   "unity": "2020.3",
   "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/tree/main/Packages/Core/Documentation~/index.html",
+  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.core/Documentation~/index.md",
   "keywords": [
     "core",
     "framework",
