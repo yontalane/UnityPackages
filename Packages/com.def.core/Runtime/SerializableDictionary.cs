@@ -13,10 +13,14 @@ namespace DEF
     }
 
     [Serializable]
-    public class SerializableDictionary<T, U> : IEnumerator, IEnumerable
+    public class DictionaryBase_DoNotUse { }
+
+    [Serializable]
+    public class SerializableDictionary<T, U> : DictionaryBase_DoNotUse, IEnumerator, IEnumerable
     {
         [SerializeField] private List<T> m_keys = new List<T>();
         [SerializeField] private List<U> m_values = new List<U>();
+        [HideInInspector, SerializeField] private bool m_editorExpanded = false;
 
         #region Get
 
