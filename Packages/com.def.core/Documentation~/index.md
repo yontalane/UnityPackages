@@ -7,8 +7,7 @@ In order to be serialized in the Inspector, SerializableDictionary needs to be i
 
 ```
 [System.Serializable]
-public class StringTextureDictionary : SerializableDictionary<string, Texture>
-{ }
+public class StringTextureDictionary : SerializableDictionary<string, Texture> { }
 
 public StringTextureDictionary dict = new StringTextureDictionary();
 ```

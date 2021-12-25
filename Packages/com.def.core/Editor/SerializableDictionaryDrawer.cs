@@ -3,34 +3,37 @@ using UnityEngine;
 
 namespace DEF
 {
-    [CustomPropertyDrawer(typeof(DictionaryBase_DoNotUse), true)]
+    [CustomPropertyDrawer(typeof(SerializableDictionaryBase_DoNotUse), true)]
     public class SerializableDictionaryDrawer : PropertyDrawer
     {
         private const float MARGIN = 3f;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (property.type == typeof(DictionaryBase_DoNotUse).Name) return;
+            SerializedProperty keysProperty = property.FindPropertyRelative("m_keys");
+            SerializedProperty valuesProperty = property.FindPropertyRelative("m_values");
+
+            if (keysProperty == null || valuesProperty == null)
+            {
+                Debug.LogError($"Attempting to use object type {typeof(SerializableDictionaryBase_DoNotUse).Name}. Do not do this.");
+                return;
+            }
 
             EditorGUI.BeginProperty(position, label, property);
 
             Rect expandedRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            SerializedProperty expandedProperty = property.FindPropertyRelative("m_editorExpanded");
-            bool expandedValue = expandedProperty.boolValue;
+            bool expandedValue = EditorPrefs.GetBool(ExpandedPrefKey(property), false);
             EditorGUI.BeginChangeCheck();
             expandedValue = EditorGUI.Foldout(expandedRect, expandedValue, new GUIContent(label.text, label.tooltip));
             if (EditorGUI.EndChangeCheck())
             {
-                expandedProperty.boolValue = expandedValue;
-                EditorUtility.SetDirty(property.serializedObject.targetObject);
+                EditorPrefs.SetBool(ExpandedPrefKey(property), expandedValue);
             }
 
             if (expandedValue)
             {
                 EditorGUI.indentLevel++;
 
-                SerializedProperty keysProperty = property.FindPropertyRelative("m_keys");
-                SerializedProperty valuesProperty = property.FindPropertyRelative("m_values");
                 int keysCount = keysProperty.arraySize;
                 int valuesCount = valuesProperty.arraySize;
                 int count = Mathf.Min(keysCount, valuesCount);
@@ -47,16 +50,19 @@ namespace DEF
                     EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
 
-                Rect leftRect = new Rect(position.x, sizeRect.y + MARGIN, position.width * 0.5f, EditorGUIUtility.singleLineHeight);
-                Rect rightRect = new Rect(position.x + position.width * 0.5f, sizeRect.y + MARGIN, position.width * 0.5f, EditorGUIUtility.singleLineHeight);
+                Rect leftRect = new Rect(position.x, sizeRect.y + MARGIN, position.width * 0.333f, EditorGUIUtility.singleLineHeight);
+                Rect middleRect = new Rect(position.x + position.width * 0.333f, sizeRect.y + MARGIN, position.width * 0.333f, EditorGUIUtility.singleLineHeight);
+                Rect rightRect = new Rect(position.x + position.width * 0.667f, sizeRect.y + MARGIN, position.width * 0.333f, EditorGUIUtility.singleLineHeight);
 
                 for (int i = 0; i < count; i++)
                 {
                     leftRect.y += LineHeightWithMargin;
+                    middleRect.y += LineHeightWithMargin;
                     rightRect.y += LineHeightWithMargin;
                     SerializedProperty keyProperty = keysProperty.GetArrayElementAtIndex(i);
                     SerializedProperty valueProperty = valuesProperty.GetArrayElementAtIndex(i);
-                    EditorGUI.PropertyField(leftRect, keyProperty, GUIContent.none);
+                    EditorGUI.LabelField(leftRect, $"Element {i}");
+                    EditorGUI.PropertyField(middleRect, keyProperty, GUIContent.none);
                     EditorGUI.PropertyField(rightRect, valueProperty, GUIContent.none);
                 }
 
@@ -68,13 +74,18 @@ namespace DEF
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            SerializedProperty expandedProperty = property.FindPropertyRelative("m_editorExpanded");
-            bool expandedValue = expandedProperty.boolValue;
+            SerializedProperty keysProperty = property.FindPropertyRelative("m_keys");
+            SerializedProperty valuesProperty = property.FindPropertyRelative("m_values");
+
+            if (keysProperty == null || valuesProperty == null)
+            {
+                return 0f;
+            }
+
+            bool expandedValue = EditorPrefs.GetBool(ExpandedPrefKey(property), false);
 
             if (!expandedValue) return EditorGUIUtility.singleLineHeight;
 
-            SerializedProperty keysProperty = property.FindPropertyRelative("m_keys");
-            SerializedProperty valuesProperty = property.FindPropertyRelative("m_values");
             int keysCount = keysProperty.arraySize;
             int valuesCount = valuesProperty.arraySize;
             int count = Mathf.Min(keysCount, valuesCount);
@@ -83,5 +94,7 @@ namespace DEF
         }
 
         private float LineHeightWithMargin => EditorGUIUtility.singleLineHeight + MARGIN;
+
+        private string ExpandedPrefKey(SerializedProperty property) => $"{property.type}_{property.serializedObject.targetObject.GetType()}_Expanded";
     }
 }
