@@ -8,18 +8,16 @@ namespace DEF.Menus.Item
     {
         private void OnEnable()
         {
-            if (MenuInput != null)
-            {
-                MenuInput.OnInputEvent += OnInputEventInternal;
-            }
+            if (MenuInput == null) return;
+
+            MenuInput.OnInputEvent += OnInputEventInternal;
         }
 
         private void OnDisable()
         {
-            if (MenuInput != null)
-            {
-                MenuInput.OnInputEvent -= OnInputEventInternal;
-            }
+            if (MenuInput == null) return;
+
+            MenuInput.OnInputEvent -= OnInputEventInternal;
         }
 
         public bool IsSelected => MenuUtility.EventSystem.currentSelectedGameObject == gameObject;

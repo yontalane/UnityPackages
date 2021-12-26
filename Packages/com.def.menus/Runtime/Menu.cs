@@ -22,18 +22,28 @@ namespace DEF.Menus
         public delegate void ClickDelegate(MenuActionEvent e);
         public static ClickDelegate OnClick = null;
 
+        [Tooltip("The Selectable items within this Menu. If left unassigned, the Menu will attempt to find them at runtime.")]
         public List<Selectable> selectables = new List<Selectable>();
-        [Min(0)] public int activeSelectable = 0;
+        [Min(0)]
+        [Tooltip("The initially selected Selectable.")]
+        public int activeSelectable = 0;
         private int m_originalActiveSelectable = 0;
+        [Tooltip("Use navigation?")]
         public bool useNavigation = true;
+        [Tooltip("Wrap navigation? Attempting to select the next item while selecting the last item in a list will select the first item if wrapping is enabled. Otherwise, it will do nothing.")]
         public bool wrapNavigation = true;
+        [Tooltip("If you exit this Menu and then return to it, should the item that had been selected still be selected?")]
         public bool rememberHighlight = true;
         public bool IsActive { get; private set; } = false;
+
         private bool m_listenersWereAdded = false;
         private ScrollRect m_scrollRect = null;
 
         [Space]
-        [SerializeField] private Selectable m_addableItem = null;
+
+        [SerializeField]
+        [Tooltip("If you can add new items to this Menu at runtime, this Selectable will be used as the template.")]
+        private Selectable m_addableItem = null;
 
         public void Initialize()
         {
@@ -41,14 +51,13 @@ namespace DEF.Menus
 
             m_scrollRect = GetComponent<ScrollRect>();
 
-            if (m_addableItem != null)
+            if (m_addableItem == null) return;
+
+            if (m_addableItem.GetComponent<AddedMenuItem>() == null)
             {
-                if (m_addableItem.GetComponent<AddedMenuItem>() == null)
-                {
-                    m_addableItem.gameObject.AddComponent<AddedMenuItem>();
-                }
-                m_addableItem.gameObject.SetActive(false);
+                m_addableItem.gameObject.AddComponent<AddedMenuItem>();
             }
+            m_addableItem.gameObject.SetActive(false);
         }
 
         public void Activate(bool isActive)
@@ -151,14 +160,13 @@ namespace DEF.Menus
 
         private void HighlightActiveSelectable()
         {
-            if (activeSelectable >= 0 && activeSelectable < selectables.Count)
-            {
-                selectables[activeSelectable].Highlight();
-                if (m_scrollRect != null)
-                {
-                    ScrollTo(activeSelectable);
-                }
-            }
+            if (activeSelectable < 0 || activeSelectable >= selectables.Count) return;
+
+            selectables[activeSelectable].Highlight();
+
+            if (m_scrollRect == null) return;
+
+            ScrollTo(activeSelectable);
         }
 
         public void HighlightNext()
@@ -305,12 +313,11 @@ namespace DEF.Menus
 
         public void Add(Action<Selectable> selectableCreator, Selectable targetLocation = null, bool andScrollTo = true)
         {
-            if (m_addableItem != null)
-            {
-                Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
-                selectableCreator(instance);
-                Add(instance, targetLocation, andScrollTo);
-            }
+            if (m_addableItem == null) return;
+
+            Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
+            selectableCreator(instance);
+            Add(instance, targetLocation, andScrollTo);
         }
 
         public void Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true)
@@ -343,11 +350,10 @@ namespace DEF.Menus
                 targetIndex = 0;
                 for (int i = selectables.Count - 1; i >= 0; i--)
                 {
-                    if (selectables[i].GetComponent<AddedMenuItem>() != null)
-                    {
-                        targetIndex = i + 1;
-                        break;
-                    }
+                    if (selectables[i].GetComponent<AddedMenuItem>() == null) continue;
+
+                    targetIndex = i + 1;
+                    break;
                 }
                 if (targetIndex == 0 && selectables.Count > 0)
                 {

@@ -19,7 +19,9 @@ namespace DEF.Menus
         public delegate void InputEventHandler(MenuInputEvent e);
         public InputEventHandler OnInputEvent = null;
 
-        [SerializeField] private bool m_allowHoldDownMove = false;
+        [SerializeField]
+        [Tooltip("If this is set to true, you can hold down a navigation button to continually select the next item in the Menu. Otherwise, you need to repeatedly press the navigation button.")]
+        private bool m_allowHoldDownMove = false;
 
         private Vector2 m_move = new Vector2();
         private bool m_readyToMove = true;

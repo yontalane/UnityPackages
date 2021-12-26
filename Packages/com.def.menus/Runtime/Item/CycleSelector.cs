@@ -7,23 +7,40 @@ namespace DEF.Menus.Item
     [DisallowMultipleComponent]
     public sealed class CycleSelector : InteractableMenuItem
     {
-        [SerializeField] private Text m_text = null;
-        [SerializeField, Min(0)] private int m_index = 0;
-        public int Index
-        {
-            get => m_index;
-            private set => m_index = value;
-        }
+        [Header("Info")]
 
-        [SerializeField] private string[] m_items = new string[0];
+        [SerializeField]
+        [Tooltip("The options within the CycleSelector.")]
+        private string[] m_items = new string[0];
         public string[] Items
         {
             get => m_items;
             set => m_items = value;
         }
 
-        [SerializeField] private Button m_previousButton = null;
-        [SerializeField] private Button m_nextButton = null;
+        [SerializeField]
+        [Min(0)]
+        [Tooltip("The initially selected option.")]
+        private int m_index = 0;
+        public int Index
+        {
+            get => m_index;
+            private set => m_index = value;
+        }
+
+        [Header("References")]
+
+        [SerializeField]
+        [Tooltip("If left null, defaults to a Text component attached to this GameObject.")]
+        private Text m_text = null;
+
+        [SerializeField]
+        [Tooltip("If you assign your button to this field, CycleSelector will set up the OnClick event, so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
+        private Button m_previousButton = null;
+
+        [SerializeField]
+        [Tooltip("If you assign your button to this field, CycleSelector will set up the OnClick event, so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
+        private Button m_nextButton = null;
 
         private void Start()
         {
@@ -72,6 +89,9 @@ namespace DEF.Menus.Item
             }
         }
 
+        /// <summary>
+        /// Select the previous option.
+        /// </summary>
         public void SelectPrevious()
         {
             Index--;
@@ -82,6 +102,9 @@ namespace DEF.Menus.Item
             RefreshText();
         }
 
+        /// <summary>
+        /// Select the next option.
+        /// </summary>
         public void SelectNext()
         {
             Index++;
@@ -92,6 +115,9 @@ namespace DEF.Menus.Item
             RefreshText();
         }
 
+        /// <summary>
+        /// The currently selected option.
+        /// </summary>
         public string Value => Items.Length > Index ? Items[Index] : "";
 
         private void RefreshText() => m_text.text = Value;

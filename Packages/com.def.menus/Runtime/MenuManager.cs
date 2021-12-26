@@ -19,19 +19,30 @@ namespace DEF.Menus
         [System.Serializable]
         public struct Connection
         {
-            public string sourceButton;
-            public string sourceMenu;
-            public string targetMenu;
+            [Tooltip("Source button.")] public string sourceButton;
+            [Tooltip("Source menu.")] public string sourceMenu;
+            [Tooltip("Target menu.")] public string targetMenu;
         }
 
         private const string ANIMATOR_PARAMETER = "Active Menu";
 
-        [SerializeField] private Menu[] m_menus = new Menu[0];
-        [SerializeField, Min(0)] private int m_activeMenu = 0;
+        [SerializeField]
+        [Tooltip("If unassigned, MenuManager will populate at runtime with all child Menu components. However, it will miss any children that are inactive in the hierarchy.")]
+        private Menu[] m_menus = new Menu[0];
+
+        [Space]
+
+        [Min(0)]
+        [SerializeField]
+        [Tooltip("The initially active Menu.")]
+        private int m_activeMenu = 0;
         private Animator m_animator = null;
 
         [Space]
-        [SerializeField] private Connection[] m_connections = new Connection[0];
+
+        [SerializeField]
+        [Tooltip("Manage buttons that navigate from one Menu to the next.")]
+        private Connection[] m_connections = new Connection[0];
 
         private void OnEnable()
         {
@@ -55,15 +66,23 @@ namespace DEF.Menus
             {
                 m_menus = GetComponentsInChildren<Menu>();
             }
-            foreach (Menu menu in m_menus)
+            for (int i = 0; i < m_menus.Length; i++)
             {
-                menu.Initialize();
+                m_menus[i].Initialize();
+                if (i == m_activeMenu && m_menus[i].activeSelectable >= 0 && m_menus[i].activeSelectable < m_menus[i].selectables.Count && MenuUtility.EventSystem != null)
+                {
+                    MenuUtility.EventSystem.firstSelectedGameObject = m_menus[i].selectables[m_menus[i].activeSelectable].gameObject;
+                }
             }
 
             ActivateMenu(m_activeMenu);
         }
 
         #region Menu
+
+        /// <summary>
+        /// Search for a Menu within this MenuManager by name. If it exists, set it to <c>menu</c> and return true. Otherwise, return false.
+        /// </summary>
         public bool TryGetMenu(string name, out Menu menu)
         {
             if (m_menus.Length == 0)
@@ -81,6 +100,9 @@ namespace DEF.Menus
             return false;
         }
 
+        /// <summary>
+        /// Get the Menu called <c>name</c> within this MenuManager.
+        /// </summary>
         public Menu GetMenu(string name) => TryGetMenu(name, out Menu menu) ? menu : null;
 
         private void ActivateMenu(int newActiveMenu)
@@ -129,9 +151,11 @@ namespace DEF.Menus
                 return null;
             }
         }
+
         #endregion
 
         #region Input
+
         private void OnInputEvent(MenuInputEvent e)
         {
             if (e.move.y < 0)
@@ -178,6 +202,7 @@ namespace DEF.Menus
         }
 
         private void OnSelectMenuItem(Menu menu, Selectable item) => OnMenuItemSelect?.Invoke(menu, item);
+
         #endregion
     }
 }

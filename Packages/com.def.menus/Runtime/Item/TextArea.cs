@@ -7,8 +7,15 @@ namespace DEF.Menus.Item
     public sealed class TextArea : InteractableMenuItem
     {
         private ScrollRect m_scrollRect = null;
-        [SerializeField, Min(0f)] private float m_speed = 2.5f;
-        [SerializeField] private bool m_reverse = false;
+
+        [Min(0f)]
+        [SerializeField]
+        [Tooltip("Scroll speed.")]
+        private float m_speed = 2.5f;
+
+        [SerializeField]
+        [Tooltip("Invert Y axis.")]
+        private bool m_reverse = false;
 
         private void Start() => m_scrollRect = GetComponent<ScrollRect>();
 
