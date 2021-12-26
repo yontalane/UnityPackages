@@ -5,7 +5,7 @@
   "description": "A menu navigation library that supports both controller and mouse and keyboard.",
   "unity": "2020.3",
   "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.menu/Documentation~/index.md",
+  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.menus/Documentation~/index.md",
   "keywords": [
     "menu",
     "framework",
