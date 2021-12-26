@@ -1,0 +1,35 @@
+{
+  "name": "com.def.menus",
+  "version": "1.0.0",
+  "displayName": "Menus (DEF)",
+  "description": "A menu navigation library that supports both controller and mouse and keyboard.",
+  "unity": "2020.3",
+  "unityRelease": "25f1",
+  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.menu/Documentation~/index.md",
+  "keywords": [
+    "menu",
+    "framework",
+    "utils",
+    "util",
+    "utility",
+    "utilities",
+    "navigation",
+    "ui",
+    "controller",
+    "gamepad",
+    "input"
+  ],
+  "author": {
+    "name": "David Frankel",
+    "email": "unitypackages@davidfrankel.com",
+    "url": "https://www.davidfrankel.com/tech-art/"
+  },
+  "samples": [
+    {
+      "displayName": "Menus Controller Demo",
+      "description": "Contains a sample implementation of the menu controller.",
+      "path": "Samples~/MenusControllerDemo"
+    }
+  ],
+  "type": "library"
+}
