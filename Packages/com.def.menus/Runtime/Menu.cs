@@ -1,4 +1,4 @@
-using System;
+                           using System;
 using System.Collections.Generic;
 using System.Linq;
 using DEF.Menus.Item;
@@ -30,7 +30,7 @@ namespace DEF.Menus
         private int m_originalActiveSelectable = 0;
         [Tooltip("Use navigation?")]
         public bool useNavigation = true;
-        [Tooltip("Wrap navigation? Attempting to select the next item while selecting the last item in a list will select the first item if wrapping is enabled. Otherwise, it will do nothing.")]
+        [Tooltip("Wrap navigation? If wrapping is on, clicking next while selecting the last item moves your selection to the first item. Otherwise, it will do nothing.")]
         public bool wrapNavigation = true;
         [Tooltip("If you exit this Menu and then return to it, should the item that had been selected still be selected?")]
         public bool rememberHighlight = true;

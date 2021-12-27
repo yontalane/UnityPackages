@@ -11,6 +11,8 @@ A menu navigation library that supports both controller and mouse and keyboard.
 
 ### Roadmap
 
+* Confirm that MenuNavigationOverride works in both directions.
 * Don't require the PlayerInput component.
+* Allow for non-vertical orientation.
 * Confirm that DEF.Menus plays nice with DEF.Dialog.
 * Add an intuitive, custom editor for MenuManager.

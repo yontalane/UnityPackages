@@ -35,11 +35,11 @@ namespace DEF.Menus.Item
         private Text m_text = null;
 
         [SerializeField]
-        [Tooltip("If you assign your button to this field, CycleSelector will set up the OnClick event, so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
+        [Tooltip("If you assign a button to this field, CycleSelector will set up the OnClick event so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
         private Button m_previousButton = null;
 
         [SerializeField]
-        [Tooltip("If you assign your button to this field, CycleSelector will set up the OnClick event, so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
+        [Tooltip("If you assign a button to this field, CycleSelector will set up the OnClick event so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
         private Button m_nextButton = null;
 
         private void Start()
