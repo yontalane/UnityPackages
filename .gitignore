@@ -72,3 +72,6 @@ crashlytics-build.properties
 
 .DS_Store
 Assets/.DS_Store
+
+# Override global gitignore to allow files ending in tilde
+!*~
