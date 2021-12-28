@@ -6,6 +6,9 @@
   "unity": "2020.3",
   "unityRelease": "25f1",
   "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.menus/Documentation~/index.md",
+  "dependencies": {
+    "com.def.core": "1.0.0"
+  },
   "keywords": [
     "menu",
     "framework",

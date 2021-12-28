@@ -1,41 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DEF.Menus
 {
     public static class MenuUtility
     {
-        private static EventSystem m_eventSystem = null;
-
-        /// <summary>
-        /// The active scene's EventSystem.
-        /// </summary>
-        public static EventSystem EventSystem
-        {
-            get
-            {
-                if (m_eventSystem == null)
-                {
-                    m_eventSystem = Object.FindObjectOfType<EventSystem>();
-                }
-                return m_eventSystem;
-            }
-        }
-
-        /// <summary>
-        /// Visually select the target Selectable.
-        /// </summary>
-        public static void Highlight(this Selectable selectable)
-        {
-            selectable.Select();
-            selectable.OnSelect(null);
-
-            if (EventSystem == null) return;
-
-            EventSystem.SetSelectedGameObject(selectable.gameObject);
-        }
-
         /// <summary>
         /// Is the target transform a descendent of <c>possibleParent</c> within the hierarchy?
         /// </summary>

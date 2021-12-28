@@ -2,6 +2,7 @@
     "name": "DEF.Menus.Runtime",
     "rootNamespace": "DEF.Menus",
     "references": [
+        "GUID:8579dca4301da4fdb94fc49558ddf5f5",
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],

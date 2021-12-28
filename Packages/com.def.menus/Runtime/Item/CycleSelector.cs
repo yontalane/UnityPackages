@@ -69,7 +69,7 @@ namespace DEF.Menus.Item
             {
                 if (m_previousButton != null)
                 {
-                    ExecuteEvents.Execute(m_previousButton.gameObject, new BaseEventData(MenuUtility.EventSystem), ExecuteEvents.submitHandler);
+                    ExecuteEvents.Execute(m_previousButton.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
                 }
                 else
                 {
@@ -80,7 +80,7 @@ namespace DEF.Menus.Item
             {
                 if (m_nextButton != null)
                 {
-                    ExecuteEvents.Execute(m_nextButton.gameObject, new BaseEventData(MenuUtility.EventSystem), ExecuteEvents.submitHandler);
+                    ExecuteEvents.Execute(m_nextButton.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DEF.Menus.Item
@@ -20,7 +21,7 @@ namespace DEF.Menus.Item
             MenuInput.OnInputEvent -= OnInputEventInternal;
         }
 
-        public bool IsSelected => MenuUtility.EventSystem.currentSelectedGameObject == gameObject;
+        public bool IsSelected => EventSystem.current.currentSelectedGameObject == gameObject;
 
         private void OnInputEventInternal(MenuInputEvent e)
         {

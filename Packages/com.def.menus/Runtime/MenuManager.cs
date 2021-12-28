@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DEF.Menus
@@ -69,9 +70,9 @@ namespace DEF.Menus
             for (int i = 0; i < m_menus.Length; i++)
             {
                 m_menus[i].Initialize();
-                if (i == m_activeMenu && m_menus[i].activeSelectable >= 0 && m_menus[i].activeSelectable < m_menus[i].selectables.Count && MenuUtility.EventSystem != null)
+                if (i == m_activeMenu && m_menus[i].activeSelectable >= 0 && m_menus[i].activeSelectable < m_menus[i].selectables.Count && EventSystem.current != null)
                 {
-                    MenuUtility.EventSystem.firstSelectedGameObject = m_menus[i].selectables[m_menus[i].activeSelectable].gameObject;
+                    EventSystem.current.firstSelectedGameObject = m_menus[i].selectables[m_menus[i].activeSelectable].gameObject;
                 }
             }
 
