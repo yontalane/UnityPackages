@@ -16,6 +16,7 @@ namespace DEF.Menus
         public Menu menu;
     }
 
+    [AddComponentMenu("DEF/Menus/Menu")]
     [DisallowMultipleComponent]
     public sealed class Menu : MenuComponent
     {
@@ -75,7 +76,7 @@ namespace DEF.Menus
                 {
                     m_addableItem.gameObject.SetActive(true);
                 }
-                selectables = GetComponentsInChildren<Selectable>().ToList();
+                selectables = GetComponentsInChildren<Selectable>(true).ToList();
                 if (m_addableItem != null)
                 {
                     m_addableItem.gameObject.SetActive(false);

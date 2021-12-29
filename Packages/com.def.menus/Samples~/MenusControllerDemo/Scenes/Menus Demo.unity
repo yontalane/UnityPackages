@@ -5158,11 +5158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893f5a9a15e1e45c5844b11dafbb8c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_menus:
-  - {fileID: 2043439110}
-  - {fileID: 1995219634}
-  - {fileID: 341026112}
-  - {fileID: 357501311}
+  m_menus: []
   m_activeMenu: 0
   m_connections:
   - sourceButton: About Button

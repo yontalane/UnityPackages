@@ -10,7 +10,9 @@ namespace DEF.Menus
         public string buttonName = "";
     }
 
-    [DisallowMultipleComponent, RequireComponent(typeof(PlayerInput))]
+    [AddComponentMenu("DEF/Menus/Input")]
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(PlayerInput))]
     public sealed class MenuInput : MonoBehaviour
     {
         private const float DEAD_ZONE = 0.35f;

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace DEF.Demos
 {
+    [AddComponentMenu("DEF/Demos/Menus")]
     public class InventoryManager : MonoBehaviour
     {
         #region Variables

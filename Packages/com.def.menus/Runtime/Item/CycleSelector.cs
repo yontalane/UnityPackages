@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace DEF.Menus.Item
 {
+    [AddComponentMenu("DEF/Menus/Items/Cycle Selector")]
     [DisallowMultipleComponent]
     public sealed class CycleSelector : InteractableMenuItem
     {

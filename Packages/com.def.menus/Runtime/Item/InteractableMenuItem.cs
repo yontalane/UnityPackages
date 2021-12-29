@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 namespace DEF.Menus.Item
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(Selectable))]
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(Selectable))]
     public abstract class InteractableMenuItem : MenuComponent
     {
         private void OnEnable()

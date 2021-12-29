@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 namespace DEF.Menus
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(MenuInput))]
+    [AddComponentMenu("DEF/Menus/Manager")]
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(MenuInput))]
     public sealed class MenuManager : MenuComponent
     {
         public delegate void ActivateMenuHandler(Menu menu);
@@ -28,7 +30,7 @@ namespace DEF.Menus
         private const string ANIMATOR_PARAMETER = "Active Menu";
 
         [SerializeField]
-        [Tooltip("If unassigned, MenuManager will populate at runtime with all child Menu components. However, it will miss any children that are inactive in the hierarchy.")]
+        [Tooltip("If unassigned, MenuManager will populate at runtime with all child Menu components.")]
         private Menu[] m_menus = new Menu[0];
 
         [Space]
@@ -65,7 +67,7 @@ namespace DEF.Menus
 
             if (m_menus.Length == 0)
             {
-                m_menus = GetComponentsInChildren<Menu>();
+                m_menus = GetComponentsInChildren<Menu>(true);
             }
             for (int i = 0; i < m_menus.Length; i++)
             {

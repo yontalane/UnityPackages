@@ -10,7 +10,17 @@
       "version": "file:com.def.menus",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.def.core": "1.0.0"
+      }
+    },
+    "com.def.query": {
+      "version": "file:com.def.query",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.def.core": "1.0.0"
+      }
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",

@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 namespace DEF.Menus.Item
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(ScrollRect))]
+    [AddComponentMenu("DEF/Menus/Items/Text Area")]
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(ScrollRect))]
     public sealed class TextArea : InteractableMenuItem
     {
         private ScrollRect m_scrollRect = null;
