@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace DEF.Dialog
 {
+    [AddComponentMenu("DEF/Dialog/Dialog Agent")]
     public class DialogAgent : DialogResponder
     {
         private const string STATIC_ID = "Static Dialog";
@@ -17,10 +19,25 @@ namespace DEF.Dialog
         public string ID { get; private set; } = "";
         public DialogData Data { get; private set; } = null;
 
-        [SerializeField] private TextAsset m_json = null;
-        [SerializeField] private string m_staticText = "";
-        [SerializeField] private KeywordPair[] m_keywords = new KeywordPair[0];
+        [Header("Dialog Script Data")]
 
+        [SerializeField]
+        [Tooltip("A complex dialog script. Used to generate DialogData.")]
+        private TextAsset m_json = null;
+
+        [SerializeField]
+        [Tooltip("A single, unchanging line of dialog. Used in place of a complex script for simple things like signs.")]
+        private string m_staticText = "";
+
+        [Header("Keyword Replacement")]
+
+        [SerializeField]
+        [Tooltip("Text to replace keywords in dialog.")]
+        private KeywordPair[] m_keywords = new KeywordPair[0];
+
+        /// <summary>
+        /// If the <c>m_json</c> field has been assigned, use that to generate DialogData. Otherwise, use <c>m_staticText</c>.
+        /// </summary>
         private void Awake()
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
@@ -32,12 +49,18 @@ namespace DEF.Dialog
             }
         }
 
+        /// <summary>
+        /// Generate DialogData using JSON.
+        /// </summary>
         public void Initialize(string id, string json)
         {
             ID = id;
             Data = JsonUtility.FromJson<DialogData>(json);
         }
 
+        /// <summary>
+        /// Generate DialogData using a non-JSON string.
+        /// </summary>
         public void InitializeStatic(string speaker, string text)
         {
             ID = STATIC_ID;
@@ -50,25 +73,22 @@ namespace DEF.Dialog
             Data.nodes[0].lines[0].text = text;
         }
 
-        public void InitializeStatic(string text)
-        {
-            InitializeStatic("", text);
-        }
+        /// <summary>
+        /// Generate DialogData using a non-JSON string.
+        /// </summary>
+        public void InitializeStatic(string text) => InitializeStatic("", text);
 
-        public override bool DialogFunction(string call, string parameter, out string result)
-        {
-            result = null;
-            return false;
-        }
-
+        /// <summary>
+        /// Use <c>m_keywords</c> to replace a keyword in dialog script.
+        /// </summary>
         public override bool GetKeyword(string key, out string result)
         {
-            foreach (KeywordPair keywordPair in m_keywords)
-                if (keywordPair.key.Equals(key))
-                {
-                    result = keywordPair.value;
-                    return true;
-                }
+            foreach (KeywordPair keywordPair in m_keywords.Where(keywordPair => keywordPair.key.Equals(key)))
+            {
+                result = keywordPair.value;
+                return true;
+            }
+
             result = null;
             return false;
         }

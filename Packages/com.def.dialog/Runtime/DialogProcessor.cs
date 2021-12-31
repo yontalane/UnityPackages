@@ -6,16 +6,14 @@ using UnityEngine.Events;
 namespace DEF.Dialog
 {
     [DisallowMultipleComponent]
-    public class DialogProcessor : DialogResponder
+    [AddComponentMenu("DEF/Dialog/Dialog Processor")]
+    public sealed class DialogProcessor : DialogResponder
     {
         public delegate void InitiateDialogDelegate();
         public delegate void ExitDialogDelegate();
 
         [Serializable]
-        class LineCallback : UnityEvent<LineData, Action<string>, Func<string, string>>
-        {
-
-        }
+        class LineCallback : UnityEvent<LineData, Action<string>, Func<string, string>> { }
 
         public enum SpeakerType
         {

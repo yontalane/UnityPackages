@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DEF.Dialog
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("DEF/Dialog/Dialog UI")]
-    public class DialogUI : MonoBehaviour
+    public sealed class DialogUI : MonoBehaviour
     {
         [Serializable] public class GetAudioClipAction : UnityEvent<DialogAgent, LineData, Action<AudioClip>> { }
         [Serializable] public class GetSpriteAction : UnityEvent<DialogAgent, LineData, Action<Sprite>> { }
@@ -34,7 +33,6 @@ namespace DEF.Dialog
         [SerializeField] private RectTransform m_portraitContainer = null;
         [SerializeField] private Image m_portrait = null;
         [SerializeField] private AudioClip m_buttonClick = null;
-        [SerializeField] private AudioClip m_buttonSelect = null;
         [SerializeField] private AudioClip m_typingDefault = null;
         [SerializeField] private bool m_stopBlastAfterText = true;
 
