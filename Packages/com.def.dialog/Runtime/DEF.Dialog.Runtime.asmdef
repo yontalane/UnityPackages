@@ -3,8 +3,7 @@
     "rootNamespace": "DEF.Dialog",
     "references": [
         "GUID:8579dca4301da4fdb94fc49558ddf5f5",
-        "GUID:c6c71bf257e5e49228df84313d238a03",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:c6c71bf257e5e49228df84313d238a03"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

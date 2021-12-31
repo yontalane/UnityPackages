@@ -2,7 +2,7 @@ using DEF.Menus;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DEF.Demos
+namespace DEF.Demos.Menus
 {
     [DisallowMultipleComponent]
     public class InventoryManager : MonoBehaviour

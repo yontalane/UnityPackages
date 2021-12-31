@@ -8,8 +8,7 @@
   "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.dialog/Documentation~/index.md",
   "dependencies": {
     "com.def.core": "1.0.0",
-    "com.def.query": "1.0.0",
-    "com.unity.inputsystem": "1.2.0"
+    "com.def.query": "1.0.0"
   },
   "keywords": [
     "dialog",

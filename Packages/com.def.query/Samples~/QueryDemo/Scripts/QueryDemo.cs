@@ -2,9 +2,8 @@ using DEF.Query;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DEF.Demos
+namespace DEF.Demos.Query
 {
-    [AddComponentMenu("DEF/Demos/Query")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(QueryUI))]
     public sealed class QueryDemo : MonoBehaviour

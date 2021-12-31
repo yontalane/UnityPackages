@@ -12,8 +12,7 @@
       "source": "embedded",
       "dependencies": {
         "com.def.core": "1.0.0",
-        "com.def.query": "1.0.0",
-        "com.unity.inputsystem": "1.2.0"
+        "com.def.query": "1.0.0"
       }
     },
     "com.def.menus": {
