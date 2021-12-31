@@ -3,10 +3,8 @@
   "nodes": [{
       "name": "Start",
       "lines": [{
-          "showText": true,
           "speaker": "<<player>>",
           "text": "Hello.",
-          "showAssets": true,
           "sound": "Positive"
         },
         {
@@ -14,7 +12,6 @@
           "ifDialogCount": "=1"
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "Oh, hi. Who are you?",
           "responses": [{
@@ -30,22 +27,18 @@
               "link": "Forgot"
             }
           ],
-          "showAssets": true,
           "portrait": "Portrait A",
           "voice": "Who Are You",
           "sound": "Negative",
           "typing": "Beep"
         },
         {
-          "showText": true,
           "elseIf": true
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "Oh, hi.",
           "link": "Exit",
-          "showAssets": true,
           "voice": "Oh Hi",
           "typing": "Beep"
         }
@@ -84,11 +77,9 @@
     {
       "name": "Give",
       "lines": [{
-          "showText": true,
           "ifFunction": "Possesses::<<DesiredItem>>=true"
         },
         {
-          "showText": true,
           "query": {
             "text": "Hand over the <<DesiredItem>>?",
             "responses": [{
@@ -103,15 +94,12 @@
           }
         },
         {
-          "showText": true,
           "elseIf": true
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "But you don't have a <<DesiredItem>>.",
           "link": "Exit",
-          "showAssets": true,
           "voice": "But You Don't Have It"
         }
       ]
@@ -119,14 +107,11 @@
     {
       "name": "Take",
       "lines": [{
-          "showText": true,
           "speaker": "<<self>>",
           "text": "Ok.",
-          "showAssets": true,
           "voice": "Okay"
         },
         {
-          "showText": true,
           "callFunction": "GiveToPlayer::Apple",
           "query": {
             "text": "You received an apple.",
@@ -137,7 +122,6 @@
           }
         },
         {
-          "showText": true,
           "speaker": "<<player>>",
           "text": "Thanks.",
           "link": "Exit"
@@ -147,7 +131,6 @@
     {
       "name": "HandOver",
       "lines": [{
-          "showText": true,
           "callFunction": "TakeFromPlayer::<<DesiredItem>>",
           "query": {
             "text": "You handed over the <<DesiredItem>>.",
@@ -158,10 +141,8 @@
           }
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "Thanks.",
-          "showAssets": true,
           "voice": "Thanks"
         }
       ]
@@ -180,54 +161,42 @@
     {
       "name": "Exit",
       "lines": [{
-          "showText": true,
           "speaker": "<<self>>",
           "text": "I have to go now.",
-          "showAssets": true,
           "portrait": "Portrait A",
           "voice": "I Have to Go Now",
           "typing": "Beep"
         },
         {
-          "showText": true,
           "ifVar": "soYouForgot=true"
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "I hope you remember yourself.",
-          "showAssets": true,
           "voice": "I Hope You Remember Yourself",
           "typing": "Beep"
         },
         {
-          "showText": true,
           "elseIf": true
         },
         {
-          "showText": true,
           "speaker": "<<self>>",
           "text": "Bye.",
-          "showAssets": true,
           "portrait": "Portrait B",
           "voice": "Bye",
           "typing": "Beep"
         },
         {
-          "showText": true,
           "endIf": true
         },
         {
-          "showText": true,
           "speaker": "<<player>>",
           "text": "Goodbye."
         },
         {
-          "showText": true,
           "ifDialogCount": ">2"
         },
         {
-          "showText": true,
           "callFunction": "DisableDialog"
         }
       ]
