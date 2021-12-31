@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace DEF.Query
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("DEF/Query/UI")]
+    [AddComponentMenu("DEF/Query/Query UI")]
     public sealed class QueryUI : MonoBehaviour
     {
         public delegate void QueryUIHandler(QueryUI queryUI);
@@ -77,7 +77,7 @@ namespace DEF.Query
 
             for (int i = queryUI.m_responses.Count - 1; i >= 0; i--)
             {
-                DestroyImmediate(queryUI.m_responses[i].gameObject);
+                Destroy(queryUI.m_responses[i].gameObject);
             }
             queryUI.m_responses.Clear();
 

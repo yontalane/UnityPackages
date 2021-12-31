@@ -6,12 +6,23 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.def.dialog": {
+      "version": "file:com.def.dialog",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.def.core": "1.0.0",
+        "com.def.query": "1.0.0",
+        "com.unity.inputsystem": "1.2.0"
+      }
+    },
     "com.def.menus": {
       "version": "file:com.def.menus",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.def.core": "1.0.0"
+        "com.def.core": "1.0.0",
+        "com.unity.inputsystem": "1.2.0"
       }
     },
     "com.def.query": {
@@ -19,7 +30,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.def.core": "1.0.0"
+        "com.def.core": "1.0.0",
+        "com.unity.inputsystem": "1.2.0"
       }
     },
     "com.unity.ext.nunit": {

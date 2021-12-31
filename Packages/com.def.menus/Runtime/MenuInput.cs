@@ -10,7 +10,7 @@ namespace DEF.Menus
         public string buttonName = "";
     }
 
-    [AddComponentMenu("DEF/Menus/Input")]
+    [AddComponentMenu("DEF/Menus/Menu Input")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerInput))]
     public sealed class MenuInput : MonoBehaviour

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DEF.Menus
 {
-    [AddComponentMenu("DEF/Menus/Manager")]
+    [AddComponentMenu("DEF/Menus/Menu Manager")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(MenuInput))]
     public sealed class MenuManager : MenuComponent

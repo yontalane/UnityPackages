@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace DEF.Menus.Item
 {
-    [AddComponentMenu("DEF/Menus/Items/Navigation Override")]
+    [AddComponentMenu("DEF/Menus/Items/Menu Navigation Override")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Selectable))]
     public sealed class MenuNavigationOverride : MenuComponent

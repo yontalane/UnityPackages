@@ -1,0 +1,34 @@
+{
+  "name": "com.def.dialog",
+  "version": "1.0.0",
+  "displayName": "Dialog (DEF)",
+  "description": "A dialog system.",
+  "unity": "2020.3",
+  "unityRelease": "25f1",
+  "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.dialog/Documentation~/index.md",
+  "dependencies": {
+    "com.def.core": "1.0.0",
+    "com.def.query": "1.0.0",
+    "com.unity.inputsystem": "1.2.0"
+  },
+  "keywords": [
+    "dialog",
+    "ui",
+    "dialogue",
+    "tree",
+    "branching"
+  ],
+  "author": {
+    "name": "David Frankel",
+    "email": "unitypackages@davidfrankel.com",
+    "url": "https://www.davidfrankel.com/tech-art/"
+  },
+  "samples": [
+    {
+      "displayName": "Dialog Demo",
+      "description": "Contains a sample implementation of the dialog system.",
+      "path": "Samples~/DialogDemo"
+    }
+  ],
+  "type": "library"
+}
