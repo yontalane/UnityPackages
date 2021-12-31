@@ -5,6 +5,7 @@ using UnityEngine;
 namespace DEF.Dialog
 {
     [AddComponentMenu("DEF/Dialog/Dialog Agent")]
+    [DisallowMultipleComponent]
     public class DialogAgent : DialogResponder
     {
         private const string STATIC_ID = "Static Dialog";

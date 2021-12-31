@@ -2,6 +2,7 @@
 
 namespace DEF.Dialog
 {
+    [DisallowMultipleComponent]
     public abstract class DialogResponder : MonoBehaviour
     {
         /// <summary>

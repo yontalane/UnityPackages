@@ -15,9 +15,9 @@ namespace DEF.Demos.Dialog
         [SerializeField] private RectTransform m_inventoryContainerUI = null;
         [SerializeField] private InventoryItemUI m_inventoryItemPrefabUI = null;
 
-        private static InventoryManager m_instance = null;
+        private static InventoryManager s_instance = null;
 
-        private void Awake() => m_instance = this;
+        private void Awake() => s_instance = this;
 
         /// <summary>
         /// Instantiate UI fields for each inventory item.
@@ -87,11 +87,11 @@ namespace DEF.Demos.Dialog
         /// </summary>
         private static InventoryItemUI GetItemUI(string itemName)
         {
-            if (m_instance == null) return null;
+            if (s_instance == null) return null;
 
-            for (int i = 0; i < m_instance.m_inventoryContainerUI.childCount; i++)
+            for (int i = 0; i < s_instance.m_inventoryContainerUI.childCount; i++)
             {
-                InventoryItemUI testInventoryItemUI = m_instance.m_inventoryContainerUI.GetChild(i).GetComponent<InventoryItemUI>();
+                InventoryItemUI testInventoryItemUI = s_instance.m_inventoryContainerUI.GetChild(i).GetComponent<InventoryItemUI>();
                 if (testInventoryItemUI != null && testInventoryItemUI.Name.Equals(itemName))
                 {
                     return testInventoryItemUI;

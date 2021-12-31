@@ -947,14 +947,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af9aa160d8fd8e4284fa094b2d1829b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_inventoryContainerUI: {fileID: 357303648}
-  m_inventoryItemPrefabUI: {fileID: 4846833321519435512, guid: 67f470339d227d049a01f466482b0931, type: 3}
   m_allItems:
   - Apple
   - Pear
   - Banana
   - Avocado
   - Pineapple
+  m_inventoryContainerUI: {fileID: 357303648}
+  m_inventoryItemPrefabUI: {fileID: 4846833321519435512, guid: 67f470339d227d049a01f466482b0931, type: 3}
 --- !u!1 &357303647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,8 +1457,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_dialogResponders:
-  - {fileID: 3977900773151413226}
   - {fileID: 283563905}
+  - {fileID: 3977900773151413226}
 --- !u!4 &889161187
 Transform:
   m_ObjectHideFlags: 0
@@ -1799,7 +1799,6 @@ MonoBehaviour:
   m_portraitContainer: {fileID: 737250794}
   m_portrait: {fileID: 749057180}
   m_buttonClick: {fileID: 8300000, guid: 0ec034b777fe1493e845bd0e4b9fae6a, type: 3}
-  m_buttonSelect: {fileID: 0}
   m_typingDefault: {fileID: 8300000, guid: 0ec034b777fe1493e845bd0e4b9fae6a, type: 3}
   m_stopBlastAfterText: 1
   m_responseButtonPrefab: {fileID: 706755093591359135, guid: a58ea1888b94d4c29b246c98b952742b, type: 3}
@@ -2261,7 +2260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5780e75be5fbe41e3a30b97797e40d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_npc: {fileID: 6871482867396216267}
+  m_npc: {fileID: 3977900773151413226}
   m_playerNameField: {fileID: 227202058}
 --- !u!4 &1840481637
 Transform:
@@ -2740,6 +2739,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f6a79ef15654799a6c50b9764c28a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_json: {fileID: 4900000, guid: 40a61ee3207fb4917879811938f36770, type: 3}
+  m_staticText: 
+  m_keywords: []
   m_desiredItem: Pear
 --- !u!1 &4189515986730750026
 GameObject:
@@ -2750,30 +2752,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8644831614553058860}
-  - component: {fileID: 6871482867396216267}
   - component: {fileID: 3977900773151413226}
   m_Layer: 0
-  m_Name: NPC
+  m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &6871482867396216267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4189515986730750026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e985f625d1a440eca4ae6c0a65ecf3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_json: {fileID: 4900000, guid: 40a61ee3207fb4917879811938f36770, type: 3}
-  m_staticText: 
-  m_keywords: []
 --- !u!4 &8644831614553058860
 Transform:
   m_ObjectHideFlags: 0
@@ -2781,7 +2767,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4189515986730750026}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

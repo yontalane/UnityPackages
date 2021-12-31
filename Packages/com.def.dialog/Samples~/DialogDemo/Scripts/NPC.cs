@@ -4,9 +4,10 @@ using UnityEngine;
 namespace DEF.Demos.Dialog
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(DialogAgent))]
-    public sealed class NPC : DialogResponder
+    public sealed class NPC : DialogAgent
     {
+        [Header("NPC")]
+
         [SerializeField] private string m_desiredItem = "";
 
         /// <summary>
@@ -16,6 +17,7 @@ namespace DEF.Demos.Dialog
         public override bool DialogFunction(string call, string parameter, out string result)
         {
             result = null;
+
             switch (call)
             {
                 case "GiveToPlayer":
@@ -25,7 +27,8 @@ namespace DEF.Demos.Dialog
                     InventoryManager.Remove(parameter);
                     return true;
             }
-            return false;
+
+            return base.DialogFunction(call, parameter, out result);
         }
 
         /// <summary>
@@ -39,8 +42,8 @@ namespace DEF.Demos.Dialog
                 result = m_desiredItem;
                 return true;
             }
-            result = null;
-            return false;
+
+            return base.GetKeyword(key, out result);
         }
     }
 }
