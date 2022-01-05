@@ -119,6 +119,8 @@ namespace DEF.Dialog
             }
         }
 
+        public void KillDialog() => ExitDialog();
+
         private static int GetDialogCount(string id)
         {
             if (DataStorage.Vars.TryGetValue(id, out string value) && int.TryParse(value, out int result))

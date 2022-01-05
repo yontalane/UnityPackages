@@ -11,7 +11,8 @@
                     "id": "d1acc3f1-06c5-408a-a346-719f94480c2f",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Scroll",
@@ -19,15 +20,17 @@
                     "id": "49996c72-b20d-4837-afc9-dde3035b1994",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "Accept",
+                    "name": "Submit",
                     "type": "Button",
                     "id": "c9a1c669-0afe-4472-9c1f-1fed002abf62",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Cancel",
@@ -35,7 +38,8 @@
                     "id": "806bc5b9-ae79-4767-88bb-55a04e4685e3",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Face Button North",
@@ -43,7 +47,8 @@
                     "id": "140aaae4-ca1c-40c3-914d-0fd64189fdbc",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Face Button East",
@@ -51,7 +56,8 @@
                     "id": "234f38af-b886-4d11-b584-3bc66779a178",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Face Button South",
@@ -59,7 +65,8 @@
                     "id": "01927e46-819f-410d-8a28-1dba92e956cb",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Face Button West",
@@ -67,7 +74,8 @@
                     "id": "f3500fab-8a8d-43fd-8591-30933a841b21",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Shoulder Left",
@@ -75,7 +83,8 @@
                     "id": "5dd2faf5-edb2-4d7e-a1b4-e7a5981bf2ae",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Shoulder Right",
@@ -83,7 +92,8 @@
                     "id": "951d3b25-2c95-4ea8-8d1c-3294cde59e13",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Start",
@@ -91,7 +101,8 @@
                     "id": "54fa6464-5db8-4634-a7f4-c5786b0fd3e4",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Gamepad Select",
@@ -99,7 +110,8 @@
                     "id": "3322cc0b-4d19-4c95-8396-f38718f627e5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -330,7 +342,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Accept",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -341,7 +353,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Accept",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -352,7 +364,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Accept",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -363,7 +375,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Accept",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

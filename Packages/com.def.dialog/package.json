@@ -1,6 +1,6 @@
 {
   "name": "com.def.dialog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Dialog (DEF)",
   "description": "A dialog system.",
   "unity": "2020.3",
