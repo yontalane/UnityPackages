@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace DEF.Menus
 {
-    public static class MenuUtility
+    internal static class MenuUtility
     {
         /// <summary>
         /// Is the target transform a descendent of <c>possibleParent</c> within the hierarchy?

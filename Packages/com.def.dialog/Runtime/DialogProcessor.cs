@@ -143,7 +143,7 @@ namespace DEF.Dialog
             return false;
         }
 
-        public static SpeakerType GetSpeakerType(string speaker)
+        internal static SpeakerType GetSpeakerType(string speaker)
         {
             if (speaker.Contains("player"))
             {

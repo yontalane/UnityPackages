@@ -394,7 +394,7 @@ namespace DEF.Dialog
             }
         }
 
-        public void SkipHandler()
+        internal void SkipHandler()
         {
             if (m_skipButton != null
                 && m_skipButton.gameObject.activeInHierarchy
@@ -416,7 +416,7 @@ namespace DEF.Dialog
             m_canUseContinueHandler = true;
         }
 
-        public void ContinueHandler()
+        internal void ContinueHandler()
         {
             if (m_canUseContinueHandler
                 && m_continueButton != null

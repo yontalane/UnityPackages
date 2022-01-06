@@ -412,7 +412,7 @@ namespace DEF.Menus
     }
 
     [DisallowMultipleComponent, RequireComponent(typeof(Selectable))]
-    public sealed class SelectItemAction : MonoBehaviour, ISelectHandler
+    internal sealed class SelectItemAction : MonoBehaviour, ISelectHandler
     {
         public delegate void SelectItemHandler(Menu menu, Selectable item);
         public static SelectItemHandler OnSelectItem = null;
@@ -422,7 +422,7 @@ namespace DEF.Menus
     }
 
     [DisallowMultipleComponent]
-    public sealed class AddedMenuItem : MonoBehaviour
+    internal sealed class AddedMenuItem : MonoBehaviour
     {
 
     }
