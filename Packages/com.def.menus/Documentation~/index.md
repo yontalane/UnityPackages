@@ -37,15 +37,19 @@ When you add a MenuManager to a GameObject, a MenuInput will automatically be ad
 MenuInput doesn't detect input entirely on its own; you have to use an event system to trigger its input listeners. The listener functions are as follows:
 
 * OnMove()
-* OnScroll()
 * OnSubmit()
 * OnCancel()
+
+* OnScroll()
+
 * OnGamepadFaceButtonNorth()
 * OnGamepadFaceButtonEast()
 * OnGamepadFaceButtonSouth()
 * OnGamepadFaceButtonWest()
+
 * OnGamepadShoulderLeft()
 * OnGamepadShoulderRight()
+
 * OnGamepadStart()
 * OnGamepadSelect()
 
@@ -56,26 +60,6 @@ The intended usage is that you call these functions using a PlayerInput componen
 ## Animator
 
 You have the option to add an Animator to a MenuManager GameObject. If you do, whenever the MenuManager activates a new menu, it will set the an integer parameter `Active Menu` in the Animator to the index of the new menu.
-
-## Player Input
-
-Along with MenuInput, a PlayerInput will also be added to your GameObject. Your input configuration should have entries for:
-
-* `Move`
-* `Scroll`
-* `Accept`
-* `Cancel`
-
-Optionally, you can also use:
-
-* `Gamepad Face Button North`
-* `Gamepad Face Button East`
-* `Gamepad Face Button South`
-* `Gamepad Face Button West`
-* `Gamepad Shoulder Left`
-* `Gamepad Shoulder Right`
-* `Gamepad Start`
-* `Gamepad Select`
 
 ## Menu
 
