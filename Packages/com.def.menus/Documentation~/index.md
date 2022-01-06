@@ -39,17 +39,13 @@ MenuInput doesn't detect input entirely on its own; you have to use an event sys
 * OnMove()
 * OnSubmit()
 * OnCancel()
-
 * OnScroll()
-
 * OnGamepadFaceButtonNorth()
 * OnGamepadFaceButtonEast()
 * OnGamepadFaceButtonSouth()
 * OnGamepadFaceButtonWest()
-
 * OnGamepadShoulderLeft()
 * OnGamepadShoulderRight()
-
 * OnGamepadStart()
 * OnGamepadSelect()
 
