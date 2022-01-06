@@ -40,7 +40,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Dialog Box/Dialog Box Frame
+    path: Dialog Box/Outer Frame
   m_FloatCurves:
   - curve:
       serializedVersion: 2
@@ -70,7 +70,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 2039208129
+      path: 4021238694
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -149,7 +149,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Dialog Box/Dialog Box Frame
+    path: Dialog Box/Outer Frame
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -177,7 +177,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Dialog Box/Dialog Box Frame
+    path: Dialog Box/Outer Frame
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -205,7 +205,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Dialog Box/Dialog Box Frame
+    path: Dialog Box/Outer Frame
     classID: 224
     script: {fileID: 0}
   m_EulerEditorCurves: []
