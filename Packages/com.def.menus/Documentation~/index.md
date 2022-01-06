@@ -32,6 +32,27 @@ When you add a MenuManager to a GameObject, a MenuInput will automatically be ad
 
 * **`bool` AllowHoldDownMove:** If this is set to true, you can hold down a navigation button to continually select the next item in the Menu. Otherwise, you need to repeatedly press the navigation button.
 
+### Input Functions
+
+MenuInput doesn't detect input entirely on its own; you have to use an event system to trigger its input listeners. The listener functions are as follows:
+
+* OnMove()
+* OnScroll()
+* OnSubmit()
+* OnCancel()
+* OnGamepadFaceButtonNorth()
+* OnGamepadFaceButtonEast()
+* OnGamepadFaceButtonSouth()
+* OnGamepadFaceButtonWest()
+* OnGamepadShoulderLeft()
+* OnGamepadShoulderRight()
+* OnGamepadStart()
+* OnGamepadSelect()
+
+It's essential that you call OnMove(), OnSubmit(), and OnCancel(). The rest are optional, depending on your menu's functionality.
+
+The intended usage is that you call these functions using a PlayerInput component or an InputActionAsset; keep in mind that both require appropriately named mappings. Or you can call the functions from your own C# script.
+
 ## Animator
 
 You have the option to add an Animator to a MenuManager GameObject. If you do, whenever the MenuManager activates a new menu, it will set the an integer parameter `Active Menu` in the Animator to the index of the new menu.
