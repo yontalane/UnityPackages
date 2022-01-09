@@ -26,12 +26,13 @@ namespace DEF.Menus
         [Tooltip("An input config asset. If you don't use this, you'll need to receive input in a different way, such as by attaching a PlayerInput to this GameObject.")]
         private InputActionAsset m_actions = null;
 
+        [Space]
+
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionMoveMap = "Move";
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionScrollMap = "Scroll";
+        private string m_actionNavigateMap = "Navigate";
+        
+        [Space]
 
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
@@ -40,32 +41,44 @@ namespace DEF.Menus
         [Tooltip("Leave blank to ignore this action.")]
         private string m_actionCancelMap = "Cancel";
 
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadFaceButtonNorthMap = "Gamepad Face Button North";
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadFaceButtonEastMap = "Gamepad Face Button East";
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadFaceButtonSouthMap = "Gamepad Face Button South";
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadFaceButtonWestMap = "Gamepad Face Button West";
+        [Space]
 
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadShoulderLeftMap = "Gamepad Shoulder Left";
-        [SerializeField]
-        [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadShoulderRightMap = "Gamepad Shoulder Right";
+        private string m_actionScrollMap = "";
+
+        [Space]
 
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadStartMap = "Gamepad Start";
+        private string m_actionGamepadFaceButtonNorthMap = "";
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
-        private string m_actionGamepadSelectMap = "Gamepad Select";
+        private string m_actionGamepadFaceButtonEastMap = "";
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadFaceButtonSouthMap = "";
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadFaceButtonWestMap = "";
+
+        [Space]
+
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadShoulderLeftMap = "";
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadShoulderRightMap = "";
+
+        [Space]
+
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadStartMap = "";
+        [SerializeField]
+        [Tooltip("Leave blank to ignore this action.")]
+        private string m_actionGamepadSelectMap = "";
 
         [Header("Navigation")]
 
@@ -87,10 +100,10 @@ namespace DEF.Menus
         {
             if (m_actions == null) return;
 
-            if (!string.IsNullOrEmpty(m_actionMoveMap))
+            if (!string.IsNullOrEmpty(m_actionNavigateMap))
             {
-                m_actions[m_actionMoveMap].started += OnInput_MoveStart;
-                m_actions[m_actionMoveMap].canceled += OnInput_MoveStop;
+                m_actions[m_actionNavigateMap].started += OnInput_MoveStart;
+                m_actions[m_actionNavigateMap].canceled += OnInput_MoveStop;
             }
             if (!string.IsNullOrEmpty(m_actionScrollMap))
             {
@@ -113,7 +126,7 @@ namespace DEF.Menus
             if (!string.IsNullOrEmpty(m_actionGamepadSelectMap)) m_actions[m_actionGamepadSelectMap].performed += OnInputPerformed_GamepadSelect;
         }
 
-        private void OnInput_MoveStart(InputAction.CallbackContext _) => OnMove(m_actions[m_actionMoveMap].ReadValue<Vector2>());
+        private void OnInput_MoveStart(InputAction.CallbackContext _) => OnMove(m_actions[m_actionNavigateMap].ReadValue<Vector2>());
         private void OnInput_MoveStop(InputAction.CallbackContext _) => OnMove(Vector2.zero);
 
         private void OnInput_ScrollStart(InputAction.CallbackContext _) => OnScroll(m_actions[m_actionScrollMap].ReadValue<Vector2>());
@@ -166,6 +179,8 @@ namespace DEF.Menus
         }
 
         public void OnMove(InputValue value) => OnMove(value.Get<Vector2>());
+
+        public void OnNavigate(InputValue value) => OnMove(value.Get<Vector2>());
 
         private void OnScroll(Vector2 vector)
         {

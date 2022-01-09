@@ -36,7 +36,7 @@ When you add a MenuManager to a GameObject, a MenuInput will automatically be ad
 
 MenuInput doesn't detect input entirely on its own; you have to use an event system to trigger its input listeners. The listener functions are as follows:
 
-* OnMove()
+* OnNavigate()
 * OnSubmit()
 * OnCancel()
 * OnScroll()
@@ -49,7 +49,7 @@ MenuInput doesn't detect input entirely on its own; you have to use an event sys
 * OnGamepadStart()
 * OnGamepadSelect()
 
-It's essential that you call OnMove(), OnSubmit(), and OnCancel(). The rest are optional, depending on your menu's functionality.
+It's essential that you call OnNavigate(), OnSubmit(), and OnCancel(). The rest are optional, depending on your menu's functionality.
 
 The intended usage is that you call these functions using a PlayerInput component or an InputActionAsset; keep in mind that both require appropriately named mappings. Or you can call the functions from your own C# script.
 
