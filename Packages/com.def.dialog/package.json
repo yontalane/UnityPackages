@@ -7,8 +7,8 @@
   "unityRelease": "25f1",
   "documentationUrl": "https://github.com/davidfrankel/UnityPackages/blob/main/Packages/com.def.dialog/Documentation~/index.md",
   "dependencies": {
-    "com.def.core": "1.0.0",
-    "com.def.query": "1.0.0"
+    "com.def.core": "https://github.com/davidfrankel/UnityPackages.git?path=/Packages/com.def.core#v1.0.0",
+    "com.def.query": "https://github.com/davidfrankel/UnityPackages.git?path=/Packages/com.def.query#v1.0.0"
   },
   "keywords": [
     "dialog",
