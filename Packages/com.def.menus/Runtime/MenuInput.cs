@@ -96,7 +96,7 @@ namespace DEF.Menus
 
         #region InputActionAsset Setup
 
-        private void Awake()
+        private void OnEnable()
         {
             if (m_actions == null) return;
 
@@ -126,6 +126,36 @@ namespace DEF.Menus
             if (!string.IsNullOrEmpty(m_actionGamepadSelectMap)) m_actions[m_actionGamepadSelectMap].performed += OnInputPerformed_GamepadSelect;
         }
 
+        private void OnDisable()
+        {
+            if (m_actions == null) return;
+
+            if (!string.IsNullOrEmpty(m_actionNavigateMap))
+            {
+                m_actions[m_actionNavigateMap].started -= OnInput_MoveStart;
+                m_actions[m_actionNavigateMap].canceled -= OnInput_MoveStop;
+            }
+            if (!string.IsNullOrEmpty(m_actionScrollMap))
+            {
+                m_actions[m_actionScrollMap].started -= OnInput_ScrollStart;
+                m_actions[m_actionScrollMap].canceled -= OnInput_ScrollStop;
+            }
+
+            if (!string.IsNullOrEmpty(m_actionSubmitMap)) m_actions[m_actionSubmitMap].performed -= OnInputPerformed_Submit;
+            if (!string.IsNullOrEmpty(m_actionCancelMap)) m_actions[m_actionCancelMap].performed -= OnInputPerformed_Cancel;
+
+            if (!string.IsNullOrEmpty(m_actionGamepadFaceButtonNorthMap)) m_actions[m_actionGamepadFaceButtonNorthMap].performed -= OnInputPerformed_GamepadFaceButtonNorth;
+            if (!string.IsNullOrEmpty(m_actionGamepadFaceButtonEastMap)) m_actions[m_actionGamepadFaceButtonEastMap].performed -= OnInputPerformed_GamepadFaceButtonEast;
+            if (!string.IsNullOrEmpty(m_actionGamepadFaceButtonSouthMap)) m_actions[m_actionGamepadFaceButtonSouthMap].performed -= OnInputPerformed_GamepadFaceButtonSouth;
+            if (!string.IsNullOrEmpty(m_actionGamepadFaceButtonWestMap)) m_actions[m_actionGamepadFaceButtonWestMap].performed -= OnInputPerformed_GamepadFaceButtonWest;
+
+            if (!string.IsNullOrEmpty(m_actionGamepadShoulderLeftMap)) m_actions[m_actionGamepadShoulderLeftMap].performed -= OnInputPerformed_GamepadShoulderLeft;
+            if (!string.IsNullOrEmpty(m_actionGamepadShoulderRightMap)) m_actions[m_actionGamepadShoulderRightMap].performed -= OnInputPerformed_GamepadShoulderRight;
+
+            if (!string.IsNullOrEmpty(m_actionGamepadStartMap)) m_actions[m_actionGamepadStartMap].performed -= OnInputPerformed_GamepadStart;
+            if (!string.IsNullOrEmpty(m_actionGamepadSelectMap)) m_actions[m_actionGamepadSelectMap].performed -= OnInputPerformed_GamepadSelect;
+        }
+
         private void OnInput_MoveStart(InputAction.CallbackContext _) => OnMove(m_actions[m_actionNavigateMap].ReadValue<Vector2>());
         private void OnInput_MoveStop(InputAction.CallbackContext _) => OnMove(Vector2.zero);
 
@@ -145,16 +175,6 @@ namespace DEF.Menus
 
         private void OnInputPerformed_GamepadStart(InputAction.CallbackContext _) => OnGamepadStart();
         private void OnInputPerformed_GamepadSelect(InputAction.CallbackContext _) => OnGamepadSelect();
-
-        private void OnEnable()
-        {
-            if (m_actions != null) m_actions.Enable();
-        }
-
-        private void OnDisable()
-        {
-            if (m_actions != null) m_actions.Disable();
-        }
 
         #endregion
 
