@@ -5200,10 +5200,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_actions: {fileID: -944628639613478452, guid: ae16f2a6f45334328ac0cf07a7df8c67, type: 3}
-  m_actionMoveMap: Move
-  m_actionScrollMap: Scroll
+  m_actionNavigateMap: Navigate
   m_actionSubmitMap: Submit
   m_actionCancelMap: Cancel
+  m_actionScrollMap: Scroll
   m_actionGamepadFaceButtonNorthMap: Gamepad Face Button North
   m_actionGamepadFaceButtonEastMap: Gamepad Face Button East
   m_actionGamepadFaceButtonSouthMap: Gamepad Face Button South

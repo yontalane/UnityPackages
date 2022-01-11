@@ -31,7 +31,7 @@ namespace DEF.Menus
         [SerializeField]
         [Tooltip("Leave blank to ignore this action.")]
         private string m_actionNavigateMap = "Navigate";
-        
+
         [Space]
 
         [SerializeField]
@@ -124,6 +124,8 @@ namespace DEF.Menus
 
             if (!string.IsNullOrEmpty(m_actionGamepadStartMap)) m_actions[m_actionGamepadStartMap].performed += OnInputPerformed_GamepadStart;
             if (!string.IsNullOrEmpty(m_actionGamepadSelectMap)) m_actions[m_actionGamepadSelectMap].performed += OnInputPerformed_GamepadSelect;
+
+            m_actions.Enable();
         }
 
         private void OnDisable()
@@ -154,6 +156,8 @@ namespace DEF.Menus
 
             if (!string.IsNullOrEmpty(m_actionGamepadStartMap)) m_actions[m_actionGamepadStartMap].performed -= OnInputPerformed_GamepadStart;
             if (!string.IsNullOrEmpty(m_actionGamepadSelectMap)) m_actions[m_actionGamepadSelectMap].performed -= OnInputPerformed_GamepadSelect;
+
+            m_actions.Disable();
         }
 
         private void OnInput_MoveStart(InputAction.CallbackContext _) => OnMove(m_actions[m_actionNavigateMap].ReadValue<Vector2>());
