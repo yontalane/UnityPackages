@@ -1,0 +1,17 @@
+{
+    "name": "Yontalane.Query.Runtime",
+    "rootNamespace": "Yontalane.Query",
+    "references": [
+        "GUID:8579dca4301da4fdb94fc49558ddf5f5",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

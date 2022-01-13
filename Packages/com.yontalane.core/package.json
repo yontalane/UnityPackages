@@ -1,0 +1,24 @@
+{
+  "name": "com.yontalane.core",
+  "version": "1.0.0",
+  "displayName": "Core",
+  "description": "A small library for Unity projects.",
+  "unity": "2020.3",
+  "unityRelease": "25f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.core/Documentation~/index.md",
+  "keywords": [
+    "core",
+    "framework",
+    "utils",
+    "util",
+    "utility",
+    "utilities",
+    "math"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "type": "library"
+}

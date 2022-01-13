@@ -1,38 +1,5 @@
 {
   "dependencies": {
-    "com.def.core": {
-      "version": "file:com.def.core",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.def.dialog": {
-      "version": "file:com.def.dialog",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.def.core": "1.0.0",
-        "com.def.query": "1.0.0"
-      }
-    },
-    "com.def.menus": {
-      "version": "file:com.def.menus",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.def.core": "1.0.0",
-        "com.unity.inputsystem": "1.2.0"
-      }
-    },
-    "com.def.query": {
-      "version": "file:com.def.query",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.def.core": "1.0.0",
-        "com.unity.inputsystem": "1.2.0"
-      }
-    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 2,
@@ -95,6 +62,39 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
+      }
+    },
+    "com.yontalane.core": {
+      "version": "file:com.yontalane.core",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.yontalane.dialog": {
+      "version": "file:com.yontalane.dialog",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.yontalane.core": "1.0.0",
+        "com.yontalane.query": "1.0.0"
+      }
+    },
+    "com.yontalane.menus": {
+      "version": "file:com.yontalane.menus",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.yontalane.core": "1.0.0",
+        "com.unity.inputsystem": "1.2.0"
+      }
+    },
+    "com.yontalane.query": {
+      "version": "file:com.yontalane.query",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.yontalane.core": "1.0.0",
+        "com.unity.inputsystem": "1.2.0"
       }
     },
     "com.unity.modules.ai": {
