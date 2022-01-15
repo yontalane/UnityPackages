@@ -144,21 +144,6 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Remove the provided value and its associated key.
-        /// </summary>
-        public void Remove(U value)
-        {
-            for (int i = m_values.Count - 1; i >= 0; i--)
-            {
-                if (m_values[i].Equals(value))
-                {
-                    m_keys.RemoveAt(i);
-                    m_values.RemoveAt(i);
-                }
-            }
-        }
-
-        /// <summary>
         /// Remove the key/value pair at the provided index.
         /// </summary>
         public void RemoveAt(int index)
@@ -212,17 +197,22 @@ namespace Yontalane
         #endregion
 
         /// <summary>
-        /// Return true if the dictionary contains the provided key. Otherwise, return false.
+        /// If the dictionary contains the provided key, return its index; otherwise, return -1.
         /// </summary>
-        public bool Contains(T key)
+        public int IndexOf(T key)
         {
             FixSize();
             for (int i = 0; i < m_keys.Count; i++)
             {
-                if (m_keys[i].Equals(key)) return true;
+                if (m_keys[i].Equals(key)) return i;
             }
-            return false;
+            return -1;
         }
+
+        /// <summary>
+        /// Return true if the dictionary contains the provided key. Otherwise, return false.
+        /// </summary>
+        public bool Contains(T key) => IndexOf(key) != -1;
 
         /// <summary>
         /// The number of key/value pairs contained within the dictionary.
