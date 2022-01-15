@@ -37,6 +37,8 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 
 ### Properties
 
+| Name | Description |
+| --- | ---|
 | **Count** | The number of key/value pairs contained within the dictionary. |
 
 ### Public Methods
