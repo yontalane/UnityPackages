@@ -17,4 +17,4 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 
 ## FloatRange
 
-## FloatInt
+## IntRange
