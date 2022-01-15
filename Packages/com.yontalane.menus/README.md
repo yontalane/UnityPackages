@@ -1,13 +1,13 @@
 # Menus
 
-A menu navigation library that supports both controller and mouse and keyboard.
+A runtime menu navigation library that supports both controller and mouse and keyboard.
 
 ### Features
 
-* Switching between menu lists
-* Add items to or removing items from menu lists
-* Scrolling
-* UI widgets embedded within menus.
+* Easily switch between multiple menu.
+* Add or remove menu items at runtime.
+* Built-in scrolling.
+* UI widgets (sliders, toggles, scrollable text areas) embedded within menus.
 
 ### Roadmap
 
