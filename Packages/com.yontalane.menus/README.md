@@ -4,7 +4,7 @@ A runtime menu navigation library that supports both controller and mouse and ke
 
 ### Features
 
-* Easily switch between multiple menu.
+* Easily switch between multiple menus.
 * Add or remove menu items at runtime.
 * Built-in scrolling.
 * UI widgets (sliders, toggles, scrollable text areas) embedded within menus.
