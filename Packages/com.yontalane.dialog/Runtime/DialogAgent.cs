@@ -27,6 +27,7 @@ namespace Yontalane.Dialog
         private TextAsset m_json = null;
 
         [SerializeField]
+        [TextArea]
         [Tooltip("A single, unchanging line of dialog. Used in place of a complex script for simple things like signs.")]
         private string m_staticText = "";
 
