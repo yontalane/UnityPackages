@@ -1,0 +1,21 @@
+{
+  "name": "com.yontalane.shaders",
+  "version": "1.0.0",
+  "displayName": "Shaders",
+  "description": "A shader library.",
+  "unity": "2020.3",
+  "unityRelease": "25f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.shaders/Documentation~/index.md",
+  "keywords": [
+    "graphics",
+    "shaders",
+    "materials",
+    "sprites"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "type": "library"
+}
