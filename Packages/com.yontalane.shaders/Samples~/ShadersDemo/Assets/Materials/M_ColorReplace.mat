@@ -8,8 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_ColorReplace
-  m_Shader: {fileID: 4800000, guid: bf57c4dba64804eb3aa515175a18f1d1, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: ac0c908295e2f4a0fbe7d94d99f0ee45, type: 3}
+  m_ShaderKeywords: _MATERIALBLENDMODE_NORMAL _TINTBLENDMODE_MULTIPLY _USECOLORREPLACE_ON
+    _USE_COLORREPLACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,6 +20,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -58,13 +63,16 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _BumpScale: 1
+    - _ColorReplaceFuzziness: 0.01
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
+    - _EnableExternalAlpha: 0
     - _Fuzziness: 0.01
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _MaterialBlendMode: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -72,12 +80,24 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StrokeWidth: 1
+    - _TintBlendMode: 0
     - _UVSec: 0
+    - _UseColorReplace: 1
+    - _UseDuochrome: 0
+    - _UseStroke: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorReplaceSource: {r: 0.6117647, g: 0.6784314, b: 0.7176471, a: 1}
+    - _ColorReplaceTarget: {r: 0.6117647, g: 0.7176471, b: 0.63529414, a: 1}
+    - _DuochromeMax: {r: 1, g: 1, b: 1, a: 1}
+    - _DuochromeMin: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ReplaceThis: {r: 0.6117647, g: 0.6784314, b: 0.7176471, a: 1}
     - _Stroke: {r: 1, g: 0, b: 0, a: 1}
+    - _StrokeColor: {r: 0, g: 0, b: 0, a: 1}
     - _WithThis: {r: 0.6117647, g: 0.7176471, b: 0.6346196, a: 1}
   m_BuildTextureStacks: []

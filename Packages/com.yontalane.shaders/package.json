@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.shaders",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "Shaders",
   "description": "A shader library.",
   "unity": "2020.3",

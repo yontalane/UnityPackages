@@ -1,36 +1,36 @@
 ﻿using System.Collections.Generic;using UnityEditor;using UnityEngine;using UnityEngine.Rendering;public class SpriteBaseGUI : ShaderGUI{    protected Material m_targetMaterial = null;    override public void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)    {        m_targetMaterial = materialEditor.target as Material;
 
-        //MaterialProperty mainTexProperty = FindProperty("_MainTex", properties);
-        //materialEditor.ShaderProperty(mainTexProperty, new GUIContent(mainTexProperty.displayName));
+        //MaterialProperty mainTex = FindProperty("_MainTex", properties);
+        //materialEditor.ShaderProperty(mainTex, new GUIContent(mainTex.displayName));
 
-        MaterialProperty colorProperty = FindProperty("_Color", properties);        materialEditor.ShaderProperty(colorProperty, new GUIContent(colorProperty.displayName));        MaterialProperty pixelSnapProperty = FindProperty("PixelSnap", properties);        materialEditor.ShaderProperty(pixelSnapProperty, new GUIContent(pixelSnapProperty.displayName));
+        MaterialProperty color = FindProperty("_Color", properties);        materialEditor.ShaderProperty(color, new GUIContent(color.displayName));        MaterialProperty pixelSnap = FindProperty("PixelSnap", properties);        materialEditor.ShaderProperty(pixelSnap, new GUIContent(pixelSnap.displayName));
 
         EditorGUILayout.Space();
 
-        MaterialProperty materialBlendModeProperty = FindProperty("_MaterialBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(materialBlendModeProperty, new GUIContent(materialBlendModeProperty.displayName));
+        MaterialProperty materialBlendMode = FindProperty("_MaterialBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(materialBlendMode, new GUIContent(materialBlendMode.displayName));
         if (EditorGUI.EndChangeCheck())
         {
-            MaterialProperty srcBlendProperty = FindProperty("_SrcBlend", properties);
-            MaterialProperty dstBlendProperty = FindProperty("_DstBlend", properties);
-            switch (Mathf.RoundToInt(materialBlendModeProperty.floatValue))
+            MaterialProperty srcBlend = FindProperty("_SrcBlend", properties);
+            MaterialProperty dstBlend = FindProperty("_DstBlend", properties);
+            switch (Mathf.RoundToInt(materialBlendMode.floatValue))
             {
                 case 0:
-                    srcBlendProperty.floatValue = (int)BlendMode.One;
-                    dstBlendProperty.floatValue = (int)BlendMode.OneMinusSrcAlpha;
+                    srcBlend.floatValue = (int)BlendMode.One;
+                    dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
                 case 1:
-                    srcBlendProperty.floatValue = (int)BlendMode.DstColor;
-                    dstBlendProperty.floatValue = (int)BlendMode.OneMinusSrcAlpha;
+                    srcBlend.floatValue = (int)BlendMode.DstColor;
+                    dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
                 case 2:
-                    srcBlendProperty.floatValue = (int)BlendMode.One;
-                    dstBlendProperty.floatValue = (int)BlendMode.One;
+                    srcBlend.floatValue = (int)BlendMode.One;
+                    dstBlend.floatValue = (int)BlendMode.One;
                     break;
             }
             EditorUtility.SetDirty(m_targetMaterial);        }
 
-        MaterialProperty tintBlendModeProperty = FindProperty("_TintBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(tintBlendModeProperty, new GUIContent(tintBlendModeProperty.displayName));
-        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            switch (Mathf.RoundToInt(tintBlendModeProperty.floatValue))
+        MaterialProperty tintBlendMode = FindProperty("_TintBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(tintBlendMode, new GUIContent(tintBlendMode.displayName));
+        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            switch (Mathf.RoundToInt(tintBlendMode.floatValue))
             {
                 case 0:
                     list.Remove("_TINTBLENDMODE_ADDITIVE");
@@ -48,26 +48,37 @@
 
         EditorGUILayout.Space();
 
-        MaterialProperty useStrokeProperty = FindProperty("_UseStroke", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(useStrokeProperty, new GUIContent(useStrokeProperty.displayName));
-        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            if (useStrokeProperty.floatValue > 0.5f) list.Add("_USE_STROKE");            else list.Remove("_USE_STROKE");            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
-        if (useStrokeProperty.floatValue > 0.5)
+        MaterialProperty useStroke = FindProperty("_UseStroke", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(useStroke, new GUIContent(useStroke.displayName));
+        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            if (useStroke.floatValue > 0.5f) list.Add("_USE_STROKE");            else list.Remove("_USE_STROKE");            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
+        if (useStroke.floatValue > 0.5)
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            MaterialProperty strokeColorProperty = FindProperty("_StrokeColor", properties);
-            materialEditor.ShaderProperty(strokeColorProperty, new GUIContent(strokeColorProperty.displayName));            MaterialProperty strokeWidthProperty = FindProperty("_StrokeWidth", properties);
-            materialEditor.ShaderProperty(strokeWidthProperty, new GUIContent(strokeWidthProperty.displayName));            EditorGUILayout.EndVertical();
+            MaterialProperty strokeColor = FindProperty("_StrokeColor", properties);
+            materialEditor.ShaderProperty(strokeColor, new GUIContent(strokeColor.displayName));            MaterialProperty strokeWidth = FindProperty("_StrokeWidth", properties);
+            materialEditor.ShaderProperty(strokeWidth, new GUIContent(strokeWidth.displayName));            EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
         }
 
-        MaterialProperty useColorReplaceProperty = FindProperty("_UseColorReplace", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(useColorReplaceProperty, new GUIContent(useColorReplaceProperty.displayName));
-        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            if (useColorReplaceProperty.floatValue > 0.5f) list.Add("_USE_COLORREPLACE");            else list.Remove("_USE_COLORREPLACE");            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
-        if (useColorReplaceProperty.floatValue > 0.5)
+        MaterialProperty useColorReplace = FindProperty("_UseColorReplace", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(useColorReplace, new GUIContent(useColorReplace.displayName));
+        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            if (useColorReplace.floatValue > 0.5f) list.Add("_USE_COLORREPLACE");            else list.Remove("_USE_COLORREPLACE");            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
+        if (useColorReplace.floatValue > 0.5)
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            MaterialProperty colorReplaceSourceProperty = FindProperty("_ColorReplaceSource", properties);
-            materialEditor.ShaderProperty(colorReplaceSourceProperty, new GUIContent(colorReplaceSourceProperty.displayName));            MaterialProperty colorReplaceTargetProperty = FindProperty("_ColorReplaceTarget", properties);
-            materialEditor.ShaderProperty(colorReplaceTargetProperty, new GUIContent(colorReplaceTargetProperty.displayName));            MaterialProperty colorReplaceFuzzinessProperty = FindProperty("_ColorReplaceFuzziness", properties);
-            materialEditor.ShaderProperty(colorReplaceFuzzinessProperty, new GUIContent(colorReplaceFuzzinessProperty.displayName));            EditorGUILayout.EndVertical();        }
+            MaterialProperty colorReplaceSource = FindProperty("_ColorReplaceSource", properties);
+            materialEditor.ShaderProperty(colorReplaceSource, new GUIContent(colorReplaceSource.displayName));            MaterialProperty colorReplaceTarget = FindProperty("_ColorReplaceTarget", properties);
+            materialEditor.ShaderProperty(colorReplaceTarget, new GUIContent(colorReplaceTarget.displayName));            MaterialProperty colorReplaceFuzziness = FindProperty("_ColorReplaceFuzziness", properties);
+            materialEditor.ShaderProperty(colorReplaceFuzziness, new GUIContent(colorReplaceFuzziness.displayName));            EditorGUILayout.EndVertical();            EditorGUILayout.Space();
+        }
+
+        MaterialProperty useDuochrome = FindProperty("_UseDuochrome", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(useDuochrome, new GUIContent(useDuochrome.displayName));
+        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            if (useDuochrome.floatValue > 0.5f) list.Add("_USE_DUOCHROME");            else list.Remove("_USE_DUOCHROME");            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
+        if (useDuochrome.floatValue > 0.5)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+            MaterialProperty duochromeMin = FindProperty("_DuochromeMin", properties);
+            materialEditor.ShaderProperty(duochromeMin, new GUIContent(duochromeMin.displayName));            MaterialProperty duochromeMax = FindProperty("_DuochromeMax", properties);
+            materialEditor.ShaderProperty(duochromeMax, new GUIContent(duochromeMax.displayName));            EditorGUILayout.EndVertical();        }
     }}

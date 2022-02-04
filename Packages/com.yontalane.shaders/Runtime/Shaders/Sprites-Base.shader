@@ -22,6 +22,10 @@ Shader "Yontalane/Sprites/Base"
         _ColorReplaceTarget ("With this", Color) = (1,1,1,1)
         _ColorReplaceFuzziness ("Fuzziness", Range(0.0, 1.0)) = 0.01
 
+        [Toggle] _UseDuochrome ("Duochrome", Float) = 0
+        _DuochromeMin ("Black becomes", Color) = (0,0,0,1)
+        _DuochromeMax ("White becomes", Color) = (1,1,1,1)
+
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend Mode", Float) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend Mode", Float) = 10
     }
@@ -51,6 +55,7 @@ Shader "Yontalane/Sprites/Base"
             #pragma shader_feature _ _TINTBLENDMODE_OVERLAY
             #pragma shader_feature _ _USE_STROKE
             #pragma shader_feature _ _USE_COLORREPLACE
+            #pragma shader_feature _ _USE_DUOCHROME
             #pragma vertex SpriteVert
             #pragma fragment Frag
             #pragma target 2.0
@@ -84,8 +89,19 @@ Shader "Yontalane/Sprites/Base"
                 float _ColorReplaceFuzziness;
             #endif
 
+            #if (_USE_DUOCHROME)
+                fixed4 _DuochromeMin;
+                fixed4 _DuochromeMax;
+            #endif
+
             fixed4 ExtrasBeforeTint(v2f IN, fixed4 c)
             {
+                #if (_USE_DUOCHROME)
+                    half4 duochrome = lerp(_DuochromeMin, _DuochromeMax, c.r);
+                    duochrome.a *= c.a;
+                    c = duochrome;
+                #endif
+
                 return c;
             }
 
