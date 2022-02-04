@@ -6,6 +6,9 @@
   "unity": "2020.3",
   "unityRelease": "25f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.shaders/Documentation~/index.md",
+  "dependencies": {
+    "com.unity.2d.sprite": "1.0.0"
+  },
   "keywords": [
     "graphics",
     "shaders",
