@@ -14,15 +14,23 @@
             MaterialProperty dstBlend = FindProperty("_DstBlend", properties);
             switch (Mathf.RoundToInt(materialBlendMode.floatValue))
             {
-                case 0:
+                case 0: // Normal
+                    srcBlend.floatValue = (int)BlendMode.SrcAlpha;
+                    dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
+                    break;
+                case 1: // Normal (Pre-Multiplied)
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
-                case 1:
+                case 2: // Multiply
                     srcBlend.floatValue = (int)BlendMode.DstColor;
                     dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
-                case 2:
+                case 3: // Screen
+                    srcBlend.floatValue = (int)BlendMode.OneMinusDstColor;
+                    dstBlend.floatValue = (int)BlendMode.One;
+                    break;
+                case 4: // Additive
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.One;
                     break;

@@ -10,7 +10,7 @@ Shader "Yontalane/Sprites/Base"
         [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
         
-        [KeywordEnum(Normal, Multiply, Additive)] _MaterialBlendMode("Material Blend Mode", float) = 0
+        [KeywordEnum(Normal, Premultiplied, Multiply, Screen, Additive)] _MaterialBlendMode("Material Blend Mode", float) = 0
         [KeywordEnum(Multiply, Additive, Overlay)] _TintBlendMode("Tint Blend Mode", float) = 0
         
         [Toggle] _UseStroke ("Stroke", Float) = 0
@@ -26,7 +26,7 @@ Shader "Yontalane/Sprites/Base"
         _DuochromeMin ("Black becomes", Color) = (0,0,0,1)
         _DuochromeMax ("White becomes", Color) = (1,1,1,1)
 
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend Mode", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend Mode", Float) = 5
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend Mode", Float) = 10
     }
 
