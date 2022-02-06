@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;using UnityEditor;using UnityEngine;using UnityEngine.Rendering;public class SpriteBaseGUI : ShaderGUI{    protected Material m_targetMaterial = null;    override public void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)    {        m_targetMaterial = materialEditor.target as Material;
+﻿using System.Collections.Generic;using UnityEditor;using UnityEngine;using UnityEngine.Rendering;public class SpriteBaseGUI : ShaderGUI{
+    //private static readonly string[] s_materialBlendModes = new string[] { "Normal", "Normal (Pre-multiplied)", "", "Multiply", "Linear Burn", "", "Screen", "Lighten", "Additive" };
+
+    protected Material m_targetMaterial = null;    override public void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)    {        m_targetMaterial = materialEditor.target as Material;
 
         //MaterialProperty mainTex = FindProperty("_MainTex", properties);
         //materialEditor.ShaderProperty(mainTex, new GUIContent(mainTex.displayName));
@@ -10,27 +13,43 @@
         MaterialProperty materialBlendMode = FindProperty("_MaterialBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(materialBlendMode, new GUIContent(materialBlendMode.displayName));
         if (EditorGUI.EndChangeCheck())
         {
+            MaterialProperty blendOp = FindProperty("_BlendOp", properties);
             MaterialProperty srcBlend = FindProperty("_SrcBlend", properties);
             MaterialProperty dstBlend = FindProperty("_DstBlend", properties);
             switch (Mathf.RoundToInt(materialBlendMode.floatValue))
             {
                 case 0: // Normal
+                    blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.SrcAlpha;
                     dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
                 case 1: // Normal (Pre-Multiplied)
+                    blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
                 case 2: // Multiply
+                    blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.DstColor;
                     dstBlend.floatValue = (int)BlendMode.OneMinusSrcAlpha;
                     break;
-                case 3: // Screen
+                case 3: // Linear Burn
+                    blendOp.floatValue = (int)BlendOp.ReverseSubtract;
+                    srcBlend.floatValue = (int)BlendMode.One;
+                    dstBlend.floatValue = (int)BlendMode.One;
+                    break;
+                case 4: // Screen
+                    blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.OneMinusDstColor;
                     dstBlend.floatValue = (int)BlendMode.One;
                     break;
-                case 4: // Additive
+                case 5: // Lighten
+                    blendOp.floatValue = (int)BlendOp.Max;
+                    srcBlend.floatValue = (int)BlendMode.One;
+                    dstBlend.floatValue = (int)BlendMode.One;
+                    break;
+                case 6: // Additive
+                    blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.One;
                     break;
