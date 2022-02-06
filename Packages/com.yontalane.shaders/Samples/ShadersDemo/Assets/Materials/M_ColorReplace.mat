@@ -62,6 +62,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
+    - _BlendOp: 0
     - _BumpScale: 1
     - _ColorReplaceFuzziness: 0.01
     - _Cutoff: 0.5
@@ -81,7 +82,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StrokeWidth: 1
-    - _TintBlendMode: 0
+    - _TintBlendMode: 2
     - _UVSec: 0
     - _UseColorReplace: 1
     - _UseDuochrome: 0

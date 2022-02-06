@@ -10,8 +10,8 @@ Shader "Yontalane/Sprites/Base"
         [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
         
-        [KeywordEnum(Normal, Premultiplied, Multiply, LinearBurn, Screen, Lighten, Additive)] _MaterialBlendMode("Material Blend Mode", float) = 0
-        [KeywordEnum(Multiply, Additive, Overlay)] _TintBlendMode("Tint Blend Mode", float) = 0
+        [KeywordEnum(Normal, Premultiplied, Multiply, LinearBurn, Lighten, Screen, LinearDodge)] _MaterialBlendMode("Material Blend Mode", float) = 0
+        [KeywordEnum(Normal, Darken, Multiply, ColorBurn, LinearBurn, DarkerColor, Lighten, Screen, ColorDodge, LinearDodge, LighterColor, Overlay, SoftLight, HardLight, VividLight, LinearLight, Difference, Subtract, Divide)] _TintBlendMode("Tint Blend Mode", float) = 2
         
         [Toggle] _UseStroke ("Stroke", Float) = 0
         _StrokeColor ("Color", Color) = (0,0,0,1)
@@ -53,11 +53,32 @@ Shader "Yontalane/Sprites/Base"
         Pass
         {
         CGPROGRAM
-            #pragma shader_feature _ _TINTBLENDMODE_ADDITIVE
+            #pragma shader_feature _ _TINTBLENDMODE_DARKEN
+            #pragma shader_feature _ _TINTBLENDMODE_MULTIPLY
+            #pragma shader_feature _ _TINTBLENDMODE_COLORBURN
+            #pragma shader_feature _ _TINTBLENDMODE_LINEARBURN
+            #pragma shader_feature _ _TINTBLENDMODE_DARKERCOLOR
+
+            #pragma shader_feature _ _TINTBLENDMODE_LIGHTEN
+            #pragma shader_feature _ _TINTBLENDMODE_SCREEN
+            #pragma shader_feature _ _TINTBLENDMODE_COLORDODGE
+            #pragma shader_feature _ _TINTBLENDMODE_LINEARDODGE
+            #pragma shader_feature _ _TINTBLENDMODE_LIGHTERCOLOR
+
             #pragma shader_feature _ _TINTBLENDMODE_OVERLAY
+            #pragma shader_feature _ _TINTBLENDMODE_SOFTLIGHT
+            #pragma shader_feature _ _TINTBLENDMODE_HARDLIGHT
+            #pragma shader_feature _ _TINTBLENDMODE_VIVIDLIGHT
+            #pragma shader_feature _ _TINTBLENDMODE_LINEARLIGHT
+
+            #pragma shader_feature _ _TINTBLENDMODE_DIFFERENCE
+            #pragma shader_feature _ _TINTBLENDMODE_SUBTRACT
+            #pragma shader_feature _ _TINTBLENDMODE_DIVIDE
+
             #pragma shader_feature _ _USE_STROKE
             #pragma shader_feature _ _USE_COLORREPLACE
             #pragma shader_feature _ _USE_DUOCHROME
+
             #pragma vertex SpriteVert
             #pragma fragment Frag
             #pragma target 2.0
@@ -135,28 +156,28 @@ Shader "Yontalane/Sprites/Base"
                 return c;
             }
 
-            #if (_TINTBLENDMODE_ADDITIVE)
-                float Overlay(float target, float blend)
+            #if (_TINTBLENDMODE_MULTIPLY)
+                fixed4 AdjustColor(fixed4 c, v2f IN) : SV_Target
+                {
+                    c *= IN.color;
+                    return c;
+                }
+            #elif (_TINTBLENDMODE_LINEARDODGE)
+                float AdjustChannel(float target, float blend)
                 {
                     return 1.0 - (1.0 - 2.0 * (target - 0.5)) * (1.0 - blend);
                 }
 
-                fixed4 Frag(v2f IN) : SV_Target
+                fixed4 AdjustColor(fixed4 c, v2f IN) : SV_Target
                 {
-                    fixed4 c = tex2D(_MainTex, IN.texcoord);
-                    c = ExtrasBeforeTint(IN, c);
-                
-                    c.r = Overlay(c.r, IN.color.r);
-                    c.g = Overlay(c.g, IN.color.g);
-                    c.b = Overlay(c.b, IN.color.b);
+                    c.r = AdjustChannel(c.r, IN.color.r);
+                    c.g = AdjustChannel(c.g, IN.color.g);
+                    c.b = AdjustChannel(c.b, IN.color.b);
                     c.a *= IN.color.a;
-                
-                    c.rgb *= c.a;
-                    c = ExtrasAfterTint(IN, c);
                     return c;
                 }
             #elif (_TINTBLENDMODE_OVERLAY)
-                float Overlay(float target, float blend)
+                float AdjustChannel(float target, float blend)
                 {
                     if (target >= 0.5)
                     {
@@ -168,31 +189,31 @@ Shader "Yontalane/Sprites/Base"
                     }
                 }
 
-                fixed4 Frag(v2f IN) : SV_Target
+                fixed4 AdjustColor(fixed4 c, v2f IN) : SV_Target
                 {
-                    fixed4 c = tex2D(_MainTex, IN.texcoord);
-                    c = ExtrasBeforeTint(IN, c);
-                
-                    c.r = Overlay(c.r, IN.color.r);
-                    c.g = Overlay(c.g, IN.color.g);
-                    c.b = Overlay(c.b, IN.color.b);
+                    c.r = AdjustChannel(c.r, IN.color.r);
+                    c.g = AdjustChannel(c.g, IN.color.g);
+                    c.b = AdjustChannel(c.b, IN.color.b);
                     c.a *= IN.color.a;
-                
-                    c.rgb *= c.a;
-                    c = ExtrasAfterTint(IN, c);
                     return c;
                 }
-            #else
-                fixed4 Frag(v2f IN) : SV_Target
+            #else // Normal
+                fixed4 AdjustColor(fixed4 c, v2f IN) : SV_Target
                 {
-                    fixed4 c = SampleSpriteTexture (IN.texcoord);
-                    c = ExtrasBeforeTint(IN, c);
-                    c *= IN.color;
-                    c.rgb *= c.a;
-                    c = ExtrasAfterTint(IN, c);
+                    c.rgb = IN.color.rgb;
                     return c;
                 }
             #endif
+
+            fixed4 Frag(v2f IN) : SV_Target
+            {
+                fixed4 c = SampleSpriteTexture (IN.texcoord);
+                c = ExtrasBeforeTint(IN, c);
+                c = AdjustColor(c, IN);
+                c.rgb *= c.a;
+                c = ExtrasAfterTint(IN, c);
+                return c;
+            }
         ENDCG
         }
     }

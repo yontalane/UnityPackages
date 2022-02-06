@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;using UnityEditor;using UnityEngine;using UnityEngine.Rendering;public class SpriteBaseGUI : ShaderGUI{
-    //private static readonly string[] s_materialBlendModes = new string[] { "Normal", "Normal (Pre-multiplied)", "", "Multiply", "Linear Burn", "", "Screen", "Lighten", "Additive" };
-
     protected Material m_targetMaterial = null;    override public void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)    {        m_targetMaterial = materialEditor.target as Material;
 
         //MaterialProperty mainTex = FindProperty("_MainTex", properties);
@@ -38,17 +36,17 @@
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.One;
                     break;
-                case 4: // Screen
-                    blendOp.floatValue = (int)BlendOp.Add;
-                    srcBlend.floatValue = (int)BlendMode.OneMinusDstColor;
-                    dstBlend.floatValue = (int)BlendMode.One;
-                    break;
-                case 5: // Lighten
+                case 4: // Lighten
                     blendOp.floatValue = (int)BlendOp.Max;
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.One;
                     break;
-                case 6: // Additive
+                case 5: // Screen
+                    blendOp.floatValue = (int)BlendOp.Add;
+                    srcBlend.floatValue = (int)BlendMode.OneMinusDstColor;
+                    dstBlend.floatValue = (int)BlendMode.One;
+                    break;
+                case 6: // Linear Dodge
                     blendOp.floatValue = (int)BlendOp.Add;
                     srcBlend.floatValue = (int)BlendMode.One;
                     dstBlend.floatValue = (int)BlendMode.One;
@@ -57,18 +55,20 @@
             EditorUtility.SetDirty(m_targetMaterial);        }
 
         MaterialProperty tintBlendMode = FindProperty("_TintBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(tintBlendMode, new GUIContent(tintBlendMode.displayName));
-        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            switch (Mathf.RoundToInt(tintBlendMode.floatValue))
+        if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            RemoveAllTintBlendModes(list);            switch (Mathf.RoundToInt(tintBlendMode.floatValue))
             {
-                case 0:
-                    list.Remove("_TINTBLENDMODE_ADDITIVE");
-                    list.Remove("_TINTBLENDMODE_OVERLAY");
+                // Normal=0
+                // Darken=1, Multiply=2, ColorBurn=3, LinearBurn=4, DarkerColor=5
+                // Lighten=6, Screen=7, ColorDodge=8, LinearDodge=9, LighterColor=10
+                // Overlay=11, SoftLight=12, HardLight=13, VividLight=14, LinearLight=15
+                // Difference=16, Subtract=17, Divide=18
+                case 2: // Multiply
+                    list.Add("_TINTBLENDMODE_MULTIPLY");
                     break;
-                case 1:
-                    list.Remove("_TINTBLENDMODE_OVERLAY");
-                    list.Add("_TINTBLENDMODE_ADDITIVE");
+                case 9: // Linear Dodge
+                    list.Add("_TINTBLENDMODE_LINEARDODGE");
                     break;
-                case 2:
-                    list.Remove("_TINTBLENDMODE_ADDITIVE");
+                case 11: // Overlay
                     list.Add("_TINTBLENDMODE_OVERLAY");
                     break;
             }            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
@@ -108,4 +108,27 @@
             MaterialProperty duochromeMin = FindProperty("_DuochromeMin", properties);
             materialEditor.ShaderProperty(duochromeMin, new GUIContent(duochromeMin.displayName));            MaterialProperty duochromeMax = FindProperty("_DuochromeMax", properties);
             materialEditor.ShaderProperty(duochromeMax, new GUIContent(duochromeMax.displayName));            EditorGUILayout.EndVertical();        }
+    }    private void RemoveAllTintBlendModes(List<string> list)
+    {
+        list.Remove("_TINTBLENDMODE_DARKEN");
+        list.Remove("_TINTBLENDMODE_MULTIPLY");
+        list.Remove("_TINTBLENDMODE_COLORBURN");
+        list.Remove("_TINTBLENDMODE_LINEARBURN");
+        list.Remove("_TINTBLENDMODE_DARKERCOLOR");
+
+        list.Remove("_TINTBLENDMODE_LIGHTEN");
+        list.Remove("_TINTBLENDMODE_SCREEN");
+        list.Remove("_TINTBLENDMODE_COLORDODGE");
+        list.Remove("_TINTBLENDMODE_LINEARDODGE");
+        list.Remove("_TINTBLENDMODE_LIGHTERCOLOR");
+
+        list.Remove("_TINTBLENDMODE_OVERLAY");
+        list.Remove("_TINTBLENDMODE_SOFTLIGHT");
+        list.Remove("_TINTBLENDMODE_HARDLIGHT");
+        list.Remove("_TINTBLENDMODE_VIVIDLIGHT");
+        list.Remove("_TINTBLENDMODE_LINEARLIGHT");
+
+        list.Remove("_TINTBLENDMODE_DIFFERENCE");
+        list.Remove("_TINTBLENDMODE_SUBTRACT");
+        list.Remove("_TINTBLENDMODE_DIVIDE");
     }}

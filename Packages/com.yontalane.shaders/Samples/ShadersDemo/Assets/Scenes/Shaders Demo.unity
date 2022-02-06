@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 1333280958}
   - component: {fileID: 1333280959}
   m_Layer: 0
-  m_Name: Additive Tint
+  m_Name: Linear Dodge Tint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -573,7 +573,7 @@ GameObject:
   - component: {fileID: 1555358134}
   - component: {fileID: 1555358135}
   m_Layer: 0
-  m_Name: Additive
+  m_Name: Linear Dodge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
