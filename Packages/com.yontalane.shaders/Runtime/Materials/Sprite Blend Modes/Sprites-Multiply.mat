@@ -7,10 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_LinearDodge
+  m_Name: Sprites-Multiply
   m_Shader: {fileID: 4800000, guid: ac0c908295e2f4a0fbe7d94d99f0ee45, type: 3}
-  m_ShaderKeywords: _MATERIALBLENDMODE_ADDITIVE _MATERIALBLENDMODE_DARKEN _MATERIALBLENDMODE_LINEARDODGE
-    _TINTBLENDMODE_MULTIPLY
+  m_ShaderKeywords: _MATERIALBLENDMODE_MULTIPLY _TINTBLENDMODE_MULTIPLY
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -67,19 +66,19 @@ Material:
     - _ColorReplaceFuzziness: 0.01
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DstBlend: 1
+    - _DstBlend: 10
     - _EnableExternalAlpha: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaterialBlendMode: 6
+    - _MaterialBlendMode: 2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 2
     - _StrokeWidth: 1
     - _TintBlendMode: 2
     - _UVSec: 0

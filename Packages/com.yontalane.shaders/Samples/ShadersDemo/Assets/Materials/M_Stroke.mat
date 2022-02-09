@@ -97,5 +97,5 @@ Material:
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Stroke: {r: 0, g: 1, b: 0, a: 1}
-    - _StrokeColor: {r: 0, g: 1, b: 0, a: 1}
+    - _StrokeColor: {r: 1, g: 0.2509804, b: 0, a: 1}
   m_BuildTextureStacks: []

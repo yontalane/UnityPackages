@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_LinearDodgeTint
+  m_Name: Sprites-HueTint
   m_Shader: {fileID: 4800000, guid: ac0c908295e2f4a0fbe7d94d99f0ee45, type: 3}
-  m_ShaderKeywords: _MATERIALBLENDMODE_NORMAL _TINTBLENDMODE_ADDITIVE _TINTBLENDMODE_LINEARDODGE
+  m_ShaderKeywords: _MATERIALBLENDMODE_NORMAL _TINTBLENDMODE_HUE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -80,7 +80,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StrokeWidth: 1
-    - _TintBlendMode: 9
+    - _TintBlendMode: 22
     - _UVSec: 0
     - _UseColorReplace: 0
     - _UseDuochrome: 0

@@ -57,19 +57,85 @@
         MaterialProperty tintBlendMode = FindProperty("_TintBlendMode", properties);        EditorGUI.BeginChangeCheck();        materialEditor.ShaderProperty(tintBlendMode, new GUIContent(tintBlendMode.displayName));
         if (EditorGUI.EndChangeCheck())        {            string[] array = m_targetMaterial.shaderKeywords;            List<string> list = new List<string>(array);            RemoveAllTintBlendModes(list);            switch (Mathf.RoundToInt(tintBlendMode.floatValue))
             {
-                // Normal=0
-                // Darken=1, Multiply=2, ColorBurn=3, LinearBurn=4, DarkerColor=5
-                // Lighten=6, Screen=7, ColorDodge=8, LinearDodge=9, LighterColor=10
-                // Overlay=11, SoftLight=12, HardLight=13, VividLight=14, LinearLight=15
-                // Difference=16, Subtract=17, Divide=18
+                case 1: // Darken
+                    list.Add("_TINTBLENDMODE_DARKEN");
+                    break;
                 case 2: // Multiply
                     list.Add("_TINTBLENDMODE_MULTIPLY");
+                    break;
+                case 3: // Color Burn
+                    list.Add("_TINTBLENDMODE_COLORBURN");
+                    break;
+                case 4: // Linear Burn
+                    list.Add("_TINTBLENDMODE_LINEARBURN");
+                    break;
+                case 5: // Darker Color
+                    list.Add("_TINTBLENDMODE_DARKERCOLOR");
+                    break;
+
+                case 6: // Lighten
+                    list.Add("_TINTBLENDMODE_LIGHTEN");
+                    break;
+                case 7: // Screen
+                    list.Add("_TINTBLENDMODE_SCREEN");
+                    break;
+                case 8: // Color Dodge
+                    list.Add("_TINTBLENDMODE_COLORDODGE");
                     break;
                 case 9: // Linear Dodge
                     list.Add("_TINTBLENDMODE_LINEARDODGE");
                     break;
+                case 10: // Lighter Color
+                    list.Add("_TINTBLENDMODE_LIGHTERCOLOR");
+                    break;
+
                 case 11: // Overlay
                     list.Add("_TINTBLENDMODE_OVERLAY");
+                    break;
+                case 12: // Soft Light
+                    list.Add("_TINTBLENDMODE_SOFTLIGHT");
+                    break;
+                case 13: // Hard Light
+                    list.Add("_TINTBLENDMODE_HARDLIGHT");
+                    break;
+                case 14: // Vivid Light
+                    list.Add("_TINTBLENDMODE_VIVIDLIGHT");
+                    break;
+                case 15: // Linear Light
+                    list.Add("_TINTBLENDMODE_LINEARLIGHT");
+                    break;
+                case 16: // Pin Light
+                    list.Add("_TINTBLENDMODE_PINLIGHT");
+                    break;
+                case 17: // Hard Mix
+                    list.Add("_TINTBLENDMODE_HARDMIX");
+                    break;
+
+                case 18: // Difference
+                    list.Add("_TINTBLENDMODE_DIFFERENCE");
+                    break;
+                case 19: // Exclusion
+                    list.Add("_TINTBLENDMODE_EXCLUSION");
+                    break;
+
+                case 20: // Subtract
+                    list.Add("_TINTBLENDMODE_SUBTRACT");
+                    break;
+                case 21: // Divide
+                    list.Add("_TINTBLENDMODE_DIVIDE");
+                    break;
+
+                case 22: // Hue
+                    list.Add("_TINTBLENDMODE_HUE");
+                    break;
+                case 23: // Saturation
+                    list.Add("_TINTBLENDMODE_SATURATION");
+                    break;
+                case 24: // Color
+                    list.Add("_TINTBLENDMODE_COLOR");
+                    break;
+                case 25: // Luminosity
+                    list.Add("_TINTBLENDMODE_LUMINOSITY");
                     break;
             }            m_targetMaterial.shaderKeywords = list.ToArray();            EditorUtility.SetDirty(m_targetMaterial);        }
 

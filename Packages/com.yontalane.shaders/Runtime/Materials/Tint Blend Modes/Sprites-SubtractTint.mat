@@ -7,10 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Duochrome
+  m_Name: Sprites-SubtractTint
   m_Shader: {fileID: 4800000, guid: ac0c908295e2f4a0fbe7d94d99f0ee45, type: 3}
-  m_ShaderKeywords: _MATERIALBLENDMODE_NORMAL _TINTBLENDMODE_MULTIPLY _USEDUOCHROME_ON
-    _USE_DUOCHROME
+  m_ShaderKeywords: _MATERIALBLENDMODE_NORMAL _TINTBLENDMODE_SUBTRACT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -81,23 +80,20 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StrokeWidth: 1
-    - _TintBlendMode: 2
+    - _TintBlendMode: 20
     - _UVSec: 0
     - _UseColorReplace: 0
-    - _UseDuochrome: 1
+    - _UseDuochrome: 0
     - _UseStroke: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.17313607, g: 0, b: 0.3301887, a: 1}
-    - _Color2: {r: 1, g: 1, b: 1, a: 1}
     - _ColorReplaceSource: {r: 0, g: 0, b: 0, a: 1}
     - _ColorReplaceTarget: {r: 1, g: 1, b: 1, a: 1}
-    - _DuochromeMax: {r: 1, g: 1, b: 0, a: 1}
-    - _DuochromeMin: {r: 0.5019608, g: 0, b: 0.7830189, a: 1}
+    - _DuochromeMax: {r: 1, g: 1, b: 1, a: 1}
+    - _DuochromeMin: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Stroke: {r: 1, g: 0, b: 0, a: 1}
     - _StrokeColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
