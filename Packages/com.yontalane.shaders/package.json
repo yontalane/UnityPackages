@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.shaders",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Shaders",
   "description": "A shader library.",
   "unity": "2020.3",
@@ -13,7 +13,11 @@
     "graphics",
     "shaders",
     "materials",
-    "sprites"
+    "sprites",
+    "blend modes",
+    "blend",
+    "photoshop",
+    "overlay"
   ],
   "author": {
     "name": "Yontalane",
