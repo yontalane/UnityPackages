@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Yontalane.LayoutTilemap
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Layout Tilemap/Entity")]
+    [AddComponentMenu("Yontalane/Layout Tilemap/Entity")]
     [RequireComponent(typeof(MapProperties))]
     public class MapEntity : MonoBehaviour
     {

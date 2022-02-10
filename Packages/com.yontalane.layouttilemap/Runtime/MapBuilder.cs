@@ -21,7 +21,7 @@ namespace Yontalane.LayoutTilemap
     #endregion
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Layout Tilemap/Builder")]
+    [AddComponentMenu("Yontalane/Layout Tilemap/Builder")]
     public sealed class MapBuilder : MonoBehaviour
     {
         #region Serialized Fields

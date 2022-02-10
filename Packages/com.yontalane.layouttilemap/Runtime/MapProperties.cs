@@ -27,7 +27,7 @@ namespace Yontalane.LayoutTilemap
     public class MapPropertyDictionary : SerializableDictionary<string, MapPropertyValue> { }
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Layout Tilemap/Properties")]
+    [AddComponentMenu("Yontalane/Layout Tilemap/Properties")]
     public class MapProperties : MonoBehaviour
     {
         [SerializeField]
