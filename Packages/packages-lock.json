@@ -6,6 +6,12 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.2d.tilemap": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 2,
@@ -23,7 +29,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -83,6 +89,15 @@
       "dependencies": {
         "com.yontalane.core": "1.0.0",
         "com.yontalane.query": "1.0.0"
+      }
+    },
+    "com.yontalane.layouttilemap": {
+      "version": "file:com.yontalane.layouttilemap",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.yontalane.core": "1.0.1",
+        "com.unity.2d.tilemap": "1.0.0"
       }
     },
     "com.yontalane.menus": {

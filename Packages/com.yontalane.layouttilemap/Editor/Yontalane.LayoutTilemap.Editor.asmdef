@@ -1,8 +1,8 @@
 {
-    "name": "Yontalane.Shaders.Editor",
-    "rootNamespace": "Yontalane.Shaders",
+    "name": "Yontalane.LayoutTilemap.Editor",
+    "rootNamespace": "Yontalane.LayoutTilemap",
     "references": [
-        "GUID:2c573e6b271651846a79655161004c5b"
+        "GUID:f3b06db84d55774408a9bee6e8f22637"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
