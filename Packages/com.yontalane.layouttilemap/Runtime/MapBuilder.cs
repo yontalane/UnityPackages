@@ -16,7 +16,8 @@ namespace Yontalane.LayoutTilemap
     public struct MapData
     {
         public List<EntityData> entities;
-        public MapProperties mapProperties;
+        public MapProperties properties;
+        public Bounds bounds;
     }
     #endregion
 
@@ -28,11 +29,11 @@ namespace Yontalane.LayoutTilemap
         [SerializeField]
         [Tooltip("The fallback map to load. If the LoadMap method receives a mapToLoad parameter, then that parameter takes precedence over this.")]
         private string m_mapToLoad = "";
-        
+
         [SerializeField]
         [Tooltip("The map will be built as child of this Transform. If left null, the map will be built the MapBuilder Transform.")]
         private Transform m_mapParent = null;
-        
+
         [SerializeField]
         [Tooltip("Should the MapBuilder attempt to load entities from Resources? Note that tiles are always loaded from Resources.")]
         private bool m_loadEntityResources = true;
@@ -50,6 +51,8 @@ namespace Yontalane.LayoutTilemap
         private Vector3 m_offset;
         private TileBase[] m_allTiles;
         private TileBase m_tile;
+        Vector3 m_tilePosition;
+        Bounds m_tileBounds;
         private GameObject m_prefab;
         private GameObject m_instance;
         private MapEntity[] m_entities;
@@ -89,7 +92,7 @@ namespace Yontalane.LayoutTilemap
             m_gridInstance.transform.localEulerAngles = Vector3.zero;
             m_gridInstance.transform.localScale = Vector3.one;
 
-            mapData.mapProperties = m_gridInstance.GetComponent<MapProperties>();
+            mapData.properties = m_gridInstance.GetComponent<MapProperties>();
 
             m_tilemaps = m_gridInstance.GetComponentsInChildren<Tilemap>();
             for (int i = 0; i < m_tilemaps.Length; i++)
@@ -116,7 +119,18 @@ namespace Yontalane.LayoutTilemap
                     {
                         m_tile = m_allTiles[x + y * m_mapBounds.size.x];
                         if (m_tile == null) continue;
-                        CreateObject(m_tile.name, m_tilemapContainer, m_tilemaps[i].CellToWorld(new Vector3Int(x, y, 0)), Vector3.zero, true);
+                        m_tilePosition = m_tilemaps[i].CellToWorld(new Vector3Int(x, y, 0));
+                        m_tileBounds = new Bounds(m_tilePosition, m_tilemaps[i].cellSize);
+                        CreateObject(m_tile.name, m_tilemapContainer, m_tilePosition, Vector3.zero, true);
+
+                        if (i == 0 && x == 0 && y == 0)
+                        {
+                            mapData.bounds = m_tileBounds;
+                        }
+                        else
+                        {
+                            mapData.bounds.Encapsulate(m_tileBounds);
+                        }
                     }
                 }
 

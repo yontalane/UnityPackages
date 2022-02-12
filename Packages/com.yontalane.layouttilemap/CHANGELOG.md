@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.2 - 2022.02.12
+
+**Added**
+
+* Map bounds to build callback event data.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.1 - 2022.02.09
 
 **Added**
