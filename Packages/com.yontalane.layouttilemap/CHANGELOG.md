@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.5 - 2022.02.13
+
+**Added**
+
+* Entity draws collider bounds as gizmo.
+
+**Changed**
+
+* Entity data contains map properties as dictionary rather than component.
+
+**Fixed**
+
+* Entity bounds not exporting properly.
+
 ## 1.0.4 - 2022.02.13
 
 **Added**

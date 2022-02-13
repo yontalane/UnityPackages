@@ -25,6 +25,11 @@ namespace Yontalane.LayoutTilemap
             Gizmos.color = Color.white;
             Gizmos.DrawIcon(transform.position + Vector3.up * 0.5f, "Packages/com.yontalane.layouttilemap/Runtime/Gizmos/MapMarkerGizmo.png", true);
             Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f);
+
+            if (TryGetComponent(out Collider collider))
+            {
+                Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
+            }
         }
     }
 }

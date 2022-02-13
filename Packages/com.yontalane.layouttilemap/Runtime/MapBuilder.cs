@@ -14,14 +14,14 @@ namespace Yontalane.LayoutTilemap
         public bool hasBounds;
         public Bounds bounds;
         public MapEntity entity;
-        public MapProperties properties;
+        public MapPropertyDictionary properties;
         public GameObject gameObject;
     }
 
     public struct MapData
     {
         public List<EntityData> entities;
-        public MapProperties properties;
+        public MapPropertyDictionary properties;
         public Bounds bounds;
     }
     #endregion
@@ -99,7 +99,8 @@ namespace Yontalane.LayoutTilemap
             m_gridInstance.transform.localEulerAngles = Vector3.zero;
             m_gridInstance.transform.localScale = Vector3.one;
 
-            mapData.properties = m_gridInstance.GetComponent<MapProperties>();
+            MapProperties mapProperties = m_gridInstance.GetComponent<MapProperties>();
+            mapData.properties = mapProperties != null ? mapProperties.Properties : new MapPropertyDictionary();
 
             m_tilemaps = m_gridInstance.GetComponentsInChildren<Tilemap>();
             for (int i = 0; i < m_tilemaps.Length; i++)
@@ -150,15 +151,15 @@ namespace Yontalane.LayoutTilemap
                         position = m_tilemaps[i].MapLocalToGridLocal(entity.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle),
                         eulerAngles = entity.transform.localEulerAngles,
                         entity = entity,
-                        properties = entity.MapProperties
+                        properties = entity.MapProperties.Properties
                     };
 
                     if (entity.TryGetComponent(out Collider collider))
                     {
                         entityData.hasBounds = true;
 
-                        m_boundsMin = entity.transform.InverseTransformPoint(collider.bounds.min);
-                        m_boundsMax = entity.transform.InverseTransformPoint(collider.bounds.max);
+                        m_boundsMin = m_tilemaps[i].transform.InverseTransformPoint(collider.bounds.min);
+                        m_boundsMax = m_tilemaps[i].transform.InverseTransformPoint(collider.bounds.max);
 
                         m_boundsMin = m_tilemaps[i].MapLocalToGridLocal(m_boundsMin, m_gridBounds, m_gridInstance.cellSwizzle);
                         m_boundsMax = m_tilemaps[i].MapLocalToGridLocal(m_boundsMax, m_gridBounds, m_gridInstance.cellSwizzle);
