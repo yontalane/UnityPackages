@@ -11,6 +11,8 @@ namespace Yontalane.LayoutTilemap
         public string name;
         public Vector3 position;
         public Vector3 eulerAngles;
+        public bool hasBounds;
+        public Bounds bounds;
         public MapEntity entity;
         public MapProperties properties;
         public GameObject gameObject;
@@ -56,6 +58,8 @@ namespace Yontalane.LayoutTilemap
         private TileBase m_tile;
         Vector3 m_tilePosition;
         Bounds m_tileBounds;
+        Vector3 m_boundsMin;
+        Vector3 m_boundsMax;
         private GameObject m_prefab;
         private GameObject m_instance;
         private MapEntity[] m_entities;
@@ -148,6 +152,25 @@ namespace Yontalane.LayoutTilemap
                         entity = entity,
                         properties = entity.MapProperties
                     };
+
+                    if (entity.TryGetComponent(out Collider collider))
+                    {
+                        entityData.hasBounds = true;
+
+                        m_boundsMin = entity.transform.InverseTransformPoint(collider.bounds.min);
+                        m_boundsMax = entity.transform.InverseTransformPoint(collider.bounds.max);
+
+                        m_boundsMin = m_tilemaps[i].MapLocalToGridLocal(m_boundsMin, m_gridBounds, m_gridInstance.cellSwizzle);
+                        m_boundsMax = m_tilemaps[i].MapLocalToGridLocal(m_boundsMax, m_gridBounds, m_gridInstance.cellSwizzle);
+
+                        entityData.bounds = new Bounds();
+                        entityData.bounds.SetMinMax(m_boundsMin, m_boundsMax);
+                    }
+                    else
+                    {
+                        entityData.hasBounds = false;
+                        entityData.bounds = new Bounds(entityData.position, Vector3.zero);
+                    }
 
                     if (m_loadEntityResources)
                     {

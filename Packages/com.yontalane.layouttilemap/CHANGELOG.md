@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 - 2022.02.13
+
+**Added**
+
+* Exporting additional entity data.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.3 - 2022.02.12
 
 **Added**
