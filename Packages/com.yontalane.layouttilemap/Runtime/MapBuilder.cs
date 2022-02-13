@@ -8,9 +8,12 @@ namespace Yontalane.LayoutTilemap
     #region Structs
     public struct EntityData
     {
-        public GameObject gameObject;
+        public string name;
+        public Vector3 position;
+        public Vector3 eulerAngles;
         public MapEntity entity;
         public MapProperties properties;
+        public GameObject gameObject;
     }
 
     public struct MapData
@@ -139,6 +142,9 @@ namespace Yontalane.LayoutTilemap
                 {
                     EntityData entityData = new EntityData
                     {
+                        name = entity.name,
+                        position = m_tilemaps[i].MapLocalToGridLocal(entity.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle),
+                        eulerAngles = entity.transform.localEulerAngles,
                         entity = entity,
                         properties = entity.MapProperties
                     };
@@ -148,8 +154,8 @@ namespace Yontalane.LayoutTilemap
                         entityData.gameObject = CreateObject
                             (entity.name,
                              m_mapParent,
-                             m_tilemaps[i].MapLocalToGridLocal(entity.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle),
-                             entity.transform.localEulerAngles,
+                             entityData.position,
+                             entityData.eulerAngles,
                              false);
                         entityData.gameObject.name = entity.name;
                     }
