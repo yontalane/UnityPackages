@@ -20,6 +20,7 @@ namespace Yontalane.LayoutTilemap
 
     public struct MapData
     {
+        public string name;
         public List<EntityData> entities;
         public MapPropertyDictionary properties;
         public Bounds bounds;
@@ -91,6 +92,7 @@ namespace Yontalane.LayoutTilemap
 
             MapData mapData = new MapData
             {
+                name = mapToLoad,
                 entities = new List<EntityData>()
             };
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6 - 2022.02.13
+
+**Added**
+
+* Added map name to MapData.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.5 - 2022.02.13
 
 **Added**
