@@ -69,6 +69,19 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 | **key** | The key. |
 | **value** | The value. |
 
+## Collision Listener
+
+Add this to an object to allow other objects to listen for its collision events.
+
+### Delegates
+
+| Name | Description |
+| --- | ---|
+| **OnCollision** | Invokes when entering or exiting collision. Passes the state (enter or exit) and Collision object. |
+| **OnCollision2D** | Invokes when entering or exiting 2D collision. Passes the state (enter or exit) and Collision2D object. |
+| **OnTrigger** | Invokes when entering or exiting trigger. Passes the state (enter or exit) and other Collider. |
+| **OnTrigger2D** | Invokes when entering or exiting 2D trigger. Passes the state (enter or exit) and other Collider2D. |
+
 ## Float Range
 
 ### Properties

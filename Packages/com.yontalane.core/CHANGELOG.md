@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.2 - 2022.02.16
+
+**Added**
+
+* Collision Listener
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.1 - 2022.01.14
 
 **Added**
