@@ -183,7 +183,10 @@ namespace Yontalane.LayoutTilemap
                              entityData.position,
                              entityData.eulerAngles,
                              false);
-                        entityData.gameObject.name = entity.name;
+                        if (entityData.gameObject != null)
+                        {
+                            entityData.gameObject.name = entity.name;
+                        }
                     }
 
                     mapData.entities.Add(entityData);
