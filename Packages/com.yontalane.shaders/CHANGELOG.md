@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 - 2022.04.09
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Fixed line endings in editor script.
+
 ## 1.0.2 - 2022.02.04
 
 **Added**

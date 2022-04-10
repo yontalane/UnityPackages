@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.8 - 2022.04.09
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Added null check when loading map entity resources.
+
 ## 1.0.6 - 2022.02.13
 
 **Added**
