@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6 - 2022.05.08
+
+**Added**
+
+* Retone shader.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.5 - 2022.04.09
 
 **Added**

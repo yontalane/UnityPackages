@@ -45,3 +45,10 @@ Simultaneously darken and desaturate the screen.
 ### Pixelate
 
 Pixelate the screen.
+
+## Miscellaneous
+
+### Retone
+
+Replace the colors and lighting on a material with textures. Choose a texture based on the underlying color value.
+
