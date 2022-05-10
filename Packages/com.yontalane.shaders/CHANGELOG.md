@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.8 - 2022.05.10
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Added assembly def to shaders runtime folder.
+
 ## 1.0.7 - 2022.05.09
 
 **Added**

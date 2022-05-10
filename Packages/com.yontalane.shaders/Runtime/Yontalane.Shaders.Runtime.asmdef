@@ -1,10 +1,7 @@
 {
-    "name": "Yontalane.Shaders.Editor",
+    "name": "Yontalane.Shaders.Runtime",
     "rootNamespace": "Yontalane.Shaders",
-    "references": [
-        "GUID:4e5c7e9799ca7487ea499f184fa63d84",
-        "GUID:2c573e6b271651846a79655161004c5b"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
