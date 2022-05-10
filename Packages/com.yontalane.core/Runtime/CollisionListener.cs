@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    [AddComponentMenu("Yontalane/Collision Listener")]
     public class CollisionListener : MonoBehaviour
     {
         public enum Type

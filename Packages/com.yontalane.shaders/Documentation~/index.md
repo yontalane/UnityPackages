@@ -46,7 +46,15 @@ Simultaneously darken and desaturate the screen.
 
 Pixelate the screen.
 
+### Retone
+
+Replace the colors on the screen with textures. Choose a texture based on the underlying color value.
+
 ## Miscellaneous
+
+### Outline
+
+A standard surface shader with an outline.
 
 ### Retone
 

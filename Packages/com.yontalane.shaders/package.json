@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.shaders",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "displayName": "Shaders",
   "description": "A shader library.",
   "unity": "2020.3",
@@ -24,5 +24,17 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
+  "samples": [
+    {
+      "displayName": "Sprite Demo",
+      "description": "Contains sample implementation of sprite shaders.",
+      "path": "Samples~/ShadersDemo"
+    },
+    {
+      "displayName": "Screen Demo",
+      "description": "Contains sample implementations of screen shaders.",
+      "path": "Samples~/ScreenDemo"
+    }
+  ],
   "type": "library"
 }

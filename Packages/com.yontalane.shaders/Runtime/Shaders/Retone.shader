@@ -28,8 +28,9 @@ Shader "Yontalane/Retone"
         _Tone08_Min ("Tone 08 Min Cutoff", Float) = 0.889
 
         [Toggle] _UsePost ("Post", Float) = 0.0
-        _PostScreen ("Screen", Color) = (0, 0, 0, 1)
+        _PostNormal ("Normal", Color) = (0, 0, 0, 0)
         _PostMultiply ("Multiply", Color) = (1, 1, 1, 1)
+        _PostAdd ("Add", Color) = (0, 0, 0, 1)
 
         _PixelScale ("Pixel Scale", Float) = 1.0
 
@@ -161,8 +162,9 @@ Shader "Yontalane/Retone"
             #endif
 
             #if (_USE_POST)
-                float4 _PostScreen;
+                float4 _PostNormal;
                 float4 _PostMultiply;
+                float4 _PostAdd;
             #endif
 
             float _PixelScale;
@@ -332,8 +334,13 @@ Shader "Yontalane/Retone"
                 #endif
 
                 #if (_USE_POST)
-                    c = lerp(c, lerp(_PostScreen, c, test), _PostScreen.a);
+                    c = lerp(c, _PostNormal, _PostNormal.a);
                     c = lerp(c, c * _PostMultiply, _PostMultiply.a);
+                    c += _PostAdd * _PostAdd.a;
+                    c.r = clamp(c.r, 0, 1);
+                    c.g = clamp(c.g, 0, 1);
+                    c.b = clamp(c.b, 0, 1);
+                    c.a = clamp(c.a, 0, 1);
                 #endif
                 
                 return c;

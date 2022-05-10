@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.7 - 2022.05.09
+
+**Added**
+
+* Outline shader shader.
+* Screen version of retone shader.
+* Container scripts to attach shaders to the camera.
+* Sample project for screen effects.
+
+**Changed**
+
+**Fixed**
+
+* Listed sprite shaders sample project in project.json.
+
 ## 1.0.6 - 2022.05.08
 
 **Added**
