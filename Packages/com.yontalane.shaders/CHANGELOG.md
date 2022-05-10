@@ -4,7 +4,7 @@
 
 **Added**
 
-* Outline shader shader.
+* Outline shader.
 * Screen version of retone shader.
 * Container scripts to attach shaders to the camera.
 * Sample project for screen effects.
