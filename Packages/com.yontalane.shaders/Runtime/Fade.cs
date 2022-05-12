@@ -5,7 +5,7 @@ namespace Yontalane.Shaders
     [RequireComponent(typeof(Camera))]
     [ExecuteAlways]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Yontalane/Shaders/Fader")]
+    [AddComponentMenu("Yontalane/Shaders/Fade")]
     public class Fade : ScreenEffect
 	{
         [SerializeField]

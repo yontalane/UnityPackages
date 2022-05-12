@@ -57,7 +57,11 @@ namespace Yontalane.Shaders
 
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            if (Material == null) return;
+            if (Material == null)
+            {
+                Debug.LogWarning($"{GetType().Name} is missing a shader or a material.");
+                return;
+            }
 
             if (!m_wasSetThisSession)
             {
