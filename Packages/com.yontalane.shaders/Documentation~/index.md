@@ -58,5 +58,5 @@ A standard surface shader with an outline.
 
 ### Retone
 
-Replace the colors and lighting on a material with textures. Choose a texture based on the underlying color value.
+Replace the colors and lighting on an object with textures. Choose a texture based on the underlying color value.
 
