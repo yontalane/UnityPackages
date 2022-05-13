@@ -4,91 +4,34 @@ using UnityEngine;
 
 namespace Yontalane.Shaders
 {
-    public abstract class BaseRetoneGUI : ShaderGUI
+    public class RetoneBaseGUI : ShaderGUI
     {
-        private static GUIStyle s_style = null;
-        protected static GUIStyle Style
-        {
-            get
-            {
-                if (s_style == null)
-                {
-                    s_style = new GUIStyle
-                    {
-                        alignment = EditorStyles.helpBox.alignment,
-                        border = EditorStyles.helpBox.border,
-                        clipping = EditorStyles.helpBox.clipping,
-                        contentOffset = EditorStyles.helpBox.contentOffset,
-                        fixedHeight = EditorStyles.helpBox.fixedHeight,
-                        fixedWidth = EditorStyles.helpBox.fixedWidth,
-                        focused = EditorStyles.helpBox.focused,
-                        font = EditorStyles.helpBox.font,
-                        fontSize = EditorStyles.helpBox.fontSize,
-                        fontStyle = EditorStyles.helpBox.fontStyle,
-                        hover = EditorStyles.helpBox.hover,
-                        imagePosition = EditorStyles.helpBox.imagePosition,
-                        margin = EditorStyles.helpBox.margin,
-                        name = EditorStyles.helpBox.name,
-                        normal = EditorStyles.helpBox.normal,
-                        overflow = EditorStyles.helpBox.overflow,
-                        padding = new RectOffset(10, 10, 10, 10),
-                        richText = EditorStyles.helpBox.richText,
-                        stretchHeight = EditorStyles.helpBox.stretchHeight,
-                        stretchWidth = EditorStyles.helpBox.stretchWidth,
-                        wordWrap = EditorStyles.helpBox.wordWrap
-                    };
-                }
-                return s_style;
-            }
-        }
-
-        protected Material m_targetMaterial = null;
+        public Material TargetMaterial { get; protected set; } = null;
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
-            m_targetMaterial = materialEditor.target as Material;
+            TargetMaterial = materialEditor.target as Material;
 
-            EditorGUILayout.LabelField(new GUIContent("MAIN", "Base material properties."), EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical(Style);
+            ShaderGUIUtility.BeginSection(new GUIContent("Main", "Base material properties."));
 
-            OnMainGUI(materialEditor, properties, m_targetMaterial);
+            OnMainGUI(materialEditor, properties, TargetMaterial);
 
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.Space();
+            ShaderGUIUtility.EndSection();
+            ShaderGUIUtility.BeginSection(new GUIContent("Tone", "Draw textures on the material depending on the color from the base properties."));
 
-            EditorGUILayout.LabelField(new GUIContent("TONE", "Draw textures on the material depending on the color from the base properties."), EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical(Style);
+            OnToneGUI(materialEditor, properties, TargetMaterial);
 
-            OnToneGUI(materialEditor, properties, m_targetMaterial);
+            ShaderGUIUtility.EndSection();
 
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.Space();
-
-            MaterialProperty usePost = FindProperty("_UsePost", properties);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("TINT", "Add a color tint after drawing the tone textures."), EditorStyles.boldLabel);
-            GUILayout.FlexibleSpace();
-            EditorGUI.BeginChangeCheck();
-            usePost.floatValue = EditorGUILayout.Toggle(usePost.floatValue > 0.5f, GUILayout.Width(EditorGUIUtility.singleLineHeight)) ? 1f : 0f;
-            if (EditorGUI.EndChangeCheck())
+            MaterialProperty post = FindProperty("_UsePost", properties);
+            if (ShaderGUIUtility.SectionHeaderToggle(new GUIContent(post.displayName, "Add a color tint after drawing the tone textures."), post, TargetMaterial, "_USE_POST"))
             {
-                string[] array = m_targetMaterial.shaderKeywords;
-                List<string> list = new List<string>(array);
-                if (usePost.floatValue > 0.5f) list.Add("_USE_POST");
-                else list.Remove("_USE_POST");
-                m_targetMaterial.shaderKeywords = list.ToArray();
-                EditorUtility.SetDirty(m_targetMaterial);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            if (usePost.floatValue > 0.5f)
-            {
-                EditorGUILayout.BeginVertical(Style);
-                OnTintGUI(materialEditor, properties, m_targetMaterial);
-                EditorGUILayout.EndVertical();
+                ShaderGUIUtility.BeginSection();
+                OnTintGUI(materialEditor, properties, TargetMaterial);
+                ShaderGUIUtility.EndSection();
             }
 
-            OnExtraGUI(materialEditor, properties, m_targetMaterial);
+            OnExtraGUI(materialEditor, properties, TargetMaterial);
         }
 
         protected virtual void OnMainGUI(MaterialEditor materialEditor, MaterialProperty[] properties, Material material)
@@ -106,7 +49,7 @@ namespace Yontalane.Shaders
             if (EditorGUI.EndChangeCheck())
             {
                 blendMode.floatValue = blendModeValue;
-                string[] array = m_targetMaterial.shaderKeywords;
+                string[] array = TargetMaterial.shaderKeywords;
                 List<string> list = new List<string>(array);
                 list.Remove("_BLEND_MODE_NORMAL");
                 list.Remove("_BLEND_MODE_MULTIPLY");
@@ -123,8 +66,8 @@ namespace Yontalane.Shaders
                         list.Add("_BLEND_MODE_ADD");
                         break;
                 }
-                m_targetMaterial.shaderKeywords = list.ToArray();
-                EditorUtility.SetDirty(m_targetMaterial);
+                TargetMaterial.shaderKeywords = list.ToArray();
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             if (blendModeValue > 0.5f)
@@ -135,7 +78,7 @@ namespace Yontalane.Shaders
                 blendAmount.floatValue = EditorGUILayout.Slider(blendAmount.displayName, blendAmount.floatValue, 0f, 1f);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    EditorUtility.SetDirty(m_targetMaterial);
+                    EditorUtility.SetDirty(TargetMaterial);
                 }
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
@@ -148,7 +91,7 @@ namespace Yontalane.Shaders
             if (EditorGUI.EndChangeCheck())
             {
                 sourceChannel.floatValue = sourceChannelValue;
-                string[] array = m_targetMaterial.shaderKeywords;
+                string[] array = TargetMaterial.shaderKeywords;
                 List<string> list = new List<string>(array);
                 list.Remove("_SOURCE_R");
                 list.Remove("_SOURCE_G");
@@ -173,8 +116,8 @@ namespace Yontalane.Shaders
                         list.Add("_SOURCE_RGB");
                         break;
                 }
-                m_targetMaterial.shaderKeywords = list.ToArray();
-                EditorUtility.SetDirty(m_targetMaterial);
+                TargetMaterial.shaderKeywords = list.ToArray();
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             MaterialProperty pixelScale = FindProperty("_PixelScale", properties);
@@ -184,7 +127,7 @@ namespace Yontalane.Shaders
             if (EditorGUI.EndChangeCheck())
             {
                 pixelScale.floatValue = Mathf.Max(pixelScaleValue, 1);
-                EditorUtility.SetDirty(m_targetMaterial);
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             MaterialProperty toneCount = FindProperty("_ToneCount", properties);
@@ -194,7 +137,7 @@ namespace Yontalane.Shaders
             if (EditorGUI.EndChangeCheck())
             {
                 toneCount.floatValue = toneCountValue;
-                string[] array = m_targetMaterial.shaderKeywords;
+                string[] array = TargetMaterial.shaderKeywords;
                 List<string> list = new List<string>(array);
                 list.Remove("_TONE_COUNT_2");
                 list.Remove("_TONE_COUNT_3");
@@ -219,8 +162,8 @@ namespace Yontalane.Shaders
                         list.Add("_TONE_COUNT_9");
                         break;
                 }
-                m_targetMaterial.shaderKeywords = list.ToArray();
-                EditorUtility.SetDirty(m_targetMaterial);
+                TargetMaterial.shaderKeywords = list.ToArray();
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             EditorGUILayout.Space();
@@ -291,7 +234,7 @@ namespace Yontalane.Shaders
             tone.textureValue = EditorGUILayout.ObjectField(tone.textureValue, typeof(Texture2D), false, GUILayout.Height(EditorGUIUtility.singleLineHeight)) as Texture2D;
             if (EditorGUI.EndChangeCheck())
             {
-                EditorUtility.SetDirty(m_targetMaterial);
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             if (includeMin)
@@ -301,7 +244,7 @@ namespace Yontalane.Shaders
                 toneMin.floatValue = EditorGUILayout.Slider(toneMin.floatValue, 0f, 1f);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    EditorUtility.SetDirty(m_targetMaterial);
+                    EditorUtility.SetDirty(TargetMaterial);
                 }
             }
             else

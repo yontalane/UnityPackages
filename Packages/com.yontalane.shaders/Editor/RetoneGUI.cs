@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yontalane.Shaders
 {
-    public class RetoneGUI : BaseRetoneGUI
+    public class RetoneGUI : RetoneBaseGUI
     {
         protected override void OnMainGUI(MaterialEditor materialEditor, MaterialProperty[] properties, Material material)
         {
@@ -13,7 +13,7 @@ namespace Yontalane.Shaders
             mainTex.textureValue = EditorGUILayout.ObjectField(mainTex.displayName, mainTex.textureValue, typeof(Texture2D), false, GUILayout.Height(EditorGUIUtility.singleLineHeight)) as Texture2D;
             if (EditorGUI.EndChangeCheck())
             {
-                EditorUtility.SetDirty(m_targetMaterial);
+                EditorUtility.SetDirty(TargetMaterial);
             }
 
             base.OnMainGUI(materialEditor, properties, material);
@@ -21,28 +21,10 @@ namespace Yontalane.Shaders
 
         protected override void OnExtraGUI(MaterialEditor materialEditor, MaterialProperty[] properties, Material material)
         {
-            EditorGUILayout.Space();
-
             MaterialProperty useOutline = FindProperty("_UseOutline", properties);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("OUTLINE", "Draw an outline around the object."), EditorStyles.boldLabel);
-            GUILayout.FlexibleSpace();
-            EditorGUI.BeginChangeCheck();
-            useOutline.floatValue = EditorGUILayout.Toggle(useOutline.floatValue > 0.5f, GUILayout.Width(EditorGUIUtility.singleLineHeight)) ? 1f : 0f;
-            if (EditorGUI.EndChangeCheck())
+            if (ShaderGUIUtility.SectionHeaderToggle(new GUIContent(useOutline.displayName, "Draw an outline around the object."), useOutline, TargetMaterial, "_USE_OUTLINE"))
             {
-                string[] array = m_targetMaterial.shaderKeywords;
-                List<string> list = new List<string>(array);
-                if (useOutline.floatValue > 0.5f) list.Add("_USE_OUTLINE");
-                else list.Remove("_USE_OUTLINE");
-                m_targetMaterial.shaderKeywords = list.ToArray();
-                EditorUtility.SetDirty(m_targetMaterial);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            if (useOutline.floatValue > 0.5f)
-            {
-                EditorGUILayout.BeginVertical(Style);
+                ShaderGUIUtility.BeginSection();
 
                 MaterialProperty outlineColor = FindProperty("_OutlineColor", properties);
                 materialEditor.ShaderProperty(outlineColor, new GUIContent(outlineColor.displayName));
@@ -54,10 +36,10 @@ namespace Yontalane.Shaders
                 if (EditorGUI.EndChangeCheck())
                 {
                     outlineWidth.floatValue = Mathf.Max(outlineWidthValue, 0);
-                    EditorUtility.SetDirty(m_targetMaterial);
+                    EditorUtility.SetDirty(TargetMaterial);
                 }
 
-                EditorGUILayout.EndVertical();
+                ShaderGUIUtility.EndSection();
             }
         }
     }

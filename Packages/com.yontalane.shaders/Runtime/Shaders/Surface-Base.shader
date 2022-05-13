@@ -1,4 +1,4 @@
-Shader "Yontalane/Outline"
+Shader "Yontalane/Surface"
 {
     Properties
     {
@@ -7,10 +7,14 @@ Shader "Yontalane/Outline"
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
-        _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
-        _OutlineWidth ("Outline Width", Float) = 1.0
+		[Toggle] _UseOutline ("Outline", Float) = 1.0
+        _OutlineColor ("Color", Color) = (0, 0, 0, 1)
+        _OutlineWidth ("Width", Float) = 1.0
 
     }
+
+    CustomEditor "Yontalane.Shaders.SurfaceBaseGUI"
+
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -53,7 +57,7 @@ Shader "Yontalane/Outline"
 			o.Alpha = c.a;
 		}
 		ENDCG
-		
+
 		Pass
 		{
 			Name "Outline"
@@ -62,28 +66,45 @@ Shader "Yontalane/Outline"
 
 			CGPROGRAM
 
+	        #pragma shader_feature _ _USE_OUTLINE
+
 			#pragma vertex vert
 			#pragma fragment frag
 
-			half4 _OutlineColor;
-			half _OutlineWidth;
+			#if (_USE_OUTLINE)
 
-			float4 vert(float4 position : POSITION, float3 normal : NORMAL) : SV_POSITION
-			{
-				float4 clipPosition = UnityObjectToClipPos(position);
-				float3 clipNormal = mul((float3x3) UNITY_MATRIX_VP, mul((float3x3) UNITY_MATRIX_M, normal));
+				half4 _OutlineColor;
+				half _OutlineWidth;
 
-				float2 offset = normalize(clipNormal.xy) / _ScreenParams.xy * _OutlineWidth * _OutlineColor.a * clipPosition.w * 2;
-				clipPosition.xy += offset;
+				float4 vert(float4 position : POSITION, float3 normal : NORMAL) : SV_POSITION
+				{
+					float4 clipPosition = UnityObjectToClipPos(position);
+					float3 clipNormal = mul((float3x3) UNITY_MATRIX_VP, mul((float3x3) UNITY_MATRIX_M, normal));
 
-				return clipPosition;
-			}
+					float2 offset = normalize(clipNormal.xy) / _ScreenParams.xy * _OutlineWidth * _OutlineColor.a * clipPosition.w * 2;
+					clipPosition.xy += offset;
 
-			half4 frag() : SV_TARGET
-			{
-				return _OutlineColor;
-			}
-		
+					return clipPosition;
+				}
+
+				half4 frag() : SV_TARGET
+				{
+					return _OutlineColor;
+				}
+
+			#else
+
+				float4 vert(float4 position : POSITION, float3 normal : NORMAL) : SV_POSITION
+				{
+					return float4(0,0,0,0);
+				}
+
+				half4 frag() : SV_TARGET
+				{
+					return half4(0,0,0,0);
+				}
+				
+			#endif
 			ENDCG
 		}
     }

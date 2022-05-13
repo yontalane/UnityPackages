@@ -1,4 +1,4 @@
-Shader "Yontalane/Sprites/Base"
+Shader "Yontalane/Sprite"
 {
     Properties
     {
@@ -31,7 +31,7 @@ Shader "Yontalane/Sprites/Base"
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend Mode", Float) = 10
     }
 
-    CustomEditor "SpriteBaseGUI"
+    CustomEditor "Yontalane.Shaders.SpriteBaseGUI"
 
     SubShader
     {
@@ -141,21 +141,39 @@ Shader "Yontalane/Sprites/Base"
 
             half4 ExtrasAfterTint(v2f IN, half4 c)
             {
+                half readyToReturn = 0.0;
+
                 #if (_USE_STROKE)
                     half test = 0.5 * IN.color.a;
                     if (c.a < test)
                     {
                         half4 stroke = half4(_StrokeColor.r, _StrokeColor.g, _StrokeColor.b, _StrokeColor.a * IN.color.a);
                         stroke.rgb *= stroke.a;
-                        if (AdjacentAlpha(IN.texcoord, -1, 0) > test) return stroke;
-                        if (AdjacentAlpha(IN.texcoord, 1, 0) > test) return stroke;
-                        if (AdjacentAlpha(IN.texcoord, 0, -1) > test) return stroke;
-                        if (AdjacentAlpha(IN.texcoord, 0, 1) > test) return stroke;
+                        if (AdjacentAlpha(IN.texcoord, -1, 0) > test)
+                        {
+                            readyToReturn = 1.0;
+                            c = stroke;
+                        }
+                        if (AdjacentAlpha(IN.texcoord, 1, 0) > test)
+                        {
+                            readyToReturn = 1.0;
+                            c = stroke;
+                        }
+                        if (AdjacentAlpha(IN.texcoord, 0, -1) > test)
+                        {
+                            readyToReturn = 1.0;
+                            c = stroke;
+                        }
+                        if (AdjacentAlpha(IN.texcoord, 0, 1) > test)
+                        {
+                            readyToReturn = 1.0;
+                            c = stroke;
+                        }
                     }
                 #endif
 
                 #if (_USE_COLORREPLACE)
-                    if (c.a > 0.0 && abs(c.r - _ColorReplaceSource.r) < _ColorReplaceFuzziness && abs(c.g - _ColorReplaceSource.g) < _ColorReplaceFuzziness && abs(c.b - _ColorReplaceSource.b) < _ColorReplaceFuzziness)
+                    if (readyToReturn < 0.5 && c.a > 0.0 && abs(c.r - _ColorReplaceSource.r) < _ColorReplaceFuzziness && abs(c.g - _ColorReplaceSource.g) < _ColorReplaceFuzziness && abs(c.b - _ColorReplaceSource.b) < _ColorReplaceFuzziness)
                     {
                         c.r = _ColorReplaceTarget.r;
                         c.g = _ColorReplaceTarget.g;
