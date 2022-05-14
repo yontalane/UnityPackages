@@ -7,7 +7,7 @@ Shader "Yontalane/Surface"
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
-		[Toggle] _UseOutline ("Outline", Float) = 1.0
+		[Toggle] _UseOutline ("Outline", Float) = 0.0
         _OutlineColor ("Color", Color) = (0, 0, 0, 1)
         _OutlineWidth ("Width", Float) = 1.0
 

@@ -144,6 +144,7 @@ Shader "Yontalane/Sprite"
                 half readyToReturn = 0.0;
 
                 #if (_USE_STROKE)
+                    readyToReturn = 0.0;
                     half test = 0.5 * IN.color.a;
                     if (c.a < test)
                     {
