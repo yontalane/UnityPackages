@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.12 - 2022.05.16
+
+**Added**
+
+**Changed**
+
+* Setting a material in the screen effect editor removes the shader and vice versa. (Setting both was causing problems.)
+
+**Fixed**
+
 ## 1.0.10 - 2022.05.13
 
 **Added**
