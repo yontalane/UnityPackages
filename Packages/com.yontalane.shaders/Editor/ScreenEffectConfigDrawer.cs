@@ -31,11 +31,23 @@ namespace Yontalane.Shaders
 
             if (userSetShader.boolValue)
             {
+                EditorGUI.BeginChangeCheck();
                 EditorGUI.PropertyField(rectB, shader, GUIContent.none);
+                if (EditorGUI.EndChangeCheck() && !Application.isPlaying)
+                {
+                    material.objectReferenceValue = null;
+                    EditorUtility.SetDirty(property.serializedObject.targetObject);
+                }
             }
             else
             {
+                EditorGUI.BeginChangeCheck();
                 EditorGUI.PropertyField(rectB, material, GUIContent.none);
+                if (EditorGUI.EndChangeCheck() && !Application.isPlaying)
+                {
+                    shader.objectReferenceValue = null;
+                    EditorUtility.SetDirty(property.serializedObject.targetObject);
+                }
             }
 
             EditorGUI.EndProperty();
