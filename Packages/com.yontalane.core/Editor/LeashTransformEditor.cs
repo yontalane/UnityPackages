@@ -17,9 +17,9 @@ namespace Yontalane
         {
             m_target = serializedObject.FindProperty("m_target");
             m_positionConfig = serializedObject.FindProperty("m_positionConfig");
-            m_positionConfigName = m_positionConfig.FindPropertyRelative("name");
+            m_positionConfigName = m_positionConfig.FindPropertyRelative("m_name");
             m_rotationConfig = serializedObject.FindProperty("m_rotationConfig");
-            m_rotationConfigName = m_rotationConfig.FindPropertyRelative("name");
+            m_rotationConfigName = m_rotationConfig.FindPropertyRelative("m_name");
             m_updateType = serializedObject.FindProperty("m_updateType");
         }
 
