@@ -6,6 +6,7 @@ namespace Yontalane
     [AddComponentMenu("Yontalane/Leash Transform")]
     public class LeashTransform : MonoBehaviour
     {
+        #region Helper Datatypes
         public enum OffsetType
         {
             Auto = 0,
@@ -68,12 +69,14 @@ namespace Yontalane
             }
         }
 
-        enum UpdateType
+        public enum UpdateType
         {
             Update = 0,
             LateUpdate = 1
         }
+        #endregion
 
+        #region Members
         public Rigidbody Rigidbody { get; private set; } = null;
         private bool m_hasRigidbody = false;
 
@@ -92,9 +95,19 @@ namespace Yontalane
 
         [SerializeField]
         private UpdateType m_updateType = UpdateType.Update;
+        #endregion
 
-        private void Start()
+        private void Start() => Initialize(m_target, m_positionConfig, m_rotationConfig, m_scaleConfig, m_updateType);
+
+        #region Initialize
+        public void Initialize(Transform target, Config positionConfig, Config rotationConfig, Config scaleConfig, UpdateType updateType)
         {
+            m_target = target;
+            m_positionConfig = positionConfig;
+            m_rotationConfig = rotationConfig;
+            m_scaleConfig = scaleConfig;
+            m_updateType = updateType;
+
             Rigidbody = GetComponent<Rigidbody>();
             m_hasRigidbody = Rigidbody != null;
 
@@ -115,6 +128,52 @@ namespace Yontalane
                 m_scaleConfig.offset = transform.localScale - Target.localScale;
             }
         }
+
+        public void Initialize(Transform target, Config positionConfig, Config rotationConfig, Config scaleConfig) => Initialize(target, positionConfig, rotationConfig, scaleConfig, UpdateType.Update);
+
+        public void Initialize(Transform target, Config positionConfig, Config rotationConfig) => Initialize(target, positionConfig, rotationConfig, new Config(false), UpdateType.Update);
+
+        public void Initialize(Transform target, float positionSmoothTime, float rotationSmoothTime)
+        {
+            Config positionConfig = new Config()
+            {
+                shouldLeash = true,
+                offsetType = OffsetType.Auto,
+                slack = 0f,
+                space = Space.World,
+                smoothTime = Mathf.Max(positionSmoothTime, 0f)
+            };
+
+            Config rotationConfig = new Config()
+            {
+                shouldLeash = true,
+                offsetType = OffsetType.Auto,
+                slack = 0f,
+                space = Space.World,
+                smoothTime = Mathf.Max(rotationSmoothTime, 0f)
+            };
+
+            Initialize(target, positionConfig, rotationConfig);
+        }
+
+        public void Initialize(Transform target, float positionSmoothTime)
+        {
+            Config positionConfig = new Config()
+            {
+                shouldLeash = true,
+                offsetType = OffsetType.Auto,
+                slack = 0f,
+                space = Space.World,
+                smoothTime = Mathf.Max(positionSmoothTime, 0f)
+            };
+
+            Config rotationConfig = new Config(false);
+
+            Initialize(target, positionConfig, rotationConfig);
+        }
+
+        public void Initialize(Transform target) => Initialize(target, 0f);
+        #endregion
 
         private void Update()
         {
