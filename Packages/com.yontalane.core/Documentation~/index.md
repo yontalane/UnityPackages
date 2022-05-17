@@ -129,3 +129,28 @@ Add this to an object to allow other objects to listen for its collision events.
 | Name | Description |
 | --- | ---|
 | **To String** | Returns the min and max value in the form of a string. |
+
+## Leash Transform
+
+### Properties
+
+| Name               | Description                                             |
+| ------------------ | ------------------------------------------------------- |
+| **target**         | What is this object being leashed to?                   |
+| **positionConfig** | Configuration for leashed position.                     |
+| **rotationConfig** | Configuration for leashed rotation.                     |
+| **updateType**     | How frequently to update the leashed object's position. |
+
+## Leash Transform Config
+
+### Properties
+
+| Name            | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| **shouldLeash** | Should this transformation be leashed?                       |
+| **offset**      | Should the offset between the target object and the leashed object be determined by their starting transformations or should it be manually set? |
+| **offsetValue** | The offset between the target object and the leashed object. |
+| **slack**       | If the objects are this close, don't leash.                  |
+| **smoothDamp**  | Should the leashed object snap to the desired transformation or should it move there smoothly? Set this to zero for snapping. |
+
+### 
