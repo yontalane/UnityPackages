@@ -15,8 +15,8 @@ namespace Yontalane
         [System.Serializable]
         public class Config
         {
-            [HideInInspector]
-            public string name = "";
+            [SerializeField]
+            private string m_name = "";
 
             public bool shouldLeash = default;
             public OffsetType offsetType = OffsetType.Auto;
@@ -69,11 +69,7 @@ namespace Yontalane
 
         [SerializeField]
         private Transform m_target = null;
-        public Transform Target
-        {
-            get => m_target;
-            set => m_target = value;
-        }
+        public Transform Target => m_target;
 
         [SerializeField]
         private Config m_positionConfig = new Config(true);

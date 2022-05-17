@@ -14,7 +14,7 @@ namespace Yontalane
 
             float y = position.y;
 
-            string name = property.FindPropertyRelative("name").stringValue.ToLower();
+            string name = property.FindPropertyRelative("m_name").stringValue.ToLower();
             bool shouldLeash = property.FindPropertyRelative("shouldLeash").boolValue;
             EditorGUI.BeginChangeCheck();
             shouldLeash = EditorGUI.ToggleLeft(new Rect(position.x, y, position.width, EditorGUIUtility.singleLineHeight),
