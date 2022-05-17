@@ -139,6 +139,7 @@ Add this to an object to allow other objects to listen for its collision events.
 | **target**         | What is this object being leashed to?                   |
 | **positionConfig** | Configuration for leashed position.                     |
 | **rotationConfig** | Configuration for leashed rotation.                     |
+| **scaleConfig**    | Configuration for leashed scale (local space only).     |
 | **updateType**     | How frequently to update the leashed object's position. |
 
 ## Leash Transform Config
@@ -150,6 +151,7 @@ Add this to an object to allow other objects to listen for its collision events.
 | **shouldLeash** | Should this transformation be leashed?                       |
 | **offset**      | Should the offset between the target object and the leashed object be determined by their starting transformations or should it be manually set? |
 | **offsetValue** | The offset between the target object and the leashed object. |
+| **space**       | Should the leashing use world space (most common) or local space? |
 | **slack**       | If the objects are this close, don't leash.                  |
 | **smoothDamp**  | Should the leashed object snap to the desired transformation or should it move there smoothly? Set this to zero for snapping. |
 

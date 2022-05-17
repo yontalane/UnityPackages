@@ -53,6 +53,28 @@ namespace Yontalane
                     EditorGUI.indentLevel--;
                 }
 
+                y += LineHeight + MARGIN;
+
+                bool enabled = GUI.enabled;
+                if (name == "scale")
+                {
+                    GUI.enabled = false;
+                    if (property.FindPropertyRelative("space").enumValueIndex != 0)
+                    {
+                        property.FindPropertyRelative("space").enumValueIndex = 0;
+                        EditorUtility.SetDirty(property.serializedObject.targetObject);
+                    }
+                }
+
+                EditorGUI.PropertyField(new Rect(position.x, y, position.width, EditorGUIUtility.singleLineHeight),
+                    property.FindPropertyRelative("space"),
+                    new GUIContent($"Space", $"Should the leashing use world space (most common) or local space?"));
+
+                if (name == "scale")
+                {
+                    GUI.enabled = enabled;
+                }
+
                 y += (LineHeight + MARGIN) * 1.5f;
 
                 EditorGUI.PropertyField(new Rect(position.x, y, position.width, EditorGUIUtility.singleLineHeight),
@@ -75,7 +97,7 @@ namespace Yontalane
         {
             if (property.FindPropertyRelative("shouldLeash").boolValue)
             {
-                return property.FindPropertyRelative("offsetType").enumValueIndex == 1 ? (LineHeight + MARGIN) * 6.5f : (LineHeight + MARGIN) * 5.5f;
+                return property.FindPropertyRelative("offsetType").enumValueIndex == 1 ? (LineHeight + MARGIN) * 7.5f : (LineHeight + MARGIN) * 6.5f;
             }
             else
             {

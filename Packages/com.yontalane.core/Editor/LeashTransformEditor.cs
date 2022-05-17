@@ -11,6 +11,8 @@ namespace Yontalane
         SerializedProperty m_positionConfigName = null;
         SerializedProperty m_rotationConfig = null;
         SerializedProperty m_rotationConfigName = null;
+        SerializedProperty m_scaleConfig = null;
+        SerializedProperty m_scaleConfigName = null;
         SerializedProperty m_updateType = null;
 
         private void OnEnable()
@@ -20,6 +22,8 @@ namespace Yontalane
             m_positionConfigName = m_positionConfig.FindPropertyRelative("m_name");
             m_rotationConfig = serializedObject.FindProperty("m_rotationConfig");
             m_rotationConfigName = m_rotationConfig.FindPropertyRelative("m_name");
+            m_scaleConfig = serializedObject.FindProperty("m_scaleConfig");
+            m_scaleConfigName = m_scaleConfig.FindPropertyRelative("m_name");
             m_updateType = serializedObject.FindProperty("m_updateType");
         }
 
@@ -27,10 +31,11 @@ namespace Yontalane
         {
             serializedObject.Update();
 
-            if (m_positionConfigName.stringValue != "Position" || m_rotationConfigName.stringValue != "Rotation")
+            if (m_positionConfigName.stringValue != "Position" || m_rotationConfigName.stringValue != "Rotation" || m_scaleConfigName.stringValue != "Scale")
             {
                 m_positionConfigName.stringValue = "Position";
                 m_rotationConfigName.stringValue = "Rotation";
+                m_scaleConfigName.stringValue = "Scale";
                 EditorUtility.SetDirty(serializedObject.targetObject);
             }
 
@@ -38,6 +43,7 @@ namespace Yontalane
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_positionConfig);
             EditorGUILayout.PropertyField(m_rotationConfig);
+            EditorGUILayout.PropertyField(m_scaleConfig);
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_updateType, new GUIContent(m_updateType.displayName, $"How frequently to update the leashed object's position."));
 
