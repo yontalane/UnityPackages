@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Yontalane
 {
@@ -11,33 +13,105 @@ namespace Yontalane
             Exit = 1
         }
 
-        public delegate void CollisionHandler(Type type, Collision collision);
+        #region Classes
+        [Serializable]
+        public class CollisionHandler : UnityEvent<Type, Collision> { }
+        [Serializable]
+        public class Collision2DHandler : UnityEvent<Type, Collision2D> { }
+        [Serializable]
+        public class TriggerHandler : UnityEvent<Type, Collider> { }
+        [Serializable]
+        public class Trigger2DHandler : UnityEvent<Type, Collider2D> { }
+        [Serializable]
+        public class ControllerHitHandler : UnityEvent<ControllerColliderHit> { }
+        #endregion
+
+        #region Fields
+        public LayerMask filter;
+        [Header("Collision")]
         public CollisionHandler OnCollision = null;
-        public delegate void Collision2DHandler(Type type, Collision2D collision);
         public Collision2DHandler OnCollision2D = null;
-        public delegate void TriggerHandler(Type type, Collider other);
+        [Header("Trigger")]
         public TriggerHandler OnTrigger = null;
-        public delegate void Trigger2DHandler(Type type, Collider2D other);
         public Trigger2DHandler OnTrigger2D = null;
-        public delegate void ControllerHitHandler(ControllerColliderHit hit);
+        [Header("Controller")]
         public ControllerHitHandler OnControllerHit = null;
+        #endregion
 
-        private void OnCollisionEnter(Collision collision) => OnCollision?.Invoke(Type.Enter, collision);
+        private void Reset() => filter = LayerMask.NameToLayer("Everything");
 
-        private void OnCollisionEnter2D(Collision2D collision) => OnCollision2D?.Invoke(Type.Enter, collision);
+        #region Event Methods
+        private void OnCollisionEnter(Collision collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnCollision?.Invoke(Type.Enter, collision);
+            }
+        }
 
-        private void OnCollisionExit(Collision collision) => OnCollision?.Invoke(Type.Exit, collision);
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnCollision2D?.Invoke(Type.Enter, collision);
+            }
+        }
 
-        private void OnCollisionExit2D(Collision2D collision) => OnCollision2D?.Invoke(Type.Exit, collision);
+        private void OnCollisionExit(Collision collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnCollision?.Invoke(Type.Exit, collision);
+            }
+        }
 
-        private void OnTriggerEnter(Collider other) => OnTrigger?.Invoke(Type.Enter, other);
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnCollision2D?.Invoke(Type.Exit, collision);
+            }
+        }
 
-        private void OnTriggerEnter2D(Collider2D collision) => OnTrigger2D?.Invoke(Type.Enter, collision);
+        private void OnTriggerEnter(Collider other)
+        {
+            if ((filter.value & (1 << other.gameObject.layer)) > 0)
+            {
+                OnTrigger?.Invoke(Type.Enter, other);
+            }
+        }
 
-        private void OnTriggerExit(Collider other) => OnTrigger?.Invoke(Type.Exit, other);
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnTrigger2D?.Invoke(Type.Enter, collision);
+            }
+        }
 
-        private void OnTriggerExit2D(Collider2D collision) => OnTrigger2D?.Invoke(Type.Exit, collision);
+        private void OnTriggerExit(Collider other)
+        {
+            if ((filter.value & (1 << other.gameObject.layer)) > 0)
+            {
+                OnTrigger?.Invoke(Type.Exit, other);
+            }
+        }
 
-        private void OnControllerColliderHit(ControllerColliderHit hit) => OnControllerHit?.Invoke(hit);
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if ((filter.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                OnTrigger2D?.Invoke(Type.Exit, collision);
+            }
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            if ((filter.value & (1 << hit.gameObject.layer)) > 0)
+            {
+                OnControllerHit?.Invoke(hit);
+            }
+        }
+        #endregion
     }
 }

@@ -73,6 +73,12 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 
 Add this to an object to allow other objects to listen for its collision events.
 
+### Properties
+
+| Name       | Description                                                  |
+| ---------- | ------------------------------------------------------------ |
+| **filter** | For any event to fire, the colliding object must have a layer that falls within this Layer Mask. |
+
 ### Delegates
 
 | Name | Description |
@@ -81,6 +87,7 @@ Add this to an object to allow other objects to listen for its collision events.
 | **OnCollision2D** | Invokes when entering or exiting 2D collision. Passes the state (enter or exit) and Collision2D object. |
 | **OnTrigger** | Invokes when entering or exiting trigger. Passes the state (enter or exit) and other Collider. |
 | **OnTrigger2D** | Invokes when entering or exiting 2D trigger. Passes the state (enter or exit) and other Collider2D. |
+| **OnControllerHit** | Invokes when the Character Controller is hit. Passes the other Collider. |
 
 ## Float Range
 
