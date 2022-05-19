@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.7 - 2022.05.19
+
+**Added**
+
+* Collision Listener now includes ControllerColliderHit.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.6 - 2022.05.17
 
 **Added**

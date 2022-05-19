@@ -19,6 +19,8 @@ namespace Yontalane
         public TriggerHandler OnTrigger = null;
         public delegate void Trigger2DHandler(Type type, Collider2D other);
         public Trigger2DHandler OnTrigger2D = null;
+        public delegate void ControllerHitHandler(ControllerColliderHit hit);
+        public ControllerHitHandler OnControllerHit = null;
 
         private void OnCollisionEnter(Collision collision) => OnCollision?.Invoke(Type.Enter, collision);
 
@@ -35,5 +37,7 @@ namespace Yontalane
         private void OnTriggerExit(Collider other) => OnTrigger?.Invoke(Type.Exit, other);
 
         private void OnTriggerExit2D(Collider2D collision) => OnTrigger2D?.Invoke(Type.Exit, collision);
+
+        private void OnControllerColliderHit(ControllerColliderHit hit) => OnControllerHit?.Invoke(hit);
     }
 }
