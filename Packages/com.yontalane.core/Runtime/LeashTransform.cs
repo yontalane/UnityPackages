@@ -95,6 +95,15 @@ namespace Yontalane
 
         [SerializeField]
         private UpdateType m_updateType = UpdateType.Update;
+
+        [SerializeField]
+        [Tooltip("Leash using Rigidbody, if one is present.")]
+        private bool m_useRigidbody = false;
+        public bool UseRigidbody
+        {
+            get => m_useRigidbody;
+            set => m_useRigidbody = value;
+        }
         #endregion
 
         private void Start() => Initialize(m_target, m_positionConfig, m_rotationConfig, m_scaleConfig, m_updateType);
@@ -189,7 +198,7 @@ namespace Yontalane
         {
             if (Target == null) return;
 
-            if (m_hasRigidbody)
+            if (m_hasRigidbody && UseRigidbody && Rigidbody.detectCollisions == true)
             {
                 if (m_positionConfig.shouldLeash)
                 {

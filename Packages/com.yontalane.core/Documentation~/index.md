@@ -148,6 +148,7 @@ Add this to an object to allow other objects to listen for its collision events.
 | **rotationConfig** | Configuration for leashed rotation.                     |
 | **scaleConfig**    | Configuration for leashed scale (local space only).     |
 | **updateType**     | How frequently to update the leashed object's position. |
+| **useRigidbody**   | Whether to leash using Rigidbody, if one is present.    |
 
 ### Public Methods
 

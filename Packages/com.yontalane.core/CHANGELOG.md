@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.9 - 2022.05.21
+
+**Added**
+
+* Added a toggle to Leash Transform for leashing using Rigidbody.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.8 - 2022.05.19
 
 **Added**
