@@ -141,14 +141,14 @@ Add this to an object to allow other objects to listen for its collision events.
 
 ### Properties
 
-| Name               | Description                                             |
-| ------------------ | ------------------------------------------------------- |
-| **target**         | What is this object being leashed to?                   |
-| **positionConfig** | Configuration for leashed position.                     |
-| **rotationConfig** | Configuration for leashed rotation.                     |
-| **scaleConfig**    | Configuration for leashed scale (local space only).     |
-| **updateType**     | How frequently to update the leashed object's position. |
-| **useRigidbody**   | Whether to leash using Rigidbody, if one is present.    |
+| Name               | Description                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| **target**         | What is this object being leashed to?                        |
+| **positionConfig** | Configuration for leashed position.                          |
+| **rotationConfig** | Configuration for leashed rotation.                          |
+| **scaleConfig**    | Configuration for leashed scale (local space only).          |
+| **updateType**     | How frequently to update the leashed object's position.      |
+| **useRigidbody**   | Whether to leash via the Move method on a Rigidbody, assuming a Rigidbody is present. Affects position and rotation, but not scale. |
 
 ### Public Methods
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.10 - 2022.05.21
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Added Rigidbody toggle to Leash Transform's Inspector.
+
 ## 1.0.9 - 2022.05.21
 
 **Added**

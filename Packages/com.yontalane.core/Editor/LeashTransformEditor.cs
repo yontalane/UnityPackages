@@ -14,6 +14,7 @@ namespace Yontalane
         SerializedProperty m_scaleConfig = null;
         SerializedProperty m_scaleConfigName = null;
         SerializedProperty m_updateType = null;
+        SerializedProperty m_useRigidbody = null;
 
         private void OnEnable()
         {
@@ -25,6 +26,7 @@ namespace Yontalane
             m_scaleConfig = serializedObject.FindProperty("m_scaleConfig");
             m_scaleConfigName = m_scaleConfig.FindPropertyRelative("m_name");
             m_updateType = serializedObject.FindProperty("m_updateType");
+            m_useRigidbody = serializedObject.FindProperty("m_useRigidbody");
         }
 
         public override void OnInspectorGUI()
@@ -46,6 +48,7 @@ namespace Yontalane
             EditorGUILayout.PropertyField(m_scaleConfig);
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_updateType, new GUIContent(m_updateType.displayName, $"How frequently to update the leashed object's position."));
+            EditorGUILayout.PropertyField(m_useRigidbody, new GUIContent(m_useRigidbody.displayName, $"Whether to leash using Rigidbody, if one is present."));
 
             serializedObject.ApplyModifiedProperties();
         }
