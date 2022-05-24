@@ -16,7 +16,8 @@ namespace Yontalane
         public enum Space
         {
             Local = 0,
-            World = 1
+            World = 1,
+            Parent = 2
         }
 
         [System.Serializable]
@@ -124,12 +125,34 @@ namespace Yontalane
 
             if (m_positionConfig.shouldLeash && m_positionConfig.offsetType == OffsetType.Auto)
             {
-                m_positionConfig.offset = transform.position - Target.position;
+                if (m_positionConfig.space == Space.Local)
+                {
+                    m_positionConfig.offset = transform.localPosition - Target.localPosition;
+                }
+                if (m_positionConfig.space == Space.World)
+                {
+                    m_positionConfig.offset = transform.position - Target.position;
+                }
+                else if (m_positionConfig.space == Space.Parent)
+                {
+                    m_positionConfig.offset = Target.InverseTransformPoint(transform.position);
+                }
             }
 
             if (m_rotationConfig.shouldLeash && m_rotationConfig.offsetType == OffsetType.Auto)
             {
-                m_rotationConfig.offset = transform.eulerAngles - Target.eulerAngles;
+                if (m_rotationConfig.space == Space.Local)
+                {
+                    m_rotationConfig.offset = transform.localEulerAngles - Target.localEulerAngles;
+                }
+                else if (m_rotationConfig.space == Space.World)
+                {
+                    m_rotationConfig.offset = transform.eulerAngles - Target.eulerAngles;
+                }
+                else if (m_rotationConfig.space == Space.Parent)
+                {
+                    m_rotationConfig.offset = Target.InverseTransformDirection(transform.eulerAngles);
+                }
             }
 
             if (m_scaleConfig.shouldLeash && m_scaleConfig.offsetType == OffsetType.Auto)
@@ -207,9 +230,13 @@ namespace Yontalane
                         Vector3 v = m_positionConfig.GetDestination(transform.localPosition, Target.localPosition);
                         Rigidbody.MovePosition(transform.TransformPoint(v));
                     }
-                    else
+                    else if (m_positionConfig.space == Space.World)
                     {
                         Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, Target.position));
+                    }
+                    else if (m_positionConfig.space == Space.Parent)
+                    {
+                        Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, Target.TransformPoint(m_positionConfig.offset)));
                     }
                 }
                 if (m_rotationConfig.shouldLeash)
@@ -219,9 +246,13 @@ namespace Yontalane
                         Vector3 v = m_rotationConfig.GetDestination(transform.eulerAngles, Target.eulerAngles);
                         Rigidbody.MoveRotation(Quaternion.Euler(transform.TransformDirection(v)));
                     }
-                    else
+                    else if (m_positionConfig.space == Space.World)
                     {
                         Rigidbody.MoveRotation(Quaternion.Euler(m_rotationConfig.GetDestination(transform.eulerAngles, Target.eulerAngles)));
+                    }
+                    else if (m_positionConfig.space == Space.Parent)
+                    {
+                        Rigidbody.MoveRotation(Quaternion.Euler(m_rotationConfig.GetDestination(transform.eulerAngles, Target.TransformDirection(m_rotationConfig.offset))));
                     }
                 }
             }
@@ -233,9 +264,13 @@ namespace Yontalane
                     {
                         transform.localPosition = m_positionConfig.GetDestination(transform.localPosition, Target.localPosition);
                     }
-                    else
+                    else if (m_positionConfig.space == Space.World)
                     {
                         transform.position = m_positionConfig.GetDestination(transform.position, Target.position);
+                    }
+                    else if (m_positionConfig.space == Space.Parent)
+                    {
+                        transform.position = m_positionConfig.GetDestination(transform.position, Target.TransformPoint(m_positionConfig.offset));
                     }
                 }
                 if (m_rotationConfig.shouldLeash)
@@ -244,9 +279,13 @@ namespace Yontalane
                     {
                         transform.localEulerAngles = m_rotationConfig.GetDestination(transform.localEulerAngles, Target.localEulerAngles);
                     }
-                    else
+                    else if (m_positionConfig.space == Space.World)
                     {
                         transform.eulerAngles = m_rotationConfig.GetDestination(transform.eulerAngles, Target.eulerAngles);
+                    }
+                    else if (m_positionConfig.space == Space.Parent)
+                    {
+                        transform.eulerAngles = m_rotationConfig.GetDestination(transform.eulerAngles, Target.TransformDirection(m_rotationConfig.offset));
                     }
                 }
             }

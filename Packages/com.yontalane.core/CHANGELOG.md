@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11 - 2022.05.24
+
+**Added**
+
+* Added parent space option to Leash Transform.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.10 - 2022.05.21
 
 **Added**
