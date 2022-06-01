@@ -91,6 +91,12 @@
         "com.yontalane.query": "1.0.0"
       }
     },
+    "com.yontalane.interaction": {
+      "version": "file:com.yontalane.interaction",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.yontalane.layouttilemap": {
       "version": "file:com.yontalane.layouttilemap",
       "depth": 0,
