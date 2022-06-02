@@ -69,6 +69,38 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 | **key** | The key. |
 | **value** | The value. |
 
+## Animation Event Transform
+
+### Public Methods
+
+| Name                 | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| **Move**             | Translate the object based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. |
+| **Set Position**     | Set the object's position based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. |
+| **Set Euler Angles** | Set the object's rotation based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. |
+| **Rotate**           | Rotate the object based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. Alternatively, can accept a float parameter—in which case, the object will rotate around the Y axis. |
+| **Set Scale**        | Set the object's local scale based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. |
+
+## Bump Listener
+
+### Properties
+
+| Name        | Description                          |
+| ----------- | ------------------------------------ |
+| **On Land** | Info for handling bottom collisions. |
+| **On Bump** | Info for handling side collisions.   |
+
+## Bump Info
+
+### Properties
+
+| Name                  | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| **Layer Mask**        | Collisions are filtered by this layer mask.     |
+| **Required Velocity** | Ignore collisions with less velocity than this. |
+| **On Collision**      | Event to invoke on collision.                   |
+| **Audio Clip**        | Sound to play on collision.                     |
+
 ## Collision Listener
 
 Add this to an object to allow other objects to listen for its collision events.
