@@ -1,7 +1,10 @@
 using UnityEngine;
 
-namespace Yontalane.Interaction
+namespace Yontalane.Interaction.Samples
 {
+    /// <summary>
+    /// The interactor picks up and carries the interactable.
+    /// </summary>
     public class InteractionCarry : InteractionBase
     {
         private enum Phase

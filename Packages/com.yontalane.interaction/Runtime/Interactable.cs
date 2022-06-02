@@ -20,12 +20,17 @@ namespace Yontalane.Interaction
         private Renderer m_renderer = null;
 
         [SerializeField]
+        [Tooltip("The animator attached to this interactable.")]
+        private Animator m_animator = null;
+
+        [SerializeField]
         [Tooltip("The audiosource attached to this interactable.")]
         private AudioSource m_audioSource = null;
         #endregion
 
         public GameObject Root => m_root;
         public AudioSource AudioSource => m_audioSource;
+        public Animator Animator => m_animator;
         public Renderer Renderer => m_renderer;
 
         #region Private variables

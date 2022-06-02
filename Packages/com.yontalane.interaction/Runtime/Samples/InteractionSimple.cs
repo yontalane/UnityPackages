@@ -1,18 +1,29 @@
 using UnityEngine;
 
-namespace Yontalane.Interaction
+namespace Yontalane.Interaction.Samples
 {
+    /// <summary>
+    /// Move the interactor to a specified point next to the interactable. Play an animation on each.
+    /// </summary>
     public class InteractionSimple : InteractionBase
     {
         #region Serialized fields
         [Header("Simple")]
         [SerializeField]
+        [Tooltip("The interactable's animator trigger for starting this interaction.")]
+        private string m_interactableStartTrigger = string.Empty;
+
+        [SerializeField]
+        [Tooltip("The interactable's animator trigger for ending this interaction.")]
+        private string m_interactableStopTrigger = string.Empty;
+
+        [SerializeField]
         [Tooltip("The interactor's animator trigger for starting this interaction.")]
-        private string m_startInteractAnimatorTrigger = string.Empty;
+        private string m_interactorStartTrigger = string.Empty;
 
         [SerializeField]
         [Tooltip("The interactor's animator trigger for ending this interaction.")]
-        private string m_stopInteractAnimatorTrigger = string.Empty;
+        private string m_interactorStopTrigger = string.Empty;
 
         [SerializeField]
         [Tooltip("When interacting with this object, teleport the interactor to this position (interaction local space).")]
@@ -60,13 +71,27 @@ namespace Yontalane.Interaction
                 info.interactor.IsLocked = false;
             }
 
-            if (IsInteracting && !string.IsNullOrEmpty(m_startInteractAnimatorTrigger))
+            if (IsInteracting)
             {
-                info.animator.SetTrigger(m_startInteractAnimatorTrigger);
+                if (!string.IsNullOrEmpty(m_interactableStartTrigger) && Interactable.Animator != null)
+                {
+                    Interactable.Animator.SetTrigger(m_interactableStartTrigger);
+                }
+                if (!string.IsNullOrEmpty(m_interactorStartTrigger) && info.animator != null)
+                {
+                    info.animator.SetTrigger(m_interactorStartTrigger);
+                }
             }
-            else if (!IsInteracting && !string.IsNullOrEmpty(m_stopInteractAnimatorTrigger))
+            else if (!IsInteracting)
             {
-                info.animator.SetTrigger(m_stopInteractAnimatorTrigger);
+                if (!string.IsNullOrEmpty(m_interactableStopTrigger) && Interactable.Animator != null)
+                {
+                    Interactable.Animator.SetTrigger(m_interactableStopTrigger);
+                }
+                if (!string.IsNullOrEmpty(m_interactorStopTrigger) && info.animator != null)
+                {
+                    info.animator.SetTrigger(m_interactorStopTrigger);
+                }
             }
         }
 
