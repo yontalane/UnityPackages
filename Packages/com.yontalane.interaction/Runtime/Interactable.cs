@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Yontalane.Interaction
 {
     [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Interaction/Interactable")]
     public class Interactable : MonoBehaviour
     {
         public delegate void HighlightHandler(bool isHighlighted, Interactable interactable);

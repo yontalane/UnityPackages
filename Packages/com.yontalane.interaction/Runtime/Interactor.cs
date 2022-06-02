@@ -26,6 +26,8 @@ namespace Yontalane.Interaction
         public UnityEngine.Object data;
     }
 
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Interaction/Interactor")]
     public class Interactor : MonoBehaviour
     {
         public delegate void InteractorEventHandler(Interactable interactable);

@@ -5,6 +5,8 @@ namespace Yontalane.Interaction.Samples
     /// <summary>
     /// Move the interactor to a specified point next to the interactable. Play an animation on each.
     /// </summary>
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Interaction/Samples/Simple Interaction")]
     public class InteractionSimple : InteractionBase
     {
         #region Serialized fields

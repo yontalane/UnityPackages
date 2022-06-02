@@ -5,6 +5,8 @@ namespace Yontalane.Interaction.Samples
     /// <summary>
     /// The interactor picks up and carries the interactable.
     /// </summary>
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Interaction/Samples/Carry Interaction")]
     public class InteractionCarry : InteractionBase
     {
         private enum Phase

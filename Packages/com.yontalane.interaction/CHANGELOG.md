@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.3 - 2022.06.02
+
+**Added**
+
+**Changed**
+
+* Cleaned up AddComponentMenu text.
+
+**Fixed**
+
 ## 1.0.2 - 2022.06.01
 
 **Added**
