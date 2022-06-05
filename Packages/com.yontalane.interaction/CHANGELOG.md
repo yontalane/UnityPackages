@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 - 2022.06.05
+
+**Added**
+
+* Interactable's highlight visible can be toggled as a separate thing from the highlighted state.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.3 - 2022.06.02
 
 **Added**

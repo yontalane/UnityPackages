@@ -33,11 +33,29 @@ namespace Yontalane.Interaction
         public AudioSource AudioSource => m_audioSource;
         public Animator Animator => m_animator;
         public Renderer Renderer => m_renderer;
+        public bool IsHighlightVisible
+        {
+            get => m_isHighlightVisible;
+            set
+            {
+                if (value == m_isHighlightVisible)
+                {
+                    return;
+                }
+                m_isHighlightVisible = value;
+                if (!IsHighlighted)
+                {
+                    return;
+                }
+                OnHighlight?.Invoke(m_isHighlightVisible, this);
+            }
+        }
 
         #region Private variables
         private InteractionBase[] m_interactions = null;
         private List<Collider> m_colliders = new List<Collider>();
         private List<Collider> m_targetColliders = new List<Collider>();
+        private bool m_isHighlightVisible = true;
         #endregion
 
         private void Start()
@@ -97,7 +115,13 @@ namespace Yontalane.Interaction
         /// <summary>
         /// Highlight this interactable.
         /// </summary>
-        public void SetHighlightOn() => Highlight(true);
+        public void SetHighlightOn()
+        {
+            if (m_isHighlightVisible)
+            {
+                Highlight(true);
+            }
+        }
 
         /// <summary>
         /// Unhighlight this interactable.
