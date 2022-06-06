@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.13 - 2022.06.05
+
+**Added**
+
+* Character Bump Controller
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.12 - 2022.06.02
 
 **Added**

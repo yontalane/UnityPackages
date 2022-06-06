@@ -81,14 +81,26 @@ public StringTextureDictionary dict = new StringTextureDictionary();
 | **Rotate**           | Rotate the object based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. Alternatively, can accept a float parameter—in which case, the object will rotate around the Y axis. |
 | **Set Scale**        | Set the object's local scale based on data in the Animation Event. Expects a string parameter formatted as `##,##,##`. |
 
+## Character Bump Controller
+
+Adding this component to a game object with a Character Controller allows the Character Controller to push other objects that use the Rigidbody physics system. (Ordinarily, the Character Controller does not interact with Unity's physics.)
+
+### Properties
+
+| Name     | Description                                                  |
+| -------- | ------------------------------------------------------------ |
+| **Mass** | Used for scaling force created by collisions between this object and a Rigidbody. |
+
 ## Bump Listener
 
 ### Properties
 
-| Name        | Description                          |
-| ----------- | ------------------------------------ |
-| **On Land** | Info for handling bottom collisions. |
-| **On Bump** | Info for handling side collisions.   |
+| Name                                     | Description                                                  |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| **On Land**                              | Info for handling bottom collisions.                         |
+| **On Bump**                              | Info for handling side collisions.                           |
+| **Listen for Character Controller Bump** | Whether or not to listen for collisions produced by Character Controllers. |
+| **On Character Controller Bump**         | Info for handling collisions produced by Character Controllers. (Relies on Character Bump Controller.) |
 
 ## Bump Info
 

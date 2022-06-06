@@ -10,7 +10,7 @@ namespace Yontalane
     public class BumpListener : MonoBehaviour
     {
         #region Event info
-        [System.Serializable]
+        [Serializable]
         private class BumpInfo
         {
             #region Serialized fields
@@ -28,11 +28,11 @@ namespace Yontalane
             private AudioClip m_audioClip = null;
             #endregion
 
-            public bool RespondToCollision(BumpListener bumpListener, Collision collision, Func<Vector3, bool> velocityCheck = null)
+            public bool RespondToCollision(BumpListener bumpListener, GameObject other, Vector3 velocity, Func<Vector3, bool> velocityCheck = null)
             {
-                if ((m_layerMask.value & (1 << collision.gameObject.layer)) > 0
-                    && collision.relativeVelocity.magnitude > m_requiredVelocity
-                    && (velocityCheck == null || velocityCheck.Invoke(collision.relativeVelocity)))
+                if ((m_layerMask.value & (1 << other.layer)) > 0
+                    && velocity.magnitude > m_requiredVelocity
+                    && (velocityCheck == null || velocityCheck.Invoke(velocity)))
                 {
                     m_onCollision?.Invoke();
                     if (m_audioClip != null)
@@ -43,6 +43,8 @@ namespace Yontalane
                 }
                 return false;
             }
+
+            public bool RespondToCollision(BumpListener bumpListener, Collision collision, Func<Vector3, bool> velocityCheck = null) => RespondToCollision(bumpListener, collision.gameObject, collision.relativeVelocity, velocityCheck);
         }
         #endregion
 
@@ -67,11 +69,34 @@ namespace Yontalane
 
         [SerializeField]
         private BumpInfo m_onBump = new BumpInfo();
+
+        [Space]
+        [SerializeField]
+        private bool m_listenForCharacterControllerBump = false;
+
+        [SerializeField]
+        private BumpInfo m_onCharacterControllerBump = new BumpInfo();
         #endregion
 
         #region Private variables
         private AudioSource m_audioSource = null;
         #endregion
+
+        private void OnEnable()
+        {
+            if (m_listenForCharacterControllerBump)
+            {
+                CharacterBumpController.OnHit += CharacterBumpController_OnHit;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (m_listenForCharacterControllerBump)
+            {
+                CharacterBumpController.OnHit -= CharacterBumpController_OnHit;
+            }
+        }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -83,6 +108,15 @@ namespace Yontalane
             {
                 return;
             }
+        }
+
+        private void CharacterBumpController_OnHit(GameObject hitReceiver, CharacterBumpController hitSource, Vector3 force)
+        {
+            if (hitReceiver != gameObject)
+            {
+                return;
+            }
+            _ = m_onCharacterControllerBump.RespondToCollision(this, hitSource.gameObject, force);
         }
 
         private bool LandVelocityCheck(Vector3 v) => Vector3.Dot(v, Vector3.up) > 0.5f;
