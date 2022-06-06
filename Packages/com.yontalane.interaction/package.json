@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.interaction",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "displayName": "Interaction",
   "description": "A small for basic interaction events in 3D games.",
   "unity": "2020.3",

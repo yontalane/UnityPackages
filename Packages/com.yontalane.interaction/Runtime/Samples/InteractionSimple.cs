@@ -67,7 +67,7 @@ namespace Yontalane.Interaction.Samples
             if (IsInteracting)
             {
                 info.interactor.IsLocked = true;
-                info.rootTransform.position = InteractPosition;
+                Teleport(info.rootTransform, InteractPosition);
                 info.rootTransform.LookAt(InteractPosition + 100f * InteractDirection, Vector3.up);
             }
             else
@@ -96,6 +96,40 @@ namespace Yontalane.Interaction.Samples
                 {
                     info.animator.SetTrigger(m_interactorStopTrigger);
                 }
+            }
+        }
+
+        private void Teleport(Transform transform, Vector3 targetPosition)
+        {
+            bool hasRB = transform.TryGetComponent(out Rigidbody rb);
+            bool hasCC = transform.TryGetComponent(out CharacterController cc);
+            bool prevRB_DC = true;
+            bool prevCC_DC = true;
+            bool prevCC_En = true;
+
+            if (hasRB)
+            {
+                prevRB_DC = rb.detectCollisions;
+                rb.detectCollisions = false;
+            }
+            if (hasCC)
+            {
+                prevCC_DC = cc.detectCollisions;
+                cc.detectCollisions = false;
+                prevCC_En = cc.enabled;
+                cc.enabled = false;
+            }
+
+            transform.position = targetPosition;
+
+            if (hasRB)
+            {
+                rb.detectCollisions = prevRB_DC;
+            }
+            if (hasCC)
+            {
+                cc.detectCollisions = prevCC_DC;
+                cc.enabled = prevCC_En;
             }
         }
 

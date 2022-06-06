@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6 - 2022.06.06
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Simple Interaction respects rigidbodies and character controllers when teleporting interactor.
+
 ## 1.0.5 - 2022.06.05
 
 **Added**
