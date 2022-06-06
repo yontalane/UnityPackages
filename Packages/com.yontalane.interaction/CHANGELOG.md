@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 - 2022.06.05
+
+**Added**
+
+* Carry and Simple interactions toggle Interactable highlight visibility.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.4 - 2022.06.05
 
 **Added**

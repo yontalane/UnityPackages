@@ -58,6 +58,8 @@ namespace Yontalane.Interaction.Samples
 
             IsInteracting = !IsInteracting;
 
+            Interactable.IsHighlightVisible = !IsInteracting;
+
             Interactable.IgnoreCollision(info.rootTransform.gameObject, IsInteracting);
 
             TryKillRigidbodyMovement(m_root);

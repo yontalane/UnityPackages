@@ -107,6 +107,7 @@ namespace Yontalane.Interaction.Samples
         {
             if (m_phase == Phase.PickingUp)
             {
+                Interactable.IsHighlightVisible = false;
                 m_phase = Phase.Carrying;
                 Vector3 p1 = m_collider.ClosestPoint(m_carryRoot.position);
                 Vector3 p2 = m_carryRoot.position - p1 + m_root.transform.position;
@@ -117,6 +118,7 @@ namespace Yontalane.Interaction.Samples
             }
             else if (m_phase == Phase.PuttingDown)
             {
+                Interactable.IsHighlightVisible = true;
                 m_interactor.IsLocked = false;
                 Interactable.IgnoreCollision(m_interactorRoot, false);
                 TrySetRigidbodyKinematic(m_root, false);
