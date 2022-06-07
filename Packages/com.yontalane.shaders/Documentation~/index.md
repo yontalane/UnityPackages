@@ -54,6 +54,10 @@ Replace the colors and lighting on an object with textures. Choose a texture bas
 
 Simultaneously darken and desaturate the screen.
 
+### Fog
+
+Set distant objects to a specified color.
+
 ### Pixelate
 
 Pixelate the screen.

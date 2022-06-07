@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.13 - 2022.06.06
+
+**Added**
+
+* Added Fog screen effect.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.12 - 2022.05.16
 
 **Added**
