@@ -48,6 +48,10 @@ An outline is drawn around the object.
 
 Replace the colors and lighting on an object with textures. Choose a texture based on the underlying color value.
 
+### Water
+
+A simple water shader. Includes foam at shore's edge, opacity by depth, and animated an caustics texture.
+
 ## Screen
 
 ### Fade
