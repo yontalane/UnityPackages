@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.shaders",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "displayName": "Shaders",
   "description": "A shader library.",
   "unity": "2020.3",
@@ -34,6 +34,11 @@
       "displayName": "Screen Demo",
       "description": "Contains sample implementations of screen shaders.",
       "path": "Samples~/ScreenDemo"
+    },
+    {
+      "displayName": "Water Demo",
+      "description": "Contains a sample implementation of the water shader.",
+      "path": "Samples~/WaterDemo"
     }
   ],
   "type": "library"

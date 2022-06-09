@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.15 - 2022.06.08
+
+**Added**
+
+* Water demo.
+
+**Changed**
+
+* Enhanced water shader.
+
+**Fixed**
+
 ## 1.0.14 - 2022.06.07
 
 **Added**

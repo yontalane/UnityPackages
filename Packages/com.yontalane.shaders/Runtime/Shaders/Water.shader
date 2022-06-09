@@ -11,6 +11,8 @@ Shader "Yontalane/Water"
 
         _FoamColor ("Foam Color", Color) = (1,1,1,1)
         _FoamCutoff("Foam Depth", float) = 0.1
+        _FoamAnimTex ("Foam Animation", 2D) = "black" {}
+
         _FogCutoffStart("Fog Start", float) = 0.75
         _FogCutoffEnd("Fog End", float) = 0.95
 
@@ -44,13 +46,12 @@ Shader "Yontalane/Water"
 
         fixed4 _FoamColor;
         float _FoamCutoff;
+        sampler2D _FoamAnimTex;
+
         float _FogCutoffStart;
         float _FogCutoffEnd;
 
         sampler2D _CausticsTex;
-
-        UNITY_INSTANCING_BUFFER_START(Props)
-        UNITY_INSTANCING_BUFFER_END(Props)
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
@@ -62,9 +63,11 @@ Shader "Yontalane/Water"
             o.Alpha = c.a;
 
             float causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
-            float causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r;
+            float causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
             float causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
             float caustics = causticsA * causticsB * causticsC;
+            caustics = saturate(lerp(0.5, caustics + 0.4, 5));
+            caustics += caustics > 0.1125 ? caustics : 0;
             o.Albedo += caustics;
 
             float depthTest = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
@@ -75,14 +78,15 @@ Shader "Yontalane/Water"
 
             if (depthTest < foamCutoff)
             {
-                o.Albedo = _FoamColor;
-                o.Alpha = 1;
+                float bla = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
+                o.Albedo = lerp(o.Albedo, _FoamColor, bla);
+                o.Alpha = lerp(o.Alpha, 1, bla);
             }
             else
             {
                 float t = depthTest - _FogCutoffStart;
                 t /= (_FogCutoffEnd - _FogCutoffStart);
-                o.Alpha = lerp(o.Alpha, 1, clamp(t, 0, 1));
+                o.Alpha = lerp(o.Alpha, 1, saturate(t));
                 o.Alpha += caustics * 0.1;
             }
 
