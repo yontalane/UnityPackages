@@ -15,8 +15,15 @@ Shader "Yontalane/Water"
 
         _FogCutoffStart("Fog Start", float) = 0.75
         _FogCutoffEnd("Fog End", float) = 0.95
+        _FogColor ("Fog Color", Color) = (0,0.5,0.75,1)
 
         _CausticsTex ("Caustics", 2D) = "black" {}
+        _CausticsColor ("Caustics Color", Color) = (0.25,0.75,1,1)
+
+		_HeightTex ("Height", 2D) = "black" {}
+		_HeightScalar ("Height Scalar", float) = 0.125
+		_HeightCoordScale ("Height Coord Scalar", float) = 0.5
+		_HeightTimeScale ("Height Time Scalar", float) = 0.5
     }
     SubShader
     {
@@ -24,7 +31,7 @@ Shader "Yontalane/Water"
         LOD 200
 
         CGPROGRAM
-        #pragma surface surf Standard alpha
+        #pragma surface surf Standard vertex:vert alpha
         #pragma target 3.0
 
         sampler2D _MainTex;
@@ -38,6 +45,30 @@ Shader "Yontalane/Water"
             float3 worldPos;
         };
 
+		sampler2D _HeightTex;
+		half _HeightScalar;
+		half _HeightCoordScale;
+		half _HeightTimeScale;
+
+		void vert (inout appdata_full v)
+		{
+			half3 coordA = v.vertex.xyz * _HeightCoordScale;
+			coordA.x += _Time.x * _HeightTimeScale;
+			coordA.y += _Time.x * 0.75 * _HeightTimeScale;
+			coordA.z -= _Time.y * _HeightTimeScale;
+			half valA = tex2Dlod (_HeightTex, half4(coordA.x, coordA.z, coordA.x, coordA.z)).r;
+
+			half3 coordB = v.vertex.xyz * _HeightCoordScale;
+			coordB.y += _Time.x * _HeightTimeScale;
+			coordB.z += _Time.x * 0.75 * _HeightTimeScale;
+			coordB.x -= _Time.y * _HeightTimeScale;
+			half valB = tex2Dlod (_HeightTex, half4(coordB.x, coordB.z, coordB.x, coordB.z)).r;
+
+			half val = valA * valB;
+
+			v.vertex.xyz += v.normal * _HeightScalar * (val * 2 - 1);
+		}
+
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
@@ -45,13 +76,15 @@ Shader "Yontalane/Water"
         float _DepthTest;
 
         fixed4 _FoamColor;
-        float _FoamCutoff;
+        half _FoamCutoff;
         sampler2D _FoamAnimTex;
 
         float _FogCutoffStart;
         float _FogCutoffEnd;
+        fixed4 _FogColor;
 
         sampler2D _CausticsTex;
+        fixed4 _CausticsColor;
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
@@ -62,31 +95,33 @@ Shader "Yontalane/Water"
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
 
-            float causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
-            float causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
-            float causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
-            float caustics = causticsA * causticsB * causticsC;
+            half causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
+            half causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
+            half causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
+            half caustics = causticsA * causticsB * causticsC;
             caustics = saturate(lerp(0.5, caustics + 0.4, 5));
             caustics += caustics > 0.1125 ? caustics : 0;
-            o.Albedo += caustics;
+            o.Albedo = lerp(o.Albedo, _CausticsColor, caustics * _CausticsColor.a);
 
-            float depthTest = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
+            half depthTest = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
             depthTest = LinearEyeDepth(depthTest);
             depthTest = saturate((depthTest - IN.screenPos.w) / _DepthTest);
 
-            float foamCutoff = _FoamCutoff * lerp(0.75, 1, _SinTime.w);
+            half foamCutoff = _FoamCutoff * lerp(0.75, 1, _SinTime.w);
 
             if (depthTest < foamCutoff)
             {
-                float bla = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
-                o.Albedo = lerp(o.Albedo, _FoamColor, bla);
-                o.Alpha = lerp(o.Alpha, 1, bla);
+                half foamMask = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
+                o.Albedo = lerp(o.Albedo, _FoamColor, foamMask * _FoamColor.a);
+                o.Alpha = lerp(o.Alpha, 1, foamMask);
             }
             else
             {
-                float t = depthTest - _FogCutoffStart;
+                half t = depthTest - _FogCutoffStart;
                 t /= (_FogCutoffEnd - _FogCutoffStart);
-                o.Alpha = lerp(o.Alpha, 1, saturate(t));
+                t = saturate(t);
+                o.Albedo = lerp(o.Albedo, _FogColor, t * _FogColor.a);
+                o.Alpha = lerp(o.Alpha, 1, t);
                 o.Alpha += caustics * 0.1;
             }
 

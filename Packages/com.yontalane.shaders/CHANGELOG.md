@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.16 - 2022.06.09
+
+**Added**
+
+* Water - animated height variation.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.15 - 2022.06.08
 
 **Added**
