@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.18 - 2022.06.10
+
+**Added**
+
+* Shader feature toggles to water shader.
+
+**Changed**
+
+* Updated water shader GUI.
+
+**Fixed**
+
 ## 1.0.17 - 2022.06.09
 
 **Added**

@@ -6,6 +6,7 @@ namespace Yontalane.Shaders
 {
     internal static class ShaderGUIUtility
     {
+        #region Style
         private static GUIStyle s_sectionStyle = null;
         private static GUIStyle SectionStyle
         {
@@ -41,7 +42,9 @@ namespace Yontalane.Shaders
                 return s_sectionStyle;
             }
         }
+        #endregion
 
+        #region Sections
         public static void BeginSection(GUIContent label)
         {
             if (label != null && !string.IsNullOrEmpty(label.text))
@@ -102,5 +105,70 @@ namespace Yontalane.Shaders
         public static void SectionHeader(GUIContent label) => SectionHeaderToggle(label, null, null, null);
 
         public static void SectionHeader(string label) => SectionHeaderToggle(label, null, null, null);
+        #endregion
+
+        #region Fields
+        public static bool ImageField(Material material, GUIContent label, MaterialProperty prop, bool large = true)
+        {
+            Texture value = prop.textureValue;
+            EditorGUI.BeginChangeCheck();
+            if (large)
+            {
+                value = EditorGUILayout.ObjectField(label, value, typeof(Texture), false) as Texture;
+            }
+            else
+            {
+                value = EditorGUILayout.ObjectField(label, value, typeof(Texture), false, GUILayout.Height(EditorGUIUtility.singleLineHeight)) as Texture;
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                prop.textureValue = value;
+                EditorUtility.SetDirty(material);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool ImageField(Material material, string label, MaterialProperty prop, bool large = true) => ImageField(material, new GUIContent(label), prop, large);
+
+        public static bool ImageField(Material material, MaterialProperty prop, bool large = true) => ImageField(material, prop.displayName, prop, large);
+
+        public static bool FloatField(Material material, GUIContent label, MaterialProperty prop, float? min, float? max, float? scalar)
+        {
+            float value = prop.floatValue * (scalar != null ? scalar.Value : 1);
+            EditorGUI.BeginChangeCheck();
+            if (min != null && max != null)
+            {
+                value = EditorGUILayout.Slider(label, value, min.Value, max.Value);
+            }
+            else
+            {
+                value = EditorGUILayout.FloatField(label, value);
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (min != null)
+                {
+                    value = Mathf.Max(value, min.Value);
+                }
+                if (max != null)
+                {
+                    value = Mathf.Min(value, max.Value);
+                }
+                if (scalar != null)
+                {
+                    value /= scalar.Value;
+                }
+                prop.floatValue = value;
+                EditorUtility.SetDirty(material);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool FloatField(Material material, string label, MaterialProperty prop, float? min, float? max, float? scalar) => FloatField(material, new GUIContent(label), prop, min, max, scalar);
+
+        public static bool FloatField(Material material, MaterialProperty prop, float? min, float? max, float? scalar) => FloatField(material, prop.displayName, prop, min, max, scalar);
+        #endregion
     }
 }

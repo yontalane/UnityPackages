@@ -3,7 +3,7 @@ Shader "Yontalane/Water"
     Properties
     {
         _Color ("Color", Color) = (0,0.5,1,1)
-        [Toggle] _UseMain ("Main", Float) = 0
+        [Toggle] _UseMain ("Common", Float) = 0
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0
@@ -13,7 +13,7 @@ Shader "Yontalane/Water"
         [Toggle] _UseFoam ("Foam", Float) = 0
         _FoamColor ("Color", Color) = (1,1,1,1)
         _FoamCutoff("Depth", float) = 0.1
-        [Toggle] _UseFoamAnimeTex ("Animation", Float) = 0
+        [Toggle] _UseFoamAnimTex ("Animation", Float) = 0
         [NoScaleOffset] _FoamAnimTex ("Texture", 2D) = "black" {}
 
         [Toggle] _UseFog ("Fog", Float) = 0
@@ -70,6 +70,9 @@ Shader "Yontalane/Water"
 				#if (_USE_MAIN)
 					float2 uv_MainTex;
 				#endif
+				#if (_USE_CAUSTICS)
+					float2 uv_CausticsTex;
+				#endif
 				float4 screenPos;
 				float3 worldPos;
 			};
@@ -95,6 +98,10 @@ Shader "Yontalane/Water"
 					half val = valA * valB;
 
 					v.vertex.xyz += v.normal * _HeightScalar * (val * 2 - 1);
+				}
+			#else
+				void vert (inout appdata_full v)
+				{
 				}
 			#endif
 
@@ -139,15 +146,14 @@ Shader "Yontalane/Water"
 					o.Alpha = c.a;
 				#else
 					fixed4 c = _Color;
-					c.a = _Color.a;
 					o.Albedo = c.rgb;
 					o.Alpha = c.a;
 				#endif
 
 				#if (_USE_CAUSTICS)
-					half causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
-					half causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
-					half causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
+					half causticsA = tex2D (_CausticsTex, IN.uv_CausticsTex + float2(frac(_Time.x), 1)).r;
+					half causticsB = tex2D (_CausticsTex, IN.uv_CausticsTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
+					half causticsC = tex2D (_CausticsTex, IN.uv_CausticsTex + float2(1, frac(_Time.x * 1.5))).r;
 					half caustics = causticsA * causticsB * causticsC;
 					caustics = saturate(lerp(0.5, caustics + 0.4, 5));
 					caustics += caustics > 0.1125 ? caustics : 0;
