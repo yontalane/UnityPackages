@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.17 - 2022.06.09
+
+**Added**
+
+* Custom inspector for water shader.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.16 - 2022.06.09
 
 **Added**

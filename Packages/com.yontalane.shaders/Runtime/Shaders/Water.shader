@@ -9,25 +9,28 @@ Shader "Yontalane/Water"
 
         _DepthTest("Depth Test", float) = 1.5
 
-        _FoamColor ("Foam Color", Color) = (1,1,1,1)
-        _FoamCutoff("Foam Depth", float) = 0.1
-        _FoamAnimTex ("Foam Animation", 2D) = "black" {}
+        _FoamColor ("Color", Color) = (1,1,1,1)
+        _FoamCutoff("Depth", float) = 0.1
+        [NoScaleOffset] _FoamAnimTex ("Foam Animation", 2D) = "black" {}
 
-        _FogCutoffStart("Fog Start", float) = 0.75
-        _FogCutoffEnd("Fog End", float) = 0.95
-        _FogColor ("Fog Color", Color) = (0,0.5,0.75,1)
+        _FogCutoffStart("Near", float) = 0.75
+        _FogCutoffEnd("Far", float) = 0.95
+        _FogColor ("Color", Color) = (0,0.5,0.75,1)
 
-        _CausticsTex ("Caustics", 2D) = "black" {}
-        _CausticsColor ("Caustics Color", Color) = (0.25,0.75,1,1)
+        [NoScaleOffset] _CausticsTex ("Map", 2D) = "black" {}
+        [HDR] _CausticsColor ("Color", Color) = (0.25,0.75,1,1)
 
-		_HeightTex ("Height", 2D) = "black" {}
-		_HeightScalar ("Height Scalar", float) = 0.125
-		_HeightCoordScale ("Height Coord Scalar", float) = 0.5
-		_HeightTimeScale ("Height Time Scalar", float) = 0.5
+		[NoScaleOffset] _HeightTex ("Map", 2D) = "black" {}
+		_HeightScalar ("Height Scale", float) = 0.125
+		_HeightCoordScalar ("UV Scale", float) = 0.5
+		_HeightTimeScalar ("Time Scale", float) = 0.5
     }
+
+    CustomEditor "Yontalane.Shaders.WaterGUI"
+
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" "ForceNoShadowCasting"="True" }
         LOD 200
 
         CGPROGRAM
@@ -47,22 +50,20 @@ Shader "Yontalane/Water"
 
 		sampler2D _HeightTex;
 		half _HeightScalar;
-		half _HeightCoordScale;
-		half _HeightTimeScale;
+		half _HeightCoordScalar;
+		half _HeightTimeScalar;
 
 		void vert (inout appdata_full v)
 		{
-			half3 coordA = v.vertex.xyz * _HeightCoordScale;
-			coordA.x += _Time.x * _HeightTimeScale;
-			coordA.y += _Time.x * 0.75 * _HeightTimeScale;
-			coordA.z -= _Time.y * _HeightTimeScale;
-			half valA = tex2Dlod (_HeightTex, half4(coordA.x, coordA.z, coordA.x, coordA.z)).r;
+			half3 coordA = v.vertex.xyz * _HeightCoordScalar;
+			coordA.x = coordA.x + _Time.x * _HeightTimeScalar;
+			coordA.y = coordA.y - _Time.y * _HeightTimeScalar;
+			half valA = tex2Dlod (_HeightTex, half4(coordA.xy, 0, 0)).r;
 
-			half3 coordB = v.vertex.xyz * _HeightCoordScale;
-			coordB.y += _Time.x * _HeightTimeScale;
-			coordB.z += _Time.x * 0.75 * _HeightTimeScale;
-			coordB.x -= _Time.y * _HeightTimeScale;
-			half valB = tex2Dlod (_HeightTex, half4(coordB.x, coordB.z, coordB.x, coordB.z)).r;
+			half3 coordB = v.vertex.xyz * _HeightCoordScalar;
+			coordB.x = coordB.x - _Time.y * _HeightTimeScalar;
+			coordB.y = coordB.z + _Time.x * _HeightTimeScalar;
+			half valB = tex2Dlod (_HeightTex, half4(coordB.xy, 0, 0)).r;
 
 			half val = valA * valB;
 
