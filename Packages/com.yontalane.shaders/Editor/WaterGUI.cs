@@ -13,96 +13,121 @@ namespace Yontalane.Shaders
 			
 			// main
 			
-            ShaderGUIUtility.BeginSection(new GUIContent("Main", "Base material properties."));
+            ShaderGUIUtility.BeginSection(new GUIContent(string.Empty));
 
             MaterialProperty color = FindProperty("_Color", properties);
             materialEditor.ShaderProperty(color, new GUIContent(color.displayName));
 
-            MaterialProperty mainTex = FindProperty("_MainTex", properties);
-            materialEditor.ShaderProperty(mainTex, new GUIContent(mainTex.displayName));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseMain", properties), TargetMaterial, "_USE_MAIN"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Main", "Base material properties."));
 
-            MaterialProperty glossiness = FindProperty("_Glossiness", properties);
-            materialEditor.ShaderProperty(glossiness, new GUIContent(glossiness.displayName));
+				MaterialProperty mainTex = FindProperty("_MainTex", properties);
+				materialEditor.ShaderProperty(mainTex, new GUIContent(mainTex.displayName));
 
-            MaterialProperty metallic = FindProperty("_Metallic", properties);
-            materialEditor.ShaderProperty(metallic, new GUIContent(metallic.displayName));
+				MaterialProperty glossiness = FindProperty("_Glossiness", properties);
+				materialEditor.ShaderProperty(glossiness, new GUIContent(glossiness.displayName));
+
+				MaterialProperty metallic = FindProperty("_Metallic", properties);
+				materialEditor.ShaderProperty(metallic, new GUIContent(metallic.displayName));
+
+				ShaderGUIUtility.EndSection();
+			}
 
             ShaderGUIUtility.EndSection();
 			
 			// depth
 			
-            ShaderGUIUtility.BeginSection(new GUIContent("Depth", ""));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseDepth", properties), TargetMaterial, "_USE_DEPTH"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Depth", ""));
 
-            MaterialProperty depthTest = FindProperty("_DepthTest", properties);
-            materialEditor.ShaderProperty(depthTest, new GUIContent(depthTest.displayName));
+				MaterialProperty depthTest = FindProperty("_DepthTest", properties);
+				materialEditor.ShaderProperty(depthTest, new GUIContent(depthTest.displayName));
 
-            ShaderGUIUtility.EndSection();
+				ShaderGUIUtility.EndSection();
+			}
 			
 			// foam
 			
-            ShaderGUIUtility.BeginSection(new GUIContent("Foam", ""));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseFoam", properties), TargetMaterial, "_USE_FOAM"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Foam", ""));
 
-            MaterialProperty foamColor = FindProperty("_FoamColor", properties);
-            materialEditor.ShaderProperty(foamColor, new GUIContent(foamColor.displayName));
+				MaterialProperty foamColor = FindProperty("_FoamColor", properties);
+				materialEditor.ShaderProperty(foamColor, new GUIContent(foamColor.displayName));
 
-            MaterialProperty foamDepth = FindProperty("_FoamCutoff", properties);
-            materialEditor.ShaderProperty(foamDepth, new GUIContent(foamDepth.displayName));
+				MaterialProperty foamDepth = FindProperty("_FoamCutoff", properties);
+				materialEditor.ShaderProperty(foamDepth, new GUIContent(foamDepth.displayName));
 
-            EditorGUILayout.Space();
+				EditorGUILayout.Space();
 
-            ShaderGUIUtility.BeginSection(new GUIContent("Animation", ""));
+				if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseFoamAnimTex", properties), TargetMaterial, "_USE_FOAM_ANIM_TEX"))
+				{
+					ShaderGUIUtility.BeginSection(new GUIContent("Animation", ""));
 
-            MaterialProperty foamAnimation = FindProperty("_FoamAnimTex", properties);
-            ImageField(TargetMaterial, foamAnimation, false);
+					MaterialProperty foamAnimation = FindProperty("_FoamAnimTex", properties);
+					ImageField(TargetMaterial, foamAnimation, false);
 
-            ShaderGUIUtility.EndSection();
+					ShaderGUIUtility.EndSection();
+				}
 
-            ShaderGUIUtility.EndSection();
+				ShaderGUIUtility.EndSection();
+			}
 
             // fog
 
-            ShaderGUIUtility.BeginSection(new GUIContent("Fog", ""));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseFog", properties), TargetMaterial, "_USE_FOG"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Fog", ""));
 
-            MaterialProperty fogStart = FindProperty("_FogCutoffStart", properties);
-            materialEditor.ShaderProperty(fogStart, new GUIContent(fogStart.displayName));
+				MaterialProperty fogStart = FindProperty("_FogCutoffStart", properties);
+				materialEditor.ShaderProperty(fogStart, new GUIContent(fogStart.displayName));
 
-            MaterialProperty fogEnd = FindProperty("_FogCutoffEnd", properties);
-            materialEditor.ShaderProperty(fogEnd, new GUIContent(fogEnd.displayName));
+				MaterialProperty fogEnd = FindProperty("_FogCutoffEnd", properties);
+				materialEditor.ShaderProperty(fogEnd, new GUIContent(fogEnd.displayName));
 
-            MaterialProperty fogColor = FindProperty("_FogColor", properties);
-            materialEditor.ShaderProperty(fogColor, new GUIContent(fogColor.displayName));
+				MaterialProperty fogColor = FindProperty("_FogColor", properties);
+				materialEditor.ShaderProperty(fogColor, new GUIContent(fogColor.displayName));
 
-            ShaderGUIUtility.EndSection();
+				ShaderGUIUtility.EndSection();
+			}
 			
 			// caustics
 			
-            ShaderGUIUtility.BeginSection(new GUIContent("Caustics", ""));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseCaustics", properties), TargetMaterial, "_USE_CAUSTICS"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Caustics", ""));
 
-            MaterialProperty causticsTex = FindProperty("_CausticsTex", properties);
-            ImageField(TargetMaterial, causticsTex, false);
+				MaterialProperty causticsTex = FindProperty("_CausticsTex", properties);
+				ImageField(TargetMaterial, causticsTex, false);
 
-            MaterialProperty causticsColor = FindProperty("_CausticsColor", properties);
-            materialEditor.ShaderProperty(causticsColor, new GUIContent(causticsColor.displayName));
+				MaterialProperty causticsColor = FindProperty("_CausticsColor", properties);
+				materialEditor.ShaderProperty(causticsColor, new GUIContent(causticsColor.displayName));
 
-            ShaderGUIUtility.EndSection();
+				ShaderGUIUtility.EndSection();
+			}
 			
 			// height
 			
-            ShaderGUIUtility.BeginSection(new GUIContent("Height", ""));
+            if (ShaderGUIUtility.SectionHeaderToggle(FindProperty("_UseHeight", properties), TargetMaterial, "_USE_HEIGHT"))
+            {
+				ShaderGUIUtility.BeginSection(new GUIContent("Height", ""));
 
-            MaterialProperty heightTex = FindProperty("_HeightTex", properties);
-            ImageField(TargetMaterial, heightTex, false);
+				MaterialProperty heightTex = FindProperty("_HeightTex", properties);
+				ImageField(TargetMaterial, heightTex, false);
 
-            MaterialProperty heightScalar = FindProperty("_HeightScalar", properties);
-            FloatField(TargetMaterial, heightScalar, 0f, null, 100f);
+				MaterialProperty heightScalar = FindProperty("_HeightScalar", properties);
+				FloatField(TargetMaterial, heightScalar, 0f, null, 100f);
 
-            MaterialProperty heightCoordScalar = FindProperty("_HeightCoordScalar", properties);
-            FloatField(TargetMaterial, heightCoordScalar, 0f, null, 0.01f);
+				MaterialProperty heightCoordScalar = FindProperty("_HeightCoordScalar", properties);
+				FloatField(TargetMaterial, heightCoordScalar, 0f, null, 0.01f);
 
-            MaterialProperty heightTimeScalar = FindProperty("_HeightTimeScalar", properties);
-            FloatField(TargetMaterial, heightTimeScalar, 0f, null, 10f);
+				MaterialProperty heightTimeScalar = FindProperty("_HeightTimeScalar", properties);
+				FloatField(TargetMaterial, heightTimeScalar, 0f, null, 10f);
 
-            ShaderGUIUtility.EndSection();
+				ShaderGUIUtility.EndSection();
+			}
         }
 
         private bool ImageField(Material material, GUIContent label, MaterialProperty prop, bool large = true)

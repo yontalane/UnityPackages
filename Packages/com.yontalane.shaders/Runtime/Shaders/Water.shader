@@ -99,6 +99,7 @@ Shader "Yontalane/Water"
 			#endif
 
 			fixed4 _Color;
+			
 			#if (_USE_MAIN)
 				half _Glossiness;
 				half _Metallic;
@@ -108,58 +109,105 @@ Shader "Yontalane/Water"
 				float _DepthTest;
 			#endif
 
-			fixed4 _FoamColor;
-			half _FoamCutoff;
-			sampler2D _FoamAnimTex;
+			#if (_USE_FOAM)
+				fixed4 _FoamColor;
+				half _FoamCutoff;
+				#if (_USE_FOAM_ANIM_TEX)
+					sampler2D _FoamAnimTex;
+				#endif
+			#endif
 
-			float _FogCutoffStart;
-			float _FogCutoffEnd;
-			fixed4 _FogColor;
+			#if (_USE_FOG)
+				float _FogCutoffStart;
+				float _FogCutoffEnd;
+				fixed4 _FogColor;
+			#endif
 
-			sampler2D _CausticsTex;
-			fixed4 _CausticsColor;
+			#if (_USE_CAUSTICS)
+				sampler2D _CausticsTex;
+				fixed4 _CausticsColor;
+			#endif
 
 			void surf (Input IN, inout SurfaceOutputStandard o)
 			{
-				fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-				c.a = _Color.a;
-				o.Albedo = c.rgb;
-				o.Metallic = _Metallic;
-				o.Smoothness = _Glossiness;
-				o.Alpha = c.a;
+				#if (_USE_MAIN)
+					fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+					c.a = _Color.a;
+					o.Albedo = c.rgb;
+					o.Metallic = _Metallic;
+					o.Smoothness = _Glossiness;
+					o.Alpha = c.a;
+				#else
+					fixed4 c = _Color;
+					c.a = _Color.a;
+					o.Albedo = c.rgb;
+					o.Alpha = c.a;
+				#endif
 
-				half causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
-				half causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
-				half causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
-				half caustics = causticsA * causticsB * causticsC;
-				caustics = saturate(lerp(0.5, caustics + 0.4, 5));
-				caustics += caustics > 0.1125 ? caustics : 0;
-				o.Albedo = lerp(o.Albedo, _CausticsColor, caustics * _CausticsColor.a);
+				#if (_USE_CAUSTICS)
+					half causticsA = tex2D (_CausticsTex, IN.uv_MainTex + float2(frac(_Time.x), 1)).r;
+					half causticsB = tex2D (_CausticsTex, IN.uv_MainTex * 2 - float2(frac(_Time.x * 2), 1)).r + 0.075;
+					half causticsC = tex2D (_CausticsTex, IN.uv_MainTex + float2(1, frac(_Time.x * 1.5))).r;
+					half caustics = causticsA * causticsB * causticsC;
+					caustics = saturate(lerp(0.5, caustics + 0.4, 5));
+					caustics += caustics > 0.1125 ? caustics : 0;
+					o.Albedo = lerp(o.Albedo, _CausticsColor, caustics * _CausticsColor.a);
+				#endif
 
-				half depthTest = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
-				depthTest = LinearEyeDepth(depthTest);
-				depthTest = saturate((depthTest - IN.screenPos.w) / _DepthTest);
+				#if (_USE_FOAM || _USE_FOG)
+					half depthTest = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
+					depthTest = LinearEyeDepth(depthTest);
+					depthTest = saturate((depthTest - IN.screenPos.w) / _DepthTest);
+				#endif
 
-				half foamCutoff = _FoamCutoff * lerp(0.75, 1, _SinTime.w);
-
-				if (depthTest < foamCutoff)
-				{
-					half foamMask = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
-					o.Albedo = lerp(o.Albedo, _FoamColor, foamMask * _FoamColor.a);
-					o.Alpha = lerp(o.Alpha, 1, foamMask);
-				}
-				else
-				{
+				#if (_USE_FOAM && _USE_FOG)
+					half foamCutoff = _FoamCutoff * lerp(0.75, 1, _SinTime.w);
+					if (depthTest < foamCutoff)
+					{
+						#if (_USE_FOAM_ANIM_TEX)
+							half foamMask = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
+						#else
+							half foamMask = 1;
+						#endif
+						o.Albedo = lerp(o.Albedo, _FoamColor, foamMask * _FoamColor.a);
+						o.Alpha = lerp(o.Alpha, 1, foamMask);
+					}
+					else
+					{
+						half t = depthTest - _FogCutoffStart;
+						t /= (_FogCutoffEnd - _FogCutoffStart);
+						t = saturate(t);
+						o.Albedo = lerp(o.Albedo, _FogColor, t * _FogColor.a);
+						o.Alpha = lerp(o.Alpha, 1, t);
+					}
+				#elif (_USE_FOAM)
+					half foamCutoff = _FoamCutoff * lerp(0.75, 1, _SinTime.w);
+					if (depthTest < foamCutoff)
+					{
+						#if (_USE_FOAM_ANIM_TEX)
+							half foamMask = tex2D (_FoamAnimTex, half2(frac(_Time.x), depthTest / foamCutoff)).r;
+						#else
+							half foamMask = 1;
+						#endif
+						o.Albedo = lerp(o.Albedo, _FoamColor, foamMask * _FoamColor.a);
+						o.Alpha = lerp(o.Alpha, 1, foamMask);
+					}
+				#elif (_USE_FOG)
 					half t = depthTest - _FogCutoffStart;
 					t /= (_FogCutoffEnd - _FogCutoffStart);
 					t = saturate(t);
 					o.Albedo = lerp(o.Albedo, _FogColor, t * _FogColor.a);
 					o.Alpha = lerp(o.Alpha, 1, t);
-					o.Alpha += caustics * 0.1;
-				}
+				#endif
+				
+				#if (_USE_CAUSTICS)
+					o.Alpha = saturate(o.Alpha + caustics * 0.1);
+				#endif
 
-				o.Albedo = lerp(1, o.Albedo, lerp(depthTest, 1, 0.5));
-				o.Alpha = lerp(1, o.Alpha, lerp(depthTest, 1, 0.5));
+				#if (_USE_FOAM || _USE_FOG)
+					o.Albedo = lerp(1, o.Albedo, lerp(depthTest, 1, 0.5));
+					o.Alpha = lerp(1, o.Alpha, lerp(depthTest, 1, 0.5));
+				#endif
 			}
         ENDCG
     }
