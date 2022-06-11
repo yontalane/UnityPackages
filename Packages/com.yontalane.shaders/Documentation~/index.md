@@ -69,3 +69,7 @@ Pixelate the screen.
 ### Retone
 
 Replace the colors on the screen with textures. Choose a texture based on the underlying color value.
+
+### Outline
+
+Draw outlines based on screen normals and depth. Based on the outline screen effect at https://www.ronja-tutorials.com.

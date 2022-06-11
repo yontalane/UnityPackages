@@ -20,8 +20,30 @@ namespace Yontalane.Shaders
         [SerializeField]
         private ScreenEffectConfig m_config = new ScreenEffectConfig();
 
+        [SerializeField]
+        [Tooltip("What 3D space data do we want to include in the screen capture?")]
+        private DepthTextureMode m_depthTextureMode = DepthTextureMode.None;
+
+        private Camera m_camera = null;
+        public Camera Camera
+        {
+            get
+            {
+                if (m_camera == null)
+                {
+                    m_camera = GetComponent<Camera>();
+                }
+                return m_camera;
+            }
+        }
+
         private void Start()
         {
+            if (m_depthTextureMode != DepthTextureMode.None)
+            {
+                Camera.depthTextureMode |= m_depthTextureMode;
+            }
+
             if (m_config.material != null)
             {
                 m_config.shader = null;

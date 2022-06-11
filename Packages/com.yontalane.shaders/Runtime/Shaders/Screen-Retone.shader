@@ -1,4 +1,4 @@
-﻿Shader "Yontalane/Screen/Retone"
+﻿Shader "Hidden/Yontalane/Screen/Retone"
 {
     Properties
     {

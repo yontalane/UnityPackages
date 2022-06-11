@@ -1,4 +1,4 @@
-Shader "Yontalane/Screen/Fog"
+Shader "Hidden/Yontalane/Screen/Fog"
 {
 	Properties
 	{

@@ -19,14 +19,6 @@ namespace Yontalane.Shaders
         [SerializeField]
         private Color m_color = default;
 
-        private Camera m_camera = null;
-
-        private void Awake()
-        {
-            m_camera = GetComponent<Camera>();
-            m_camera.depthTextureMode |= DepthTextureMode.Depth;
-        }
-
         protected override void InitializeMaterial(Material material) { }
 
         protected override void UpdateMaterial(Material material)

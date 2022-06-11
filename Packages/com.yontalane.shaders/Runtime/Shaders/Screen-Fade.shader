@@ -1,4 +1,4 @@
-﻿Shader "Yontalane/Screen/Fade"
+﻿Shader "Hidden/Yontalane/Screen/Fade"
 {
 	Properties
 	{

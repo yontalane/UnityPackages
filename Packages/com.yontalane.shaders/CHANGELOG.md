@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.19 - 2022.06.11
+
+**Added**
+
+* Outline screen effect.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.18 - 2022.06.10
 
 **Added**

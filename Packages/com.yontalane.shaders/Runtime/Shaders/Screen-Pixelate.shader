@@ -1,4 +1,4 @@
-﻿Shader "Yontalane/Screen/Pixelate"
+﻿Shader "Hidden/Yontalane/Screen/Pixelate"
 {
 	Properties
 	{
