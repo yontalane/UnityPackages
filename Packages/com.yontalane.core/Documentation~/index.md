@@ -1,5 +1,18 @@
 # Core
 
+## Logger
+
+### Static Methods
+
+| Name                   | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| **Log**                | Invoke UnityEngine.Debug.Log, but only if the conditional ENABLE_LOGS is active. |
+| **Log Warning**        | Invoke UnityEngine.Debug.LogWarning, but only if the conditional ENABLE_LOGS is active. |
+| **Log Error**          | Invoke UnityEngine.Debug.LogError, but only if the conditional ENABLE_LOGS is active. |
+| **Editor Log**         | Invoke UnityEngine.Debug.Log, but only if in the editor. Note that outside the editor, this function still calls an empty method. |
+| **Editor Log Warning** | Invoke UnityEngine.Debug.LogWarning, but only if in the editor. Note that outside the editor, this function still calls an empty method. |
+| **Editor Log Error**   | Invoke UnityEngine.Debug.LogError, but only if in the editor. Note that outside the editor, this function still calls an empty method. |
+
 ## Math
 
 ### Static Methods

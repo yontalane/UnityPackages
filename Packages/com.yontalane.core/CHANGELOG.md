@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.14 - 2022.06.16
+
+**Added**
+
+* Logger
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.13 - 2022.06.05
 
 **Added**
