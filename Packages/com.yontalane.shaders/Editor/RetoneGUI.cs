@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yontalane.Shaders
 {
-    public class RetoneGUI : RetoneBaseGUI
+    internal class RetoneGUI : RetoneBaseGUI
     {
         protected override void OnMainGUI(MaterialEditor materialEditor, MaterialProperty[] properties, Material material)
         {

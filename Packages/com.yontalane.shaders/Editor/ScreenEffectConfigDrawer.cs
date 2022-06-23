@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yontalane.Shaders
 {
     [CustomPropertyDrawer(typeof(ScreenEffectConfig))]
-    public class ScreenEffectConfigDrawer : PropertyDrawer
+    internal class ScreenEffectConfigDrawer : PropertyDrawer
     {
         private const int MARGIN = 2;
 

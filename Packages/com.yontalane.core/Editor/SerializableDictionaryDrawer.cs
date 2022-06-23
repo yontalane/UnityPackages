@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yontalane
 {
     [CustomPropertyDrawer(typeof(SerializableDictionaryBase_DoNotUse), true)]
-    public class SerializableDictionaryDrawer : PropertyDrawer
+    internal class SerializableDictionaryDrawer : PropertyDrawer
     {
         private const float MARGIN = 3f;
 

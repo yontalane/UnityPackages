@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yontalane.Shaders
 {
-    public class SurfaceBaseGUI : ShaderGUI
+    internal class SurfaceBaseGUI : ShaderGUI
     {
         public Material TargetMaterial { get; protected set; } = null;
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Yontalane.Shaders
 {
-    public class WaterGUI : ShaderGUI
+	internal class WaterGUI : ShaderGUI
     {
         public Material TargetMaterial { get; protected set; } = null;
 

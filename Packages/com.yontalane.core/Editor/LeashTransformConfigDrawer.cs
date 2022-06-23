@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yontalane
 {
     [CustomPropertyDrawer(typeof(LeashTransform.Config))]
-    public class LeashTransformConfigDrawer : PropertyDrawer
+    internal class LeashTransformConfigDrawer : PropertyDrawer
     {
         private const int MARGIN = 2;
 

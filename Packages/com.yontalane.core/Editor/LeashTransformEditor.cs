@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yontalane
 {
     [CustomEditor(typeof(LeashTransform))]
-    public class LeashTransformEditor : Editor
+    internal class LeashTransformEditor : Editor
     {
         SerializedProperty m_target = null;
         SerializedProperty m_positionConfig = null;

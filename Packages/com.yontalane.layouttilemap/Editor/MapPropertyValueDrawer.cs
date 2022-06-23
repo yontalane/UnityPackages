@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yontalane.LayoutTilemap
 {
     [CustomPropertyDrawer(typeof(MapPropertyValue))]
-    public class MapPropertyValueDrawer : PropertyDrawer
+    internal class MapPropertyValueDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Yontalane.Shaders
 {
-    public class SpriteBaseGUI : ShaderGUI
+    internal class SpriteBaseGUI : ShaderGUI
     {
         public Material TargetMaterial { get; protected set; } = null;
 
