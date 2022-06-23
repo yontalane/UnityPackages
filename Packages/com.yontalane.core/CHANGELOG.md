@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.15 - 2022.06.23
+
+**Added**
+
+* Clamp Attribute for Float Range and Int Range
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.14 - 2022.06.16
 
 **Added**

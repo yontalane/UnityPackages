@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Yontalane
@@ -58,5 +59,18 @@ namespace Yontalane
         public int Random => Mathf.RoundToInt(Mathf.Lerp((float)min, (float)max, UnityEngine.Random.value));
 
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
+    }
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    public sealed class ClampAttribute : PropertyAttribute
+    {
+        public readonly float min = 0f;
+        public readonly float max = 1f;
+
+        public ClampAttribute(float min = 0f, float max = 1f)
+        {
+            this.min = min;
+            this.max = max;
+        }
     }
 }

@@ -126,6 +126,17 @@ Adding this component to a game object with a Character Controller allows the Ch
 | **On Collision**      | Event to invoke on collision.                   |
 | **Audio Clip**        | Sound to play on collision.                     |
 
+## Clamp Attribute
+
+Can be used with Float Range or Int Range. Similar to Range Attribute on a standard float or int. Clamps the allowed upper and lower limits of the field.
+
+### Properties
+
+| Name    | Description                          |
+| ------- | ------------------------------------ |
+| **min** | The allowed lower limit input value. |
+| **max** | The allowed upper limit input value. |
+
 ## Collision Listener
 
 Add this to an object to allow other objects to listen for its collision events.
