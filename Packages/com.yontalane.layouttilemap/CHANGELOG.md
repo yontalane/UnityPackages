@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.9 - 2022.06.27
+
+**Added**
+
+- Persistent Object to be copied wholesale from the source map into the final.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.8 - 2022.04.09
 
 **Added**

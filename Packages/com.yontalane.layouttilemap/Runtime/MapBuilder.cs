@@ -64,6 +64,7 @@ namespace Yontalane.LayoutTilemap
         private GameObject m_prefab;
         private GameObject m_instance;
         private MapEntity[] m_entities;
+        private PersistentObject[] m_persistentObjects;
         #endregion
 
         /// <summary>
@@ -190,6 +191,18 @@ namespace Yontalane.LayoutTilemap
                     }
 
                     mapData.entities.Add(entityData);
+                }
+
+                m_persistentObjects = m_tilemaps[i].GetComponentsInChildren<PersistentObject>();
+                foreach (PersistentObject persistentObject in m_persistentObjects)
+                {
+                    m_instance = Instantiate(persistentObject.gameObject);
+                    m_instance.transform.SetParent(m_mapParent);
+                    m_instance.transform.localPosition = m_tilemaps[i].MapLocalToGridLocal(persistentObject.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle);
+                    m_instance.transform.localEulerAngles = persistentObject.transform.localEulerAngles;
+                    m_instance.transform.localScale = Vector3.one;
+                    m_instance.isStatic = persistentObject.gameObject.isStatic;
+                    m_instance.name = persistentObject.name;
                 }
             }
 
