@@ -200,7 +200,7 @@ namespace Yontalane.LayoutTilemap
                     m_instance.transform.SetParent(m_mapParent);
                     m_instance.transform.localPosition = m_tilemaps[i].MapLocalToGridLocal(persistentObject.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle);
                     m_instance.transform.localEulerAngles = persistentObject.transform.localEulerAngles;
-                    m_instance.transform.localScale = Vector3.one;
+                    m_instance.transform.localScale = persistentObject.transform.localScale;
                     m_instance.isStatic = persistentObject.gameObject.isStatic;
                     m_instance.name = persistentObject.name;
                 }

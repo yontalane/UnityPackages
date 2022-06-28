@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.10 - 2022.06.27
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+- Persistent object retains scale.
+
 ## 1.0.9 - 2022.06.27
 
 **Added**
