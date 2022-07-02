@@ -24,6 +24,7 @@ namespace Yontalane.LayoutTilemap
         public List<EntityData> entities;
         public MapPropertyDictionary properties;
         public Bounds bounds;
+        public Transform mapParent;
     }
     #endregion
 
@@ -205,6 +206,8 @@ namespace Yontalane.LayoutTilemap
                     m_instance.name = persistentObject.name;
                 }
             }
+
+            mapData.mapParent = m_mapParent;
 
             Destroy(m_gridInstance.gameObject);
 

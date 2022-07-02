@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11 - 2022.07.02
+
+**Added**
+
+- Passing map parent Transform in MapData.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.10 - 2022.06.27
 
 **Added**
