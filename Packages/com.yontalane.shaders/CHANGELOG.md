@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.20 - 2022.07.25
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+- Fixed - Editor scritps in build.
+
 ## 1.0.19 - 2022.06.11
 
 **Added**

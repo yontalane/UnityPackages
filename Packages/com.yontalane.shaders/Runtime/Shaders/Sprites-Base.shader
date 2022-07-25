@@ -31,7 +31,7 @@ Shader "Yontalane/Sprite"
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend Mode", Float) = 10
     }
 
-    CustomEditor "Yontalane.Shaders.SpriteBaseGUI"
+    CustomEditor "YontalaneEditor.Shaders.SpriteBaseGUI"
 
     SubShader
     {

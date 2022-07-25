@@ -39,7 +39,7 @@ Shader "Yontalane/Retone"
         _OutlineWidth ("Width", Float) = 1.0
     }
 
-    CustomEditor "Yontalane.Shaders.RetoneGUI"
+    CustomEditor "YontalaneEditor.Shaders.RetoneGUI"
 
     SubShader
     {

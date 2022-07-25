@@ -35,7 +35,7 @@
         _PixelScale ("Pixel Scale", Float) = 1.0
     }
 
-    CustomEditor "Yontalane.Shaders.RetoneBaseGUI"
+    CustomEditor "YontalaneEditor.Shaders.RetoneBaseGUI"
 
     SubShader
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Yontalane.Shaders
+namespace YontalaneEditor.Shaders
 {
     internal class SurfaceBaseGUI : ShaderGUI
     {

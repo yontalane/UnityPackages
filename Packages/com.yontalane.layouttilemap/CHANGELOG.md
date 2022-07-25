@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.12 - 2022.07.25
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+- Fixed - Editor scripts in build.
+
 ## 1.0.11 - 2022.07.02
 
 **Added**

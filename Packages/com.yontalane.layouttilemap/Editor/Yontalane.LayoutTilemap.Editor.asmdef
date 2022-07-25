@@ -1,10 +1,12 @@
 {
     "name": "Yontalane.LayoutTilemap.Editor",
-    "rootNamespace": "Yontalane.LayoutTilemap",
+    "rootNamespace": "YontalaneEditor.LayoutTilemap",
     "references": [
         "GUID:f3b06db84d55774408a9bee6e8f22637"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

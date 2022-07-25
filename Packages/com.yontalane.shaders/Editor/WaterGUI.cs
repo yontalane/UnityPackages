@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Yontalane.Shaders
+namespace YontalaneEditor.Shaders
 {
 	internal class WaterGUI : ShaderGUI
     {

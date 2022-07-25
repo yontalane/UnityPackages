@@ -32,7 +32,7 @@ Shader "Yontalane/Water"
 		_HeightTimeScalar ("Time Scale", float) = 0.5
     }
 
-    CustomEditor "Yontalane.Shaders.WaterGUI"
+    CustomEditor "YontalaneEditor.Shaders.WaterGUI"
 
     SubShader
     {

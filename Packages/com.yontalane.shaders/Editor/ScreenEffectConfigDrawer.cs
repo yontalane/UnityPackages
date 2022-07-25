@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
+using Yontalane.Shaders;
 
-namespace Yontalane.Shaders
+namespace YontalaneEditor.Shaders
 {
     [CustomPropertyDrawer(typeof(ScreenEffectConfig))]
     internal class ScreenEffectConfigDrawer : PropertyDrawer

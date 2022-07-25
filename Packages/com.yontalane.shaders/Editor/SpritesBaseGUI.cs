@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Yontalane.Shaders
+namespace YontalaneEditor.Shaders
 {
     internal class SpriteBaseGUI : ShaderGUI
     {

@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
+using Yontalane.LayoutTilemap;
 
-namespace Yontalane.LayoutTilemap
+namespace YontalaneEditor.LayoutTilemap
 {
     [CustomPropertyDrawer(typeof(MapPropertyValue))]
     internal class MapPropertyValueDrawer : PropertyDrawer

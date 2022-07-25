@@ -13,7 +13,7 @@ Shader "Yontalane/Surface"
 
     }
 
-    CustomEditor "Yontalane.Shaders.SurfaceBaseGUI"
+    CustomEditor "YontalaneEditor.Shaders.SurfaceBaseGUI"
 
     SubShader
     {
