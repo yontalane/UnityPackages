@@ -1,10 +1,12 @@
 {
     "name": "Yontalane.Core.Editor",
-    "rootNamespace": "Yontalane",
+    "rootNamespace": "YontalaneEditor",
     "references": [
         "GUID:8579dca4301da4fdb94fc49558ddf5f5"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

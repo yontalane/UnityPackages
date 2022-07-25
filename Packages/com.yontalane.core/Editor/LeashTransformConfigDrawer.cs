@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
+using Yontalane;
 
-namespace Yontalane
+namespace YontalaneEditor
 {
     [CustomPropertyDrawer(typeof(LeashTransform.Config))]
     internal class LeashTransformConfigDrawer : PropertyDrawer

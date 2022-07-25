@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.16 - 2022.07.25
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+- Editor scripts should no longer be included in build.
+
 ## 1.0.15 - 2022.06.23
 
 **Added**

@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
+using Yontalane;
 
-namespace Yontalane
+namespace YontalaneEditor
 {
     [CustomPropertyDrawer(typeof(FloatRange))]
     internal class FloatRangeDrawer : PropertyDrawer

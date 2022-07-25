@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
+using Yontalane;
 
-namespace Yontalane
+namespace YontalaneEditor
 {
     [CustomPropertyDrawer(typeof(SerializableDictionaryBase_DoNotUse), true)]
     internal class SerializableDictionaryDrawer : PropertyDrawer
