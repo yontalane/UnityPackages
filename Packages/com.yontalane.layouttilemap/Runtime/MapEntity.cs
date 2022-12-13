@@ -23,8 +23,8 @@ namespace Yontalane.LayoutTilemap
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.white;
-            Gizmos.DrawIcon(transform.position + Vector3.up * 0.5f, "Packages/com.yontalane.layouttilemap/Runtime/Gizmos/MapMarkerGizmo.png", true);
-            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f);
+            Gizmos.DrawIcon(transform.position, "Packages/com.yontalane.layouttilemap/Runtime/Gizmos/MapMarkerGizmo.png", true);
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 1f);
 
             if (TryGetComponent(out Collider collider))
             {

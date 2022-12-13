@@ -6,6 +6,13 @@ using UnityEngine.Tilemaps;
 namespace Yontalane.LayoutTilemap
 {
     #region Structs
+    public struct TileData
+    {
+        public bool exists;
+        public string name;
+        public Vector3 worldPosition;
+    }
+    
     public struct EntityData
     {
         public string name;
@@ -21,10 +28,156 @@ namespace Yontalane.LayoutTilemap
     public struct MapData
     {
         public string name;
+        public TileDataCollection tileDataCollection;
         public List<EntityData> entities;
         public MapPropertyDictionary properties;
         public Bounds bounds;
         public Transform mapParent;
+    }
+    #endregion
+
+    #region Extra Classes
+    public class TileDataCollection
+    {
+        #region Private Variables
+        private readonly List<List<List<TileData>>> m_list = new List<List<List<TileData>>>();
+        #endregion
+
+        #region Constructor
+        public TileDataCollection() => m_list.Clear();
+        #endregion
+
+        public void AddTilemap() => m_list.Add(new List<List<TileData>>());
+
+        public void AddRow()
+        {
+            if (m_list.Count == 0)
+            {
+                AddTilemap();
+            }
+
+            List<List<TileData>> tilemap = m_list[m_list.Count - 1];
+            tilemap.Add(new List<TileData>());
+        }
+
+        public void AddTileData(TileData tileData)
+        {
+            if (m_list.Count == 0)
+            {
+                AddTilemap();
+            }
+
+            List<List<TileData>> tilemap = m_list[m_list.Count - 1];
+
+            if (tilemap.Count == 0)
+            {
+                AddRow();
+            }
+
+            List<TileData> row = tilemap[tilemap.Count - 1];
+
+            row.Add(tileData);
+        }
+
+        public int GetTilemapCount() => m_list.Count;
+
+        public int GetRowCount(int tilemapIndex)
+        {
+            if (tilemapIndex < 0 || tilemapIndex >= GetTilemapCount())
+            {
+                return -1;
+            }
+
+            return m_list[tilemapIndex].Count;
+        }
+
+        public int GetColumnCount(int tilemapIndex, int rowIndex)
+        {
+            if (tilemapIndex < 0 || tilemapIndex >= GetTilemapCount())
+            {
+                return -1;
+            }
+
+            if (rowIndex < 0 || rowIndex >= GetRowCount(tilemapIndex))
+            {
+                return -1;
+            }
+
+            return m_list[tilemapIndex][rowIndex].Count;
+        }
+
+        public bool TryGetTileData(int tilemapIndex, int rowIndex, int columnIndex, out TileData tileData)
+        {
+            int columnCount = GetColumnCount(tilemapIndex, rowIndex);
+
+            if (columnCount <= columnIndex)
+            {
+                tileData = default;
+                return false;
+            }
+
+            tileData = m_list[tilemapIndex][rowIndex][columnIndex];
+            return true;
+        }
+
+        public TileData GetTileData(int tilemapIndex, int rowIndex, int columnIndex)
+        {
+            if (TryGetTileData(tilemapIndex, rowIndex, columnIndex, out TileData tileData))
+            {
+                return tileData;
+            }
+            else
+            {
+                return default;
+            }
+        }
+
+        private T[,] GetArray<T>(int tilemapIndex, Func<Vector2Int, T> getItem)
+        {
+            if (tilemapIndex < 0 || tilemapIndex >= GetTilemapCount())
+            {
+                return default;
+            }
+
+            List<List<TileData>> tilemap = m_list[tilemapIndex];
+
+            int longestRow = 0;
+            foreach(List<TileData> row in tilemap)
+            {
+                longestRow = Mathf.Max(row.Count, longestRow);
+            }
+
+            T[,] array = new T[longestRow, tilemap.Count];
+
+            for (int y = 0; y < array.GetLength(1); y++)
+            {
+                List<TileData> row = tilemap[y];
+                for (int x = 0; x < array.GetLength(0); x++)
+                {
+                    array[x, y] = getItem(new Vector2Int(x, y));
+                }
+            }
+
+            return array;
+        }
+
+        public string[,] GetNamesArray(int tilemapIndex)
+        {
+            return GetArray<string>(tilemapIndex, (Vector2Int mapPosition) =>
+            {
+                List<TileData> row = m_list[tilemapIndex][mapPosition.y];
+                return mapPosition.x < row.Count ? row[mapPosition.x].name : string.Empty;
+            });
+        }
+
+        public bool[,] GetExistArray(int tilemapIndex)
+        {
+            return GetArray<bool>(tilemapIndex, (Vector2Int mapPosition) =>
+            {
+                List<TileData> row = m_list[tilemapIndex][mapPosition.y];
+                return mapPosition.x < row.Count ? row[mapPosition.x].exists : false;
+            });
+        }
     }
     #endregion
 
@@ -106,9 +259,12 @@ namespace Yontalane.LayoutTilemap
             MapProperties mapProperties = m_gridInstance.GetComponent<MapProperties>();
             mapData.properties = mapProperties != null ? mapProperties.Properties : new MapPropertyDictionary();
 
+            mapData.tileDataCollection = new TileDataCollection();
             m_tilemaps = m_gridInstance.GetComponentsInChildren<Tilemap>();
             for (int i = 0; i < m_tilemaps.Length; i++)
             {
+                mapData.tileDataCollection.AddTilemap();
+
                 if (i == 0)
                 {
                     m_gridBounds = m_tilemaps[i].cellBounds;
@@ -125,15 +281,30 @@ namespace Yontalane.LayoutTilemap
                 m_tilemapContainer.transform.localScale = Vector3.one;
                 m_tilemapContainer.gameObject.isStatic = true;
 
-                for (int x = 0; x < m_mapBounds.size.x; x++)
+                for (int y = 0; y < m_mapBounds.size.y; y++)
                 {
-                    for (int y = 0; y < m_mapBounds.size.y; y++)
+                    mapData.tileDataCollection.AddRow();
+                    for (int x = 0; x < m_mapBounds.size.x; x++)
                     {
                         m_tile = m_allTiles[x + y * m_mapBounds.size.x];
-                        if (m_tile == null) continue;
+                        if (m_tile == null)
+                        {
+                            mapData.tileDataCollection.AddTileData(new TileData()
+                            {
+                                exists = false
+                            });
+                            continue;
+                        }
                         m_tilePosition = m_tilemaps[i].CellToWorld(new Vector3Int(x, y, 0));
                         m_tileBounds = new Bounds(m_tilePosition, m_tilemaps[i].cellSize);
                         CreateObject(m_tile.name, m_tilemapContainer, m_tilePosition, Vector3.zero, true);
+
+                        mapData.tileDataCollection.AddTileData(new TileData()
+                        {
+                            exists = true,
+                            name = m_tile.name,
+                            worldPosition = m_tilePosition
+                        });
 
                         if (i == 0 && x == 0 && y == 0)
                         {

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.13 - 2022.12.13
+
+**Added**
+
+- Map data contains tile data.
+
+**Changed**
+
+**Fixed**
+
+- Map entity icon was sometimes not centered.
+
 ## 1.0.12 - 2022.07.25
 
 **Added**
