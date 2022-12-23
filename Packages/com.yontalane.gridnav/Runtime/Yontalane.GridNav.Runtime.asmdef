@@ -1,0 +1,14 @@
+{
+    "name": "Yontalane.GridNav.Runtime",
+    "rootNamespace": "Yontalane.Dialog",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

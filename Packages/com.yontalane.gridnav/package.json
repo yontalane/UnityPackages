@@ -1,0 +1,30 @@
+{
+  "name": "com.yontalane.gridnav",
+  "version": "1.0.0",
+  "displayName": "Grid Nav",
+  "description": "A* grid navigation.",
+  "unity": "2021.3",
+  "unityRelease": "16f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.gridnav/Documentation~/index.md",
+  "dependencies": {
+    "com.unity.inputsystem": "1.2.0"
+  },
+  "keywords": [
+    "pathing",
+    "navigation",
+    "ai"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "samples": [
+    {
+      "displayName": "Grid Nav Demo",
+      "description": "Contains a sample implementation of grid nav pathing.",
+      "path": "Samples~/GridNavDemo"
+    }
+  ],
+  "type": "library"
+}

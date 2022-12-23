@@ -91,6 +91,14 @@
         "com.yontalane.query": "1.0.0"
       }
     },
+    "com.yontalane.gridnav": {
+      "version": "file:com.yontalane.gridnav",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.inputsystem": "1.2.0"
+      }
+    },
     "com.yontalane.interaction": {
       "version": "file:com.yontalane.interaction",
       "depth": 0,
