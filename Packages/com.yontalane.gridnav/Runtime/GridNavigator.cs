@@ -12,7 +12,7 @@ namespace Yontalane.GridNav
             public int visited;
         }
 
-        enum Direction
+        private enum Direction
         {
             Up = 0,
             Right = 1,
@@ -22,8 +22,8 @@ namespace Yontalane.GridNav
         #endregion
 
         #region Delegates
-        public delegate void FoundPathEvent(bool pathExists);
-        public FoundPathEvent OnFoundPath;
+        public delegate void PathingCompleteHandler(bool pathExists);
+        public PathingCompleteHandler OnComplete;
         #endregion
 
         #region Private Variables
@@ -33,13 +33,7 @@ namespace Yontalane.GridNav
         private readonly List<VisitedNode> m_path;
         #endregion
 
-        public GridNavigator()
-        {
-            m_visitedNodes = new VisitedNode[0, 0];
-            m_startCoord = new Vector2Int();
-            m_endCoord = new Vector2Int();
-            m_path = new List<VisitedNode>();
-        }
+        public GridNavigator() => m_path = new List<VisitedNode>();
 
         /// <summary>
         /// The number of nodes along the path to reach the goal.
@@ -49,17 +43,15 @@ namespace Yontalane.GridNav
         /// <summary>
         /// The node at the given index along the path to reach the goal.
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public T GetPathNode(int index) => index >= 0 && index < m_path.Count ? m_path[index].node : null;
 
         /// <summary>
         /// Find a path to the goal. Invokes delegate when finding is complete.
         /// </summary>
-        public void FindPath(Vector2Int startCoord, Vector2Int endCoord, T[,] gridNodes)
+        public void FindPath(Vector2Int start, Vector2Int end, T[,] gridNodes)
         {
-            m_startCoord = startCoord;
-            m_endCoord = endCoord;
+            m_startCoord = start;
+            m_endCoord = end;
             GenerateGrid(gridNodes);
             SetDistance();
             SetPath();
@@ -70,11 +62,16 @@ namespace Yontalane.GridNav
             m_visitedNodes = new VisitedNode[gridNodes.GetLength(0), gridNodes.GetLength(1)];
 
             for (int x = 0; x < gridNodes.GetLength(0); x++)
+            {
                 for (int y = 0; y < gridNodes.GetLength(1); y++)
-                    m_visitedNodes[x, y] = new VisitedNode() {
+                {
+                    m_visitedNodes[x, y] = new VisitedNode()
+                    {
                         node = gridNodes[x, y],
                         visited = -1
                     };
+                }
+            }
         }
 
         private void SetDistance()
@@ -83,9 +80,15 @@ namespace Yontalane.GridNav
             Vector2Int coord = m_startCoord;
             int[] testArray = new int[m_visitedNodes.GetLength(0) * m_visitedNodes.GetLength(1)];
             for (int step = 1; step < testArray.Length; step++)
+            {
                 foreach (VisitedNode obj in m_visitedNodes)
+                {
                     if (obj.node != null && obj.visited == step - 1)
+                    {
                         TestFourDirections(obj.node.GetCoordinate(), step);
+                    }
+                }
+            }
         }
 
         private void SetPath()
@@ -101,34 +104,48 @@ namespace Yontalane.GridNav
             }
             else
             {
-                OnFoundPath?.Invoke(false);
+                OnComplete?.Invoke(false);
                 return;
             }
             for (int i = step; step > -1; step--)
             {
                 if (TestDirection(coord, step, Direction.Up))
+                {
                     tempList.Add(m_visitedNodes[coord.x, coord.y + 1]);
+                }
                 if (TestDirection(coord, step, Direction.Right))
+                {
                     tempList.Add(m_visitedNodes[coord.x + 1, coord.y]);
+                }
                 if (TestDirection(coord, step, Direction.Down))
+                {
                     tempList.Add(m_visitedNodes[coord.x, coord.y - 1]);
+                }
                 if (TestDirection(coord, step, Direction.Left))
+                {
                     tempList.Add(m_visitedNodes[coord.x - 1, coord.y]);
+                }
 
                 VisitedNode tempObj = FindClosest(m_visitedNodes[m_endCoord.x, m_endCoord.y], tempList);
                 m_path.Insert(0, tempObj);
                 coord = tempObj.node.GetCoordinate();
                 tempList.Clear();
             }
-            OnFoundPath?.Invoke(true);
+            OnComplete?.Invoke(true);
         }
 
         private void InitialSetup()
         {
             for (int x = 0; x < m_visitedNodes.GetLength(0); x++)
+            {
                 for (int y = 0; y < m_visitedNodes.GetLength(1); y++)
+                {
                     if (m_visitedNodes[x, y].node != null)
+                    {
                         m_visitedNodes[x, y].visited = -1;
+                    }
+                }
+            }
             m_visitedNodes[m_startCoord.x, m_startCoord.y].visited = 0;
         }
 
@@ -138,24 +155,40 @@ namespace Yontalane.GridNav
             {
                 case Direction.Up:
                     if (coord.y + 1 < m_visitedNodes.GetLength(1) && m_visitedNodes[coord.x, coord.y + 1].node != null && m_visitedNodes[coord.x, coord.y + 1].visited == step)
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 case Direction.Right:
                     if (coord.x + 1 < m_visitedNodes.GetLength(0) && m_visitedNodes[coord.x + 1, coord.y].node != null && m_visitedNodes[coord.x + 1, coord.y].visited == step)
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 case Direction.Down:
                     if (coord.y - 1 >= 0 && m_visitedNodes[coord.x, coord.y - 1].node != null && m_visitedNodes[coord.x, coord.y - 1].visited == step)
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 case Direction.Left:
                     if (coord.x - 1 >= 0 && m_visitedNodes[coord.x - 1, coord.y].node != null && m_visitedNodes[coord.x - 1, coord.y].visited == step)
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
             }
             return false;
         }
@@ -163,20 +196,34 @@ namespace Yontalane.GridNav
         private void TestFourDirections(Vector2Int coord, int step)
         {
             if (TestDirection(coord, -1, Direction.Up))
+            {
                 SetVisited(coord + Vector2Int.up, step);
+            }
             if (TestDirection(coord, -1, Direction.Right))
+            {
                 SetVisited(coord + Vector2Int.right, step);
+            }
             if (TestDirection(coord, -1, Direction.Down))
+            {
                 SetVisited(coord + Vector2Int.down, step);
+            }
             if (TestDirection(coord, -1, Direction.Left))
+            {
                 SetVisited(coord + Vector2Int.left, step);
+            }
         }
 
         private void SetVisited(Vector2Int coord, int step)
         {
-            if (coord.x >= 0 && coord.x < m_visitedNodes.GetLength(0) && coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1) && m_visitedNodes[coord.x, coord.y].node != null)
+            if (coord.x >= 0 && coord.x < m_visitedNodes.GetLength(0))
             {
-                m_visitedNodes[coord.x, coord.y].visited = step;
+                if (coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1))
+                {
+                    if (m_visitedNodes[coord.x, coord.y].node != null)
+                    {
+                        m_visitedNodes[coord.x, coord.y].visited = step;
+                    }
+                }
             }
         }
 

@@ -46,7 +46,7 @@ namespace Yontalane.GridNav.Example
         {
             if (m_initialized)
             {
-                m_gridNavigator.OnFoundPath += GridBehavior_OnFoundPath;
+                m_gridNavigator.OnComplete += OnPathingComplete;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Yontalane.GridNav.Example
         {
             if (m_initialized)
             {
-                m_gridNavigator.OnFoundPath -= GridBehavior_OnFoundPath;
+                m_gridNavigator.OnComplete -= OnPathingComplete;
             }
         }
 
@@ -63,7 +63,7 @@ namespace Yontalane.GridNav.Example
             m_gridGenerator = FindObjectOfType<GridGenerator>();
 
             m_gridNavigator = new GridNavigator<GridNode>();
-            m_gridNavigator.OnFoundPath += GridBehavior_OnFoundPath;
+            m_gridNavigator.OnComplete += OnPathingComplete;
 
             m_initialized = true;
         }
@@ -88,7 +88,7 @@ namespace Yontalane.GridNav.Example
             }
         }
 
-        private void GridBehavior_OnFoundPath(bool foundExists)
+        private void OnPathingComplete(bool foundExists)
         {
             if (foundExists)
             {
