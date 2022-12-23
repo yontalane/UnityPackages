@@ -1440,7 +1440,7 @@ MonoBehaviour:
   m_scale: 2
   m_gridNodePrefab: {fileID: 2659147683889932351, guid: 922611c52ef8c40a8b262414b1742885, type: 3}
   m_leftBottomPosition: {x: 0, y: 0, z: 0}
-  m_chanceToNotCreate: 0.15
+  m_pathableChance: 0.75
 --- !u!1 &1635353623
 GameObject:
   m_ObjectHideFlags: 0

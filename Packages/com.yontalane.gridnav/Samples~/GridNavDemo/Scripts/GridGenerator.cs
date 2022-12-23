@@ -21,10 +21,10 @@ namespace Yontalane.GridNav.Example
         [SerializeField]
         private Vector3 m_leftBottomPosition;
 
-        [Tooltip("Likelihood of null node.")]
+        [Tooltip("Likelihood of blocking node.")]
         [SerializeField]
         [Range(0f, 1f)]
-        private float m_chanceToNotCreate;
+        private float m_pathableChance;
         #endregion
 
         #region Accessors
@@ -37,7 +37,7 @@ namespace Yontalane.GridNav.Example
             m_scale = 1;
             m_gridNodePrefab = null;
             m_leftBottomPosition = new Vector3();
-            m_chanceToNotCreate = 0.15f;
+            m_pathableChance = 0.15f;
         }
 
         private void Awake()
@@ -47,13 +47,10 @@ namespace Yontalane.GridNav.Example
             {
                 for (int y = 0; y < m_gridSize.y; y++)
                 {
-                    if (Random.value < m_chanceToNotCreate)
-                    {
-                        continue;
-                    }
                     GridNode gridNode = Instantiate(m_gridNodePrefab.gameObject, new Vector3(m_leftBottomPosition.x + m_scale * x, m_leftBottomPosition.y, m_leftBottomPosition.z + m_scale * y), Quaternion.identity).GetComponent<GridNode>();
                     gridNode.transform.SetParent(gameObject.transform);
-                    gridNode.coordinate = new Vector2Int(x, y);
+                    gridNode.Coordinate = new Vector2Int(x, y);
+                    gridNode.IsPathable = Random.value < m_pathableChance;
                     GridArray[x, y] = gridNode;
                 }
             }

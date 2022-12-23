@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4689118802511247395}
+  - component: {fileID: 2659147683889932351}
   - component: {fileID: 5533038470206993000}
   - component: {fileID: 4093015925861482454}
   - component: {fileID: 458209139873173785}
-  - component: {fileID: 2659147683889932351}
   m_Layer: 0
   m_Name: GridNode
   m_TagString: Untagged
@@ -35,6 +35,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2659147683889932351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7686081557012330509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607d76c684bae471e892295330ba456a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_pathableMaterial: {fileID: 2100000, guid: 3274d5a6f00d8453b97bfe090c9bb1d4, type: 2}
+  m_nonPathableMaterial: {fileID: 2100000, guid: 961cb3dd7e6f4497a9eada9a6a11d443, type: 2}
+  Coordinate: {x: 0, y: 0}
 --- !u!33 &5533038470206993000
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98,16 +113,3 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2659147683889932351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7686081557012330509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 607d76c684bae471e892295330ba456a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coordinate: {x: 0, y: 0}

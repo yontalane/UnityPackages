@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.2 - 2022.12.23
+
+**Added**
+
+**Changed**
+
+* Undid generic class definition.
+* Got rid of IGridNode.
+* GridNav navigates using a callback to determine if a coordinate is pathable.
+
+**Fixed**
+
 ## 1.0.1 - 2022.12.23
 
 **Added**

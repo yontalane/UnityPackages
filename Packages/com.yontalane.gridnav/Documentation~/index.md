@@ -1,23 +1,20 @@
 # Grid Nav
 
-### To use this library, implement IGridNode.
+### To use this library, create a function to determine if a node is pathable.
 
 ```c#
-using UnityEngine;
-
-public class GridNode : MonoBehaviour, IGridNode
+private bool IsPathable(Vector2Int coordinate)
 {
-  public Vector2Int coordinate;
-  public Vector2Int GetCoordinate() => coordinate;
+  return grid[coordinate.x, coordinate.y] != null;
 }
 ```
 
 
 
-### Create a GridNavigator for your node type.
+### Create a GridNavigator. Pass it a grid size and the callback function.
 
 ```c#
-GridNavigator navigator = new GridNavigator<GridNode>();
+GridNavigator navigator = new GridNavigator(new Vector2Int(grid.GetLength(0), grid.GetLength(1)), IsPathable);
 ```
 
 
@@ -25,7 +22,7 @@ GridNavigator navigator = new GridNavigator<GridNode>();
 ### Listen for the navigator's completion event.
 
 ```c#
-navigator.OnFoundPath += Navigator_OnFoundPath;
+navigator.OnComplete += Navigator_OnComplete;
 ```
 
 
@@ -33,23 +30,27 @@ navigator.OnFoundPath += Navigator_OnFoundPath;
 ### Call FindPath() on the navigator.
 
 ```c#
-navigator.FindPath(startCoord, endCoord, grid);
+navigator.FindPath(startCoordinate, endCoordinate);
 ```
 
 
 
-`startCoord` and `endCoord` are Vector2Int objects. `grid` is a two-dimensional array of grid nodes.
+`startCoordinate` and `endCoordinate` are Vector2Int objects.
 
 
 
 ### When the navigator finishes pathing, it will invoke its completion event.
 
 ```c#
-private void Navigator_OnFoundPath(bool pathExists)
+private void Navigator_OnComplete(bool pathExists)
 {
   if (pathExists)
   {
-    Debug.Log($"Path exists with a count of {navigator.PathCount}.");
+    Debug.Log($"Path exists.");
+    for (int i = 0; i < navigator.PathCount; i++)
+    {
+      Debug.Log($"Go to {navigator.GetPathNode(i)}.");
+    }
   }
   else
   {

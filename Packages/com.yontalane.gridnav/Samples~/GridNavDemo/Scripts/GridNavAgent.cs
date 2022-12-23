@@ -28,7 +28,7 @@ namespace Yontalane.GridNav.Example
         #region Private Variables
         private bool m_initialized = false;
         private GridGenerator m_gridGenerator;
-        private GridNavigator<GridNode> m_gridNavigator;
+        private GridNavigator m_gridNavigator;
         private Vector2Int m_startCoord = Vector2Int.zero;
         private Vector2Int m_endCoord;
         private bool m_shouldDrawGizmos = false;
@@ -62,7 +62,7 @@ namespace Yontalane.GridNav.Example
         {
             m_gridGenerator = FindObjectOfType<GridGenerator>();
 
-            m_gridNavigator = new GridNavigator<GridNode>();
+            m_gridNavigator = new GridNavigator(new Vector2Int(m_gridGenerator.GridArray.GetLength(0), m_gridGenerator.GridArray.GetLength(1)), NodeIsValid);
             m_gridNavigator.OnComplete += OnPathingComplete;
 
             m_initialized = true;
@@ -83,9 +83,22 @@ namespace Yontalane.GridNav.Example
                     m_endCoord.y = y;
                 }
 
-                m_gridNavigator.FindPath(m_startCoord, m_endCoord, m_gridGenerator.GridArray);
+                m_gridNavigator.FindPath(m_startCoord, m_endCoord);
                 m_go = false;
             }
+        }
+
+        private bool NodeIsValid(Vector2Int coordinate)
+        {
+            if (coordinate.x >= 0 && coordinate.x < m_gridGenerator.GridArray.GetLength(0))
+            {
+                if (coordinate.y >= 0 && coordinate.y < m_gridGenerator.GridArray.GetLength(1))
+                {
+                    GridNode gridNode = m_gridGenerator.GridArray[coordinate.x, coordinate.y];
+                    return gridNode != null && gridNode.IsPathable;
+                }
+            }
+            return false;
         }
 
         private void OnPathingComplete(bool foundExists)
@@ -101,7 +114,8 @@ namespace Yontalane.GridNav.Example
             m_shouldDrawGizmos = true;
             for (int i = 0; i < m_gridNavigator.PathCount; i++)
             {
-                transform.position = m_gridNavigator.GetPathNode(i).transform.position;
+                Vector2Int node = m_gridNavigator.GetPathNode(i);
+                transform.position = m_gridGenerator.GridArray[node.x, node.y].transform.position;
                 yield return new WaitForSeconds(m_speed);
             }
             m_shouldDrawGizmos = false;
@@ -115,7 +129,9 @@ namespace Yontalane.GridNav.Example
                 Gizmos.color = Color.cyan;
                 for (int i = 0; i < m_gridNavigator.PathCount - 1; i++)
                 {
-                    Gizmos.DrawLine(m_gridNavigator.GetPathNode(i + 1).transform.position, m_gridNavigator.GetPathNode(i).transform.position);
+                    Vector2Int nodeA = m_gridNavigator.GetPathNode(i + 1);
+                    Vector2Int nodeB = m_gridNavigator.GetPathNode(i);
+                    Gizmos.DrawLine(m_gridGenerator.GridArray[nodeA.x, nodeA.y].transform.position, m_gridGenerator.GridArray[nodeB.x, nodeB.y].transform.position);
                 }
             }
         }
