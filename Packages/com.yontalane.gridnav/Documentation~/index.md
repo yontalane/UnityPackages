@@ -1,9 +1,23 @@
 # Grid Nav
 
-### To use this library, create a GridNavigator.
+### To use this library, implement IGridNode.
 
 ```c#
-GridNavigator navigator = new GridNavigator();
+using UnityEngine;
+
+public class GridNode : MonoBehaviour, IGridNode
+{
+  public Vector2Int coordinate;
+  public Vector2Int GetCoordinate() => coordinate;
+}
+```
+
+
+
+### Create a GridNavigator for your node type.
+
+```c#
+GridNavigator navigator = new GridNavigator<GridNode>();
 ```
 
 
@@ -24,7 +38,7 @@ navigator.FindPath(startCoord, endCoord, grid);
 
 
 
-`startCoord` and `endCoord` are Vector2Int objects. `grid` is a two-dimensional array of IGridNode. (IGridNode is any Component that implements `Vector2Int Coordinate { get; set; }`.)
+`startCoord` and `endCoord` are Vector2Int objects. `grid` is a two-dimensional array of grid nodes.
 
 
 

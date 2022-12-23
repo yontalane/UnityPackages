@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Yontalane.GridNav
 {
-    public class GridNavigator
+    public class GridNavigator<T> where T : class, IGridNode
     {
         #region Structs & Enums
         private struct VisitedNode
         {
-            public IGridNode node;
+            public T node;
             public int visited;
         }
 
@@ -51,12 +51,12 @@ namespace Yontalane.GridNav
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IGridNode GetPathNode(int index) => index >= 0 && index < m_path.Count ? m_path[index].node : null;
+        public T GetPathNode(int index) => index >= 0 && index < m_path.Count ? m_path[index].node : null;
 
         /// <summary>
         /// Find a path to the goal. Invokes delegate when finding is complete.
         /// </summary>
-        public void FindPath(Vector2Int startCoord, Vector2Int endCoord, IGridNode[,] gridNodes)
+        public void FindPath(Vector2Int startCoord, Vector2Int endCoord, T[,] gridNodes)
         {
             m_startCoord = startCoord;
             m_endCoord = endCoord;
@@ -65,7 +65,7 @@ namespace Yontalane.GridNav
             SetPath();
         }
 
-        private void GenerateGrid(IGridNode[,] gridNodes)
+        private void GenerateGrid(T[,] gridNodes)
         {
             m_visitedNodes = new VisitedNode[gridNodes.GetLength(0), gridNodes.GetLength(1)];
 

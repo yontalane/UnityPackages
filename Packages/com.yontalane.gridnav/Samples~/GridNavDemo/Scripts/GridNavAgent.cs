@@ -27,10 +27,10 @@ namespace Yontalane.GridNav.Example
 
         #region Private Variables
         private bool m_initialized = false;
-        private GridGenerator m_gridGenerator = null;
-        private GridNavigator m_gridNavigator = null;
+        private GridGenerator m_gridGenerator;
+        private GridNavigator<GridNode> m_gridNavigator;
         private Vector2Int m_startCoord = Vector2Int.zero;
-        private Vector2Int m_endCoord = new Vector2Int(2, 2);
+        private Vector2Int m_endCoord;
         private bool m_shouldDrawGizmos = false;
         #endregion
 
@@ -62,7 +62,7 @@ namespace Yontalane.GridNav.Example
         {
             m_gridGenerator = FindObjectOfType<GridGenerator>();
 
-            m_gridNavigator = new GridNavigator();
+            m_gridNavigator = new GridNavigator<GridNode>();
             m_gridNavigator.OnFoundPath += GridBehavior_OnFoundPath;
 
             m_initialized = true;
