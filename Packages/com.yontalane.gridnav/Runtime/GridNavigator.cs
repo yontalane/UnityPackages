@@ -43,6 +43,11 @@ namespace Yontalane.GridNav
             m_path = new List<VisitedNode>();
         }
 
+        public GridNavigator(int gridWidth, int gridHeight, Func<Vector2Int, bool> nodeIsValid) : this(new Vector2Int(gridWidth, gridHeight), nodeIsValid)
+        {
+
+        }
+
         /// <summary>
         /// The number of nodes along the path to reach the goal.
         /// </summary>
@@ -64,6 +69,11 @@ namespace Yontalane.GridNav
             SetDistance();
             SetPath();
         }
+
+        /// <summary>
+        /// Find a path to the goal. Invokes delegate when finding is complete.
+        /// </summary>
+        public void FindPath(int startX, int startY, int endX, int endY) => FindPath(new Vector2Int(startX, startY), new Vector2Int(endX, endY));
 
         private void GenerateGrid()
         {
