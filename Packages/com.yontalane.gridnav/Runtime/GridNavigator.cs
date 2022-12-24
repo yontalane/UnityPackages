@@ -33,17 +33,17 @@ namespace Yontalane.GridNav
         private Vector2Int m_endCoord;
         private readonly List<VisitedNode> m_path;
         private Vector2Int m_gridSize;
-        private Func<Vector2Int, bool> m_nodeIsValid;
+        private Func<int, int, bool> m_nodeIsValid;
         #endregion
 
-        public GridNavigator(Vector2Int gridSize, Func<Vector2Int, bool> nodeIsValid)
+        public GridNavigator(Vector2Int gridSize, Func<int, int, bool> nodeIsValid)
         {
             m_gridSize = gridSize;
             m_nodeIsValid = nodeIsValid;
             m_path = new List<VisitedNode>();
         }
 
-        public GridNavigator(int gridWidth, int gridHeight, Func<Vector2Int, bool> nodeIsValid) : this(new Vector2Int(gridWidth, gridHeight), nodeIsValid)
+        public GridNavigator(int gridWidth, int gridHeight, Func<int, int, bool> nodeIsValid) : this(new Vector2Int(gridWidth, gridHeight), nodeIsValid)
         {
 
         }
@@ -67,13 +67,30 @@ namespace Yontalane.GridNav
             m_endCoord = end;
             GenerateGrid();
             SetDistance();
-            SetPath();
+            _ = SetPath(true);
+        }
+
+        /// <summary>
+        /// Find a path to the goal and return whether path was found.
+        /// </summary>
+        public bool FindPathSynchronous(Vector2Int start, Vector2Int end)
+        {
+            m_startCoord = start;
+            m_endCoord = end;
+            GenerateGrid();
+            SetDistance();
+            return SetPath(false);
         }
 
         /// <summary>
         /// Find a path to the goal. Invokes delegate when finding is complete.
         /// </summary>
         public void FindPath(int startX, int startY, int endX, int endY) => FindPath(new Vector2Int(startX, startY), new Vector2Int(endX, endY));
+
+        /// <summary>
+        /// Find a path to the goal and return whether path was found.
+        /// </summary>
+        public bool FindPathSynchronous(int startX, int startY, int endX, int endY) => FindPathSynchronous(new Vector2Int(startX, startY), new Vector2Int(endX, endY));
 
         private void GenerateGrid()
         {
@@ -101,7 +118,7 @@ namespace Yontalane.GridNav
             {
                 foreach (VisitedNode visitedNode in m_visitedNodes)
                 {
-                    if (m_nodeIsValid(visitedNode.coordinate) && visitedNode.visited == step - 1)
+                    if (m_nodeIsValid(visitedNode.coordinate.x, visitedNode.coordinate.y) && visitedNode.visited == step - 1)
                     {
                         TestFourDirections(visitedNode.coordinate, step);
                     }
@@ -109,21 +126,25 @@ namespace Yontalane.GridNav
             }
         }
 
-        private void SetPath()
+        private bool SetPath(bool invokeCallback)
         {
             int step;
             Vector2Int coord = m_endCoord;
             List<VisitedNode> tempList = new List<VisitedNode>();
             m_path.Clear();
-            if (coord.x >= 0 && coord.x < m_visitedNodes.GetLength(0) && coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1) && m_nodeIsValid(m_visitedNodes[m_endCoord.x, m_endCoord.y].coordinate) && m_visitedNodes[m_endCoord.x, m_endCoord.y].visited > 0)
+            Vector2Int test = m_visitedNodes[m_endCoord.x, m_endCoord.y].coordinate;
+            if (coord.x >= 0 && coord.x < m_visitedNodes.GetLength(0) && coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1) && m_nodeIsValid(test.x, test.y) && m_visitedNodes[m_endCoord.x, m_endCoord.y].visited > 0)
             {
                 m_path.Insert(0, m_visitedNodes[coord.x, coord.y]);
                 step = m_visitedNodes[coord.x, coord.y].visited - 1;
             }
             else
             {
-                OnComplete?.Invoke(false);
-                return;
+                if (invokeCallback)
+                {
+                    OnComplete?.Invoke(false);
+                }
+                return false;
             }
             for (int i = step; step > -1; step--)
             {
@@ -149,16 +170,22 @@ namespace Yontalane.GridNav
                 coord = tempObj.coordinate;
                 tempList.Clear();
             }
-            OnComplete?.Invoke(true);
+            if (invokeCallback)
+            {
+                OnComplete?.Invoke(true);
+            }
+            return true;
         }
 
         private void InitialSetup()
         {
+            Vector2Int test;
             for (int x = 0; x < m_visitedNodes.GetLength(0); x++)
             {
                 for (int y = 0; y < m_visitedNodes.GetLength(1); y++)
                 {
-                    if (m_nodeIsValid(m_visitedNodes[x, y].coordinate))
+                    test = m_visitedNodes[x, y].coordinate;
+                    if (m_nodeIsValid(test.x, test.y))
                     {
                         m_visitedNodes[x, y].visited = -1;
                     }
@@ -172,7 +199,7 @@ namespace Yontalane.GridNav
             switch (direction)
             {
                 case Direction.Up:
-                    if (coord.y + 1 < m_visitedNodes.GetLength(1) && m_nodeIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate) && m_visitedNodes[coord.x, coord.y + 1].visited == step)
+                    if (coord.y + 1 < m_visitedNodes.GetLength(1) && m_nodeIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y) && m_visitedNodes[coord.x, coord.y + 1].visited == step)
                     {
                         return true;
                     }
@@ -181,7 +208,7 @@ namespace Yontalane.GridNav
                         return false;
                     }
                 case Direction.Right:
-                    if (coord.x + 1 < m_visitedNodes.GetLength(0) && m_nodeIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate) && m_visitedNodes[coord.x + 1, coord.y].visited == step)
+                    if (coord.x + 1 < m_visitedNodes.GetLength(0) && m_nodeIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y) && m_visitedNodes[coord.x + 1, coord.y].visited == step)
                     {
                         return true;
                     }
@@ -190,7 +217,7 @@ namespace Yontalane.GridNav
                         return false;
                     }
                 case Direction.Down:
-                    if (coord.y - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate) && m_visitedNodes[coord.x, coord.y - 1].visited == step)
+                    if (coord.y - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y) && m_visitedNodes[coord.x, coord.y - 1].visited == step)
                     {
                         return true;
                     }
@@ -199,7 +226,7 @@ namespace Yontalane.GridNav
                         return false;
                     }
                 case Direction.Left:
-                    if (coord.x - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate) && m_visitedNodes[coord.x - 1, coord.y].visited == step)
+                    if (coord.x - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y) && m_visitedNodes[coord.x - 1, coord.y].visited == step)
                     {
                         return true;
                     }
@@ -237,7 +264,8 @@ namespace Yontalane.GridNav
             {
                 if (coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1))
                 {
-                    if (m_nodeIsValid(m_visitedNodes[coord.x, coord.y].coordinate))
+                    Vector2Int test = m_visitedNodes[coord.x, coord.y].coordinate;
+                    if (m_nodeIsValid(test.x, test.y))
                     {
                         m_visitedNodes[coord.x, coord.y].visited = step;
                     }
@@ -251,7 +279,8 @@ namespace Yontalane.GridNav
             int closestIndex = 0;
             for (int i = 0; i < list.Count; i++)
             {
-                if (m_nodeIsValid(list[i].coordinate))
+                Vector2Int test = list[i].coordinate;
+                if (m_nodeIsValid(test.x, test.y))
                 {
                     float distance = Vector2.Distance(targetLocation.coordinate, list[i].coordinate);
                     if (distance < closestDistance)

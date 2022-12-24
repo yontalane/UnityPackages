@@ -1,25 +1,25 @@
 # Grid Nav
 
-### To use this library, create a function to determine if a node is pathable.
+To use this library, create a function to determine if a node is pathable.
 
 ```c#
-private bool IsPathable(Vector2Int coordinate)
+private bool IsPathable(int x, int y)
 {
-  return grid[coordinate.x, coordinate.y] != null;
+  return grid[x, y] != null;
 }
 ```
 
 
 
-### Create a GridNavigator. Pass it a grid size and the callback function.
+Create a GridNavigator. Pass it a grid size and the callback function.
 
 ```c#
-GridNavigator navigator = new GridNavigator(new Vector2Int(grid.GetLength(0), grid.GetLength(1)), IsPathable);
+GridNavigator navigator = new GridNavigator(grid.GetLength(0), grid.GetLength(1), IsPathable);
 ```
 
 
 
-### Listen for the navigator's completion event.
+Listen for the navigator's completion event.
 
 ```c#
 navigator.OnComplete += Navigator_OnComplete;
@@ -27,19 +27,15 @@ navigator.OnComplete += Navigator_OnComplete;
 
 
 
-### Call FindPath() on the navigator.
+Call FindPath() on the navigator.
 
 ```c#
-navigator.FindPath(startCoordinate, endCoordinate);
+navigator.FindPath(startX, startY, endX, endY);
 ```
 
 
 
-`startCoordinate` and `endCoordinate` are Vector2Int objects.
-
-
-
-### When the navigator finishes pathing, it will invoke its completion event.
+When the navigator finishes pathing, it will invoke its completion event.
 
 ```c#
 private void Navigator_OnComplete(bool pathExists)
@@ -59,3 +55,23 @@ private void Navigator_OnComplete(bool pathExists)
 }
 ```
 
+
+
+If you don't want path asynchronously, you can instead do:
+
+```c#
+bool pathExists = navigator.FindPathSynchronous(startX, startY, endX, endY);
+
+if (pathExists)
+{
+  Debug.Log($"Path exists.");
+  for (int i = 0; i < navigator.PathCount; i++)
+  {
+    Debug.Log($"Go to {navigator.GetPathNode(i)}.");
+  }
+}
+else
+{
+  Debug.Log($"Path does not exist.");
+}
+```

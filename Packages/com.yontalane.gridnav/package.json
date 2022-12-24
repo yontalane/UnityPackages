@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.gridnav",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Grid Nav",
   "description": "A* grid navigation.",
   "unity": "2021.3",

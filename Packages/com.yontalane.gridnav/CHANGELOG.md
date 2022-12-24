@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.4 - 2022.12.24
+
+**Added**
+
+* Option for synchronous (not just asynchronous) path finding.
+
+**Changed**
+
+* Callback takes integer parameters instead of Vector2Int.
+
+**Fixed**
+
 ## 1.0.3 - 2022.12.23
 
 **Added**

@@ -84,17 +84,18 @@ namespace Yontalane.GridNav.Example
                 }
 
                 m_gridNavigator.FindPath(m_startCoord, m_endCoord);
+
                 m_go = false;
             }
         }
 
-        private bool NodeIsValid(Vector2Int coordinate)
+        private bool NodeIsValid(int x, int y)
         {
-            if (coordinate.x >= 0 && coordinate.x < m_gridGenerator.GridArray.GetLength(0))
+            if (x >= 0 && x < m_gridGenerator.GridArray.GetLength(0))
             {
-                if (coordinate.y >= 0 && coordinate.y < m_gridGenerator.GridArray.GetLength(1))
+                if (y >= 0 && y < m_gridGenerator.GridArray.GetLength(1))
                 {
-                    GridNode gridNode = m_gridGenerator.GridArray[coordinate.x, coordinate.y];
+                    GridNode gridNode = m_gridGenerator.GridArray[x, y];
                     return gridNode != null && gridNode.IsPathable;
                 }
             }
