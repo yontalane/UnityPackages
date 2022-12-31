@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 - 2022.12.30
+
+**Added**
+
+**Changed**
+
+* Changed to Text Mesh Pro.
+
+**Fixed**
+
 ## 1.0.3 - 2022.01.15
 
 **Added**

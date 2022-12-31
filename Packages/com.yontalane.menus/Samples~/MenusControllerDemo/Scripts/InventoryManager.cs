@@ -1,6 +1,7 @@
-using Yontalane.Menus;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Yontalane.Menus;
 
 namespace Yontalane.Demos.Menus
 {
@@ -159,6 +160,6 @@ namespace Yontalane.Demos.Menus
         /// <summary>
         /// The label text of the currently selected menu item.
         /// </summary>
-        private string ActiveItemLabel => m_activeItem != null ? m_activeItem.GetComponentInChildren<Text>().text : "";
+        private string ActiveItemLabel => m_activeItem != null ? m_activeItem.GetComponentInChildren<TMP_Text>().text : "";
     }
 }

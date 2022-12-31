@@ -5,6 +5,7 @@ using Yontalane.Menus.Item;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Yontalane.Menus
 {
@@ -303,7 +304,7 @@ namespace Yontalane.Menus
             {
                 Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
                 instance.name = name;
-                Text text = instance.GetComponentInChildren<Text>();
+                TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
                 if (text != null)
                 {
                     text.text = label ?? name;

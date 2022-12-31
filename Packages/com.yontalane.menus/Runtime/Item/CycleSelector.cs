@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ namespace Yontalane.Menus.Item
 
         [SerializeField]
         [Tooltip("If left null, defaults to a Text component attached to this GameObject.")]
-        private Text m_text = null;
+        private TMP_Text m_text = null;
 
         [SerializeField]
         [Tooltip("If you assign a button to this field, CycleSelector will set up the OnClick event so you don't have to. Without a button assigned here, you can still navigate using a controller.")]
@@ -47,7 +48,7 @@ namespace Yontalane.Menus.Item
         {
             if (m_text == null)
             {
-                m_text = GetComponent<Text>();
+                m_text = GetComponent<TMP_Text>();
             }
 
             RefreshText();
