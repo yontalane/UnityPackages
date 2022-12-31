@@ -1,5 +1,5 @@
-using Yontalane.Dialog;
 using UnityEngine;
+using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
 {

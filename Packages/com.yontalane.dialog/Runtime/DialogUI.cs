@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -46,7 +47,7 @@ namespace Yontalane.Dialog
         private Animator m_animator = null;
         [SerializeField]
         [Tooltip("The field for displaying dialog text.")]
-        private Text m_textField = null;
+        private TMP_Text m_textField = null;
         [SerializeField]
         [Tooltip("Button for skipping text writing sequence. May be the same as the continue button.")]
         private Button m_skipButton = null;
@@ -213,7 +214,7 @@ namespace Yontalane.Dialog
                     {
                         OnClickResponse(instance);
                     });
-                    instance.GetComponentInChildren<Text>().text = FormatInlineText(replaceInlineText(line.responses[i].text));
+                    instance.GetComponentInChildren<TMP_Text>().text = FormatInlineText(replaceInlineText(line.responses[i].text));
                     instance.GetComponent<RectTransform>().SetParent(m_responseContainer);
                     instance.transform.localPosition = Vector3.zero;
                     instance.transform.localScale = Vector3.one;
@@ -298,7 +299,7 @@ namespace Yontalane.Dialog
                         indexOfClose += j;
                         i = indexOfClose + 1;
                         string interior = m_text.Substring(j, i - j - 1);
-                        m_textField.supportRichText = true;
+                        m_textField.richText = true;
                         if (interior.Equals("/color"))
                         {
                             fullText += "</color>";

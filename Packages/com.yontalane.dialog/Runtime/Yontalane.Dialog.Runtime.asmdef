@@ -2,6 +2,7 @@
     "name": "Yontalane.Dialog.Runtime",
     "rootNamespace": "Yontalane.Dialog",
     "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:8579dca4301da4fdb94fc49558ddf5f5",
         "GUID:c6c71bf257e5e49228df84313d238a03"
     ],

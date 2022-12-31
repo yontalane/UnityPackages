@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 
 namespace Yontalane.Demos.Dialog
 {
@@ -8,8 +8,8 @@ namespace Yontalane.Demos.Dialog
     {
         [Header("References")]
 
-        [SerializeField] private Text m_nameText = null;
-        [SerializeField] private Text m_countText = null;
+        [SerializeField] private TMP_Text m_nameText = null;
+        [SerializeField] private TMP_Text m_countText = null;
 
         /// <summary>
         /// The name of this inventory item.

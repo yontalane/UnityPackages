@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,7 @@ namespace Yontalane.Query
 
         [SerializeField]
         [Tooltip("The field for displaying the dialog's message text.")]
-        private Text m_text = null;
+        private TMP_Text m_text = null;
 
         [SerializeField]
         [Tooltip("The location to instantiate response buttons.")]
@@ -48,7 +49,7 @@ namespace Yontalane.Query
         private void Start()
         {
             if (m_animator == null) m_animator = GetComponent<Animator>();
-            if (m_text == null) m_text = GetComponentInChildren<Text>();
+            if (m_text == null) m_text = GetComponentInChildren<TMP_Text>();
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace Yontalane.Query
             for (int i = 0; i < responses.Length; i++)
             {
                 Button instance = Instantiate(queryUI.m_responseButtonPrefab.gameObject).GetComponent<Button>();
-                instance.GetComponentInChildren<Text>().text = responses[i];
+                instance.GetComponentInChildren<TMP_Text>().text = responses[i];
                 instance.onClick.AddListener(delegate { queryUI.OnClickResponse(instance); });
                 instance.GetComponent<RectTransform>().SetParent(queryUI.m_responseContainer);
                 instance.transform.localPosition = Vector3.zero;
@@ -145,7 +146,7 @@ namespace Yontalane.Query
 
             Close();
 
-            m_callback?.Invoke(response.GetComponentInChildren<Text>().text);
+            m_callback?.Invoke(response.GetComponentInChildren<TMP_Text>().text);
         }
 
         private static AudioSource ClickAudioSource

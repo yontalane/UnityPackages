@@ -1,6 +1,6 @@
-using Yontalane.Dialog;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
 {
@@ -8,7 +8,7 @@ namespace Yontalane.Demos.Dialog
     public sealed class GameManager : MonoBehaviour
     {
         [SerializeField] private DialogAgent m_npc = null;
-        [SerializeField] private InputField m_playerNameField = null;
+        [SerializeField] private TMP_InputField m_playerNameField = null;
 
         /// <summary>
         /// Dialog is initiated by clicking on the talk button.

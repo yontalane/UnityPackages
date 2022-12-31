@@ -2,8 +2,9 @@
     "name": "Yontalane.Query.Runtime",
     "rootNamespace": "Yontalane.Query",
     "references": [
-        "GUID:8579dca4301da4fdb94fc49558ddf5f5",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:8579dca4301da4fdb94fc49558ddf5f5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
