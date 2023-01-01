@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.14 - 2022.12.31
+
+**Added**
+
+- Sample scene.
+
+**Changed**
+
+- Visually dynamic map entities.
+
+**Fixed**
+
 ## 1.0.13 - 2022.12.13
 
 **Added**

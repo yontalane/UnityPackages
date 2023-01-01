@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.layouttilemap",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "displayName": "Layout Tilemap",
   "description": "Enables creation of prefab-based level layouts using 2D UnityEngine.Tilemap objects as blueprints.",
   "unity": "2020.3",
@@ -20,5 +20,12 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
+  "samples": [
+    {
+      "displayName": "Layout Tilemap Demo",
+      "description": "Contains a sample implementation of the layout tilemap.",
+      "path": "Samples~/LayoutTilemapDemo"
+    }
+    ],
   "type": "library"
 }
