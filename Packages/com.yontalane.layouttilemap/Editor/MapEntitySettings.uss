@@ -1,0 +1,22 @@
+.field
+{
+    font-size: 12px;
+    -unity-font-style: normal;
+    margin-top: 1px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.title
+{
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin-bottom: 14px;
+}
+
+.header
+{
+    -unity-font-style: bold;
+    margin-bottom: 2px;
+}

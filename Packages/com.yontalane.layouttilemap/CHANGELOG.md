@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.15 - 2023.01.03
+
+**Added**
+
+**Changed**
+
+- Map entity settings is now a part of Project Settings.
+
+**Fixed**
+
 ## 1.0.14 - 2022.12.31
 
 **Added**

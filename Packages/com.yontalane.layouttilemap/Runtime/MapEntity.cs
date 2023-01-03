@@ -25,21 +25,27 @@ namespace Yontalane.LayoutTilemap
 
         private void OnDrawGizmos()
         {
-            float scale;
+            float scale, pointerLength, pointerScale;
             Color outerColor, innerColor;
-            MapEntityManager mapEntityManager = GetComponentInParent<MapEntityManager>();
-            if (mapEntityManager != null)
+
+            MapEntityConfig config = MapEntitySettings.GetOrCreateSettings().Config;
+
+            if (config != null)
             {
-                MapEntityManager.MapEntityData data = !string.IsNullOrWhiteSpace(entityTag) ? mapEntityManager.GetData(entityTag) : mapEntityManager.defaultData;
+                MapEntityConfig.MapEntityData data = !string.IsNullOrWhiteSpace(entityTag) ? config.GetData(entityTag) : config.defaultData;
                 scale = data.scale;
                 outerColor = data.outerColor;
                 innerColor = data.innerColor;
+                pointerLength = data.pointerLength;
+                pointerScale = data.pointerScale;
             }
             else
             {
-                scale = 1f;
+                scale = 0.75f;
                 outerColor = Color.gray;
                 innerColor = Color.white;
+                pointerLength = 1.5f;
+                pointerScale = 0.5f;
             }
 
             Gizmos.color = innerColor;
@@ -50,20 +56,28 @@ namespace Yontalane.LayoutTilemap
             Gizmos.DrawWireSphere(transform.position, scale * 0.32f);
 
             Gizmos.color = innerColor;
-            Gizmos.DrawWireSphere(transform.position, scale * 0.78f);
-            Gizmos.DrawWireSphere(transform.position, scale * 0.8f);
+            for (int i = 0; i < 5; i++)
+            {
+                Gizmos.DrawWireSphere(transform.position, scale * (0.8f - i * 0.02f));
+            }
             Gizmos.color = outerColor;
-            Gizmos.DrawWireSphere(transform.position, scale * 0.82f);
-            Gizmos.DrawWireSphere(transform.position, scale * 0.84f);
+            for (int i = 0; i < 5; i++)
+            {
+                Gizmos.DrawWireSphere(transform.position, scale * (0.82f + i * 0.02f));
+            }
 
             Gizmos.color = innerColor;
-            Gizmos.DrawLine(transform.position, transform.position + scale * transform.forward);
+            Gizmos.DrawLine(transform.position, transform.position + pointerLength * scale * transform.forward);
 
-            Gizmos.DrawWireSphere(transform.position + transform.forward * scale, scale * 0.15f);
-            Gizmos.DrawWireSphere(transform.position + transform.forward * scale, scale * 0.17f);
+            for (int i = 0; i < 3; i++)
+            {
+                Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.8f - i * 0.02f));
+            }
             Gizmos.color = outerColor;
-            Gizmos.DrawWireSphere(transform.position + transform.forward * scale, scale * 0.19f);
-            Gizmos.DrawWireSphere(transform.position + transform.forward * scale, scale * 0.21f);
+            for (int i = 0; i < 3; i++)
+            {
+                Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.82f + i * 0.02f));
+            }
 
             if (TryGetComponent(out Collider collider))
             {

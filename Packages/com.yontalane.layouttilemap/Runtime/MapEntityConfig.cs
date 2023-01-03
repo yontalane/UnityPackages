@@ -1,11 +1,9 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Yontalane.LayoutTilemap
 {
-    [DisallowMultipleComponent]
-    [AddComponentMenu("Yontalane/Layout Tilemap/Map Entity Manager")]
-    public sealed class MapEntityManager : MonoBehaviour
+    [CreateAssetMenu(fileName = "Map Entity Config", menuName = "Yontalane/Map Entity Config", order = 1)]
+    public sealed class MapEntityConfig : ScriptableObject
     {
         [System.Serializable]
         public struct MapEntityData
@@ -13,6 +11,8 @@ namespace Yontalane.LayoutTilemap
             public float scale;
             public Color outerColor;
             public Color innerColor;
+            public float pointerLength;
+            public float pointerScale;
         }
 
         [System.Serializable]
@@ -29,9 +29,11 @@ namespace Yontalane.LayoutTilemap
         {
             defaultData = new MapEntityData()
             {
-                scale = 1f,
+                scale = 0.75f,
                 outerColor = Color.gray,
-                innerColor = Color.white
+                innerColor = Color.white,
+                pointerLength = 1.5f,
+                pointerScale = 0.5f
             };
 
             specialCaseData = new NamedMapEntityData[0];
@@ -39,7 +41,7 @@ namespace Yontalane.LayoutTilemap
 
         public MapEntityData GetData(string name)
         {
-            foreach(NamedMapEntityData namedData in specialCaseData)
+            foreach (NamedMapEntityData namedData in specialCaseData)
             {
                 if (namedData.name.Contains(name))
                 {
