@@ -8,7 +8,7 @@ namespace Yontalane.LayoutTilemap
 {
     class MapEntitySettings : ScriptableObject
     {
-        public const string MAP_ENTITY_SETTINGS_PATH = "Packages/com.yontalane.layouttilemap/Editor/MapEntitySettings.asset";
+        public const string MAP_ENTITY_SETTINGS_PATH = "ProjectSettings/MapEntitySettings.asset";
 
 #pragma warning disable 0414
         [SerializeField]
@@ -48,7 +48,7 @@ namespace Yontalane.LayoutTilemap
                 {
                     SerializedObject settings = MapEntitySettings.GetSerializedSettings();
 
-                    StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yontalane.layouttilemap/Editor/MapEntitySettings.uss");
+                    StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("ProjectSettings/MapEntitySettings.uss");
                     rootElement.styleSheets.Add(styleSheet);
                     Label title = new Label()
                     {
