@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.17 - 2023.01.03
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+- Map entity project settings are now handled properly.
+
 ## 1.0.16 - 2023.01.03
 
 **Added**

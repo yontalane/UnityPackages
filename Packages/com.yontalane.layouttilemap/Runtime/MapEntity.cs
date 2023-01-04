@@ -25,28 +25,13 @@ namespace Yontalane.LayoutTilemap
 
         private void OnDrawGizmos()
         {
-            float scale, pointerLength, pointerScale;
-            Color outerColor, innerColor;
-
-            MapEntityConfig config = MapEntitySettings.GetOrCreateSettings().Config;
-
-            if (config != null)
-            {
-                MapEntityConfig.MapEntityData data = !string.IsNullOrWhiteSpace(entityTag) ? config.GetData(entityTag) : config.defaultData;
-                scale = data.scale;
-                outerColor = data.outerColor;
-                innerColor = data.innerColor;
-                pointerLength = data.pointerLength;
-                pointerScale = data.pointerScale;
-            }
-            else
-            {
-                scale = 0.75f;
-                outerColor = Color.gray;
-                innerColor = Color.white;
-                pointerLength = 1.5f;
-                pointerScale = 0.5f;
-            }
+            LayoutTilemapSettings.MapEntityData data = LayoutTilemapSettings.instance.GetData(entityTag);
+            float scale = data.scale;
+            Color outerColor = data.outerColor;
+            Color innerColor = data.innerColor;
+            float pointerLength = data.pointerLength;
+            float pointerScale = data.pointerScale;
+            int thickness = data.thickness;
 
             Gizmos.color = innerColor;
             Gizmos.DrawWireSphere(transform.position, scale * 0.26f);
@@ -56,12 +41,12 @@ namespace Yontalane.LayoutTilemap
             Gizmos.DrawWireSphere(transform.position, scale * 0.32f);
 
             Gizmos.color = innerColor;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4 * thickness; i++)
             {
                 Gizmos.DrawWireSphere(transform.position, scale * (0.8f - i * 0.02f));
             }
             Gizmos.color = outerColor;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4 * thickness; i++)
             {
                 Gizmos.DrawWireSphere(transform.position, scale * (0.82f + i * 0.02f));
             }
@@ -69,12 +54,12 @@ namespace Yontalane.LayoutTilemap
             Gizmos.color = innerColor;
             Gizmos.DrawLine(transform.position, transform.position + pointerLength * scale * transform.forward);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2 * thickness; i++)
             {
                 Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.8f - i * 0.02f));
             }
             Gizmos.color = outerColor;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2 * thickness; i++)
             {
                 Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.82f + i * 0.02f));
             }

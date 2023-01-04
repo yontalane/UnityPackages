@@ -1,18 +1,29 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace Yontalane.LayoutTilemap
 {
-    [CreateAssetMenu(fileName = "Map Entity Config", menuName = "Yontalane/Map Entity Config", order = 1)]
-    public sealed class MapEntityConfig : ScriptableObject
+    [FilePath("ProjectSettings/LayoutTilemapSettings.asset", FilePathAttribute.Location.ProjectFolder)]
+    public class LayoutTilemapSettings : ScriptableSingleton<LayoutTilemapSettings>
     {
         [System.Serializable]
         public struct MapEntityData
         {
+            [Min(0.01f)]
             public float scale;
+
             public Color outerColor;
+
             public Color innerColor;
+
+            [Min(0.01f)]
             public float pointerLength;
+
+            [Min(0.01f)]
             public float pointerScale;
+
+            [Range(1, 5)]
+            public int thickness;
         }
 
         [System.Serializable]
@@ -25,7 +36,7 @@ namespace Yontalane.LayoutTilemap
         public MapEntityData defaultData;
         public NamedMapEntityData[] specialCaseData;
 
-        private void Reset()
+        public LayoutTilemapSettings()
         {
             defaultData = new MapEntityData()
             {
@@ -33,10 +44,16 @@ namespace Yontalane.LayoutTilemap
                 outerColor = Color.gray,
                 innerColor = Color.white,
                 pointerLength = 1.5f,
-                pointerScale = 0.5f
+                pointerScale = 0.5f,
+                thickness = 2
             };
 
             specialCaseData = new NamedMapEntityData[0];
+        }
+
+        public void Save()
+        {
+            Save(true);
         }
 
         public MapEntityData GetData(string name)
