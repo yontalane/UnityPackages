@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Yontalane.LayoutTilemap
 {
@@ -8,8 +7,6 @@ namespace Yontalane.LayoutTilemap
     [RequireComponent(typeof(MapProperties))]
     public class MapEntity : MonoBehaviour
     {
-        public string entityTag = string.Empty;
-
         private MapProperties m_mapProperties = null;
         public MapProperties MapProperties
         {
@@ -25,7 +22,7 @@ namespace Yontalane.LayoutTilemap
 
         private void OnDrawGizmos()
         {
-            LayoutTilemapSettings.MapEntityData data = LayoutTilemapSettings.instance.GetData(entityTag);
+            LayoutTilemapSettings.MapEntityData data = LayoutTilemapSettings.instance.GetData(name);
             float scale = data.scale;
             Color outerColor = data.outerColor;
             Color innerColor = data.innerColor;

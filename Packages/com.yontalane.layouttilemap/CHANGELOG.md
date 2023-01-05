@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.18 - 2023.01.04
+
+**Added**
+
+**Changed**
+
+- Removed entity tags. Styling based on name.
+
+**Fixed**
+
 ## 1.0.17 - 2023.01.03
 
 **Added**
