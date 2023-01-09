@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.19 - 2023.01.09
+
+**Added**
+
+- `MapBuilder.LoadMap()` can now accept a Grid instance as a parameter.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.18 - 2023.01.04
 
 **Added**

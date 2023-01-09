@@ -226,7 +226,14 @@ namespace Yontalane.LayoutTilemap
         /// </summary>
         /// <param name="callback">Invoke this action when the map has finished loading.</param>
         /// <param name="mapToLoad">The name of the Tilemap to load from Resources. If this parameter is left blank, MapBuilder will fall back on <c>mapToLoad</c>.</param>
-        public void LoadMap(Action<MapData> callback, string mapToLoad = null)
+        public void LoadMap(Action<MapData> callback) => LoadMap(callback, m_mapToLoad);
+
+        /// <summary>
+        /// This method loads a UnityEngine.Tilemap. It scrapes through all Tiles and Entities within the map, replaces them with instantiated prefabs, and then deletes the Tilemap. In other words, you can use this method to build a 3D level using a 2D Tilemap as your blueprint.
+        /// </summary>
+        /// <param name="callback">Invoke this action when the map has finished loading.</param>
+        /// <param name="mapToLoad">The name of the Tilemap to load from Resources. If this parameter is left blank, MapBuilder will fall back on <c>mapToLoad</c>.</param>
+        public void LoadMap(Action<MapData> callback, string mapToLoad)
         {
             if (string.IsNullOrEmpty(mapToLoad))
             {
@@ -240,21 +247,35 @@ namespace Yontalane.LayoutTilemap
                 return;
             }
 
+            m_gridInstance = Instantiate(m_gridPrefab);
+            m_gridInstance.name = mapToLoad;
+
+            LoadMap(callback, m_gridInstance);
+        }
+
+        /// <summary>
+        /// This method loads a UnityEngine.Tilemap. It scrapes through all Tiles and Entities within the map, replaces them with instantiated prefabs, and then deletes the Tilemap. In other words, you can use this method to build a 3D level using a 2D Tilemap as your blueprint.
+        /// </summary>
+        /// <param name="callback">Invoke this action when the map has finished loading.</param>
+        /// <param name="mapToLoad">The name of the Tilemap to load from Resources. If this parameter is left blank, MapBuilder will fall back on <c>mapToLoad</c>.</param>
+        public void LoadMap(Action<MapData> callback, Grid mapToLoad)
+        {
+            m_gridInstance = mapToLoad;
+
+            m_gridInstance.transform.position = Vector3.zero;
+            m_gridInstance.transform.localEulerAngles = Vector3.zero;
+            m_gridInstance.transform.localScale = Vector3.one;
+
+            MapData mapData = new MapData
+            {
+                name = m_gridInstance.name,
+                entities = new List<EntityData>()
+            };
+
             if (m_mapParent == null)
             {
                 m_mapParent = transform;
             }
-
-            MapData mapData = new MapData
-            {
-                name = mapToLoad,
-                entities = new List<EntityData>()
-            };
-
-            m_gridInstance = Instantiate(m_gridPrefab);
-            m_gridInstance.transform.position = Vector3.zero;
-            m_gridInstance.transform.localEulerAngles = Vector3.zero;
-            m_gridInstance.transform.localScale = Vector3.one;
 
             MapProperties mapProperties = m_gridInstance.GetComponent<MapProperties>();
             mapData.properties = mapProperties != null ? mapProperties.Properties : new MapPropertyDictionary();
