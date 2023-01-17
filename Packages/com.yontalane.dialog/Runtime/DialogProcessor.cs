@@ -52,7 +52,7 @@ namespace Yontalane.Dialog
         [Header("Responders")]
 
         [SerializeField]
-        [Tooltip("Every DialogResponder that this DialogProcessor should check for keywords and function calls. Note that this field will accept any GameObject, but only objects that contain IDialogRsponder will be used.")]
+        [Tooltip("Every DialogResponder that this DialogProcessor should check for keywords and function calls. Note that this field will accept any GameObject, but only objects that contain IDialogResponder will be used.")]
         private GameObject[] m_dialogResponders = new GameObject[0];
         private readonly List<IDialogResponder> m_responders = new List<IDialogResponder>();
 
