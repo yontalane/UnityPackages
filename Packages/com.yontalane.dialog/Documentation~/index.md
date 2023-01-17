@@ -4,13 +4,15 @@ A dialog system. This incorporates branching dialog functionality and dialog dis
 
 ## Structure
 
-For the dialog system to work, you need two singletons in your scene: DialogProcessor and DialogUI. DialogProcessor manages the overall flow; you use it to initiate dialog, it handles on-the-fly changes to dialog text, it manages branching dialog and stored variables, it manages player response input, and it provides callbacks to external functions depending on the state of your dialog tree. DialogUI handles the visual representation of the dialog: It works with an Animator to show and hide your text box, it plays sounds, it allows you to control whether letters type out in sequence or display all at once, et cetera.
+For the dialog system to work, you need two singletons in your scene: DialogProcessor and DialogUI. DialogProcessor manages the overall flow; it handles on-the-fly changes to dialog text, it manages branching dialog and stored variables, it manages player response input, and it provides callbacks to external functions depending on the state of your dialog tree. DialogUI handles the visual representation of the dialog: It works with an Animator to show and hide your text box, it plays sounds, it allows you to control whether letters type out in sequence or display all at once, et cetera.
 
-You also need one or more DialogAgent objects. The DialogAgent stores the text script for the dialog, which is stored as a DialogData object. If you're making an RPG and you can talk to various NPCs, presumably each NPC would contain a DialogAgent component.
+You also need one or more DialogAgent objects. The DialogAgent initiates dialog, and it stores the dialog's text script, formatted as a DialogData object. If you're making an RPG and you can talk to various NPCs, presumably each NPC would contain a DialogAgent component.
 
 Finally, you have the option to include IDialogResponder objects in your scene. IDialogResponder works with the DialogProcessor and can modify dialog text or run actions based on keywords within the text. DialogAgent inherits from IDialogResponder, but non-agents can be responders as well. For example, a line of dialog might read: `My name is <<speaker>> and I see that you have a lot of <<most common item>>.` The DialogProcessor takes each keyword--designated by double angle brackets--and checks how they should be modified by each IDialogResponder. The DialogAgent, which is a type of responder, replaces `<<speaker>>` with its name. And an inventory manager singleton that also inherits from IDialogResponder might replace `<<most common item>>` with whatever item the player has the most of. So, after processing, the dialog could read: `My name is Lulu and I see that you have a lot of fish.`
 
 ## Dialog Data Format
+
+There are two types of DialogAgent: DialogAgent, that inherits from MonoBehaviour, and SerializedDialogAgent, that inherits from SerializedObject. You can use either in your project; both contain the same methods and functionality.
 
 Each DialogAgent has a DialogData object. DialogData, which is read in as JSON, is composed of multiple nodes that form together to establish a branching dialog tree. Each node has text data and information for which node to go to next. For example, in its first node, an NPC might ask you for your fish ("May I please have a fish?"). The DialogProcessor checks first if you have fish on you, and if you do, gives you an opportunity to respond "Yes" or "No." So you might have three nodes in total:
 
