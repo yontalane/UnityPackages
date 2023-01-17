@@ -6,7 +6,7 @@ namespace Yontalane.Dialog
 {
     [AddComponentMenu("Yontalane/Dialog/Dialog Agent")]
     [DisallowMultipleComponent]
-    public class DialogAgent : DialogResponder
+    public class DialogAgent : MonoBehaviour, IDialogResponder
     {
         private const string STATIC_ID = "Static Dialog";
 
@@ -83,7 +83,7 @@ namespace Yontalane.Dialog
         /// <summary>
         /// Use <c>m_keywords</c> to replace a keyword in dialog script.
         /// </summary>
-        public override bool GetKeyword(string key, out string result)
+        public virtual bool GetKeyword(string key, out string result)
         {
             foreach (KeywordPair keywordPair in m_keywords.Where(keywordPair => keywordPair.key.Equals(key)))
             {
@@ -91,6 +91,12 @@ namespace Yontalane.Dialog
                 return true;
             }
 
+            result = null;
+            return false;
+        }
+
+        public virtual bool DialogFunction(string call, string parameter, out string result)
+        {
             result = null;
             return false;
         }

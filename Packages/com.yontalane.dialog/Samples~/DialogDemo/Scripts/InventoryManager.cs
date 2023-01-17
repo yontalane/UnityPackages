@@ -4,7 +4,7 @@ using Yontalane.Dialog;
 namespace Yontalane.Demos.Dialog
 {
     [DisallowMultipleComponent]
-    public sealed class InventoryManager : DialogResponder
+    public sealed class InventoryManager : MonoBehaviour, IDialogResponder
     {
         [Header("Inventory")]
 
@@ -44,7 +44,7 @@ namespace Yontalane.Demos.Dialog
         /// <param name="parameter">The query's parameter (the item we want to check our inventory for).</param>
         /// <param name="result">Whether or not we own the item.</param>
         /// <returns>Whether or not the function call was a success. In this case, that is equal to <c>result</c>.</returns>
-        public override bool DialogFunction(string call, string parameter, out string result)
+        public bool DialogFunction(string call, string parameter, out string result)
         {
             switch (call)
             {
@@ -99,6 +99,12 @@ namespace Yontalane.Demos.Dialog
             }
 
             return null;
+        }
+
+        public bool GetKeyword(string key, out string result)
+        {
+            result = null;
+            return false;
         }
     }
 }

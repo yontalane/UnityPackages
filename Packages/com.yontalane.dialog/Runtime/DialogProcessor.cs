@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Linq;
 
 namespace Yontalane.Dialog
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Dialog/Dialog Processor")]
-    public sealed class DialogProcessor : DialogResponder
+    public sealed class DialogProcessor : MonoBehaviour, IDialogResponder
     {
         public delegate void InitiateDialogDelegate();
         public InitiateDialogDelegate OnInitiateDialog = null;
@@ -51,8 +52,9 @@ namespace Yontalane.Dialog
         [Header("Responders")]
 
         [SerializeField]
-        [Tooltip("Every DialogResponder that this DialogProcessor should check for keywords and function calls.")]
-        private DialogResponder[] m_dialogResponders = new DialogResponder[0];
+        [Tooltip("Every DialogResponder that this DialogProcessor should check for keywords and function calls. Note that this field will accept any GameObject, but only objects that contain IDialogRsponder will be used.")]
+        private GameObject[] m_dialogResponders = new GameObject[0];
+        private readonly List<IDialogResponder> m_responders = new List<IDialogResponder>();
 
         private static DialogProcessor s_instance = null;
         public static DialogProcessor Instance
@@ -65,6 +67,22 @@ namespace Yontalane.Dialog
         }
 
         public static bool IsActive => Instance != null && Instance.m_isActive;
+
+        private void Start()
+        {
+            Component[] components;
+            foreach(GameObject gameObject in m_dialogResponders)
+            {
+                components = gameObject.GetComponents<Component>();
+                foreach(Component component in components)
+                {
+                    if (component is IDialogResponder dialogResponder)
+                    {
+                        m_responders.Add(dialogResponder);
+                    }
+                }
+            }
+        }
 
         public static void InitiateDialog(DialogAgent dialogAgent, UnityAction onExitDialog)
         {
@@ -179,9 +197,9 @@ namespace Yontalane.Dialog
                     }
                     else
                     {
-                        for (int i = 0; i < m_dialogResponders.Length; i++)
+                        for (int i = 0; i < m_responders.Count; i++)
                         {
-                            if (m_dialogResponders[i].GetKeyword(interior, out string keywordTargetResult))
+                            if (m_responders[i].GetKeyword(interior, out string keywordTargetResult))
                             {
                                 interior = keywordTargetResult;
                                 break;
@@ -217,16 +235,16 @@ namespace Yontalane.Dialog
 
             DialogFunction(functionName, parameter, out _);
             DialogAgent.DialogFunction(functionName, parameter, out _);
-            foreach (DialogResponder dialogResponder in m_dialogResponders)
+            foreach (IDialogResponder dialogResponder in m_responders)
             {
-                if (dialogResponder != DialogAgent)
+                if ((UnityEngine.Object)dialogResponder != DialogAgent)
                 {
                     dialogResponder.DialogFunction(functionName, parameter, out _);
                 }
             }
         }
 
-        public override bool GetKeyword(string key, out string result)
+        public bool GetKeyword(string key, out string result)
         {
             if (key.Equals("player") && !string.IsNullOrEmpty(PlayerName))
             {
@@ -243,7 +261,7 @@ namespace Yontalane.Dialog
             return false;
         }
 
-        public override bool DialogFunction(string call, string parameter, out string result)
+        public bool DialogFunction(string call, string parameter, out string result)
         {
             switch (call)
             {
@@ -356,7 +374,7 @@ namespace Yontalane.Dialog
                 }
                 else
                 {
-                    foreach (DialogResponder dialogResponder in m_dialogResponders)
+                    foreach (IDialogResponder dialogResponder in m_responders)
                     {
                         if (dialogResponder.DialogFunction(functionName, parameter, out string dialogResponderResult))
                         {

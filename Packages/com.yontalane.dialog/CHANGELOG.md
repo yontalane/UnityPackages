@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 - 2023.01.17
+
+**Added**
+
+**Changed**
+
+* Changed abstract class DialogResponder to interface IDialogResponder.
+
+**Fixed**
+
 ## 1.0.3 - 2022.12.30
 
 **Added**

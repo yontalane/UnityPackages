@@ -8,7 +8,7 @@ For the dialog system to work, you need two singletons in your scene: DialogProc
 
 You also need one or more DialogAgent objects. The DialogAgent stores the text script for the dialog, which is stored as a DialogData object. If you're making an RPG and you can talk to various NPCs, presumably each NPC would contain a DialogAgent component.
 
-Finally, you have the option to include DialogResponder objects in your scene. A DialogResponder works with the DialogProcessor and can modify dialog text or run actions based on keywords within the text. DialogAgent inherits from DialogResponder, but non-agents can be responders as well. For example, a line of dialog might read: `My name is <<speaker>> and I see that you have a lot of <<most common item>>.` The DialogProcessor takes each keyword--designated by double angle brackets--and checks how they should be modified by each DialogResponder. The DialogAgent, which is a type of responder, replaces `<<speaker>>` with its name. And an inventory manager singleton that also inherits from DialogResponder might replace `<<most common item>>` with whatever item the player has the most of. So, after processing, the dialog could read: `My name is Lulu and I see that you have a lot of fish.`
+Finally, you have the option to include IDialogResponder objects in your scene. IDialogResponder works with the DialogProcessor and can modify dialog text or run actions based on keywords within the text. DialogAgent inherits from IDialogResponder, but non-agents can be responders as well. For example, a line of dialog might read: `My name is <<speaker>> and I see that you have a lot of <<most common item>>.` The DialogProcessor takes each keyword--designated by double angle brackets--and checks how they should be modified by each IDialogResponder. The DialogAgent, which is a type of responder, replaces `<<speaker>>` with its name. And an inventory manager singleton that also inherits from IDialogResponder might replace `<<most common item>>` with whatever item the player has the most of. So, after processing, the dialog could read: `My name is Lulu and I see that you have a lot of fish.`
 
 ## Dialog Data Format
 
@@ -48,12 +48,12 @@ LineData contains the following data for displaying dialog:
 LineData is sometimes purely functional, almost acting as lines of code. Functional LineData won't use `speaker` or `text`, but instead will make use of the following:
 
 * string **ifDialogCount**: If you have spoken to this DialogAgent *x* times. The value of this string takes the format [operator][number], e.g. `>2`.
-* string **ifFunction**: Send a query to all your DialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
+* string **ifFunction**: Send a query to all your IDialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
 * string **ifVar**: Check whether the DialogProcessor has set a particular variable. [variable name]=[desired result], e.g. `joinedTheTeam=true`.
 * bool **elseIf**: Setting this to true makes a LineData object act purely as an "else if" line in code, ignoring all other LineData fields. Must follow an `if` LineData object.
 * bool **endIf**: Setting this to true makes a LineData object at purely as an "end if" line in code, ignoring all other LineData fields. Must follow an `if` or `elseIf` LineData object.
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
 * QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
-* string **callFunction**: Calls a function in your DialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
+* string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
 
 The demo scene embedded in this package includes dialog data that shows all of this functionality in action.

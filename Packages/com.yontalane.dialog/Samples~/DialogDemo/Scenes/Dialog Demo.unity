@@ -1827,8 +1827,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_dialogResponders:
-  - {fileID: 3977900773151413226}
-  - {fileID: 283563905}
+  - {fileID: 283563903}
 --- !u!4 &889161187
 Transform:
   m_ObjectHideFlags: 0
@@ -1926,7 +1925,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1008487960
 GameObject:
@@ -2105,7 +2104,7 @@ RectTransform:
   - {fileID: 1008487961}
   - {fileID: 194364212}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3076,7 +3075,7 @@ Transform:
   - {fileID: 1088614298}
   - {fileID: 28661806}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2113308096
 GameObject:
@@ -3385,5 +3384,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
