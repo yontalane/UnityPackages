@@ -23,7 +23,7 @@ namespace Yontalane.Demos.Dialog
             if (!DialogProcessor.IsActive)
             {
                 DialogProcessor.PlayerName = m_playerNameField.text;
-                DialogProcessor.InitiateDialog(m_npc);
+                m_npc.InitiateDialog();
             }
         }
     }

@@ -1,23 +1,12 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Yontalane.Dialog
 {
-    [Serializable]
-    internal class KeywordPair
+    [CreateAssetMenu(fileName = "Dialog Agent", menuName = "Yontalane/Dialog/Dialog Agent", order = 1)]
+    public class ScriptableDialogAgent : ScriptableObject, IDialogAgent
     {
-        public string key = "";
-        public string value = "";
-    }
-
-    [AddComponentMenu("Yontalane/Dialog/Dialog Agent")]
-    [DisallowMultipleComponent]
-    public class DialogAgent : MonoBehaviour, IDialogAgent
-    {
-        internal const string STATIC_ID = "Static Dialog";
-
         public string ID { get; private set; } = "";
         public DialogData Data { get; private set; } = null;
 
@@ -40,6 +29,13 @@ namespace Yontalane.Dialog
 
         private UnityAction m_onExitDialog;
 
+        private bool m_enabled = true;
+        public bool enabled
+        {
+            get => m_enabled;
+            set => m_enabled = value;
+        }
+
         public void InitiateDialog(string speaker, UnityAction onExitDialog)
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
@@ -51,7 +47,7 @@ namespace Yontalane.Dialog
                 }
                 else
                 {
-                    ID = STATIC_ID;
+                    ID = DialogAgent.STATIC_ID;
                     Data = new DialogData();
                     Data.nodes = new NodeData[1];
                     Data.nodes[0] = new NodeData();

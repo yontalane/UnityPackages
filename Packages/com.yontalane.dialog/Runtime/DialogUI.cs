@@ -12,8 +12,8 @@ namespace Yontalane.Dialog
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : MonoBehaviour
     {
-        [Serializable] public class GetAudioClipAction : UnityEvent<DialogAgent, LineData, Action<AudioClip>> { }
-        [Serializable] public class GetSpriteAction : UnityEvent<DialogAgent, LineData, Action<Sprite>> { }
+        [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
+        [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
 
         private const string ANIMATION_PARAMETER = "Dialog Visible";
         private const float HANDLER_DELAY = 0.15f;

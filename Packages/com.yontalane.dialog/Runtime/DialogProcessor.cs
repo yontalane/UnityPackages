@@ -31,7 +31,7 @@ namespace Yontalane.Dialog
         private NodeData m_nodeData = null;
         private int m_lineIndex = 0;
 
-        public DialogAgent DialogAgent { get; private set; } = null;
+        public IDialogAgent DialogAgent { get; private set; } = null;
         public static string PlayerName { get; set; } = "";
 
         [Header("Callbacks")]
@@ -84,9 +84,9 @@ namespace Yontalane.Dialog
             }
         }
 
-        public static void InitiateDialog(DialogAgent dialogAgent, UnityAction onExitDialog)
+        internal static void InitiateDialog(IDialogAgent dialogAgent, UnityAction onExitDialog)
         {
-            if (dialogAgent == null || !dialogAgent.enabled) return;
+            if (dialogAgent == null) return;
 
             if (Instance == null)
             {
@@ -120,7 +120,7 @@ namespace Yontalane.Dialog
             Instance.m_exitDialogCode = onExitDialog;
         }
 
-        public static void InitiateDialog(DialogAgent dialogAgent) => InitiateDialog(dialogAgent, null);
+        internal static void InitiateDialog(IDialogAgent dialogAgent) => InitiateDialog(dialogAgent, null);
 
         private static void AddDialogCount(string id)
         {
@@ -237,7 +237,7 @@ namespace Yontalane.Dialog
             DialogAgent.DialogFunction(functionName, parameter, out _);
             foreach (IDialogResponder dialogResponder in m_responders)
             {
-                if ((UnityEngine.Object)dialogResponder != DialogAgent)
+                if (dialogResponder != DialogAgent)
                 {
                     dialogResponder.DialogFunction(functionName, parameter, out _);
                 }
