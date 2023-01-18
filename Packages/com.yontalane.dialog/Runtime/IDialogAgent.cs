@@ -9,5 +9,6 @@ namespace Yontalane.Dialog
         public string ID { get; }
         public DialogData Data { get; }
         public void InitiateDialog(UnityAction onExitDialog);
+        public string DisplayName { get; }
     }
 }

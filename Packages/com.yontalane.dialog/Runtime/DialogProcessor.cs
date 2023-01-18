@@ -253,7 +253,7 @@ namespace Yontalane.Dialog
             }
             else if (key.Equals("self"))
             {
-                result = DialogAgent.name;
+                result = DialogAgent.DisplayName;
                 return true;
             }
 
@@ -277,6 +277,11 @@ namespace Yontalane.Dialog
 
         private void AdvanceLine(string link)
         {
+            if (m_nodeData == null)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(link) && GetNode(DialogAgent.Data, link, out NodeData linkedNodeDataFromResponse))
             {
                 m_nodeData = linkedNodeDataFromResponse;
@@ -473,6 +478,7 @@ namespace Yontalane.Dialog
             {
                 StartCoroutine(DelayedExit());
             }
+            DialogUI.Instance.Close();
             m_exitDialog?.Invoke();
             OnExitDialog?.Invoke();
             m_exitDialogCode?.Invoke();
@@ -564,6 +570,7 @@ namespace Yontalane.Dialog
             }
             else
             {
+                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
                 m_initiateLine?.Invoke(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
             }
         }

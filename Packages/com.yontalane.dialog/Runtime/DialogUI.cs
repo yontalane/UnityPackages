@@ -104,6 +104,13 @@ namespace Yontalane.Dialog
         private Action<string> m_lineCompleteCallback = null;
         private bool m_canUseContinueHandler = true;
 
+        public static DialogUI Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         private void Start()
         {
             m_skipButton.onClick.AddListener(delegate { SkipWriteOut(); });

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.6 - 2023.01.18
+
+**Added**
+
+**Changed**
+
+* DialogUI now has a static Instance accessor.
+* DialogProcessor automatically calls Close() and InstantiateLine() in DialogUI.
+* DialogProcessor will not try to process a line if NodeData is null.
+* Add DisplayName field to DialogAgent.
+
+**Fixed**
+
 ## 1.0.5 - 2023.01.17
 
 **Added**

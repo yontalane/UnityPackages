@@ -21,6 +21,10 @@ namespace Yontalane.Dialog
         [Tooltip("A single, unchanging line of dialog. Used in place of a complex script for simple things like signs.")]
         private string m_staticText = "";
 
+        [SerializeField]
+        [Tooltip("The agent's name in dialog. If blank, will default to the name of this asset.")]
+        private string m_displayName = "";
+
         [Header("Keyword Replacement")]
 
         [SerializeField]
@@ -34,6 +38,18 @@ namespace Yontalane.Dialog
         {
             get => m_enabled;
             set => m_enabled = value;
+        }
+
+        public virtual string DisplayName
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(m_displayName) ? m_displayName : name;
+            }
+            set
+            {
+                m_displayName = value;
+            }
         }
 
         public void InitiateDialog(string speaker, UnityAction onExitDialog)
