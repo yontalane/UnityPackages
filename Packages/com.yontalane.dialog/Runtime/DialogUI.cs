@@ -30,8 +30,11 @@ namespace Yontalane.Dialog
         [Tooltip("Color of speaker name in dialog header text.")]
         private Color m_speakerColor = Color.white;
         [SerializeField]
-        [Tooltip("The string to appear between the speaker name and dialog.")]
+        [Tooltip("The string to appear between the speaker name and dialog text.")]
         private string m_speakerSeparator = ": ";
+        [SerializeField]
+        [Tooltip("Whether or not there is a line break between the speaker name and the dialog text.")]
+        private bool m_speakerLineBreak = false;
         [SerializeField]
         [Tooltip("Whether to write out text character by character.")]
         private bool m_useTypeCharacterInterval = true;
@@ -138,7 +141,7 @@ namespace Yontalane.Dialog
             m_continueButton.gameObject.SetActive(false);
             m_canUseContinueHandler = true;
 
-            m_speaker = string.IsNullOrEmpty(line.speaker) ? "" : "<color=#" + ColorUtility.ToHtmlStringRGBA(GetSpeakerColor(line.speaker)) + ">" + replaceInlineText(line.speaker) + m_speakerSeparator + "</color>";
+            m_speaker = string.IsNullOrEmpty(line.speaker) ? "" : "<color=#" + ColorUtility.ToHtmlStringRGBA(GetSpeakerColor(line.speaker)) + ">" + replaceInlineText(line.speaker) + m_speakerSeparator + "</color>" + (m_speakerLineBreak ? "\n" : string.Empty);
             m_text = replaceInlineText(line.text);
 
             m_line = line;
