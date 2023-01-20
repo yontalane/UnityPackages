@@ -397,11 +397,19 @@ namespace Yontalane.Dialog
         private void SkipWriteOut()
         {
             StopAllCoroutines();
+            EndLine();
+
             if (m_refreshLayoutGroups)
             {
                 Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
+                StartCoroutine(DelayedRefreshLayoutGroups());
             }
-            EndLine();
+        }
+
+        private IEnumerator DelayedRefreshLayoutGroups()
+        {
+            yield return new WaitForEndOfFrame();
+            Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
         }
 
         private void EndLine()

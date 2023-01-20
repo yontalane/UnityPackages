@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.10 - 2023.01.19
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Refresh layout groups not working on skip.
+
 ## 1.0.9 - 2023.01.19
 
 **Added**
