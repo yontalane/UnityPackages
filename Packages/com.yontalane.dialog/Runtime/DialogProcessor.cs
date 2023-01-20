@@ -568,6 +568,11 @@ namespace Yontalane.Dialog
                 AdvanceLine(null);
                 return;
             }
+            else if (m_nodeData.lines[m_lineIndex].exit)
+            {
+                ExitDialog();
+                return;
+            }
             else
             {
                 DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);

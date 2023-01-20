@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.7 - 2023.01.19
+
+**Added**
+
+* You can customize the string that is displayed between the speaker's name and the dialog text.
+* Added new line command: `exit`. Exits dialog when set to true.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.6 - 2023.01.18
 
 **Added**

@@ -53,7 +53,8 @@ LineData is sometimes purely functional, almost acting as lines of code. Functio
 * string **ifFunction**: Send a query to all your IDialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
 * string **ifVar**: Check whether the DialogProcessor has set a particular variable. [variable name]=[desired result], e.g. `joinedTheTeam=true`.
 * bool **elseIf**: Setting this to true makes a LineData object act purely as an "else if" line in code, ignoring all other LineData fields. Must follow an `if` LineData object.
-* bool **endIf**: Setting this to true makes a LineData object at purely as an "end if" line in code, ignoring all other LineData fields. Must follow an `if` or `elseIf` LineData object.
+* bool **endIf**: Setting this to true makes a LineData object act purely as an "end if" line in code, ignoring all other LineData fields. Must follow an `if` or `elseIf` LineData object.
+* bool **exit**: Setting this to true exits the dialog as soon as this line is reached. Other LineData fields are ignored.
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
 * QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.

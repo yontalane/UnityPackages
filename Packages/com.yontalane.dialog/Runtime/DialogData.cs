@@ -37,6 +37,7 @@ namespace Yontalane.Dialog
         public string ifVar = "";
         public bool elseIf = false;
         public bool endIf = false;
+        public bool exit = false;
 
         public VarData setVar = new VarData();
         public QueryData query = new QueryData();
