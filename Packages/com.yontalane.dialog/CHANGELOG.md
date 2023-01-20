@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.9 - 2023.01.19
+
+**Added**
+
+* Option to automatically refresh layout groups.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.8 - 2023.01.19
 
 **Added**

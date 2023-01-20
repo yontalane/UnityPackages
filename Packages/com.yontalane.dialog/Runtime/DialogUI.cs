@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Yontalane;
 
 namespace Yontalane.Dialog
 {
@@ -48,6 +49,12 @@ namespace Yontalane.Dialog
 
         [Header("Scene UI")]
 
+        [SerializeField]
+        [Tooltip("The root container of the dialog UI. Used to recursively refresh child layout groups.")]
+        private RectTransform m_dialogRoot = null;
+        [SerializeField]
+        [Tooltip("Whether to force layout groups to refresh while typing.")]
+        private bool m_refreshLayoutGroups = true;
         [SerializeField]
         [Tooltip("The Animator that controls the dialog UI.")]
         private Animator m_animator = null;
@@ -363,6 +370,10 @@ namespace Yontalane.Dialog
                     {
                         ClickAudioSource.PlayOneShot(typing);
                     }
+                    if (m_refreshLayoutGroups)
+                    {
+                        Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
+                    }
                     yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
                 }
             }
@@ -386,6 +397,10 @@ namespace Yontalane.Dialog
         private void SkipWriteOut()
         {
             StopAllCoroutines();
+            if (m_refreshLayoutGroups)
+            {
+                Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
+            }
             EndLine();
         }
 
