@@ -11,16 +11,34 @@ namespace Yontalane.Query
     [AddComponentMenu("Yontalane/Query/Query UI")]
     public sealed class QueryUI : MonoBehaviour
     {
+        [Serializable]
+        private enum ShowType
+        {
+            None = 0,
+            Animator = 1,
+            SetActive = 2,
+        }
+
         public delegate void QueryUIHandler(QueryUI queryUI);
         public static QueryUIHandler OnQueryUILoaded = null;
 
         private const string ANIMATION_PARAMETER = "Query Visible";
         private const float BUTTON_HIGHLIGHT_DELAY = 0.25f;
 
+        [Header("Config")]
+
+        [SerializeField]
+        [Tooltip("How to show the dialog.")]
+        private ShowType m_showType = ShowType.Animator;
+
         [Header("Scene UI")]
 
         [SerializeField]
-        [Tooltip("The Animator for controlling the dialog. Must have a \"Query Visible\" boolean parameter.")]
+        [Tooltip("The root object to show and hide. (Assuming showType is \"SetActive.\")")]
+        private GameObject m_rootObject = null;
+
+        [SerializeField]
+        [Tooltip("The Animator for controlling the dialog. Must have a \"Query Visible\" boolean parameter. (Assuming showType is \\\"Animator.\\\")\")")]
         private Animator m_animator = null;
 
         [SerializeField]
@@ -55,7 +73,17 @@ namespace Yontalane.Query
         /// <summary>
         /// Close the window. QueryUI relies on the Animator to do the closing.
         /// </summary>
-        public void Close() => m_animator.SetBool(ANIMATION_PARAMETER, false);
+        public void Close()
+        {
+            if (m_showType == ShowType.Animator && m_animator != null)
+            {
+                m_animator.SetBool(ANIMATION_PARAMETER, false);
+            }
+            else if (m_showType == ShowType.SetActive && m_rootObject != null)
+            {
+                m_rootObject.SetActive(false);
+            }
+        }
 
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
@@ -120,7 +148,14 @@ namespace Yontalane.Query
 
             Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_responseContainer.gameObject);
 
-            queryUI.m_animator.SetBool(ANIMATION_PARAMETER, true);
+            if (queryUI.m_showType == ShowType.Animator && queryUI.m_animator != null)
+            {
+                queryUI.m_animator.SetBool(ANIMATION_PARAMETER, true);
+            }
+            else if (queryUI.m_showType == ShowType.SetActive && queryUI.m_rootObject != null)
+            {
+                queryUI.m_rootObject.SetActive(true);
+            }
 
             OnQueryUILoaded?.Invoke(queryUI);
         }
