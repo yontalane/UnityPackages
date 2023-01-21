@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.3 - 2023.01.21
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Refreshing layout group height upon showing.
+
 ## 1.0.2 - 2023.01.21
 
 **Added**

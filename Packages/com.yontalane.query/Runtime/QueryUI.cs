@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,6 +69,11 @@ namespace Yontalane.Query
         {
             if (m_animator == null) m_animator = GetComponent<Animator>();
             if (m_text == null) m_text = GetComponentInChildren<TMP_Text>();
+
+            if (m_showType == ShowType.SetActive && m_rootObject != null)
+            {
+                m_rootObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -146,8 +152,6 @@ namespace Yontalane.Query
                 queryUI.StartCoroutine(queryUI.DelayedHighlight(queryUI));
             }
 
-            Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_responseContainer.gameObject);
-
             if (queryUI.m_showType == ShowType.Animator && queryUI.m_animator != null)
             {
                 queryUI.m_animator.SetBool(ANIMATION_PARAMETER, true);
@@ -158,6 +162,15 @@ namespace Yontalane.Query
             }
 
             OnQueryUILoaded?.Invoke(queryUI);
+
+            if (queryUI.m_rootObject != null)
+            {
+                Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_rootObject);
+            }
+            else
+            {
+                Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_responseContainer.gameObject);
+            }
         }
 
         /// <summary>
