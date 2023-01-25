@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6 - 2023.01.25
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Added null checks to selectable objects.
+
 ## 1.0.5 - 2023.01.25
 
 **Added**
