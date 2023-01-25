@@ -243,7 +243,7 @@ namespace Yontalane.Menus
 
             MenuNavigationOverride o;
 
-            if (selectables.Count > index)
+            if (selectables.Count > index && selectables[index] != null)
             {
                 o = selectables[index].GetComponent<MenuNavigationOverride>();
                 if (selectables[index].interactable && ((o != null && o.IsNavigable) || (o == null && useNavigation)))

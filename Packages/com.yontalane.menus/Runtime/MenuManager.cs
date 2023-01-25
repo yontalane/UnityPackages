@@ -72,7 +72,7 @@ namespace Yontalane.Menus
             for (int i = 0; i < m_menus.Length; i++)
             {
                 m_menus[i].Initialize();
-                if (i == m_activeMenu && m_menus[i].activeSelectable >= 0 && m_menus[i].activeSelectable < m_menus[i].selectables.Count && EventSystem.current != null)
+                if (i == m_activeMenu && m_menus[i].activeSelectable >= 0 && m_menus[i].activeSelectable < m_menus[i].selectables.Count && EventSystem.current != null && m_menus[i].selectables[m_menus[i].activeSelectable] != null)
                 {
                     EventSystem.current.firstSelectedGameObject = m_menus[i].selectables[m_menus[i].activeSelectable].gameObject;
                 }
