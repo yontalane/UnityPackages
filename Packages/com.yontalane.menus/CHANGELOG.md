@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.7 - 2023.01.26
+
+**Added**
+
+**Changed**
+
+* Made MenuManager.ActivateMenu() public.
+
+**Fixed**
+
 ## 1.0.6 - 2023.01.25
 
 **Added**

@@ -47,6 +47,8 @@ namespace Yontalane.Menus
         [Tooltip("Manage buttons that navigate from one Menu to the next.")]
         private Connection[] m_connections = new Connection[0];
 
+        public static MenuManager Instance { get; private set; }
+
         private void OnEnable()
         {
             MenuInput.OnInputEvent += OnInputEvent;
@@ -63,6 +65,8 @@ namespace Yontalane.Menus
 
         private void Awake()
         {
+            Instance = this;
+
             m_animator = GetComponent<Animator>();
 
             if (m_menus.Length == 0)
@@ -128,7 +132,10 @@ namespace Yontalane.Menus
             }
         }
 
-        private void ActivateMenu(string newActiveMenu)
+        /// <summary>
+        /// Activate the menu.
+        /// </summary>
+        public void ActivateMenu(string newActiveMenu)
         {
             for (int i = 0; i < m_menus.Length; i++)
             {
