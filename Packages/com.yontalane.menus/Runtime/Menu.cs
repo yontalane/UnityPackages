@@ -121,7 +121,7 @@ namespace Yontalane.Menus
                     }
                     if (selectables[i] is Button b)
                     {
-                        b.onClick.RemoveAllListeners();
+                        b.onClick.RemoveListener(() => ClickResponder(b));
                     }
                 }
                 m_listenersWereAdded = false;
@@ -147,16 +147,18 @@ namespace Yontalane.Menus
 
         private void InitializeListener(Button b)
         {
-            b.onClick.RemoveAllListeners();
-            b.onClick.AddListener(() =>
+            b.onClick.RemoveListener(() => ClickResponder(b));
+            b.onClick.AddListener(() => ClickResponder(b));
+        }
+
+        private void ClickResponder(Button b)
+        {
+            OnClick?.Invoke(new MenuActionEvent()
             {
-                OnClick?.Invoke(new MenuActionEvent()
-                {
-                    item = b,
-                    itemName = b.name,
-                    menuName = name,
-                    menu = this
-                });
+                item = b,
+                itemName = b.name,
+                menuName = name,
+                menu = this
             });
         }
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.8 - 2023.01.28
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Menu component had been removing non-Menu listeners on buttons.
+
 ## 1.0.7 - 2023.01.26
 
 **Added**
