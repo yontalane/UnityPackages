@@ -60,10 +60,18 @@ namespace Yontalane.Query
         [Tooltip("The prefab to use for the response buttons.")]
         private Button m_responseButtonPrefab = null;
 
+        public static QueryUI Instance { get; private set; }
         private static AudioSource s_clickAudioSource = null;
 
         private Action<string> m_callback = null;
         private readonly List<Button> m_responses = new List<Button>();
+
+        private bool m_isOn = false;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -89,6 +97,8 @@ namespace Yontalane.Query
             {
                 m_rootObject.SetActive(false);
             }
+
+            m_isOn = false;
         }
 
         /// <summary>
@@ -171,6 +181,8 @@ namespace Yontalane.Query
             {
                 Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_responseContainer.gameObject);
             }
+
+            queryUI.m_isOn = true;
         }
 
         /// <summary>
@@ -186,15 +198,30 @@ namespace Yontalane.Query
             }
         }
 
-        private void OnClickResponse(Button response)
+        public void OnClickResponse(string response)
         {
+            if (!m_isOn)
+            {
+                return;
+            }
+
             if (response == null) return;
 
             if (m_buttonClick != null) ClickAudioSource.PlayOneShot(m_buttonClick);
 
             Close();
 
-            m_callback?.Invoke(response.GetComponentInChildren<TMP_Text>().text);
+            m_callback?.Invoke(response);
+        }
+
+        public void OnClickResponse(Button response)
+        {
+            if (response == null)
+            {
+                return;
+            }
+
+            OnClickResponse(response.GetComponentInChildren<TMP_Text>().text);
         }
 
         private static AudioSource ClickAudioSource

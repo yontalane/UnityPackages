@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 - 2023.01.28
+
+**Added**
+
+**Changed**
+
+* Made OnClickResponse public.
+
+**Fixed**
+
 ## 1.0.3 - 2023.01.21
 
 **Added**
