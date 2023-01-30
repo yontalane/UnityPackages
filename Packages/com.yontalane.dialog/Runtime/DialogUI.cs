@@ -13,6 +13,13 @@ namespace Yontalane.Dialog
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : MonoBehaviour
     {
+        [System.Serializable]
+        private struct ColorSet
+        {
+            public string speaker;
+            public Color color;
+        }
+
         [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
         [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
 
@@ -30,6 +37,12 @@ namespace Yontalane.Dialog
         [SerializeField]
         [Tooltip("Color of speaker name in dialog header text.")]
         private Color m_speakerColor = Color.white;
+        [SerializeField]
+        [Tooltip("Color of other speaker names in dialog header text.")]
+        private ColorSet[] m_speakerColors = new ColorSet[0];
+        [SerializeField]
+        [Tooltip("Color of fallback speaker name in dialog header text.")]
+        private Color m_fallbackSpeakerColor = Color.white;
         [SerializeField]
         [Tooltip("The string to appear between the speaker name and dialog text.")]
         private string m_speakerSeparator = ": ";
@@ -284,7 +297,14 @@ namespace Yontalane.Dialog
                 case DialogProcessor.SpeakerType.Self:
                     return m_speakerColor;
             }
-            return Color.white;
+            foreach(ColorSet colorSet in m_speakerColors)
+            {
+                if (speaker.Contains(colorSet.speaker))
+                {
+                    return colorSet.color;
+                }
+            }
+            return m_fallbackSpeakerColor;
         }
 
         private IEnumerator WriteOut()

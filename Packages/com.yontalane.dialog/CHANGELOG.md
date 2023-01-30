@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11 - 2023.01.30
+
+**Added**
+
+* More speaker color options.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.10 - 2023.01.19
 
 **Added**
