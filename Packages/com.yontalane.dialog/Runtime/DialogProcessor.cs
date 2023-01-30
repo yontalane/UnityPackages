@@ -363,18 +363,20 @@ namespace Yontalane.Dialog
                 desiredResult = ReplaceInlineText(desiredResult);
             }
 
-            desiredResult = desiredResult.ToLower();
+            desiredResult = !string.IsNullOrEmpty(desiredResult) ? desiredResult.ToLower() : string.Empty;
 
             if (!string.IsNullOrEmpty(functionName))
             {
                 if (DialogFunction(functionName, parameter, out string dialogProcessorResult))
                 {
-                    result = desiredResult.Equals(dialogProcessorResult.ToLower());
+                    dialogProcessorResult = !string.IsNullOrEmpty(dialogProcessorResult) ? dialogProcessorResult.ToLower() : string.Empty;
+                    result = desiredResult.Equals(dialogProcessorResult);
                     return true;
                 }
                 else if (DialogAgent.DialogFunction(functionName, parameter, out string dialogAgentResult))
                 {
-                    result = desiredResult.Equals(dialogAgentResult.ToLower());
+                    dialogAgentResult = !string.IsNullOrEmpty(dialogAgentResult) ? dialogAgentResult.ToLower() : string.Empty;
+                    result = desiredResult.Equals(dialogAgentResult);
                     return true;
                 }
                 else
@@ -383,7 +385,8 @@ namespace Yontalane.Dialog
                     {
                         if (dialogResponder.DialogFunction(functionName, parameter, out string dialogResponderResult))
                         {
-                            result = desiredResult.Equals(dialogResponderResult.ToLower());
+                            dialogResponderResult = !string.IsNullOrEmpty(dialogResponderResult) ? dialogResponderResult.ToLower() : string.Empty;
+                            result = desiredResult.Equals(dialogResponderResult);
                             return true;
                         }
                     }

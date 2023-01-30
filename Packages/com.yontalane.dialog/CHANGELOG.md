@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.12 - 2023.01.30
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Null check for dialog function result.
+
 ## 1.0.11 - 2023.01.30
 
 **Added**

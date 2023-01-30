@@ -51,6 +51,24 @@ LineData is sometimes purely functional, almost acting as lines of code. Functio
 
 * string **ifDialogCount**: If you have spoken to this DialogAgent *x* times. The value of this string takes the format [operator][number], e.g. `>2`.
 * string **ifFunction**: Send a query to all your IDialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
+  * When creating the code for `ifFunction` in a DialogResponder, note that `DialogFunction()` returns true if it can process the request and false if it cannot. If `DialogFunction()` is able to process a request and determines that the result is false, then `result` will be set to false, but the function will return true. See the example below.
+
+
+```c#
+public bool DialogFunction(string call, string parameter, out string result)
+{
+  switch (call)
+  {
+    case "Possesses":
+      result = (Inventory.Contains(parameter)).ToString();
+      return true;
+      break;
+  }
+  result = null;
+  return false;
+}
+```
+
 * string **ifVar**: Check whether the DialogProcessor has set a particular variable. [variable name]=[desired result], e.g. `joinedTheTeam=true`.
 * bool **elseIf**: Setting this to true makes a LineData object act purely as an "else if" line in code, ignoring all other LineData fields. Must follow an `if` LineData object.
 * bool **endIf**: Setting this to true makes a LineData object act purely as an "end if" line in code, ignoring all other LineData fields. Must follow an `if` or `elseIf` LineData object.
