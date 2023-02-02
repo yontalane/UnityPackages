@@ -147,7 +147,10 @@ namespace Yontalane.Menus
             }
         }
 
-        private Menu ActiveMenu
+        /// <summary>
+        /// Get the active menu.
+        /// </summary>
+        public Menu ActiveMenu
         {
             get
             {
@@ -160,6 +163,15 @@ namespace Yontalane.Menus
                 }
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Get the active menu.
+        /// </summary>
+        public bool TryGetActiveMenu(out Menu activeMenu)
+        {
+            activeMenu = ActiveMenu;
+            return activeMenu != null;
         }
 
         #endregion

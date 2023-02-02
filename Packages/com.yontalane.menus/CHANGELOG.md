@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.9 - 2023.02.01
+
+**Added**
+
+**Changed**
+
+* Made GetActiveMenu public.
+
+**Fixed**
+
 ## 1.0.8 - 2023.01.28
 
 **Added**
