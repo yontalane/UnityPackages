@@ -17,7 +17,7 @@ namespace Yontalane.Menus.Item
         public string[] Items
         {
             get => m_items;
-            set => m_items = value;
+            set { m_items = value; Index = Mathf.Clamp(Index, 0, value.length); }
         }
 
         [SerializeField]
@@ -27,7 +27,7 @@ namespace Yontalane.Menus.Item
         public int Index
         {
             get => m_index;
-            private set => m_index = value;
+            set { m_index = value; RefreshText(); }
         }
 
         [Header("References")]
@@ -101,7 +101,6 @@ namespace Yontalane.Menus.Item
             {
                 Index = Items.Length - 1;
             }
-            RefreshText();
         }
 
         /// <summary>
@@ -114,13 +113,28 @@ namespace Yontalane.Menus.Item
             {
                 Index = 0;
             }
-            RefreshText();
         }
 
         /// <summary>
         /// The currently selected option.
         /// </summary>
-        public string Value => Items.Length > Index ? Items[Index] : "";
+        public string Value
+        {
+            get
+            {
+                return Items.Length > Index ? Items[Index] : string.Empty;
+            }
+            set
+            {
+                for (int i = 0; i < Items.length; i++)
+                {
+                    if (Items[i] == value)
+                    {
+                        Index = i;
+                    }
+                }
+            }
+        }
 
         private void RefreshText() => m_text.text = Value;
     }
