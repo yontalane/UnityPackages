@@ -78,6 +78,13 @@ namespace Yontalane.Menus
                     m_addableItem.gameObject.SetActive(true);
                 }
                 selectables = GetComponentsInChildren<Selectable>(true).ToList();
+                foreach(Selectable selectable in selectables)
+                {
+                    if (selectable is Button button)
+                    {
+                        _ = BetterButton.GetOrAdd(button);
+                    }
+                }
                 if (m_addableItem != null)
                 {
                     m_addableItem.gameObject.SetActive(false);
@@ -104,9 +111,9 @@ namespace Yontalane.Menus
                         InitializeNavigation(s);
                     }
 
-                    if (!m_listenersWereAdded && selectables[i] is Button b)
+                    if (!m_listenersWereAdded && selectables[i].TryGetComponent(out BetterButton betterButton))
                     {
-                        InitializeListener(b);
+                        InitializeListener(betterButton);
                     }
                 }
                 m_listenersWereAdded = true;
@@ -119,9 +126,9 @@ namespace Yontalane.Menus
                     {
                         s.interactable = false;
                     }
-                    if (selectables[i] is Button b)
+                    if (selectables[i].TryGetComponent(out BetterButton betterButton))
                     {
-                        b.onClick.RemoveListener(() => ClickResponder(b));
+                        betterButton.OnClick -= ClickResponder;
                     }
                 }
                 m_listenersWereAdded = false;
@@ -145,18 +152,18 @@ namespace Yontalane.Menus
             s.GetComponent<SelectItemAction>().Menu = this;
         }
 
-        private void InitializeListener(Button b)
+        private void InitializeListener(BetterButton betterButton)
         {
-            b.onClick.RemoveListener(() => ClickResponder(b));
-            b.onClick.AddListener(() => ClickResponder(b));
+            betterButton.OnClick -= ClickResponder;
+            betterButton.OnClick += ClickResponder;
         }
 
-        private void ClickResponder(Button b)
+        private void ClickResponder(BetterButtonEvent e)
         {
             OnClick?.Invoke(new MenuActionEvent()
             {
-                item = b,
-                itemName = b.name,
+                item = e.button,
+                itemName = e.name,
                 menuName = name,
                 menu = this
             });
@@ -340,7 +347,7 @@ namespace Yontalane.Menus
             InitializeNavigation(selectable);
             if (selectable is Button b)
             {
-                InitializeListener(b);
+                InitializeListener(BetterButton.GetOrAdd(b));
             }
 
             Transform parent = m_addableItem != null ? m_addableItem.transform.parent : selectables.Count > 0 ? selectables[0].transform.parent : transform;

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.12 - 2023.02.03
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Menu buttons were leaking click listeners.
+
 ## 1.0.11 - 2023.02.02
 
 **Added**
