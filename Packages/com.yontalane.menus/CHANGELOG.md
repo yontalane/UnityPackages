@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11 - 2023.02.02
+
+**Added**
+
+**Changed**
+
+* Minor changes to Cycle Selector.
+
+**Fixed**
+
 ## 1.0.10 - 2023.02.02
 
 **Added**
