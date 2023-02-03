@@ -6,7 +6,8 @@ namespace Yontalane.Menus.Item
     [AddComponentMenu("Yontalane/Menus/Items/Menu Navigation Override")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Selectable))]
-    public sealed class MenuNavigationOverride : MenuComponent
+    [RequireComponent(typeof(MenuComponent))]
+    public sealed class MenuNavigationOverride : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("Is this MenuComponent part of the UI navigation map?")]
