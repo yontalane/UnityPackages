@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.menus",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "displayName": "Menus",
   "description": "A menu navigation library that supports both controller and mouse and keyboard.",
   "unity": "2020.3",

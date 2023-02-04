@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.19 - 2023.02.04
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Fixed menu nav wrapping.
+
 ## 1.0.18 - 2023.02.04
 
 **Added**

@@ -197,6 +197,11 @@ namespace Yontalane.Menus
 
         public void HighlightNext()
         {
+            if (!useNavigation)
+            {
+                return;
+            }
+
             int start = activeSelectable;
 
             activeSelectable++;
@@ -223,13 +228,16 @@ namespace Yontalane.Menus
                 activeSelectable = start;
             }
 
-            activeSelectable = GetNavigableSelectableIndex(activeSelectable, 1);
-
             HighlightActiveSelectable();
         }
 
         public void HighlightPrevious()
         {
+            if (!useNavigation)
+            {
+                return;
+            }
+
             int start = activeSelectable;
 
             activeSelectable--;
@@ -255,8 +263,6 @@ namespace Yontalane.Menus
             {
                 activeSelectable = start;
             }
-
-            activeSelectable = GetNavigableSelectableIndex(activeSelectable, -1);
 
             HighlightActiveSelectable();
         }
@@ -348,31 +354,30 @@ namespace Yontalane.Menus
 
         #region Adding
 
-        public void Add(string name, string label = null, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
+        public Selectable Add(string name, string label = null, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
-            if (m_addableItem != null)
+            if (m_addableItem == null) return null;
+
+            Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
+            instance.name = name;
+            TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
+            if (text != null)
             {
-                Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
-                instance.name = name;
-                TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
-                if (text != null)
-                {
-                    text.text = label ?? name;
-                }
-                Add(instance, targetLocation, andScrollTo, andHighlight);
+                text.text = label ?? name;
             }
+            return Add(instance, targetLocation, andScrollTo, andHighlight);
         }
 
-        public void Add(Action<Selectable> selectableCreator, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
+        public Selectable Add(Action<Selectable> selectableCreator, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
-            if (m_addableItem == null) return;
+            if (m_addableItem == null) return null;
 
             Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
             selectableCreator(instance);
-            Add(instance, targetLocation, andScrollTo, andHighlight);
+            return Add(instance, targetLocation, andScrollTo, andHighlight);
         }
 
-        public void Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
+        public Selectable Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
             if (!selectable.TryGetComponent(out AddedMenuItem addedMenuItem))
             {
@@ -441,6 +446,8 @@ namespace Yontalane.Menus
             {
                 ScrollTo(targetIndex);
             }
+
+            return selectable;
         }
 
         public void Remove(Selectable selectable) => Remove(selectable.name);
