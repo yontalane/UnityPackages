@@ -198,14 +198,17 @@ namespace Yontalane.Menus
         public void HighlightNext()
         {
             int start = activeSelectable;
+
             activeSelectable++;
+
             while (activeSelectable != start)
             {
                 if (activeSelectable >= selectables.Count)
                 {
-                    activeSelectable = wrapNavigation ? 0 : selectables.Count - 1;
+                    activeSelectable = 0;
                 }
-                if (selectables[activeSelectable].gameObject.activeSelf)
+
+                if (selectables[activeSelectable].gameObject.activeSelf && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
                 {
                     break;
                 }
@@ -213,6 +216,11 @@ namespace Yontalane.Menus
                 {
                     activeSelectable++;
                 }
+            }
+
+            if (!wrapNavigation && activeSelectable < start)
+            {
+                activeSelectable = start;
             }
 
             activeSelectable = GetNavigableSelectableIndex(activeSelectable, 1);
@@ -223,14 +231,17 @@ namespace Yontalane.Menus
         public void HighlightPrevious()
         {
             int start = activeSelectable;
+
             activeSelectable--;
+
             while (activeSelectable != start)
             {
                 if (activeSelectable < 0)
                 {
-                    activeSelectable = wrapNavigation ? selectables.Count - 1 : 0;
+                    activeSelectable = selectables.Count - 1;
                 }
-                if (selectables[activeSelectable].gameObject.activeSelf)
+
+                if (selectables[activeSelectable].gameObject.activeSelf && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
                 {
                     break;
                 }
@@ -238,6 +249,11 @@ namespace Yontalane.Menus
                 {
                     activeSelectable--;
                 }
+            }
+
+            if (!wrapNavigation && activeSelectable > start)
+            {
+                activeSelectable = start;
             }
 
             activeSelectable = GetNavigableSelectableIndex(activeSelectable, -1);
