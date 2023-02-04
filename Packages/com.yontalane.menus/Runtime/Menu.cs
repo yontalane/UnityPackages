@@ -78,13 +78,6 @@ namespace Yontalane.Menus
                     m_addableItem.gameObject.SetActive(true);
                 }
                 selectables = GetComponentsInChildren<Selectable>(true).ToList();
-                foreach(Selectable selectable in selectables)
-                {
-                    if (selectable is Button button)
-                    {
-                        _ = BetterButton.GetOrAdd(button);
-                    }
-                }
                 if (m_addableItem != null)
                 {
                     m_addableItem.gameObject.SetActive(false);
@@ -99,6 +92,14 @@ namespace Yontalane.Menus
                             selectables.RemoveAt(i);
                         }
                     }
+                }
+            }
+
+            foreach (Selectable selectable in selectables)
+            {
+                if (selectable is Button button)
+                {
+                    _ = BetterButton.GetOrAdd(button);
                 }
             }
 

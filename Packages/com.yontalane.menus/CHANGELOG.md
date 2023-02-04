@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.14 - 2023.02.04
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Pre-added menu buttons weren't initializing.
+
 ## 1.0.13 - 2023.02.03
 
 **Added**
