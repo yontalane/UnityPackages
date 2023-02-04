@@ -213,7 +213,7 @@ namespace Yontalane.Menus
                     activeSelectable = 0;
                 }
 
-                if (selectables[activeSelectable].gameObject.activeSelf && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
+                if (selectables[activeSelectable].gameObject.activeSelf && selectables[activeSelectable].interactable && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
                 {
                     break;
                 }
@@ -249,7 +249,7 @@ namespace Yontalane.Menus
                     activeSelectable = selectables.Count - 1;
                 }
 
-                if (selectables[activeSelectable].gameObject.activeSelf && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
+                if (selectables[activeSelectable].gameObject.activeSelf && selectables[activeSelectable].interactable && (!selectables[activeSelectable].TryGetComponent(out MenuNavigationOverride navOverride) || navOverride.IsNavigable))
                 {
                     break;
                 }
