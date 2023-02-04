@@ -334,7 +334,7 @@ namespace Yontalane.Menus
 
         #region Adding
 
-        public void Add(string name, string label = null, Selectable targetLocation = null, bool andScrollTo = true)
+        public void Add(string name, string label = null, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
             if (m_addableItem != null)
             {
@@ -345,20 +345,20 @@ namespace Yontalane.Menus
                 {
                     text.text = label ?? name;
                 }
-                Add(instance, targetLocation, andScrollTo);
+                Add(instance, targetLocation, andScrollTo, andHighlight);
             }
         }
 
-        public void Add(Action<Selectable> selectableCreator, Selectable targetLocation = null, bool andScrollTo = true)
+        public void Add(Action<Selectable> selectableCreator, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
             if (m_addableItem == null) return;
 
             Selectable instance = Instantiate(m_addableItem.gameObject).GetComponent<Selectable>();
             selectableCreator(instance);
-            Add(instance, targetLocation, andScrollTo);
+            Add(instance, targetLocation, andScrollTo, andHighlight);
         }
 
-        public void Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true)
+        public void Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
             if (selectable.GetComponent<AddedMenuItem>() == null)
             {
@@ -414,7 +414,12 @@ namespace Yontalane.Menus
             selectable.transform.localScale = Vector3.one;
             selectable.transform.SetSiblingIndex(targetLocation != null ? targetLocation.transform.GetSiblingIndex() + 1 : targetIndex);
 
-            if (andScrollTo)
+            if (andHighlight)
+            {
+                activeSelectable = targetIndex;
+                HighlightActiveSelectable();
+            }
+            else if (andScrollTo)
             {
                 ScrollTo(targetIndex);
             }

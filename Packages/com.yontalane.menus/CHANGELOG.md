@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.17 - 2023.02.04
+
+**Added**
+
+* Option to highlight selectable upon adding.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.16 - 2023.02.04
 
 **Added**
