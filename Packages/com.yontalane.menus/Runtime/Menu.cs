@@ -192,8 +192,6 @@ namespace Yontalane.Menus
 
             selectables[activeSelectable].Highlight();
 
-            if (m_scrollRect == null) return;
-
             ScrollTo(activeSelectable);
         }
 
@@ -360,10 +358,11 @@ namespace Yontalane.Menus
 
         public void Add(Selectable selectable, Selectable targetLocation = null, bool andScrollTo = true, bool andHighlight = false)
         {
-            if (selectable.GetComponent<AddedMenuItem>() == null)
+            if (!selectable.TryGetComponent(out AddedMenuItem addedMenuItem))
             {
-                selectable.gameObject.AddComponent<AddedMenuItem>();
+                addedMenuItem = selectable.gameObject.AddComponent<AddedMenuItem>();
             }
+            addedMenuItem.hideFlags = HideFlags.HideInInspector;
 
             selectable.gameObject.SetActive(true);
             InitializeNavigation(selectable);
@@ -388,7 +387,10 @@ namespace Yontalane.Menus
                 targetIndex = 0;
                 for (int i = selectables.Count - 1; i >= 0; i--)
                 {
-                    if (selectables[i].GetComponent<AddedMenuItem>() == null) continue;
+                    if (!selectables[i].TryGetComponent(out AddedMenuItem _))
+                    {
+                        continue;
+                    }
 
                     targetIndex = i + 1;
                     break;
