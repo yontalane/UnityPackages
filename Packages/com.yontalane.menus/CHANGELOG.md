@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.15 - 2023.02.04
+
+**Added**
+
+**Changed**
+
+* MenuNavOverride doesn't require MenuComponent.
+
+**Fixed**
+
 ## 1.0.14 - 2023.02.04
 
 **Added**

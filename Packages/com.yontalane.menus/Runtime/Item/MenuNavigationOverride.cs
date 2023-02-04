@@ -6,7 +6,6 @@ namespace Yontalane.Menus.Item
     [AddComponentMenu("Yontalane/Menus/Items/Menu Navigation Override")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Selectable))]
-    [RequireComponent(typeof(MenuComponent))]
     public sealed class MenuNavigationOverride : MonoBehaviour
     {
         [SerializeField]
