@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.16 - 2023.02.04
+
+**Added**
+
+**Changed**
+
+**Fixed**
+
+* Menu allows for child scroll rect.
+
 ## 1.0.15 - 2023.02.04
 
 **Added**

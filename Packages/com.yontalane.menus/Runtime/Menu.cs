@@ -39,6 +39,11 @@ namespace Yontalane.Menus
         public bool IsActive { get; private set; } = false;
 
         private bool m_listenersWereAdded = false;
+
+        [Space]
+
+        [Tooltip("Defaults to a scroll rect attached to the menu.")]
+        [SerializeField]
         private ScrollRect m_scrollRect = null;
 
         [Space]
@@ -47,11 +52,22 @@ namespace Yontalane.Menus
         [Tooltip("If you can add new items to this Menu at runtime, this Selectable will be used as the template.")]
         private Selectable m_addableItem = null;
 
+        private void Reset()
+        {
+            if (!TryGetComponent<ScrollRect>(out m_scrollRect))
+            {
+                m_scrollRect = GetComponentInChildren<ScrollRect>();
+            }
+        }
+
         public void Initialize()
         {
             m_originalActiveSelectable = activeSelectable;
 
-            m_scrollRect = GetComponent<ScrollRect>();
+            if (m_scrollRect == null)
+            {
+                m_scrollRect = GetComponent<ScrollRect>();
+            }
 
             if (m_addableItem == null) return;
 
@@ -302,6 +318,11 @@ namespace Yontalane.Menus
 
         private void ScrollTo(int index)
         {
+            if (m_scrollRect == null)
+            {
+                return;
+            }
+
             Bounds b1 = RectTransformUtility.CalculateRelativeRectTransformBounds(m_scrollRect.content, selectables[index].transform);
             Bounds b2 = RectTransformUtility.CalculateRelativeRectTransformBounds(m_scrollRect.content);
             float positionOfSelectable = Mathf.Abs(b1.center.y) + b1.extents.y * (index < selectables.Count * 0.5f ? -1 : 1);
