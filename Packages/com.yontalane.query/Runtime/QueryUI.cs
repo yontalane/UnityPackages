@@ -8,14 +8,13 @@ using UnityEngine.UI;
 
 namespace Yontalane.Query
 {
-public struct QueryEventData
-{
-public string prompt;
-public string[] responses;
-public int chosenResponseIndex;
-public string chosenResponse;
-public string queryId;
-}
+    public struct QueryEventData
+    {
+        public string prompt;
+        public string[] responses;
+        public string chosenResponse;
+        public string queryId;
+    }
 
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Query/Query UI")]
@@ -70,16 +69,20 @@ public string queryId;
         private Button m_responseButtonPrefab = null;
 
         public static QueryUI Instance { get; private set; }
+        public string Id { get; private set; } = string.Empty;
         private static AudioSource s_clickAudioSource = null;
 
-        private Action<string> m_callback = null;
+        private Action<QueryEventData> m_callback = null;
         private readonly List<Button> m_responses = new List<Button>();
+        private string[] m_responsesText;
+        private static Action<string> s_stringCallback;
 
         private bool m_isOn = false;
 
         private void Awake()
         {
             Instance = this;
+            s_stringCallback = null;
         }
 
         private void Start()
@@ -116,15 +119,17 @@ public string queryId;
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void Initiate(string text, string[] responses, Action<QueryEventData> callback)
+        public static void Initiate(string id, string text, string[] responses, Action<QueryEventData> callback)
         {
-            QueryUI queryUI = FindObjectOfType<QueryUI>();
+            QueryUI queryUI = Instance;
 
             if (queryUI == null)
             {
                 Debug.LogError("QueryUI could not be found.");
                 return;
             }
+
+            queryUI.Id = id;
 
             queryUI.m_callback = callback;
             queryUI.m_text.text = text;
@@ -134,6 +139,8 @@ public string queryId;
                 Destroy(queryUI.m_responses[i].gameObject);
             }
             queryUI.m_responses.Clear();
+
+            queryUI.m_responsesText = responses;
 
             for (int i = 0; i < responses.Length; i++)
             {
@@ -200,9 +207,29 @@ public string queryId;
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void Initiate(string text, string[] responses, Action<string> callback)
-{
-}
+        public static void Initiate(string text, string[] responses, Action<QueryEventData> callback) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback);
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        public static void Initiate(string id, string text, string[] responses, Action<string> callback)
+        {
+            s_stringCallback = callback;
+            Initiate(id, text, responses, CallbackConverter);
+        }
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        public static void Initiate(string text, string[] responses, Action<string> callback) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback);
+
+        private static void CallbackConverter(QueryEventData eventData) => s_stringCallback?.Invoke(eventData.chosenResponse);
 
         /// <summary>
         /// In case the animation involves deactivating the buttons...
@@ -230,7 +257,13 @@ public string queryId;
 
             Close();
 
-            m_callback?.Invoke(response);
+            m_callback?.Invoke(new QueryEventData()
+            {
+                prompt = m_text.text,
+                responses = m_responsesText,
+                chosenResponse = response,
+                queryId = Id
+            });
         }
 
         public void OnClickResponse(Button response)

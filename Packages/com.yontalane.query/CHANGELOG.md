@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 - 2023.002.07
+
+**Added**
+
+* Returning more data on callback.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.4 - 2023.01.28
 
 **Added**
