@@ -8,6 +8,15 @@ using UnityEngine.UI;
 
 namespace Yontalane.Query
 {
+public struct QueryEventData
+{
+public string prompt;
+public string[] responses;
+public int chosenResponseIndex;
+public string chosenResponse;
+public string queryId;
+}
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Query/Query UI")]
     public sealed class QueryUI : MonoBehaviour
@@ -107,7 +116,7 @@ namespace Yontalane.Query
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void Initiate(string text, string[] responses, Action<string> callback)
+        public static void Initiate(string text, string[] responses, Action<QueryEventData> callback)
         {
             QueryUI queryUI = FindObjectOfType<QueryUI>();
 
@@ -184,6 +193,16 @@ namespace Yontalane.Query
 
             queryUI.m_isOn = true;
         }
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        public static void Initiate(string text, string[] responses, Action<string> callback)
+{
+}
 
         /// <summary>
         /// In case the animation involves deactivating the buttons...
