@@ -236,3 +236,13 @@ Add this to an object to allow other objects to listen for its collision events.
 | **space**       | Should the leashing use world space, local space (least common), or parent space? |
 | **slack**       | If the objects are this close, don't leash.                  |
 | **smoothDamp**  | Should the leashed object snap to the desired transformation or should it move there smoothly? Set this to zero for snapping. |
+
+## Selectable Listener
+
+### Properties
+
+| Name         | Description                                         |
+| ------------ | --------------------------------------------------- |
+| **onSelect** | Trigger this event when the Selectable is selected. |
+| **clip**     | Play this sound when the Selectable is selected.    |
+| **volume**   | If playing a sound, use this volume.                |

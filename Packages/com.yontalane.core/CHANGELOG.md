@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.17 - 2023.02.24
+
+**Added**
+
+- Added SelectableListener.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.16 - 2022.07.25
 
 **Added**
