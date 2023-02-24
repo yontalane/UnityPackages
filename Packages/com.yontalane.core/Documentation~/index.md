@@ -241,8 +241,8 @@ Add this to an object to allow other objects to listen for its collision events.
 
 ### Properties
 
-| Name         | Description                                         |
-| ------------ | --------------------------------------------------- |
-| **onSelect** | Trigger this event when the Selectable is selected. |
-| **clip**     | Play this sound when the Selectable is selected.    |
-| **volume**   | If playing a sound, use this volume.                |
+| Name                  | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| **onChangeSelection** | Trigger this event when the Selectable is selected. |
+| **clip**              | Play this sound when the Selectable is selected.    |
+| **volume**            | If playing a sound, use this volume.                |

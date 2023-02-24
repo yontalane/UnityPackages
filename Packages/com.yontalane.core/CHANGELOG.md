@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.18 - 2023.02.24
+
+**Added**
+
+- Added delegate to SelectableListener.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.17 - 2023.02.24
 
 **Added**

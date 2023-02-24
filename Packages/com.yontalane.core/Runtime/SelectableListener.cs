@@ -8,9 +8,14 @@ namespace Yontalane
     [RequireComponent(typeof(Button))]
     public class SelectableListener : MonoBehaviour, ISelectHandler
     {
+        #region Delegates
+        public delegate void ChangeSelectionHandler(Button button);
+        public ChangeSelectionHandler OnChangeSelection = null;
+        #endregion
+
         #region Serialized Fields
         [SerializeField]
-        private UnityEvent m_onSelect;
+        private UnityEvent m_onChangeSelection;
 
         [Header("Audio")]
 
@@ -38,7 +43,7 @@ namespace Yontalane
 
         private void Reset()
         {
-            m_onSelect = null;
+            m_onChangeSelection = null;
             m_clip = null;
             m_volume = 1f;
         }
@@ -53,7 +58,8 @@ namespace Yontalane
             {
                 AudioSource.PlayClipAtPoint(m_clip, Camera.main.transform.position, m_volume);
             }
-            m_onSelect?.Invoke();
+            OnChangeSelection?.Invoke(GetComponent<Button>());
+            m_onChangeSelection?.Invoke();
         }
     }
 }
