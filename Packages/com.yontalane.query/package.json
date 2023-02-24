@@ -1,13 +1,13 @@
 {
   "name": "com.yontalane.query",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "displayName": "Query",
   "description": "A dialog input box.",
   "unity": "2020.3",
   "unityRelease": "25f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.query/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.0",
+    "com.yontalane.core": "1.0.18",
     "com.unity.inputsystem": "1.2.0"
   },
   "keywords": [

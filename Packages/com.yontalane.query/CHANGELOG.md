@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.0.5 - 2023.002.07
+## 1.0.6 - 2023.02.24
+
+**Added**
+
+* Optional callback on select response.
+
+**Changed**
+
+**Fixed**
+
+## 1.0.5 - 2023.02.07
 
 **Added**
 

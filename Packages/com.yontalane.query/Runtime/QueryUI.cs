@@ -5,9 +5,11 @@ using TMPro;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Yontalane.Query
 {
+    #region Structs
     public struct QueryEventData
     {
         public string prompt;
@@ -15,11 +17,13 @@ namespace Yontalane.Query
         public string chosenResponse;
         public string queryId;
     }
+    #endregion
 
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Query/Query UI")]
     public sealed class QueryUI : MonoBehaviour
     {
+        #region Structs
         [Serializable]
         private enum ShowType
         {
@@ -27,13 +31,19 @@ namespace Yontalane.Query
             Animator = 1,
             SetActive = 2,
         }
+        #endregion
 
+        #region Delegates
         public delegate void QueryUIHandler(QueryUI queryUI);
         public static QueryUIHandler OnQueryUILoaded = null;
+        #endregion
 
+        #region Constants
         private const string ANIMATION_PARAMETER = "Query Visible";
         private const float BUTTON_HIGHLIGHT_DELAY = 0.25f;
+        #endregion
 
+        #region Serialized Fields
         [Header("Config")]
 
         [SerializeField]
@@ -67,17 +77,24 @@ namespace Yontalane.Query
         [SerializeField]
         [Tooltip("The prefab to use for the response buttons.")]
         private Button m_responseButtonPrefab = null;
+        #endregion
 
+        #region Accessors
         public static QueryUI Instance { get; private set; }
         public string Id { get; private set; } = string.Empty;
+        #endregion
+
+        #region Private Variables
         private static AudioSource s_clickAudioSource = null;
 
         private Action<QueryEventData> m_callback = null;
+        private Action<QueryEventData> m_selectCallback = null;
         private readonly List<Button> m_responses = new List<Button>();
         private string[] m_responsesText;
         private static Action<string> s_stringCallback;
 
         private bool m_isOn = false;
+        #endregion
 
         private void Awake()
         {
@@ -119,7 +136,8 @@ namespace Yontalane.Query
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void Initiate(string id, string text, string[] responses, Action<QueryEventData> callback)
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void Initiate(string id, string text, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
         {
             QueryUI queryUI = Instance;
 
@@ -132,10 +150,15 @@ namespace Yontalane.Query
             queryUI.Id = id;
 
             queryUI.m_callback = callback;
+            queryUI.m_selectCallback = selectCallback;
             queryUI.m_text.text = text;
 
             for (int i = queryUI.m_responses.Count - 1; i >= 0; i--)
             {
+                if (queryUI.m_responses[i].TryGetComponent(out SelectableListener selectableListener))
+                {
+                    selectableListener.OnChangeSelection -= queryUI.OnSelectResponse;
+                }
                 Destroy(queryUI.m_responses[i].gameObject);
             }
             queryUI.m_responses.Clear();
@@ -146,8 +169,10 @@ namespace Yontalane.Query
             {
                 Button instance = Instantiate(queryUI.m_responseButtonPrefab.gameObject).GetComponent<Button>();
                 instance.GetComponentInChildren<TMP_Text>().text = responses[i];
+                instance.name = i.ToString();
                 instance.onClick.AddListener(delegate { queryUI.OnClickResponse(instance); });
                 instance.GetComponent<RectTransform>().SetParent(queryUI.m_responseContainer);
+                instance.gameObject.AddComponent<SelectableListener>().OnChangeSelection += queryUI.OnSelectResponse;
                 instance.transform.localPosition = Vector3.zero;
                 instance.transform.localScale = Vector3.one;
                 instance.navigation = Navigation.defaultNavigation;
@@ -207,7 +232,8 @@ namespace Yontalane.Query
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void Initiate(string text, string[] responses, Action<QueryEventData> callback) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback);
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void Initiate(string text, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback, selectCallback);
 
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
@@ -242,6 +268,17 @@ namespace Yontalane.Query
             {
                 queryUI.m_responses[0].GetComponent<Button>().Highlight();
             }
+        }
+
+        private void OnSelectResponse(Button response)
+        {
+            m_selectCallback?.Invoke(new QueryEventData()
+            {
+                prompt = m_text.text,
+                responses = m_responsesText,
+                chosenResponse = m_responsesText[int.Parse(response.name)],
+                queryId = Id
+            });
         }
 
         public void OnClickResponse(string response)

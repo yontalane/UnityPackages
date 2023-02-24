@@ -137,7 +137,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.0",
+        "com.yontalane.core": "1.0.18",
         "com.unity.inputsystem": "1.2.0"
       }
     },
