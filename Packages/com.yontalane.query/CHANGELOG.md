@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.7 - 2023.03.04
+
+**Added**
+
+* Can set initially selected response.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.6 - 2023.02.24
 
 **Added**

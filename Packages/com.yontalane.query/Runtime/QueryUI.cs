@@ -135,9 +135,10 @@ namespace Yontalane.Query
         /// </summary>
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
+        /// <param name="initialSelection">The index of the initially selected response.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
         /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
-        public static void Initiate(string id, string text, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
+        public static void Initiate(string id, string text, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
         {
             QueryUI queryUI = Instance;
 
@@ -199,8 +200,9 @@ namespace Yontalane.Query
 
             if (responses.Length > 0)
             {
-                queryUI.m_responses[0].GetComponent<Button>().Highlight();
-                queryUI.StartCoroutine(queryUI.DelayedHighlight(queryUI));
+                initialSelection = initialSelection < 0 ? 0 : initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
+                queryUI.m_responses[initialSelection].GetComponent<Button>().Highlight();
+                queryUI.StartCoroutine(queryUI.DelayedHighlight(queryUI, initialSelection));
             }
 
             if (queryUI.m_showType == ShowType.Animator && queryUI.m_animator != null)
@@ -225,6 +227,25 @@ namespace Yontalane.Query
 
             queryUI.m_isOn = true;
         }
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void Initiate(string id, string text, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(id, text, responses, 0, callback, selectCallback);
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="initialSelection">The index of the initially selected response.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void Initiate(string text, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, initialSelection, callback, selectCallback);
 
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
@@ -260,13 +281,13 @@ namespace Yontalane.Query
         /// <summary>
         /// In case the animation involves deactivating the buttons...
         /// </summary>
-        private IEnumerator DelayedHighlight(QueryUI queryUI)
+        private IEnumerator DelayedHighlight(QueryUI queryUI, int index)
         {
             yield return new WaitForSeconds(BUTTON_HIGHLIGHT_DELAY);
 
-            if (queryUI.m_responses.Count > 0)
+            if (queryUI.m_responses.Count > index)
             {
-                queryUI.m_responses[0].GetComponent<Button>().Highlight();
+                queryUI.m_responses[index].GetComponent<Button>().Highlight();
             }
         }
 
