@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace Yontalane
 {
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Yontalane/Selectable Listener")]
     public class SelectableListener : MonoBehaviour, ISelectHandler
     {
         #region Delegates
