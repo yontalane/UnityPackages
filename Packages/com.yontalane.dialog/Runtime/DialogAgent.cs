@@ -12,6 +12,13 @@ namespace Yontalane.Dialog
         public string value = "";
     }
 
+    public enum DialogAgentInputType
+    {
+        Data = 0,
+        Json = 1,
+        String = 2
+    }
+
     [AddComponentMenu("Yontalane/Dialog/Dialog Agent")]
     [DisallowMultipleComponent]
     public class DialogAgent : MonoBehaviour, IDialogAgent
@@ -24,6 +31,18 @@ namespace Yontalane.Dialog
         [Header("Dialog Script Data")]
 
         [SerializeField]
+        [Tooltip("The agent's name in dialog. If blank, will default to the name of this asset.")]
+        private string m_displayName = "";
+
+        [SerializeField]
+        [Tooltip("The type of dialog script this object expects.")]
+        private DialogAgentInputType m_inputType = DialogAgentInputType.Json;
+
+        [SerializeField]
+        [Tooltip("A complex dialog script. Used to generate DialogData.")]
+        private DialogDataContainer m_data = null;
+
+        [SerializeField]
         [Tooltip("A complex dialog script. Used to generate DialogData.")]
         private TextAsset m_json = null;
 
@@ -31,10 +50,6 @@ namespace Yontalane.Dialog
         [TextArea]
         [Tooltip("A single, unchanging line of dialog. Used in place of a complex script for simple things like signs.")]
         private string m_staticText = "";
-
-        [SerializeField]
-        [Tooltip("The agent's name in dialog. If blank, will default to the name of this asset.")]
-        private string m_displayName = "";
 
         [Header("Keyword Replacement")]
 
@@ -60,21 +75,26 @@ namespace Yontalane.Dialog
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
             {
-                if (m_json != null)
+                switch(m_inputType)
                 {
-                    ID = name;
-                    Data = JsonUtility.FromJson<DialogData>(m_json.text);
-                }
-                else
-                {
-                    ID = STATIC_ID;
-                    Data = new DialogData();
-                    Data.nodes = new NodeData[1];
-                    Data.nodes[0] = new NodeData();
-                    Data.nodes[0].lines = new LineData[1];
-                    Data.nodes[0].lines[0] = new LineData();
-                    Data.nodes[0].lines[0].speaker = speaker;
-                    Data.nodes[0].lines[0].text = m_staticText;
+                    case DialogAgentInputType.Data:
+                        ID = name;
+                        Data = m_data.data;
+                        break;
+                    case DialogAgentInputType.Json:
+                        ID = name;
+                        Data = JsonUtility.FromJson<DialogData>(m_json.text);
+                        break;
+                    case DialogAgentInputType.String:
+                        ID = STATIC_ID;
+                        Data = new DialogData();
+                        Data.nodes = new NodeData[1];
+                        Data.nodes[0] = new NodeData();
+                        Data.nodes[0].lines = new LineData[1];
+                        Data.nodes[0].lines[0] = new LineData();
+                        Data.nodes[0].lines[0].speaker = speaker;
+                        Data.nodes[0].lines[0].text = m_staticText;
+                        break;
                 }
             }
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.13 - 2023.04.30
+
+**Added**
+
+* Dialog Agent can accept data in additional formats.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.12 - 2023.01.30
 
 **Added**

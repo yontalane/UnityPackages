@@ -1,0 +1,16 @@
+{
+    "name": "Yontalane.Dialog.Editor",
+    "rootNamespace": "YontalaneEditor.Dialog",
+    "references": [
+        "GUID:4498c88d6cea046869d2da7e80e7a88f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
