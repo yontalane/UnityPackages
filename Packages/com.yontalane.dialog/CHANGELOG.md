@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.14 - 2023.05.02
+
+**Added**
+
+**Changed**
+
+* Dialog Data text field is now a text area.
+
+**Fixed**
+
 ## 1.0.13 - 2023.04.30
 
 **Added**

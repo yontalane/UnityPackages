@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Yontalane.Dialog
 {
@@ -23,6 +24,7 @@ namespace Yontalane.Dialog
     public class LineData
     {
         public string speaker = "";
+        [TextArea]
         public string text = "";
         public string portrait = "";
         public string typing = "";
