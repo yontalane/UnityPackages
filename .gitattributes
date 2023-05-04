@@ -1,0 +1,12 @@
+*.cs text eol=lf diff=csharp
+*.md text eol=lf
+
+*.unity text eol=lf
+*.asset text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.tiff binary
+*.fbx binary
