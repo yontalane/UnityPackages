@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.19 - 2023.05.04
+
+**Added**
+
+- Added Singleton.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.18 - 2023.02.24
 
 **Added**
