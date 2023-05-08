@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.15 - 2023.05.08
+
+**Added**
+
+**Changed**
+
+* When writing out dialog, Dialog UI waits one frame before highlighting skip button.
+
+**Fixed**
+
 ## 1.0.14 - 2023.05.02
 
 **Added**

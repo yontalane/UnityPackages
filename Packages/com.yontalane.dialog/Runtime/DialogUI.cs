@@ -321,7 +321,7 @@ namespace Yontalane.Dialog
                 typing = m_typingDefault;
             }
 
-            m_skipButton.Highlight();
+            StartCoroutine(DelayHighlightSkipButton());
             List<string> hangingTags = new List<string>();
 
             m_textField.text = "";
@@ -398,6 +398,15 @@ namespace Yontalane.Dialog
                 }
             }
             EndLine();
+        }
+
+        private IEnumerator DelayHighlightSkipButton()
+        {
+            yield return new WaitForEndOfFrame();
+            if (m_skipButton != null)
+            {
+                m_skipButton.Highlight();
+            }
         }
 
         private string FormatInlineText(string text)
