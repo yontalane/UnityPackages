@@ -7,7 +7,7 @@
   "unityRelease": "25f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.menus/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.20",
+    "com.yontalane.core": "1.0.21",
     "com.unity.inputsystem": "1.2.0"
   },
   "keywords": [
