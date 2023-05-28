@@ -83,7 +83,11 @@ namespace Yontalane
 
         [SerializeField]
         private Transform m_target = null;
-        public Transform Target => m_target;
+        public Transform Target
+        {
+            get => m_target;
+            set => Initialize(m_target, m_positionConfig, m_rotationConfig, m_scaleConfig, m_updateType);
+        }
 
         [SerializeField]
         private Config m_positionConfig = new Config(true);

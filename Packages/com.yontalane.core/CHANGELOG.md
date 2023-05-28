@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.20 - 2023.05.27
+
+**Added**
+
+- Can set Target on LeashTransform.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.19 - 2023.05.04
 
 **Added**
