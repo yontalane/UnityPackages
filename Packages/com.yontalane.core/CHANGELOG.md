@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.22 - 2023.06.04
+
+**Added**
+
+- Added List.Shuffle().
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.21 - 2023.05.27
 
 **Added**
