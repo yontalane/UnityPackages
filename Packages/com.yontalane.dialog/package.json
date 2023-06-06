@@ -1,33 +1,33 @@
 {
-  "name": "com.yontalane.dialog",
-  "version": "1.0.15",
-  "displayName": "Dialog",
-  "description": "A dialog system.",
-  "unity": "2020.3",
-  "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialog/Documentation~/index.md",
-  "dependencies": {
-    "com.yontalane.core": "1.0.22",
-    "com.yontalane.query": "1.0.7"
-  },
-  "keywords": [
-    "dialog",
-    "ui",
-    "dialogue",
-    "tree",
-    "branching"
-  ],
-  "author": {
-    "name": "Yontalane",
-    "email": "unitypackages@yontalane.com",
-    "url": "https://yontalane.com/"
-  },
-  "samples": [
-    {
-      "displayName": "Dialog Demo",
-      "description": "Contains a sample implementation of the dialog system.",
-      "path": "Samples~/DialogDemo"
-    }
-  ],
-  "type": "library"
+    "name": "com.yontalane.dialog",
+    "version": "1.0.15",
+    "displayName": "Dialog",
+    "description": "A dialog system.",
+    "unity": "2021.3",
+    "unityRelease": "10f1",
+    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialog/Documentation~/index.md",
+    "dependencies": {
+        "com.yontalane.core": "1.0.23",
+        "com.yontalane.query": "1.0.7"
+    },
+    "keywords": [
+        "dialog",
+        "ui",
+        "dialogue",
+        "tree",
+        "branching"
+    ],
+    "author": {
+        "name": "Yontalane",
+        "email": "unitypackages@yontalane.com",
+        "url": "https://yontalane.com/"
+    },
+    "samples": [
+        {
+            "displayName": "Dialog Demo",
+            "description": "Contains a sample implementation of the dialog system.",
+            "path": "Samples~/DialogDemo"
+        }
+    ],
+    "type": "library"
 }

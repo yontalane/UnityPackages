@@ -6,6 +6,8 @@ namespace Yontalane
 {
     public static class Utility
     {
+        public static int LayerCount => UnityEngine.SortingLayer.layers.Length;
+
         /// <summary>
         /// Visually select the target Selectable.
         /// </summary>

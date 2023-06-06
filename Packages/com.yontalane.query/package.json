@@ -1,33 +1,33 @@
 {
-  "name": "com.yontalane.query",
-  "version": "1.0.7",
-  "displayName": "Query",
-  "description": "A dialog input box.",
-  "unity": "2020.3",
-  "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.query/Documentation~/index.md",
-  "dependencies": {
-    "com.yontalane.core": "1.0.22",
-    "com.unity.inputsystem": "1.2.0"
-  },
-  "keywords": [
-    "dialog",
-    "ui",
-    "alert",
-    "dialogue",
-    "input"
-  ],
-  "author": {
-    "name": "Yontalane",
-    "email": "unitypackages@yontalane.com",
-    "url": "https://yontalane.com/"
-  },
-  "samples": [
-    {
-      "displayName": "Query Demo",
-      "description": "Contains a sample implementation of the query UI.",
-      "path": "Samples~/QueryDemo"
-    }
-  ],
-  "type": "library"
+    "name": "com.yontalane.query",
+    "version": "1.0.7",
+    "displayName": "Query",
+    "description": "A dialog input box.",
+    "unity": "2021.3",
+    "unityRelease": "10f1",
+    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.query/Documentation~/index.md",
+    "dependencies": {
+        "com.yontalane.core": "1.0.23",
+        "com.unity.inputsystem": "1.2.0"
+    },
+    "keywords": [
+        "dialog",
+        "ui",
+        "alert",
+        "dialogue",
+        "input"
+    ],
+    "author": {
+        "name": "Yontalane",
+        "email": "unitypackages@yontalane.com",
+        "url": "https://yontalane.com/"
+    },
+    "samples": [
+        {
+            "displayName": "Query Demo",
+            "description": "Contains a sample implementation of the query UI.",
+            "path": "Samples~/QueryDemo"
+        }
+    ],
+    "type": "library"
 }

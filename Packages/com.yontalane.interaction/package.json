@@ -1,19 +1,19 @@
 {
-  "name": "com.yontalane.interaction",
-  "version": "1.0.6",
-  "displayName": "Interaction",
-  "description": "A small for basic interaction events in 3D games.",
-  "unity": "2020.3",
-  "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.interaction/Documentation~/index.md",
-  "keywords": [
-    "3d",
-    "interaction"
-  ],
-  "author": {
-    "name": "Yontalane",
-    "email": "unitypackages@yontalane.com",
-    "url": "https://yontalane.com/"
-  },
-  "type": "library"
+    "name": "com.yontalane.interaction",
+    "version": "1.0.6",
+    "displayName": "Interaction",
+    "description": "A small for basic interaction events in 3D games.",
+    "unity": "2021.3",
+    "unityRelease": "10f1",
+    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.interaction/Documentation~/index.md",
+    "keywords": [
+        "3d",
+        "interaction"
+    ],
+    "author": {
+        "name": "Yontalane",
+        "email": "unitypackages@yontalane.com",
+        "url": "https://yontalane.com/"
+    },
+    "type": "library"
 }

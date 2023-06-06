@@ -1,45 +1,45 @@
 {
-  "name": "com.yontalane.shaders",
-  "version": "1.0.20",
-  "displayName": "Shaders",
-  "description": "A shader library.",
-  "unity": "2020.3",
-  "unityRelease": "25f1",
-  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.shaders/Documentation~/index.md",
-  "dependencies": {
-    "com.unity.2d.sprite": "1.0.0"
-  },
-  "keywords": [
-    "graphics",
-    "shaders",
-    "materials",
-    "sprites",
-    "blend modes",
-    "blend",
-    "photoshop",
-    "overlay"
-  ],
-  "author": {
-    "name": "Yontalane",
-    "email": "unitypackages@yontalane.com",
-    "url": "https://yontalane.com/"
-  },
-  "samples": [
-    {
-      "displayName": "Sprite Demo",
-      "description": "Contains sample implementation of sprite shaders.",
-      "path": "Samples~/ShadersDemo"
+    "name": "com.yontalane.shaders",
+    "version": "1.0.20",
+    "displayName": "Shaders",
+    "description": "A shader library.",
+    "unity": "2021.3",
+    "unityRelease": "10f1",
+    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.shaders/Documentation~/index.md",
+    "dependencies": {
+        "com.unity.2d.sprite": "1.0.0"
     },
-    {
-      "displayName": "Screen Demo",
-      "description": "Contains sample implementations of screen shaders.",
-      "path": "Samples~/ScreenDemo"
+    "keywords": [
+        "graphics",
+        "shaders",
+        "materials",
+        "sprites",
+        "blend modes",
+        "blend",
+        "photoshop",
+        "overlay"
+    ],
+    "author": {
+        "name": "Yontalane",
+        "email": "unitypackages@yontalane.com",
+        "url": "https://yontalane.com/"
     },
-    {
-      "displayName": "Water Demo",
-      "description": "Contains a sample implementation of the water shader.",
-      "path": "Samples~/WaterDemo"
-    }
-  ],
-  "type": "library"
+    "samples": [
+        {
+            "displayName": "Sprite Demo",
+            "description": "Contains sample implementation of sprite shaders.",
+            "path": "Samples~/ShadersDemo"
+        },
+        {
+            "displayName": "Screen Demo",
+            "description": "Contains sample implementations of screen shaders.",
+            "path": "Samples~/ScreenDemo"
+        },
+        {
+            "displayName": "Water Demo",
+            "description": "Contains a sample implementation of the water shader.",
+            "path": "Samples~/WaterDemo"
+        }
+    ],
+    "type": "library"
 }
