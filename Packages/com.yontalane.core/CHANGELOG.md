@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.24 - 2023.06.06
+
+**Added**
+
+- LayerAttribute; static LayerCount getter.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.23 - 2023.06.06
 
 **Added**
