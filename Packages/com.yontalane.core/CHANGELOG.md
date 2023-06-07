@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.28 - 2023.06.07
+
+**Added**
+
+- TagAttribute can affect strings as well as ints.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.27 - 2023.06.07
 
 **Added**
