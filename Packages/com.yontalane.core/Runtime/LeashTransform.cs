@@ -109,6 +109,16 @@ namespace Yontalane
             get => m_useRigidbody;
             set => m_useRigidbody = value;
         }
+
+        [SerializeField]
+        [Tooltip("Stop positional leashing if target is outside these world bounds.")]
+        private bool m_useBounds = false;
+        public bool UseBounds
+        {
+            get => m_useBounds;
+            set => m_useBounds = value;
+        }
+
         #endregion
 
         private void Start() => Initialize(m_target, m_positionConfig, m_rotationConfig, m_scaleConfig, m_updateType);
