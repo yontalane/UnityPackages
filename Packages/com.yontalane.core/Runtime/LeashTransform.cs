@@ -111,12 +111,21 @@ namespace Yontalane
         }
 
         [SerializeField]
-        [Tooltip("Stop positional leashing if target is outside these world bounds.")]
+        [Tooltip("Whether or not to bound positional leashing.")]
         private bool m_useBounds = false;
         public bool UseBounds
         {
             get => m_useBounds;
             set => m_useBounds = value;
+        }
+
+        [SerializeField]
+        [Tooltip("Stop positional leashing if target is outside these world bounds.")]
+        private Bounds m_bounds = new Bounds();
+        public Bounds Bounds
+        {
+            get => m_bounds;
+            set => m_bounds = value;
         }
 
         #endregion
@@ -239,18 +248,43 @@ namespace Yontalane
             {
                 if (m_positionConfig.shouldLeash)
                 {
+                    Vector3 p;
                     if (m_positionConfig.space == Space.Local)
                     {
-                        Vector3 v = m_positionConfig.GetDestination(transform.localPosition, Target.localPosition);
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.localPosition, m_bounds, false);
+                        }
+                        else
+                        {
+                            p = Target.localPosition;
+                        }
+                        Vector3 v = m_positionConfig.GetDestination(transform.localPosition, p);
                         Rigidbody.MovePosition(transform.TransformPoint(v));
                     }
                     else if (m_positionConfig.space == Space.World)
                     {
-                        Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, Target.position));
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.position, m_bounds, true);
+                        }
+                        else
+                        {
+                            p = Target.position;
+                        }
+                        Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, p));
                     }
                     else if (m_positionConfig.space == Space.Parent)
                     {
-                        Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, Target.TransformPoint(m_positionConfig.offset)));
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.TransformPoint(m_positionConfig.offset), m_bounds, true);
+                        }
+                        else
+                        {
+                            p = Target.TransformPoint(m_positionConfig.offset);
+                        }
+                        Rigidbody.MovePosition(m_positionConfig.GetDestination(transform.position, p));
                     }
                 }
                 if (m_rotationConfig.shouldLeash)
@@ -308,6 +342,29 @@ namespace Yontalane
             {
                 transform.localScale = m_scaleConfig.GetDestination(transform.localScale, Target.localScale);
             }
+        }
+
+        private Vector3 ClampTargetPositionToBounds(Vector3 position, Bounds bounds, bool positionIsInWorldSpace)
+        {
+            Vector3 min, max;
+
+            if (positionIsInWorldSpace)
+            {
+                min = bounds.min;
+                max = bounds.max;
+            }
+            else
+            {
+                min = Target.InverseTransformPoint(bounds.min);
+                max = Target.InverseTransformPoint(bounds.max);
+            }
+
+            return new()
+            {
+                x = Mathf.Clamp(position.x, min.x, max.x),
+                y = Mathf.Clamp(position.y, min.y, max.y),
+                z = Mathf.Clamp(position.z, min.z, max.z)
+            };
         }
     }
 }

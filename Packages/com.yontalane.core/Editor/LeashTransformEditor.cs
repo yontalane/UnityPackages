@@ -16,6 +16,8 @@ namespace YontalaneEditor
         SerializedProperty m_scaleConfigName = null;
         SerializedProperty m_updateType = null;
         SerializedProperty m_useRigidbody = null;
+        SerializedProperty m_useBounds = null;
+        SerializedProperty m_bounds = null;
 
         private void OnEnable()
         {
@@ -28,6 +30,8 @@ namespace YontalaneEditor
             m_scaleConfigName = m_scaleConfig.FindPropertyRelative("m_name");
             m_updateType = serializedObject.FindProperty("m_updateType");
             m_useRigidbody = serializedObject.FindProperty("m_useRigidbody");
+            m_useBounds = serializedObject.FindProperty("m_useBounds");
+            m_bounds = serializedObject.FindProperty("m_bounds");
         }
 
         public override void OnInspectorGUI()
@@ -50,6 +54,13 @@ namespace YontalaneEditor
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_updateType, new GUIContent(m_updateType.displayName, $"How frequently to update the leashed object's position."));
             EditorGUILayout.PropertyField(m_useRigidbody, new GUIContent(m_useRigidbody.displayName, $"Whether to leash using Rigidbody, if one is present."));
+            EditorGUILayout.PropertyField(m_useBounds, new GUIContent(m_useBounds.displayName, $"Whether or not to bound positional leashing."));
+            if (m_useBounds.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(m_bounds, new GUIContent(m_bounds.displayName, $"Stop positional leashing if target is outside these world bounds."));
+                EditorGUI.indentLevel--;
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
