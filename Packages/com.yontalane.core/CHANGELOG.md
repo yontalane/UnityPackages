@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.26 - 2023.06.06
+
+**Added**
+
+- LeashTransform can now be restricted to bounds.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.25 - 2023.06.06
 
 **Added**

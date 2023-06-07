@@ -308,17 +308,42 @@ namespace Yontalane
             {
                 if (m_positionConfig.shouldLeash)
                 {
+                    Vector3 p;
                     if (m_positionConfig.space == Space.Local)
                     {
-                        transform.localPosition = m_positionConfig.GetDestination(transform.localPosition, Target.localPosition);
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.localPosition, m_bounds, false);
+                        }
+                        else
+                        {
+                            p = Target.localPosition;
+                        }
+                        transform.localPosition = m_positionConfig.GetDestination(transform.localPosition, p);
                     }
                     else if (m_positionConfig.space == Space.World)
                     {
-                        transform.position = m_positionConfig.GetDestination(transform.position, Target.position);
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.position, m_bounds, true);
+                        }
+                        else
+                        {
+                            p = Target.position;
+                        }
+                        transform.position = m_positionConfig.GetDestination(transform.position, p);
                     }
                     else if (m_positionConfig.space == Space.Parent)
                     {
-                        transform.position = m_positionConfig.GetDestination(transform.position, Target.TransformPoint(m_positionConfig.offset));
+                        if (m_useBounds)
+                        {
+                            p = ClampTargetPositionToBounds(Target.TransformPoint(m_positionConfig.offset), m_bounds, true);
+                        }
+                        else
+                        {
+                            p = Target.TransformPoint(m_positionConfig.offset);
+                        }
+                        transform.position = m_positionConfig.GetDestination(transform.position, p);
                     }
                 }
                 if (m_rotationConfig.shouldLeash)
