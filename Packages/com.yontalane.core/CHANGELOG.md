@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.29 - 2023.06.30
+
+**Added**
+
+- OptionalSingleton class.
+
 ## 1.0.28 - 2023.06.07
 
 **Added**

@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UIElementsDemo/UI/Menu.uss?fileID=7433441132597879392&amp;guid=1a03f4978d7564982bb94c61f5192400&amp;type=3#Menu" />
+    <ui:VisualElement name="SettingsGlobals" picking-mode="Ignore" class="menu full">
+        <ui:Button text="Back" display-tooltip-when-elided="true" name="Back" focusable="false" />
+        <ui:Button text="Gameplay" display-tooltip-when-elided="true" name="GameplayButton" />
+        <ui:Button text="Graphics" display-tooltip-when-elided="true" name="GraphicsButton" />
+        <ui:Button text="Audio" display-tooltip-when-elided="true" name="AudioButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="SettingsGameplay" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" />
+        <ui:Toggle label="Invert Y" />
+        <ui:Toggle label="Show Map" value="true" />
+        <ui:Slider label="Cursor Sensitivity" value="5" />
+    </ui:VisualElement>
+    <ui:VisualElement name="SettingsGraphics" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" />
+        <ui:DropdownField label="Presets" index="1" choices="Ultra,High,Medium,Low" />
+        <ui:DropdownField label="Resolution" index="0" choices="1920x1080,1024x768,640x480" />
+        <ui:Toggle label="Screen Shake" value="true" />
+    </ui:VisualElement>
+    <ui:VisualElement name="SettingsAudio" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" />
+        <ui:Slider label="Master Volume" value="10" />
+        <ui:Slider label="Music" name="Slider" value="10" />
+        <ui:Slider label="SFX" value="10" />
+        <ui:Slider label="Speech" value="10" />
+    </ui:VisualElement>
+</ui:UXML>

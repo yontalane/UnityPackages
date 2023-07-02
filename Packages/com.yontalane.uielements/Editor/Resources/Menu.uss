@@ -1,0 +1,73 @@
+.root {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 3px;
+}
+
+.root.expanded {
+    margin-bottom: 6px;
+}
+
+#Container {
+    display: none;
+    padding-left: 15px;
+}
+
+.expanded #Container {
+    display: flex;
+}
+
+#Header {
+    -unity-font-style: bold;
+    margin-bottom: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 4px;
+    -unity-text-align: middle-left;
+}
+
+#GlobalMenu #Items,
+#GlobalMenu #Addable {
+    margin-top: 5px;
+}
+
+#Menu #CancelTargetType,
+#Menu #Addable {
+    margin-top: 5px;
+}
+
+#Menu #CancelTargetType,
+#Menu #CancelTargetMenu,
+#Menu #CancelTargetSubordinate {
+    display: none;
+    margin-left: 8px;
+}
+
+#Menu.can-cancel #CancelTargetType {
+    display: flex;
+}
+
+#Menu.can-cancel.cancel-normal #CancelTargetMenu,
+#Menu.can-cancel.cancel-subordinate #CancelTargetMenu {
+    display: flex;
+}
+
+#Menu.can-cancel.cancel-subordinate #CancelTargetSubordinate {
+    display: flex;
+}
+
+#ExtraInputs #Actions {
+    margin-bottom: 5px;
+}
+
+#MenuItem #TargetSubordinate,
+#MenuItem #Highlight {
+    display: none;
+}
+
+#MenuItem.normalMenuItem #Highlight {
+    display: flex;
+}
+
+#MenuItem.subordinateMenuItem #TargetSubordinate {
+    display: flex;
+}

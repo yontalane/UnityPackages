@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="SettingsMenu" src="project://database/Assets/UIElementsDemo/UI/SettingsMenu.uxml?fileID=9197481963319205126&amp;guid=91a4f1868ce294d1882ded34f65d51bf&amp;type=3#SettingsMenu" />
+    <Style src="project://database/Assets/UIElementsDemo/UI/Menu.uss?fileID=7433441132597879392&amp;guid=1a03f4978d7564982bb94c61f5192400&amp;type=3#Menu" />
+    <ui:VisualElement name="Main" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="Main Menu" display-tooltip-when-elided="true" name="Title" />
+        <ui:Button text="About" display-tooltip-when-elided="true" name="AboutButton" />
+        <ui:Button text="Popups" display-tooltip-when-elided="true" name="PopupButton" />
+        <ui:Button text="Inventory" display-tooltip-when-elided="true" name="InventoryButton" />
+        <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="About" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="About" display-tooltip-when-elided="true" name="Title" />
+        <ui:Label tabindex="-1" text="This demo provides an example of the Menu, Notification, and Query components." display-tooltip-when-elided="true" class="text-block" />
+        <ui:Button text="Back" display-tooltip-when-elided="true" name="Back" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Inventory" picking-mode="Ignore" class="menu">
+        <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" name="Title" />
+        <ui:Button text="Add Item" display-tooltip-when-elided="true" name="Add" />
+        <ui:Button text="Drop All" display-tooltip-when-elided="true" name="Drop" />
+        <ui:VisualElement name="Container" />
+        <ui:Button text="Back" display-tooltip-when-elided="true" name="Back" />
+    </ui:VisualElement>
+    <ui:Instance template="SettingsMenu" name="SettingsMenu" picking-mode="Ignore" />
+</ui:UXML>

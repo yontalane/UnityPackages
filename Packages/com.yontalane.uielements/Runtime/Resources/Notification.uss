@@ -1,0 +1,46 @@
+:root {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 15px;
+    width: 345px;
+    height: 75px;
+    background-color: #666;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    translate: 345px 0px;
+
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+
+    transition: all 0.5s ease 0s;
+}
+
+:root.shown {
+    translate: 0px 0px;
+}
+
+#yontalane-notification-header {
+    width: 295px;
+    height: 15px;
+
+    margin-left: 30px;
+    color: #FFF;
+    font-size: 18px;
+    -unity-text-align: middle-left;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: clip;
+    -unity-font-style: bold;
+    text-shadow: 0 1px 2px #000;
+}
+
+#yontalane-notification-body {
+    margin-left: 30px;
+    color: #DDD;
+    font-size: 14px;
+    -unity-text-align: middle-left;
+    white-space: normal;
+    text-overflow: clip;
+}

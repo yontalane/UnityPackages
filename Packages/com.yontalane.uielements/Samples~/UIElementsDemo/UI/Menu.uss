@@ -1,0 +1,248 @@
+.menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 120px;
+}
+
+.menu.full {
+    height: auto;
+    padding-top: 0;
+}
+
+.menu Button {
+    color: rgb(255, 255, 255);
+    padding: 4px 12px 4px 12px;
+    background-color: rgb(68, 68, 68);
+    border-width: 0;
+    border-radius: 6px;
+    -unity-font-style: bold;
+}
+
+.menu Button:hover {
+    background-color: rgb(34, 34, 34);
+}
+
+.menu Button:active {
+    background-color: rgb(17, 17, 17);
+}
+
+.menu Button:focus {
+    background-color: rgb(0, 170, 170);
+}
+
+.menu Button:disabled {
+    color: rgb(102, 102, 102);
+}
+
+.menu Toggle {
+    position: relative;
+    color: rgb(255, 255, 255);
+    width: 50%;
+    padding: 4px 12px 4px 12px;
+    -unity-font-style: bold;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.menu DropdownField {
+    position: relative;
+    color: rgb(255, 255, 255);
+    width: 50%;
+    padding: 4px 12px 4px 12px;
+    -unity-font-style: bold;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.menu Slider {
+    position: relative;
+    color: rgb(255, 255, 255);
+    width: 50%;
+    padding: 4px 12px 4px 12px;
+    -unity-font-style: bold;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.menu Toggle:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(34, 34, 34);
+}
+
+.menu DropdownField:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(34, 34, 34);
+}
+
+.menu Slider:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(34, 34, 34);
+}
+
+.menu Toggle:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(17, 17, 17);
+}
+
+.menu DropdownField:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(17, 17, 17);
+}
+
+.menu Slider:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(17, 17, 17);
+}
+
+.menu Toggle:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 170, 170);
+}
+
+.menu DropdownField:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 170, 170);
+}
+
+.menu Slider:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 170, 170);
+}
+
+.menu Toggle:disabled {
+    color: rgb(102, 102, 102);
+}
+
+.menu DropdownField:disabled {
+    color: rgb(102, 102, 102);
+}
+
+.menu Slider:disabled {
+    color: rgb(102, 102, 102);
+}
+
+.menu Toggle #unity-checkmark {
+    border-radius: 4px;
+    background-color: rgb(85, 85, 85);
+    -unity-background-image-tint-color: white;
+    border-width: 0;
+    border-color: transparent;
+}
+
+.menu Slider #unity-tracker {
+    border-radius: 2px;
+    background-color: rgb(85, 85, 85);
+    border-width: 0;
+    border-color: transparent;
+}
+
+.menu Slider #unity-dragger-border {
+    display: none;
+}
+
+.menu Slider #unity-dragger {
+    border-radius: 4px;
+    background-color: rgb(221, 221, 221);
+    border-width: 0;
+    border-color: transparent;
+}
+
+.menu DropdownField .unity-popup-field__input {
+    background-color: rgb(85, 85, 85);
+    border-radius: 4px;
+    border-width: 0;
+    border-color: transparent;
+}
+
+.menu #Title {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 100%;
+    height: auto;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    text-shadow: 0 1px 2px rgb(0, 0, 0);
+}
+
+.menu .text-block {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    -unity-text-align: middle-left;
+    width: 40%;
+    white-space: normal;
+}
+
+.menu #Container {
+    height: auto;
+    margin: 8px 0 8px 0;
+}
+
+.menu #Container .inventory {
+    border-radius: 0;
+    -unity-font-style: normal;
+}
+
+#SettingsMenu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+#SettingsGlobals.menu {
+    flex-direction: row;
+    top: 80px;
+    height: auto;
+    justify-content: center;
+}
+
+#SettingsGlobals Button {
+    margin: 0 1px 0 1px;
+    border-radius: 0;
+}
+
+#SettingsGlobals Button.highlight {
+    background-color: rgb(222, 64, 12);
+}
+
+#SettingsGlobals Button#Back {
+    margin-right: 10px;
+    border-radius: 6px;
+}
+
+#SettingsGlobals Button#GameplayButton {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+#SettingsGlobals Button#AudioButton {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.tip {
+    position: absolute;
+    background-color: rgb(119, 119, 119);
+    padding: 2px;
+    border-radius: 1px;
+    top: 95%;
+    left: 95%;
+}
+
+.tip > Label {
+    font-size: 9px;
+    color: rgb(170, 170, 170);
+}
