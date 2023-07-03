@@ -126,10 +126,18 @@ namespace Yontalane.UIElements
             }
 
             m_input.actions.Enable();
-            m_input.actions[m_input.tabLeft].Enable();
-            m_input.actions[m_input.tabRight].Enable();
-            m_input.actions[m_input.tabLeft].performed += OnTabLeft;
-            m_input.actions[m_input.tabRight].performed += OnTabRight;
+
+            if (!string.IsNullOrEmpty(m_input.tabLeft))
+            {
+                m_input.actions[m_input.tabLeft].Enable();
+                m_input.actions[m_input.tabLeft].performed += OnTabLeft;
+            }
+
+            if (!string.IsNullOrEmpty(m_input.tabRight))
+            {
+                m_input.actions[m_input.tabRight].Enable();
+                m_input.actions[m_input.tabRight].performed += OnTabRight;
+            }
         }
 
         private void OnDisable()
@@ -139,8 +147,15 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            m_input.actions[m_input.tabLeft].performed -= OnTabLeft;
-            m_input.actions[m_input.tabRight].performed -= OnTabRight;
+            if (!string.IsNullOrEmpty(m_input.tabLeft))
+            {
+                m_input.actions[m_input.tabLeft].performed -= OnTabLeft;
+            }
+
+            if (!string.IsNullOrEmpty(m_input.tabRight))
+            {
+                m_input.actions[m_input.tabRight].performed -= OnTabRight;
+            }
         }
 
         #region Clicks
