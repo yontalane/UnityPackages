@@ -287,32 +287,29 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       - name: GameplayButton
         type: 0
         targetMenu: SettingsGameplay
         targetSubordinate: 0
-        highlight: 1
       - name: GraphicsButton
         type: 0
         targetMenu: SettingsGraphics
         targetSubordinate: 0
-        highlight: 1
       - name: AudioButton
         type: 0
         targetMenu: SettingsAudio
         targetSubordinate: 0
-        highlight: 1
       hasCancelTarget: 0
       cancelTarget:
         name: 
         type: 0
         targetMenu: 
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 0
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
+    resetFocus: 0
   m_menus:
     editorExpanded: 1
     firstMenu: -1
@@ -326,10 +323,10 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
     - name: SettingsGraphics
       items: []
       hasCancelTarget: 1
@@ -338,10 +335,10 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
     - name: SettingsAudio
       items: []
       hasCancelTarget: 1
@@ -350,10 +347,10 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
   m_input:
     editorExpanded: 1
     actions: {fileID: -944628639613478452, guid: a550d5bad40824c33b69d909b451e28c, type: 3}
@@ -414,10 +411,11 @@ MonoBehaviour:
         type: 0
         targetMenu: 
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 0
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
+    resetFocus: 0
   m_menus:
     editorExpanded: 1
     firstMenu: 0
@@ -430,61 +428,56 @@ MonoBehaviour:
         type: 0
         targetMenu: About
         targetSubordinate: 0
-        highlight: 0
       - name: InventoryButton
         type: 0
         targetMenu: Inventory
         targetSubordinate: 0
-        highlight: 0
       - name: SettingsButton
         type: 1
         targetMenu: SettingsGameplay
         targetSubordinate: 0
-        highlight: 0
       hasCancelTarget: 0
       cancelTarget:
         name: 
         type: 0
         targetMenu: 
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
     - name: About
       items:
       - name: Back
         type: 0
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasCancelTarget: 1
       cancelTarget:
         name: 
         type: 0
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
+      focusItem: 
     - name: Inventory
       items:
       - name: Back
         type: 0
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasCancelTarget: 1
       cancelTarget:
         name: 
         type: 0
         targetMenu: Main
         targetSubordinate: 0
-        highlight: 0
       hasGlobalMenu: 1
       addableContainer: Container
       defaultAddableItemTemplate: {fileID: 9197481963319205126, guid: f4e0d104e78a74ca29716351456067dc, type: 3}
+      focusItem: 
   m_input:
     editorExpanded: 1
     actions: {fileID: 0}

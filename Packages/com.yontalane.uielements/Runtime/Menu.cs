@@ -42,6 +42,7 @@ namespace Yontalane.UIElements
 #endif
 
         public Menu menu;
+        public bool resetFocus;
     }
 
     [Serializable]
@@ -70,5 +71,7 @@ namespace Yontalane.UIElements
 
         public string addableContainer; // uxml id
         public VisualTreeAsset defaultAddableItemTemplate;
+
+        public string focusItem;
     }
 }

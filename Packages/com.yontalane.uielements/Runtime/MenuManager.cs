@@ -35,6 +35,8 @@ namespace Yontalane.UIElements
         #region Private Variables
         private UIDocument m_document;
         private MenuManager m_dominant = null;
+        private bool m_sourceIsGlobal = false;
+        private bool m_sourceIsSubordinate = false;
         #endregion
 
         #region Serialized Fields
@@ -219,6 +221,7 @@ namespace Yontalane.UIElements
                         break;
                     case MenuItemType.Dominant:
                         HideAllMenus();
+                        m_dominant.m_sourceIsSubordinate = true;
                         m_dominant.SetMenu(menu.cancelTarget.targetMenu);
                         break;
                 }
@@ -240,6 +243,7 @@ namespace Yontalane.UIElements
                             break;
                         case MenuItemType.Dominant:
                             HideAllMenus();
+                            m_dominant.m_sourceIsSubordinate = true;
                             m_dominant.SetMenu(keyValue.targetMenu);
                             break;
                     }
@@ -254,6 +258,36 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Display Menus
+        private void GetActiveMenuAndRecordCurrentFocus(out Menu menu, out VisualElement root, out VisualElement element)
+        {
+            int activeMenuIndex = IndexOfActiveMenu();
+
+            if (activeMenuIndex < 0)
+            {
+                menu = default;
+                root = null;
+                element = null;
+                return;
+            }
+
+            menu = m_menus.menus[activeMenuIndex];
+            root = Root.Q<VisualElement>(m_menus.menus[activeMenuIndex].name);
+
+            m_menus.menus[activeMenuIndex].focusItem = string.Empty;
+
+            Focusable focusedElement = root.focusController.focusedElement;
+
+            if (focusedElement == null || focusedElement is not VisualElement focusedVisualElement)
+            {
+                element = null;
+                return;
+            }
+
+            element = focusedVisualElement;
+
+            m_menus.menus[activeMenuIndex].focusItem = element.name;
+        }
+
         private void SetMenu(int menu)
         {
             if (menu >= 0 && menu < m_menus.menus.Length)
@@ -268,14 +302,19 @@ namespace Yontalane.UIElements
 
         protected void SetMenu(string menu)
         {
+            bool sourceIsGlobal = m_sourceIsGlobal;
+            m_sourceIsGlobal = false;
+
+            bool sourceIsSubordinate = m_sourceIsSubordinate;
+            m_sourceIsSubordinate = false;
+
             if (string.IsNullOrEmpty(menu))
             {
                 HideAllMenus(true);
                 return;
             }
 
-            VisualElement root = null;
-
+            GetActiveMenuAndRecordCurrentFocus(out Menu sourceMenu, out _, out _);
             bool globalMenuIsVisible = true;
 
             if (menu == m_globalMenu.menu.name || menu == GLOBAL_MENU)
@@ -287,21 +326,28 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            foreach (Menu menuObject in m_menus.menus)
+            for (int i = 0; i < m_menus.menus.Length; i++)
             {
-                if (menuObject.name == menu)
+                if (m_menus.menus[i].name == menu)
                 {
-                    root = Root.Q<VisualElement>(menuObject.name);
+                    if (!sourceIsSubordinate && sourceIsGlobal && m_globalMenu.resetFocus)
+                    {
+                        m_menus.menus[i].focusItem = string.Empty;
+                    }
+                    else if (!sourceIsSubordinate && !sourceIsGlobal && (!sourceMenu.hasCancelTarget || menu != sourceMenu.cancelTarget.targetMenu))
+                    {
+                        m_menus.menus[i].focusItem = string.Empty;
+                    }
+                    VisualElement root = Root.Q<VisualElement>(m_menus.menus[i].name);
                     root.style.display = DisplayStyle.Flex;
-                    globalMenuIsVisible = menuObject.hasGlobalMenu;
+                    globalMenuIsVisible = m_menus.menus[i].hasGlobalMenu;
+                    StartCoroutine(DelayedFocusElement(m_menus.menus[i], root));
                 }
                 else
                 {
-                    Root.Q<VisualElement>(menuObject.name).style.display = DisplayStyle.None;
+                    Root.Q<VisualElement>(m_menus.menus[i].name).style.display = DisplayStyle.None;
                 }
             }
-
-            StartCoroutine(DelayedFocusFirstElement(root));
 
             if (string.IsNullOrEmpty(m_globalMenu.menu.name))
             {
@@ -330,7 +376,7 @@ namespace Yontalane.UIElements
             }
         }
 
-        private IEnumerator DelayedFocusFirstElement(VisualElement root)
+        private IEnumerator DelayedFocusElement(Menu menu, VisualElement root)
         {
             if (root == null)
             {
@@ -343,6 +389,17 @@ namespace Yontalane.UIElements
             {
                 EventSystem.current.SetSelectedGameObject(m_document.gameObject);
             }
+
+            if (!string.IsNullOrEmpty(menu.focusItem))
+            {
+                VisualElement focusItem = root.Q<VisualElement>(menu.focusItem);
+                if (focusItem != null)
+                {
+                    focusItem.Focus();
+                    yield break;
+                }
+            }
+
             List<VisualElement> children = root.Query<VisualElement>().ToList();
             for (int i = 0; i < children.Count; i++)
             {
@@ -356,6 +413,8 @@ namespace Yontalane.UIElements
 
         protected void HideAllMenus(bool includingGlobalMenu = true)
         {
+            GetActiveMenuAndRecordCurrentFocus(out _, out _, out _);
+
             if (includingGlobalMenu && !string.IsNullOrEmpty(m_globalMenu.menu.name))
             {
                 Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.None;
@@ -428,6 +487,24 @@ namespace Yontalane.UIElements
 
         public bool TryGetActiveMenu(out Menu menu, out VisualElement root)
         {
+            int index = IndexOfActiveMenu();
+            if (index >= 0)
+            {
+                menu = m_menus.menus[index];
+                root = Root.Q<VisualElement>(menu.name);
+                return true;
+            }
+            else
+            {
+                menu = default;
+                root = null;
+                return false;
+            }
+        }
+
+        public int IndexOfActiveMenu()
+        {
+            VisualElement root;
             for (int i = 0; i < m_menus.menus.Length; i++)
             {
                 root = Root.Q<VisualElement>(m_menus.menus[i].name);
@@ -435,13 +512,10 @@ namespace Yontalane.UIElements
                 {
                     continue;
                 }
-                menu = m_menus.menus[i];
-                return true;
+                return i;
             }
 
-            menu = default;
-            root = null;
-            return false;
+            return -1;
         }
         #endregion
 
@@ -737,6 +811,7 @@ namespace Yontalane.UIElements
                 }
             }
 
+            m_sourceIsGlobal = true;
             SetMenu(m_globalMenu.menu.items[index].targetMenu);
         }
         #endregion
