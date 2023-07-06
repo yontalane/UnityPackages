@@ -11,6 +11,7 @@ namespace Yontalane.UIElements
         public string text;
         public string label; // uxml id for the label
         public VisualTreeAsset template; // leave null to use the default
+        public Action<VisualElement> onAdd;
     }
 
     [Serializable]

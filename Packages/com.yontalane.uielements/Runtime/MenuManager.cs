@@ -728,11 +728,13 @@ namespace Yontalane.UIElements
 
                 if (index < 0 || index >= containerAsScrollViewAuto.ChildCount)
                 {
+                    data.onAdd?.Invoke(element);
                     return;
                 }
 
                 containerAsScrollViewAuto.RemoveAt(firstElementIndex);
                 containerAsScrollViewAuto.Insert(index, element);
+                data.onAdd?.Invoke(element);
             }
             else
             {
@@ -779,11 +781,13 @@ namespace Yontalane.UIElements
 
                 if (index < 0 || index >= container.childCount)
                 {
+                    data.onAdd?.Invoke(element);
                     return;
                 }
 
                 container.RemoveAt(firstElementIndex);
                 container.Insert(index, element);
+                data.onAdd?.Invoke(element);
             }
         }
 

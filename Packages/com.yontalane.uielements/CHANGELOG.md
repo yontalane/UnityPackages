@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8 - 2023.07.06
+
+**Added**
+
+- Callback when addin element.
+
 ## 1.0.7 - 2023.07.06
 
 **Added**

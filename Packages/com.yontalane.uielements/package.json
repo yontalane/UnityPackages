@@ -1,6 +1,6 @@
 {
     "name": "com.yontalane.uielements",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "displayName": "UI Elements",
     "description": "A small library for Unity projects.",
     "unity": "2021.3",
