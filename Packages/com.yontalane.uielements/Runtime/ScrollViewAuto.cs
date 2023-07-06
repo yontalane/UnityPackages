@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.ComponentModel;
-using System;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace Yontalane.UIElements
 {
@@ -24,17 +18,26 @@ namespace Yontalane.UIElements
         }
         #endregion
 
-        private VisualElement m_container;
+        private readonly VisualElement m_container;
+        private readonly List<VisualElement> m_registeredChildren;
 
         #region Constructors
         public ScrollViewAuto() : base()
         {
             m_container = this.Q<VisualElement>("unity-content-container");
-            IEnumerable<VisualElement> children = m_container.Children();
-            foreach(VisualElement child in children)
+            m_registeredChildren = new();
+
+            RegisterCallback<AttachToPanelEvent>((e) =>
             {
-                child.RegisterCallback<FocusEvent>(FocusListener);
-            }
+                if (Application.isPlaying)
+                {
+                    IEnumerable<VisualElement> children = Children();
+                    foreach (VisualElement child in children)
+                    {
+                        RegisterElement(child);
+                    }
+                }
+            });
         }
         #endregion
 
@@ -51,18 +54,32 @@ namespace Yontalane.UIElements
             return m_container.Children();
         }
 
-        public new int childCount
+        public int ChildCount => m_container.childCount;
+
+        private void RegisterElement(VisualElement element)
         {
-            get
+            if (m_registeredChildren.Contains(element))
             {
-                return m_container.childCount;
+                return;
             }
+            m_registeredChildren.Add(element);
+            element.RegisterCallback<FocusEvent>(FocusListener);
+        }
+
+        private void UnregisterElement(VisualElement element)
+        {
+            if (!m_registeredChildren.Contains(element))
+            {
+                return;
+            }
+            m_registeredChildren.Remove(element);
+            element.UnregisterCallback<FocusEvent>(FocusListener);
         }
 
         #region Add & Remove
         public new void Clear()
         {
-            for (int i = childCount - 1; i >= 0; i--)
+            for (int i = ChildCount - 1; i >= 0; i--)
             {
                 RemoveAt(i);
             }
@@ -70,13 +87,13 @@ namespace Yontalane.UIElements
 
         public new void Add(VisualElement element)
         {
-            element.RegisterCallback<FocusEvent>(FocusListener);
+            RegisterElement(element);
             m_container.Add(element);
         }
 
         public new void Insert(int index, VisualElement element)
         {
-            element.RegisterCallback<FocusEvent>(FocusListener);
+            RegisterElement(element);
             m_container.Insert(index, element);
         }
 
@@ -90,7 +107,7 @@ namespace Yontalane.UIElements
 
         public new void Remove(VisualElement element)
         {
-            element.UnregisterCallback<FocusEvent>(FocusListener);
+            UnregisterElement(element);
             m_container.Remove(element);
         }
 
@@ -111,7 +128,7 @@ namespace Yontalane.UIElements
             {
                 if (i == index)
                 {
-                    child.UnregisterCallback<FocusEvent>(FocusListener);
+                    UnregisterElement(child);
                     m_container.RemoveAt(index);
                     return;
                 }
@@ -131,7 +148,7 @@ namespace Yontalane.UIElements
             {
                 if (i >= firstElementIndex && i < firstElementIndex + elementAddedCount)
                 {
-                    child.RegisterCallback<FocusEvent>(FocusListener);
+                    RegisterElement(child);
                 }
                 i++;
             }

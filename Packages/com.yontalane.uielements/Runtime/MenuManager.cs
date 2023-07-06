@@ -715,7 +715,7 @@ namespace Yontalane.UIElements
                     RegisterClick(menuObject, elementAsButton);
                 }
 
-                if (index < 0 || index >= containerAsScrollViewAuto.childCount)
+                if (index < 0 || index >= containerAsScrollViewAuto.ChildCount)
                 {
                     return;
                 }

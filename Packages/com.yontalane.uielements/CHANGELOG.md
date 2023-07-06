@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5 - 2023.07.05
+
+**Fixed**
+
+- ScrollViewAuto now works with children that were added prior to runtime.
+
 ## 1.0.4 - 2023.07.05
 
 **Added**
