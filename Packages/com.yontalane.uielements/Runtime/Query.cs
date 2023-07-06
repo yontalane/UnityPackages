@@ -206,7 +206,7 @@ namespace Yontalane.UIElements
 
         public new void Focus()
         {
-            UIDocument document = GameObject.FindObjectOfType<UIDocument>();
+            UIDocument document = UnityEngine.Object.FindObjectOfType<UIDocument>();
             if (EventSystem.current != null)
             {
                 EventSystem.current.SetSelectedGameObject(document.gameObject);
@@ -227,7 +227,7 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            button.RegisterCallback<NavigationMoveEvent>((NavigationMoveEvent e) =>
+            button.RegisterCallback((NavigationMoveEvent e) =>
             {
                 switch (e.direction)
                 {

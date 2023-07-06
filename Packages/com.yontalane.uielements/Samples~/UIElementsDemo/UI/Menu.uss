@@ -184,13 +184,16 @@
 }
 
 .menu #Container {
-    height: auto;
+    height: 150px;
+    width: 100px;
     margin: 8px 0 8px 0;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .menu #Container .inventory {
     border-radius: 0;
     -unity-font-style: normal;
+    width: 100%;
 }
 
 #SettingsMenu {

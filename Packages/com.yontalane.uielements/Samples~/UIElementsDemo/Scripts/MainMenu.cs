@@ -7,7 +7,7 @@ namespace YontalaneDemos.UIElements
 {
     public class MainMenu : MenuManager
     {
-        private const int MAX_INVENTORY = 5;
+        private const int MAX_INVENTORY = 10;
         private readonly string[] FRUIT = new string[] { "Apple", "Pear", "Mango", "Durian" };
 
         private Query m_query;

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4 - 2023.07.05
+
+**Added**
+
+- ScrollViewAuto is a ScrollView that automatically scrolls to the focused element.
+
 ## 1.0.3 - 2023.07.05
 
 **Added**

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
@@ -643,9 +644,13 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            for (int i = container.childCount - 1; i >= 0; i--)
+            if (container is ScrollViewAuto containerAsScrollViewAuto)
             {
-                container.RemoveAt(i);
+                containerAsScrollViewAuto.Clear();
+            }
+            else
+            {
+                container.Clear();
             }
         }
 
@@ -666,54 +671,109 @@ namespace Yontalane.UIElements
                 Logger.LogError("Could not find template.");
             }
 
-            template.CloneTree(container, out int firstElementIndex, out int elementAddedCount);
 
-            List<VisualElement> list = (List<VisualElement>)container.Children();
-
-            if (elementAddedCount != 1)
+            if (container is ScrollViewAuto containerAsScrollViewAuto)
             {
-                Logger.LogError("Only use templates containing exactly one element.");
-                if (elementAddedCount == 0)
+                containerAsScrollViewAuto.CloneTreeAsset(template, out int firstElementIndex, out int elementAddedCount);
+
+                List<VisualElement> list = (List<VisualElement>)containerAsScrollViewAuto.Children();
+
+                if (elementAddedCount != 1)
+                {
+                    Logger.LogError("Only use templates containing exactly one element.");
+                    if (elementAddedCount == 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        for (int i = elementAddedCount - 1; i > 0; i--)
+                        {
+                            containerAsScrollViewAuto.RemoveAt(firstElementIndex + i);
+                        }
+                    }
+                }
+
+                VisualElement element = list[firstElementIndex];
+                element.name = data.name;
+
+                if (!string.IsNullOrEmpty(data.label))
+                {
+                    TextElement textElement = element.Q<TextElement>(data.label);
+                    if (textElement != null)
+                    {
+                        textElement.text = data.text;
+                    }
+                }
+                else if (element is TextElement elementAsTextElement)
+                {
+                    elementAsTextElement.text = data.text;
+                }
+
+                if (element is Button elementAsButton)
+                {
+                    RegisterClick(menuObject, elementAsButton);
+                }
+
+                if (index < 0 || index >= containerAsScrollViewAuto.childCount)
                 {
                     return;
                 }
-                else
+
+                containerAsScrollViewAuto.RemoveAt(firstElementIndex);
+                containerAsScrollViewAuto.Insert(index, element);
+            }
+            else
+            {
+                template.CloneTree(container, out int firstElementIndex, out int elementAddedCount);
+
+                List<VisualElement> list = (List<VisualElement>)container.Children();
+
+                if (elementAddedCount != 1)
                 {
-                    for (int i = elementAddedCount - 1; i > 0; i--)
+                    Logger.LogError("Only use templates containing exactly one element.");
+                    if (elementAddedCount == 0)
                     {
-                        container.RemoveAt(firstElementIndex + i);
+                        return;
+                    }
+                    else
+                    {
+                        for (int i = elementAddedCount - 1; i > 0; i--)
+                        {
+                            container.RemoveAt(firstElementIndex + i);
+                        }
                     }
                 }
-            }
 
-            VisualElement element = list[firstElementIndex];
-            element.name = data.name;
+                VisualElement element = list[firstElementIndex];
+                element.name = data.name;
 
-            if (!string.IsNullOrEmpty(data.label))
-            {
-                TextElement textElement = element.Q<TextElement>(data.label);
-                if (textElement != null)
+                if (!string.IsNullOrEmpty(data.label))
                 {
-                    textElement.text = data.text;
+                    TextElement textElement = element.Q<TextElement>(data.label);
+                    if (textElement != null)
+                    {
+                        textElement.text = data.text;
+                    }
                 }
-            }
-            else if (element is TextElement elementAsTextElement)
-            {
-                elementAsTextElement.text = data.text;
-            }
+                else if (element is TextElement elementAsTextElement)
+                {
+                    elementAsTextElement.text = data.text;
+                }
 
-            if (element is Button elementAsButton)
-            {
-                RegisterClick(menuObject, elementAsButton);
-            }
+                if (element is Button elementAsButton)
+                {
+                    RegisterClick(menuObject, elementAsButton);
+                }
 
-            if (index < 0 || index >= container.childCount)
-            {
-                return;
-            }
+                if (index < 0 || index >= container.childCount)
+                {
+                    return;
+                }
 
-            container.RemoveAt(firstElementIndex);
-            container.Insert(index, element);
+                container.RemoveAt(firstElementIndex);
+                container.Insert(index, element);
+            }
         }
 
         public void AddRange(string menu, IReadOnlyList<AddableItemData> datas)
@@ -734,7 +794,14 @@ namespace Yontalane.UIElements
             VisualElement child = container.Q<VisualElement>(item);
             if (child != null)
             {
-                container.Remove(child);
+                if (container is ScrollViewAuto containerAsScrollViewAuto)
+                {
+                    containerAsScrollViewAuto.Remove(child);
+                }
+                else
+                {
+                    container.Remove(child);
+                }
             }
         }
         #endregion
