@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.7 - 2023.07.06
+
+**Added**
+
+- Exposed MenuManager.InputAsset and OnDisplayMenu().
+
 ## 1.0.6 - 2023.07.05
 
 **Fixed**

@@ -54,6 +54,7 @@ namespace Yontalane.UIElements
         #region Accessors
         public UIDocument Document => m_document;
         public VisualElement Root => Document.rootVisualElement;
+        public InputActionAsset InputActions => m_input.actions;
         #endregion
 
         private void Reset()
@@ -342,6 +343,7 @@ namespace Yontalane.UIElements
                     VisualElement root = Root.Q<VisualElement>(m_menus.menus[i].name);
                     root.style.display = DisplayStyle.Flex;
                     globalMenuIsVisible = m_menus.menus[i].hasGlobalMenu;
+                    OnDisplayMenu(m_menus.menus[i]);
                     StartCoroutine(DelayedFocusElement(m_menus.menus[i], root));
                 }
                 else
@@ -363,6 +365,10 @@ namespace Yontalane.UIElements
             {
                 Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.None;
             }
+        }
+
+        protected virtual void OnDisplayMenu(Menu menu)
+        {
         }
 
         private void UpdateGlobalMenuHighlight(string menuName, MenuItemType type, int _)
