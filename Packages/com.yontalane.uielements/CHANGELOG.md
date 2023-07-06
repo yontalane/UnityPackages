@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.6 - 2023.07.05
+
+**Fixed**
+
+- Tabs can select subordinate Menu Manager.
+
 ## 1.0.5 - 2023.07.05
 
 **Fixed**

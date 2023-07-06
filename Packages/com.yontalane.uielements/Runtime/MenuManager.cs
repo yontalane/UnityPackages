@@ -357,23 +357,28 @@ namespace Yontalane.UIElements
 
             if (globalMenuIsVisible)
             {
-                Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.Flex;
-
-                for (int i = 0; i < m_globalMenu.menu.items.Length; i++)
-                {
-                    if (m_globalMenu.menu.items[i].targetMenu == menu)
-                    {
-                        AddClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
-                    }
-                    else
-                    {
-                        RemoveClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
-                    }
-                }
+                UpdateGlobalMenuHighlight(menu, MenuItemType.Normal, -1);
             }
             else
             {
                 Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.None;
+            }
+        }
+
+        private void UpdateGlobalMenuHighlight(string menuName, MenuItemType type, int _)
+        {
+            Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.Flex;
+
+            for (int i = 0; i < m_globalMenu.menu.items.Length; i++)
+            {
+                if (m_globalMenu.menu.items[i].targetMenu == menuName && m_globalMenu.menu.items[i].type == type)
+                {
+                    AddClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
+                }
+                else
+                {
+                    RemoveClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
+                }
             }
         }
 
@@ -824,17 +829,33 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            if (!TryGetActiveMenu(out Menu menu, out _))
+            if (!TryGetMenu(GLOBAL_MENU, out VisualElement _))
             {
                 return;
             }
 
-            if (!menu.hasGlobalMenu)
+            bool foundActiveMenu = TryGetActiveMenu(out Menu menu, out _);
+            bool isSubordinate = false;
+
+            if (!foundActiveMenu)
+            {
+                foreach (MenuManager subordinate in m_menus.subordinates)
+                {
+                    foundActiveMenu = subordinate.TryGetActiveMenu(out menu, out _);
+                    if (foundActiveMenu)
+                    {
+                        isSubordinate = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!foundActiveMenu)
             {
                 return;
             }
 
-            if (!TryGetMenu(GLOBAL_MENU, out VisualElement globalMenu))
+            if (!isSubordinate && !menu.hasGlobalMenu)
             {
                 return;
             }
@@ -865,7 +886,7 @@ namespace Yontalane.UIElements
                 index = 0;
             }
 
-            while (!TryGetMenu(m_globalMenu.menu.items[index].targetMenu, out Menu _))
+            while ((m_globalMenu.menu.items[index].type == MenuItemType.Normal && !TryGetMenu(m_globalMenu.menu.items[index].targetMenu, out Menu _)) || (m_globalMenu.menu.items[index].type == MenuItemType.Subordinate && !m_menus.subordinates[m_globalMenu.menu.items[index].targetSubordinate].TryGetMenu(m_globalMenu.menu.items[index].targetMenu, out Menu _)) || m_globalMenu.menu.items[index].type == MenuItemType.Dominant)
             {
                 index += direction;
                 if (index < 0)
@@ -879,7 +900,20 @@ namespace Yontalane.UIElements
             }
 
             m_sourceIsGlobal = true;
-            SetMenu(m_globalMenu.menu.items[index].targetMenu);
+            if (m_globalMenu.menu.items[index].type == MenuItemType.Normal)
+            {
+                foreach(MenuManager subordinate in m_menus.subordinates)
+                {
+                    subordinate.HideAllMenus();
+                }
+                SetMenu(m_globalMenu.menu.items[index].targetMenu);
+            }
+            else if (m_globalMenu.menu.items[index].type == MenuItemType.Subordinate)
+            {
+                HideAllMenus(false);
+                m_menus.subordinates[m_globalMenu.menu.items[index].targetSubordinate].SetMenu(m_globalMenu.menu.items[index].targetMenu);
+                UpdateGlobalMenuHighlight(m_globalMenu.menu.items[index].targetMenu, m_globalMenu.menu.items[index].type, m_globalMenu.menu.items[index].targetSubordinate);
+            }
         }
         #endregion
     }
