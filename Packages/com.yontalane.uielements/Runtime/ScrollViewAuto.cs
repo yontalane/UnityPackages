@@ -45,7 +45,13 @@ namespace Yontalane.UIElements
         {
             if (e.target is VisualElement targetAsVisualElement)
             {
-                ScrollTo(targetAsVisualElement);
+                scrollOffset = new()
+                {
+                    x = scrollOffset.x,
+                    y = targetAsVisualElement.layout.center.y - contentViewport.layout.size.y * 0.5f
+                };
+
+                //ScrollTo(targetAsVisualElement);
             }
         }
 

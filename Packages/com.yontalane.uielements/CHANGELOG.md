@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.9 - 2023.07.07
+
+**Changed**
+
+- ScrollViewAuto keeps elements in the middle.
+
 ## 1.0.8 - 2023.07.06
 
 **Added**
