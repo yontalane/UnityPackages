@@ -1,0 +1,40 @@
+ToggleButton {
+    color: #FFF;
+    background-color: #444;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5px 6px 5px 6px;
+    border-width: 0;
+    border-radius: 6px;
+}
+
+ToggleButton:hover {
+    background-color: #222;
+}
+
+ToggleButton:active {
+    background-color: #111;
+}
+
+ToggleButton:focus {
+    background-color: #0AA;
+}
+
+ToggleButton:disabled {
+    color: #666;
+}
+
+ToggleButton:checked {
+    background-color: rgb(222, 64, 12);
+}
+
+ToggleButton > Label {
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-center;
+}
+
+ToggleButton > .unity-toggle__input {
+    display: none;
+}

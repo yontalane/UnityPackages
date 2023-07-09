@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.10 - 2023.07.09
+
+**Added**
+
+- ToggleButton is a button that has a toggle state.
+
 ## 1.0.9 - 2023.07.07
 
 **Changed**
