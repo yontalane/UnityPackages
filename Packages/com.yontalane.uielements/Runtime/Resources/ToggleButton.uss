@@ -1,5 +1,12 @@
 ToggleButton {
-    color: #FFF;
+    background-color: transparent;
+    padding: 0;
+    border-width: 0;
+    width: 120px;
+    height: 24px;
+}
+
+ToggleButton #Frame {
     background-color: #444;
     align-items: center;
     justify-content: center;
@@ -7,36 +14,41 @@ ToggleButton {
     padding: 5px 6px 5px 6px;
     border-width: 0;
     border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }
 
-ToggleButton:hover {
+ToggleButton:hover #Frame {
     background-color: #222;
 }
 
-ToggleButton:active {
+ToggleButton:active #Frame {
     background-color: #111;
 }
 
-ToggleButton:focus {
+ToggleButton:focus #Frame {
     background-color: #0AA;
 }
 
-ToggleButton:disabled {
+ToggleButton:disabled #Label {
     color: #666;
 }
 
-ToggleButton:checked {
+ToggleButton:checked #Frame {
     background-color: rgb(222, 64, 12);
 }
 
-ToggleButton > Label,
-ToggleButton > Label.unity-base-field__label {
+ToggleButton Label,
+ToggleButton Label.unity-base-field__label {
+    color: white;
     min-width: auto;
     margin: 0;
     padding: 0;
     -unity-text-align: middle-center;
 }
 
-ToggleButton > .unity-toggle__input {
+ToggleButton .unity-label,
+ToggleButton #unity-checkmark {
     display: none;
 }

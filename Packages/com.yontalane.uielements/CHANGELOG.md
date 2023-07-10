@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.13 - 2023.07.09
+
+**Fixed**
+
+- ToggleButton is navigable.
+
 ## 1.0.12 - 2023.07.09
 
 **Fixed**

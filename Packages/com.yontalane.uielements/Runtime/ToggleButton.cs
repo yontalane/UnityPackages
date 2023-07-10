@@ -29,6 +29,11 @@ namespace Yontalane.UIElements
         }
         #endregion
 
+        #region Private Variables
+        private readonly Label m_stubLabel;
+        private readonly VisualElement m_box;
+        #endregion
+
         #region Accessors
         public new string label
         {
@@ -38,8 +43,10 @@ namespace Yontalane.UIElements
             }
             set
             {
-                this.Q<Label>("StubLabel").style.display = string.IsNullOrEmpty(value) ? DisplayStyle.Flex : DisplayStyle.None;
+                m_stubLabel.style.display = string.IsNullOrEmpty(value) ? DisplayStyle.Flex : DisplayStyle.Flex;
                 base.label = value;
+                m_stubLabel.text = value;
+                RemoveFocusable();
             }
         }
         #endregion
@@ -47,11 +54,37 @@ namespace Yontalane.UIElements
         #region Constructors
         public ToggleButton() : base()
         {
-            Label stubLabel = new() { name = "StubLabel" };
-            stubLabel.AddToClassList(textUssClassName);
-            Add(stubLabel);
+            m_box = this.Query<VisualElement>(className: "unity-toggle__input").First();
+            m_box.name = "Frame";
+            m_box.AddToClassList("yontalane-frame");
+
+            m_stubLabel = new() { name = "Label" };
+            m_stubLabel.AddToClassList(textUssClassName);
+            m_box.Add(m_stubLabel);
+
+            RemoveFocusable();
+
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
         }
         #endregion
+
+        private void RemoveFocusable()
+        {
+            m_stubLabel.pickingMode = PickingMode.Ignore;
+            m_stubLabel.focusable = false;
+
+            m_box.pickingMode = pickingMode;
+            m_box.focusable = focusable;
+
+            VisualElement checkmark = this.Q<VisualElement>("unity-checkmark");
+            checkmark.pickingMode = PickingMode.Ignore;
+            checkmark.focusable = false;
+
+            if (m_Label != null)
+            {
+                m_Label.pickingMode = PickingMode.Ignore;
+                m_Label.focusable = false;
+            }
+        }
     }
 }
