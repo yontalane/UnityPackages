@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.14 - 2023.07.09
+
+**Fixed**
+
+- Leave ToggleButton height auto.
+
 ## 1.0.13 - 2023.07.09
 
 **Fixed**
