@@ -30,7 +30,6 @@ namespace Yontalane.UIElements
         #region Constants
         protected const string GLOBAL_MENU = "GLOBAL";
         protected const string CANCEL_EVENT = "CANCEL";
-        public const string TAB_HIGHLIGHT_CLASS = "highlight";
         #endregion
 
         #region Private Variables
@@ -177,10 +176,13 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            List<Button> buttons = root.Query<Button>().ToList();
-            foreach (Button item in buttons)
+            List<VisualElement> elements = root.Query<VisualElement>().ToList();
+            foreach (VisualElement element in elements)
             {
-                RegisterClick(menu, item);
+                if (element is Button || element is Toggle)
+                {
+                    RegisterClick(menu, element);
+                }
             }
 
             List<BindableElement> bindables = root.Query<BindableElement>().ToList();
@@ -194,17 +196,30 @@ namespace Yontalane.UIElements
             }
         }
 
-        private void RegisterClick(Menu menu, Button button)
+        private void RegisterClick(Menu menu, VisualElement buttonOrToggle)
         {
-            button.clicked += () => OnClickInternal(menu, button.name);
-            button.RegisterCallback((NavigationCancelEvent e) =>
+            if (buttonOrToggle is Button button)
+            {
+                button.clicked += () => OnClickInternal(menu, buttonOrToggle.name);
+            }
+            else if (buttonOrToggle is Toggle toggle)
+            {
+                toggle.RegisterValueChangedCallback((e) =>
+                {
+                    if (e.newValue)
+                    {
+                        OnClickInternal(menu, buttonOrToggle.name);
+                    }
+                });
+            }
+            buttonOrToggle.RegisterCallback((NavigationCancelEvent e) =>
             {
                 OnClickInternal(menu, CANCEL_EVENT);
             });
 
             if (menu.name == m_globalMenu.menu.name)
             {
-                button.focusable = false;
+                buttonOrToggle.focusable = false;
             }
         }
 
@@ -375,16 +390,21 @@ namespace Yontalane.UIElements
         {
             Root.Q<VisualElement>(m_globalMenu.menu.name).style.display = DisplayStyle.Flex;
 
+            if (!TryGetMenu(m_globalMenu.menu.name, out VisualElement globalMenu))
+            {
+                return;
+            }
+
+            Toggle toggle;
+
             for (int i = 0; i < m_globalMenu.menu.items.Length; i++)
             {
-                if (m_globalMenu.menu.items[i].targetMenu == menuName && m_globalMenu.menu.items[i].type == type)
+                toggle = globalMenu.Q<Toggle>(m_globalMenu.menu.items[i].name);
+                if (toggle == null)
                 {
-                    AddClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
+                    continue;
                 }
-                else
-                {
-                    RemoveClass(m_globalMenu.menu.name, m_globalMenu.menu.items[i].name, TAB_HIGHLIGHT_CLASS);
-                }
+                toggle.value = m_globalMenu.menu.items[i].targetMenu == menuName && m_globalMenu.menu.items[i].type == type;
             }
         }
 
@@ -725,6 +745,10 @@ namespace Yontalane.UIElements
                 {
                     RegisterClick(menuObject, elementAsButton);
                 }
+                else if (element is Toggle elementAsToggle)
+                {
+                    RegisterClick(menuObject, elementAsToggle);
+                }
 
                 if (index < 0 || index >= containerAsScrollViewAuto.ChildCount)
                 {
@@ -777,6 +801,10 @@ namespace Yontalane.UIElements
                 if (element is Button elementAsButton)
                 {
                     RegisterClick(menuObject, elementAsButton);
+                }
+                else if (element is Toggle elementAsToggle)
+                {
+                    RegisterClick(menuObject, elementAsToggle);
                 }
 
                 if (index < 0 || index >= container.childCount)

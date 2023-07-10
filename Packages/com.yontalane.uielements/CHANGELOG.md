@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.11 - 2023.07.09
+
+**Added**
+
+- Using ToggleButton in menu.
+
 ## 1.0.10 - 2023.07.09
 
 **Added**
