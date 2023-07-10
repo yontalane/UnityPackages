@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.12 - 2023.07.09
+
+**Fixed**
+
+- Removed minimum width from ToggleButton label.
+
 ## 1.0.11 - 2023.07.09
 
 **Added**

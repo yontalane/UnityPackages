@@ -29,7 +29,9 @@ ToggleButton:checked {
     background-color: rgb(222, 64, 12);
 }
 
-ToggleButton > Label {
+ToggleButton > Label,
+ToggleButton > Label.unity-base-field__label {
+    min-width: auto;
     margin: 0;
     padding: 0;
     -unity-text-align: middle-center;
