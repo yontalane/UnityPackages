@@ -1,4 +1,4 @@
-ToggleButton {
+:root {
     background-color: transparent;
     padding: 0;
     border-width: 0;
@@ -6,7 +6,7 @@ ToggleButton {
     height: auto;
 }
 
-ToggleButton #Frame {
+#Frame {
     background-color: #444;
     align-items: center;
     justify-content: center;
@@ -19,28 +19,28 @@ ToggleButton #Frame {
     margin: 0;
 }
 
-ToggleButton:hover #Frame {
+.yontalane-toggle-button:hover #Frame {
     background-color: #222;
 }
 
-ToggleButton:active #Frame {
+.yontalane-toggle-button:active #Frame {
     background-color: #111;
 }
 
-ToggleButton:focus #Frame {
+.yontalane-toggle-button:focus #Frame {
     background-color: #0AA;
 }
 
-ToggleButton:disabled #Label {
+.yontalane-toggle-button:disabled #Label {
     color: #666;
 }
 
-ToggleButton:checked #Frame {
+.yontalane-toggle-button:checked #Frame {
     background-color: rgb(222, 64, 12);
 }
 
-ToggleButton Label,
-ToggleButton Label.unity-base-field__label {
+Label,
+Label.unity-base-field__label {
     color: white;
     min-width: auto;
     margin: 0;
@@ -48,7 +48,7 @@ ToggleButton Label.unity-base-field__label {
     -unity-text-align: middle-center;
 }
 
-ToggleButton .unity-label,
-ToggleButton #unity-checkmark {
+.unity-label,
+#unity-checkmark {
     display: none;
 }

@@ -54,6 +54,8 @@ namespace Yontalane.UIElements
         #region Constructors
         public ToggleButton() : base()
         {
+            AddToClassList("yontalane-toggle-button");
+
             m_box = this.Query<VisualElement>(className: "unity-toggle__input").First();
             m_box.name = "Frame";
             m_box.AddToClassList("yontalane-frame");

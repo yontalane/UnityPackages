@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.15 - 2023.07.11
+
+**Fixed**
+
+- ToggleButton USS no longer directly references ToggleButton.
+
 ## 1.0.14 - 2023.07.09
 
 **Fixed**
