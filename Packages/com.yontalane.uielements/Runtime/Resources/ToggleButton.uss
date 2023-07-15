@@ -46,10 +46,12 @@
 
 .icon {
     height: 16px;
-    width: auto;
+    width: 0;
+    display: none;
 }
 
 .icon.with-image {
     width: 16px;
     margin-right: 8px;
+    display: flex;
 }

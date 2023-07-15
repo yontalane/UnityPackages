@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.18 - 2023.07.14
+
+**Fixed**
+
+- If a ToggleButton's icon is empty, its display is now none.
+
 ## 1.0.17 - 2023.07.14
 
 **Fixed**
