@@ -39,9 +39,14 @@
     -unity-text-align: middle-center;
 }
 
-.unity-toggle__input,
 #unity-checkmark {
     display: none;
+}
+
+.unity-toggle__input {
+    width: 0;
+    height: 0;
+    flex-grow: 0;
 }
 
 .icon {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.19 - 2023.07.14
+
+**Fixed**
+
+- ToggleButton could not gain focus.
+
 ## 1.0.18 - 2023.07.14
 
 **Fixed**

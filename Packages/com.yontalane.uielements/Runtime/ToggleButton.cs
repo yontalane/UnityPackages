@@ -67,7 +67,6 @@ namespace Yontalane.UIElements
         #region Private Variables
         private string m_iconResource;
         private readonly VisualElement m_icon;
-        private readonly VisualElement m_box;
         private readonly VisualElement m_checkmark;
         #endregion
 
@@ -76,7 +75,6 @@ namespace Yontalane.UIElements
         {
             AddToClassList("yontalane-toggle-button");
 
-            m_box = this.Query<VisualElement>(className: "unity-toggle__input").First();
             m_checkmark = this.Q<VisualElement>("unity-checkmark");
 
             m_icon = new();
@@ -91,11 +89,11 @@ namespace Yontalane.UIElements
 
         private void RemoveFocusable()
         {
-            m_box.pickingMode = pickingMode;
-            m_box.focusable = focusable;
-
             m_checkmark.pickingMode = PickingMode.Ignore;
             m_checkmark.focusable = false;
+
+            m_icon.pickingMode = PickingMode.Ignore;
+            m_icon.focusable = false;
 
             if (m_Label != null)
             {
