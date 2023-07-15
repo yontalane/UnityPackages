@@ -17,6 +17,7 @@ namespace Yontalane.UIElements
             private readonly UxmlStringAttributeDescription m_bindingPath = new() { name = "binding-path", defaultValue = string.Empty };
             private readonly UxmlBoolAttributeDescription m_value = new() { name = "value", defaultValue = false };
             private readonly UxmlStringAttributeDescription m_label = new() { name = "label", defaultValue = "Label" };
+            private readonly UxmlStringAttributeDescription m_icon = new() { name = "icon", defaultValue = string.Empty };
 
             public override void Init(VisualElement visualElement, IUxmlAttributes attributes, CreationContext context)
             {
@@ -25,30 +26,49 @@ namespace Yontalane.UIElements
                 element.bindingPath = m_bindingPath.GetValueFromBag(attributes, context);
                 element.value = m_value.GetValueFromBag(attributes, context);
                 element.label = m_label.GetValueFromBag(attributes, context);
+                element.Icon = m_icon.GetValueFromBag(attributes, context);
             }
         }
-        #endregion
-
-        #region Private Variables
-        private readonly Label m_stubLabel;
-        private readonly VisualElement m_box;
         #endregion
 
         #region Accessors
         public new string label
         {
-            get
-            {
-                return base.label;
-            }
+            get => base.label;
+
             set
             {
-                m_stubLabel.style.display = string.IsNullOrEmpty(value) ? DisplayStyle.Flex : DisplayStyle.Flex;
                 base.label = value;
-                m_stubLabel.text = value;
                 RemoveFocusable();
             }
         }
+
+        public string Icon
+        {
+            get => m_iconResource;
+
+            set
+            {
+                m_iconResource = value;
+                Sprite sprite = Resources.Load<Sprite>(m_iconResource);
+                m_icon.style.backgroundImage = new StyleBackground(sprite);
+                if (sprite != null)
+                {
+                    m_icon.AddToClassList("with-image");
+                }
+                else
+                {
+                    m_icon.RemoveFromClassList("with-image");
+                }
+            }
+        }
+        #endregion
+
+        #region Private Variables
+        private string m_iconResource;
+        private readonly VisualElement m_icon;
+        private readonly VisualElement m_box;
+        private readonly VisualElement m_checkmark;
         #endregion
 
         #region Constructors
@@ -57,12 +77,11 @@ namespace Yontalane.UIElements
             AddToClassList("yontalane-toggle-button");
 
             m_box = this.Query<VisualElement>(className: "unity-toggle__input").First();
-            m_box.name = "Frame";
-            m_box.AddToClassList("yontalane-frame");
+            m_checkmark = this.Q<VisualElement>("unity-checkmark");
 
-            m_stubLabel = new() { name = "Label" };
-            m_stubLabel.AddToClassList(textUssClassName);
-            m_box.Add(m_stubLabel);
+            m_icon = new();
+            m_icon.AddToClassList("icon");
+            Add(m_icon);
 
             RemoveFocusable();
 
@@ -72,15 +91,11 @@ namespace Yontalane.UIElements
 
         private void RemoveFocusable()
         {
-            m_stubLabel.pickingMode = PickingMode.Ignore;
-            m_stubLabel.focusable = false;
-
             m_box.pickingMode = pickingMode;
             m_box.focusable = focusable;
 
-            VisualElement checkmark = this.Q<VisualElement>("unity-checkmark");
-            checkmark.pickingMode = PickingMode.Ignore;
-            checkmark.focusable = false;
+            m_checkmark.pickingMode = PickingMode.Ignore;
+            m_checkmark.focusable = false;
 
             if (m_Label != null)
             {

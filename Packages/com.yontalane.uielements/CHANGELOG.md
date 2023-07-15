@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.16 - 2023.07.14
+
+**Added**
+
+- Icon on ToggleButton.
+
+**Changed**
+
+- Simplified ToggleButton layout and style.
+
 ## 1.0.15 - 2023.07.11
 
 **Fixed**

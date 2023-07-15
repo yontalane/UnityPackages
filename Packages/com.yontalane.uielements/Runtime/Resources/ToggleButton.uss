@@ -1,16 +1,8 @@
-:root {
-    background-color: transparent;
-    padding: 0;
-    border-width: 0;
-    width: auto;
-    height: auto;
-}
-
-#Frame {
+.yontalane-toggle-button {
     background-color: #444;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row-reverse;
     padding: 5px 6px 5px 6px;
     border-width: 0;
     border-radius: 6px;
@@ -19,28 +11,27 @@
     margin: 0;
 }
 
-.yontalane-toggle-button:hover #Frame {
+.yontalane-toggle-button:hover {
     background-color: #222;
 }
 
-.yontalane-toggle-button:active #Frame {
+.yontalane-toggle-button:active {
     background-color: #111;
 }
 
-.yontalane-toggle-button:focus #Frame {
+.yontalane-toggle-button:focus {
     background-color: #0AA;
 }
 
-.yontalane-toggle-button:disabled #Label {
+.yontalane-toggle-button:disabled {
     color: #666;
 }
 
-.yontalane-toggle-button:checked #Frame {
+.yontalane-toggle-button:checked {
     background-color: rgb(222, 64, 12);
 }
 
-Label,
-Label.unity-base-field__label {
+.unity-label {
     color: white;
     min-width: auto;
     margin: 0;
@@ -48,7 +39,17 @@ Label.unity-base-field__label {
     -unity-text-align: middle-center;
 }
 
-.unity-label,
+.unity-toggle__input,
 #unity-checkmark {
     display: none;
+}
+
+.icon {
+    height: 16px;
+    width: auto;
+}
+
+.icon.with-image {
+    width: 16px;
+    margin-right: 8px;
 }
