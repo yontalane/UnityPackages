@@ -740,6 +740,10 @@ namespace Yontalane.UIElements
                 {
                     elementAsTextElement.text = data.text;
                 }
+                else if (element is Toggle elementAsToggle)
+                {
+                    elementAsToggle.label = data.text;
+                }
 
                 if (element is Button elementAsButton)
                 {

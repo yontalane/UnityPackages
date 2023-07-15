@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.17 - 2023.07.14
+
+**Fixed**
+
+- When a menu's AddableItem is a Toggle, set its label value with text data rather than its text value.
+
 ## 1.0.16 - 2023.07.14
 
 **Added**
