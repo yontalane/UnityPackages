@@ -40,7 +40,7 @@ namespace Yontalane.UIElements
         }
 
         public delegate void ToggleButtonChangeEventHandler(ToggleButtonChangeEvent e);
-        public static ToggleButtonChangeEventHandler OnChange = null;
+        public ToggleButtonChangeEventHandler OnChange = null;
 
         #region Private Variables
         private bool m_value;

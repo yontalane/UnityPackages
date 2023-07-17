@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.22 - 2023.07.16
+
+**Changed**
+
+- ToggleButton OnChanged delegate is no longer static.
+
 ## 1.0.21 - 2023.07.16
 
 **Changed**
