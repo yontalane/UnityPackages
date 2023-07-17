@@ -7,21 +7,26 @@ namespace Yontalane.UIElements
     {
         #region Constants
         private const string STYLESHEET_RESOURCE = "ToggleButton";
+        public const string CHECKED_STYLE_CLASS = "checked";
         #endregion
 
         #region UXML Methods
         public new class UxmlFactory : UxmlFactory<ToggleButton, UxmlTraits> { }
 
-        public new class UxmlTraits : Button.UxmlTraits
+        public new class UxmlTraits : VisualElement.UxmlTraits
         {
+            private readonly UxmlStringAttributeDescription m_bindingPath = new() { name = "binding-path", defaultValue = string.Empty };
             private readonly UxmlBoolAttributeDescription m_value = new() { name = "value", defaultValue = false };
+            private readonly UxmlStringAttributeDescription m_text = new() { name = "text", defaultValue = string.Empty };
             private readonly UxmlStringAttributeDescription m_icon = new() { name = "icon", defaultValue = string.Empty };
 
             public override void Init(VisualElement visualElement, IUxmlAttributes attributes, CreationContext context)
             {
                 base.Init(visualElement, attributes, context);
                 ToggleButton element = visualElement as ToggleButton;
-                element.Value = m_value.GetValueFromBag(attributes, context);
+                element.bindingPath = m_bindingPath.GetValueFromBag(attributes, context);
+                element.value = m_value.GetValueFromBag(attributes, context);
+                element.text = m_text.GetValueFromBag(attributes, context);
                 element.Icon = m_icon.GetValueFromBag(attributes, context);
             }
         }
@@ -41,10 +46,12 @@ namespace Yontalane.UIElements
         private bool m_value;
         private string m_iconResource;
         private readonly VisualElement m_icon;
+        private Label m_label;
+        private string m_labelValue;
         #endregion
 
         #region Accessors
-        public bool Value
+        public bool value
         {
             get => m_value;
 
@@ -80,11 +87,33 @@ namespace Yontalane.UIElements
                 }
             }
         }
+
+        public new string text
+        {
+            get => m_labelValue;
+
+            set
+            {
+                base.text = string.Empty;
+                m_labelValue = value;
+                m_label.text = value;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    AddToClassList("with-text");
+                }
+                else
+                {
+                    RemoveFromClassList("with-text");
+                }
+            }
+        }
         #endregion
 
         #region Constructors
         public ToggleButton() : base()
         {
+            base.text = string.Empty;
+
             m_icon = new()
             {
                 name = "icon",
@@ -93,9 +122,17 @@ namespace Yontalane.UIElements
             };
             Add(m_icon);
 
+            m_label = new()
+            {
+                name = "label",
+                focusable = false,
+                pickingMode = PickingMode.Ignore
+            };
+            Add(m_label);
+            
             clicked += () =>
             {
-                Value = !Value;
+                value = !value;
             };
             
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
@@ -107,11 +144,11 @@ namespace Yontalane.UIElements
             m_value = value;
             if (m_value)
             {
-                AddToClassList("checked");
+                AddToClassList(CHECKED_STYLE_CLASS);
             }
             else
             {
-                RemoveFromClassList("checked");
+                RemoveFromClassList(CHECKED_STYLE_CLASS);
             }
         }
     }

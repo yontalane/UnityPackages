@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,17 +42,67 @@ namespace Yontalane.UIElements
         }
         #endregion
 
-        private void FocusListener(FocusEvent e)
+        private void NavigationMoveListener(NavigationMoveEvent e)
         {
-            if (e.target is VisualElement targetAsVisualElement)
+            if (e.target is not VisualElement element)
+            {
+                return;
+            }
+
+            IEnumerable<VisualElement> children = m_container.Children();
+            int index = m_container.IndexOf(element);
+            int count = ChildCount;
+            VisualElement target = null;
+
+            if (e.direction == NavigationMoveEvent.Direction.Up)
+            {
+                if (index == 0)
+                {
+                    target = children.Last();
+                }
+                else
+                {
+                    target = children.ElementAt(index - 1);
+                }
+            }
+            else if (e.direction == NavigationMoveEvent.Direction.Down)
+            {
+                if (index == count - 1)
+                {
+                    target = children.First();
+                }
+                else
+                {
+                    target = children.ElementAt(index + 1);
+                }
+            }
+
+            if (target == null)
+            {
+                return;
+            }
+
+            target.Focus();
+            ScrollToChild(target);
+        }
+
+        private void ScrollToChild(VisualElement child)
+        {
+            if (m_container.worldBound.height <= worldBound.height)
             {
                 scrollOffset = new()
                 {
                     x = scrollOffset.x,
-                    y = targetAsVisualElement.layout.center.y - contentViewport.layout.size.y * 0.5f
+                    y = 0f
                 };
-
-                //ScrollTo(targetAsVisualElement);
+            }
+            else if (child != null)
+            {
+                scrollOffset = new()
+                {
+                    x = scrollOffset.x,
+                    y = child.layout.center.y - contentViewport.layout.size.y * 0.5f
+                };
             }
         }
 
@@ -69,7 +120,7 @@ namespace Yontalane.UIElements
                 return;
             }
             m_registeredChildren.Add(element);
-            element.RegisterCallback<FocusEvent>(FocusListener);
+            element.RegisterCallback<NavigationMoveEvent>(NavigationMoveListener);
         }
 
         private void UnregisterElement(VisualElement element)
@@ -79,7 +130,7 @@ namespace Yontalane.UIElements
                 return;
             }
             m_registeredChildren.Remove(element);
-            element.UnregisterCallback<FocusEvent>(FocusListener);
+            element.UnregisterCallback<NavigationMoveEvent>(NavigationMoveListener);
         }
 
         #region Add & Remove

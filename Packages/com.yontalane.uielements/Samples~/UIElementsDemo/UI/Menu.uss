@@ -24,10 +24,6 @@
     width: auto;
 }
 
-#SettingsGlobals ToggleButton > Label {
-    min-width: auto;
-}
-
 .menu Button {
     color: rgb(255, 255, 255);
     padding: 4px 12px 4px 12px;
@@ -251,7 +247,7 @@
     border-radius: 0;
 }
 
-#SettingsGlobals ToggleButton:checked,
+#SettingsGlobals ToggleButton.checked,
 #SettingsGlobals Button.highlight {
     background-color: rgb(222, 64, 12);
 }

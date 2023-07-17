@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
@@ -395,11 +394,11 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            Toggle toggle;
+            ToggleButton toggle;
 
             for (int i = 0; i < m_globalMenu.menu.items.Length; i++)
             {
-                toggle = globalMenu.Q<Toggle>(m_globalMenu.menu.items[i].name);
+                toggle = globalMenu.Q<ToggleButton>(m_globalMenu.menu.items[i].name);
                 if (toggle == null)
                 {
                     continue;

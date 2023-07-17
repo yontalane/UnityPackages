@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.21 - 2023.07.16
+
+**Changed**
+
+- Cleaned up new version of ToggleButton.
+
+**Fixed**
+
+- ScrollViewAuto wraps properly.
+
 ## 1.0.20 - 2023.07.16
 
 **Changed**
