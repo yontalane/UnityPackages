@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.23 - 2023.07.17
+
+**Changed**
+
+- ToggleButton style uses class name.
+
 ## 1.0.22 - 2023.07.16
 
 **Changed**

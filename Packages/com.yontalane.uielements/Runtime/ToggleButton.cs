@@ -112,6 +112,8 @@ namespace Yontalane.UIElements
         #region Constructors
         public ToggleButton() : base()
         {
+            AddToClassList("yontalane-toggle-button");
+
             base.text = string.Empty;
 
             m_icon = new()
