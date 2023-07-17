@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.20 - 2023.07.16
+
+**Changed**
+
+- ToggleButton inherits from Button instead of Toggle.
+
 ## 1.0.19 - 2023.07.14
 
 **Fixed**

@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
 {
-    public class ToggleButton : Toggle
+    public class ToggleButton : Button
     {
         #region Constants
         private const string STYLESHEET_RESOURCE = "ToggleButton";
@@ -12,34 +12,52 @@ namespace Yontalane.UIElements
         #region UXML Methods
         public new class UxmlFactory : UxmlFactory<ToggleButton, UxmlTraits> { }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits
+        public new class UxmlTraits : Button.UxmlTraits
         {
-            private readonly UxmlStringAttributeDescription m_bindingPath = new() { name = "binding-path", defaultValue = string.Empty };
             private readonly UxmlBoolAttributeDescription m_value = new() { name = "value", defaultValue = false };
-            private readonly UxmlStringAttributeDescription m_label = new() { name = "label", defaultValue = "Label" };
             private readonly UxmlStringAttributeDescription m_icon = new() { name = "icon", defaultValue = string.Empty };
 
             public override void Init(VisualElement visualElement, IUxmlAttributes attributes, CreationContext context)
             {
                 base.Init(visualElement, attributes, context);
                 ToggleButton element = visualElement as ToggleButton;
-                element.bindingPath = m_bindingPath.GetValueFromBag(attributes, context);
-                element.value = m_value.GetValueFromBag(attributes, context);
-                element.label = m_label.GetValueFromBag(attributes, context);
+                element.Value = m_value.GetValueFromBag(attributes, context);
                 element.Icon = m_icon.GetValueFromBag(attributes, context);
             }
         }
         #endregion
 
-        #region Accessors
-        public new string label
+        public struct ToggleButtonChangeEvent
         {
-            get => base.label;
+            public bool oldValue;
+            public bool newValue;
+            public ToggleButton target;
+        }
+
+        public delegate void ToggleButtonChangeEventHandler(ToggleButtonChangeEvent e);
+        public static ToggleButtonChangeEventHandler OnChange = null;
+
+        #region Private Variables
+        private bool m_value;
+        private string m_iconResource;
+        private readonly VisualElement m_icon;
+        #endregion
+
+        #region Accessors
+        public bool Value
+        {
+            get => m_value;
 
             set
             {
-                base.label = value;
-                RemoveFocusable();
+                bool oldValue = m_value;
+                SetValueWithoutNotify(value);
+                OnChange?.Invoke(new ToggleButtonChangeEvent()
+                {
+                    oldValue = oldValue,
+                    newValue = value,
+                    target = this
+                });
             }
         }
 
@@ -54,51 +72,46 @@ namespace Yontalane.UIElements
                 m_icon.style.backgroundImage = new StyleBackground(sprite);
                 if (sprite != null)
                 {
-                    m_icon.AddToClassList("with-image");
+                    AddToClassList("with-image");
                 }
                 else
                 {
-                    m_icon.RemoveFromClassList("with-image");
+                    RemoveFromClassList("with-image");
                 }
             }
         }
         #endregion
 
-        #region Private Variables
-        private string m_iconResource;
-        private readonly VisualElement m_icon;
-        private readonly VisualElement m_checkmark;
-        #endregion
-
         #region Constructors
         public ToggleButton() : base()
         {
-            AddToClassList("yontalane-toggle-button");
-
-            m_checkmark = this.Q<VisualElement>("unity-checkmark");
-
-            m_icon = new();
-            m_icon.AddToClassList("icon");
+            m_icon = new()
+            {
+                name = "icon",
+                focusable = false,
+                pickingMode = PickingMode.Ignore
+            };
             Add(m_icon);
 
-            RemoveFocusable();
-
+            clicked += () =>
+            {
+                Value = !Value;
+            };
+            
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
         }
         #endregion
 
-        private void RemoveFocusable()
+        public void SetValueWithoutNotify(bool value)
         {
-            m_checkmark.pickingMode = PickingMode.Ignore;
-            m_checkmark.focusable = false;
-
-            m_icon.pickingMode = PickingMode.Ignore;
-            m_icon.focusable = false;
-
-            if (m_Label != null)
+            m_value = value;
+            if (m_value)
             {
-                m_Label.pickingMode = PickingMode.Ignore;
-                m_Label.focusable = false;
+                AddToClassList("checked");
+            }
+            else
+            {
+                RemoveFromClassList("checked");
             }
         }
     }

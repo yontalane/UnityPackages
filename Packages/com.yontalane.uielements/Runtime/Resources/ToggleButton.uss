@@ -1,62 +1,55 @@
-.yontalane-toggle-button {
+ToggleButton {
+    color: #FFF;
     background-color: #444;
     align-items: center;
-    justify-content: center;
-    flex-direction: row-reverse;
-    padding: 5px 6px 5px 6px;
-    border-width: 0;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 0;
+    border-color: #444;
+    border-width: 3px;
     border-radius: 6px;
+    -unity-font-style: normal;
     width: 100%;
-    height: auto;
-    margin: 0;
+    height: 32px;
 }
 
-.yontalane-toggle-button:hover {
+ToggleButton:hover {
+    border-color: #222;
     background-color: #222;
 }
 
-.yontalane-toggle-button:active {
+ToggleButton:active {
+    border-color: #111;
     background-color: #111;
 }
 
-.yontalane-toggle-button:focus {
-    background-color: #0AA;
-}
-
-.yontalane-toggle-button:disabled {
+ToggleButton:disabled {
     color: #666;
 }
 
-.yontalane-toggle-button:checked {
+ToggleButton.checked {
+    border-color: rgb(222, 64, 12);
     background-color: rgb(222, 64, 12);
 }
 
-.unity-label {
-    color: white;
-    min-width: auto;
-    margin: 0;
-    padding: 0;
-    -unity-text-align: middle-center;
+ToggleButton:focus {
+    border-color: #0AA;
+    background-color: #0AA;
 }
 
-#unity-checkmark {
-    display: none;
+ToggleButton:focus.checked {
+    background-color: rgb(222, 64, 12);
+    border-color: #0AA;
 }
 
-.unity-toggle__input {
-    width: 0;
-    height: 0;
-    flex-grow: 0;
-}
-
-.icon {
+#icon {
     height: 16px;
     width: 0;
     display: none;
 }
 
-.icon.with-image {
+.with-image #icon {
     width: 16px;
-    margin-right: 8px;
+    margin-left: 8px;
     display: flex;
 }
