@@ -191,7 +191,27 @@ namespace Yontalane.UIElements
                 {
                     continue;
                 }
-                item.RegisterCallback((NavigationCancelEvent e) => OnClickInternal(menu, CANCEL_EVENT));
+                item.RegisterCallback((NavigationCancelEvent e) =>
+                {
+                    OnCancelInternal(menu, item.name, out bool blockEvent);
+                    if (blockEvent)
+                    {
+                        e.PreventDefault();
+                        e.StopPropagation();
+                    }
+                });
+                item.RegisterCallback((NavigationMoveEvent e) =>
+                {
+                    if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
+                    {
+                        OnSideNavigationInternal(menu, item.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
+                        if (blockEvent)
+                        {
+                            e.PreventDefault();
+                            e.StopPropagation();
+                        }
+                    }
+                });
             }
         }
 
@@ -213,7 +233,24 @@ namespace Yontalane.UIElements
             }
             buttonOrToggle.RegisterCallback((NavigationCancelEvent e) =>
             {
-                OnClickInternal(menu, CANCEL_EVENT);
+                OnCancelInternal(menu, buttonOrToggle.name, out bool blockEvent);
+                if (blockEvent)
+                {
+                    e.PreventDefault();
+                    e.StopPropagation();
+                }
+            });
+            buttonOrToggle.RegisterCallback((NavigationMoveEvent e) =>
+            {
+                if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
+                {
+                    OnSideNavigationInternal(menu, buttonOrToggle.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
+                    if (blockEvent)
+                    {
+                        e.PreventDefault();
+                        e.StopPropagation();
+                    }
+                }
             });
 
             if (menu.name == m_globalMenu.menu.name)
@@ -224,26 +261,6 @@ namespace Yontalane.UIElements
 
         private void OnClickInternal(Menu menu, string item)
         {
-            if (item == CANCEL_EVENT && menu.hasCancelTarget)
-            {
-                switch (menu.cancelTarget.type)
-                {
-                    case MenuItemType.Normal:
-                        SetMenu(menu.cancelTarget.targetMenu);
-                        break;
-                    case MenuItemType.Subordinate:
-                        HideAllMenus();
-                        m_menus.subordinates[menu.cancelTarget.targetSubordinate].SetMenu(menu.cancelTarget.targetMenu);
-                        break;
-                    case MenuItemType.Dominant:
-                        HideAllMenus();
-                        m_dominant.m_sourceIsSubordinate = true;
-                        m_dominant.SetMenu(menu.cancelTarget.targetMenu);
-                        break;
-                }
-                return;
-            }
-
             foreach (MenuItem keyValue in menu.items)
             {
                 if (keyValue.name == item)
@@ -271,6 +288,49 @@ namespace Yontalane.UIElements
         }
 
         protected abstract void OnClick(string menu, string item);
+
+        protected virtual void OnCancelInternal(Menu menu, string item, out bool blockEvent)
+        {
+            if (menu.hasCancelTarget)
+            {
+                switch (menu.cancelTarget.type)
+                {
+                    case MenuItemType.Normal:
+                        SetMenu(menu.cancelTarget.targetMenu);
+                        break;
+                    case MenuItemType.Subordinate:
+                        HideAllMenus();
+                        m_menus.subordinates[menu.cancelTarget.targetSubordinate].SetMenu(menu.cancelTarget.targetMenu);
+                        break;
+                    case MenuItemType.Dominant:
+                        HideAllMenus();
+                        m_dominant.m_sourceIsSubordinate = true;
+                        m_dominant.SetMenu(menu.cancelTarget.targetMenu);
+                        break;
+                }
+                blockEvent = true;
+            }
+            else
+            {
+                OnCancel(menu.name, item, out blockEvent);
+            }
+        }
+
+        protected virtual void OnCancel(string menu, string item, out bool blockEvent)
+        {
+            blockEvent = false;
+        }
+
+        protected virtual void OnSideNavigationInternal(Menu menu, string item, bool isRight, out bool blockEvent)
+        {
+            OnSideNavigation(menu.name, item, isRight, out blockEvent);
+            blockEvent = blockEvent || menu.blockSideNavigation;
+        }
+
+        protected virtual void OnSideNavigation(string menu, string item, bool isRight, out bool blockEvent)
+        {
+            blockEvent = false;
+        }
         #endregion
 
         #region Display Menus

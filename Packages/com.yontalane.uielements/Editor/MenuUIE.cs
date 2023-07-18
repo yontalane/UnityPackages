@@ -39,6 +39,7 @@ namespace YontalaneEditor.UIElements
             SerializedProperty cancelTargetType = cancelTarget.FindPropertyRelative("type");
             SerializedProperty cancelTargetMenu = cancelTarget.FindPropertyRelative("targetMenu");
             SerializedProperty cancelTargetSubordinate = cancelTarget.FindPropertyRelative("targetSubordinate");
+            SerializedProperty blockSideNavigation = property.FindPropertyRelative("blockSideNavigation");
             SerializedProperty hasGlobalMenu = property.FindPropertyRelative("hasGlobalMenu");
 
             if (!hasGlobalMenu.boolValue)
@@ -55,6 +56,7 @@ namespace YontalaneEditor.UIElements
             PropertyField cancelTargetTypeField = new(cancelTargetType) { name = "CancelTargetType" };
             PropertyField cancelTargetMenuField = new(cancelTargetMenu) { name = "CancelTargetMenu" };
             PropertyField cancelTargetSubordinateField = new(cancelTargetSubordinate) { name = "CancelTargetSubordinate" };
+            PropertyField blockSideNavigationField = new(blockSideNavigation) { name = "BlockSideNavigation" };
 
             container.Add(nameField);
             container.Add(itemsField);
@@ -62,6 +64,7 @@ namespace YontalaneEditor.UIElements
             container.Add(cancelTargetTypeField);
             container.Add(cancelTargetSubordinateField);
             container.Add(cancelTargetMenuField);
+            container.Add(blockSideNavigationField);
             container.Add(addableContainerField);
             container.Add(defaultAddableItemTemplateField);
 

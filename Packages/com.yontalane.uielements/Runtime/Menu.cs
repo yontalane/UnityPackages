@@ -68,6 +68,7 @@ namespace Yontalane.UIElements
         public MenuItem[] items; // button id, target menu id
         public bool hasCancelTarget;
         public MenuItem cancelTarget;
+        public bool blockSideNavigation;
         public bool hasGlobalMenu;
 
         public string addableContainer; // uxml id

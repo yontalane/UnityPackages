@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.24 - 2023.07.18
+
+**Added**
+
+- Menus can override left & right navigation.
+- Separate menu method for overriding cancel.
+
 ## 1.0.23 - 2023.07.17
 
 **Changed**
