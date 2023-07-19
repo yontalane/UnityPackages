@@ -289,7 +289,7 @@ namespace Yontalane.UIElements
 
         protected abstract void OnClick(string menu, string item);
 
-        protected virtual void OnCancelInternal(Menu menu, string item, out bool blockEvent)
+        private void OnCancelInternal(Menu menu, string item, out bool blockEvent)
         {
             if (menu.hasCancelTarget)
             {
@@ -321,7 +321,7 @@ namespace Yontalane.UIElements
             blockEvent = false;
         }
 
-        protected virtual void OnSideNavigationInternal(Menu menu, string item, bool isRight, out bool blockEvent)
+        private void OnSideNavigationInternal(Menu menu, string item, bool isRight, out bool blockEvent)
         {
             OnSideNavigation(menu.name, item, isRight, out blockEvent);
             blockEvent = blockEvent || menu.blockSideNavigation;

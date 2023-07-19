@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.25] - 2023.07.19
+
+### Fixed
+
+- MenuManager private methods are private.
+
 ## [1.0.24] - 2023.07.18
 
 ### Added
