@@ -1,161 +1,161 @@
 # Changelog
 
-## 1.0.24 - 2023.07.18
+## [1.0.24] - 2023.07.18
 
-**Added**
+### Added
 
 - Menus can override left & right navigation.
 - Separate menu method for overriding cancel.
 
-## 1.0.23 - 2023.07.17
+## [1.0.23] - 2023.07.17
 
-**Changed**
+### Changed
 
 - ToggleButton style uses class name.
 
-## 1.0.22 - 2023.07.16
+## [1.0.22] - 2023.07.16
 
-**Changed**
+### Changed
 
 - ToggleButton OnChanged delegate is no longer static.
 
-## 1.0.21 - 2023.07.16
+## [1.0.21] - 2023.07.16
 
-**Changed**
+### Changed
 
 - Cleaned up new version of ToggleButton.
 
-**Fixed**
+### Fixed
 
 - ScrollViewAuto wraps properly.
 
-## 1.0.20 - 2023.07.16
+## [1.0.20] - 2023.07.16
 
-**Changed**
+### Changed
 
 - ToggleButton inherits from Button instead of Toggle.
 
-## 1.0.19 - 2023.07.14
+## [1.0.19] - 2023.07.14
 
-**Fixed**
+### Fixed
 
 - ToggleButton could not gain focus.
 
-## 1.0.18 - 2023.07.14
+## [1.0.18] - 2023.07.14
 
-**Fixed**
+### Fixed
 
 - If a ToggleButton's icon is empty, its display is now none.
 
-## 1.0.17 - 2023.07.14
+## [1.0.17] - 2023.07.14
 
-**Fixed**
+### Fixed
 
 - When a menu's AddableItem is a Toggle, set its label value with text data rather than its text value.
 
-## 1.0.16 - 2023.07.14
+## [1.0.16] - 2023.07.14
 
-**Added**
+### Added
 
 - Icon on ToggleButton.
 
-**Changed**
+### Changed
 
 - Simplified ToggleButton layout and style.
 
-## 1.0.15 - 2023.07.11
+## [1.0.15] - 2023.07.11
 
-**Fixed**
+### Fixed
 
 - ToggleButton USS no longer directly references ToggleButton.
 
-## 1.0.14 - 2023.07.09
+## [1.0.14] - 2023.07.09
 
-**Fixed**
+### Fixed
 
 - Leave ToggleButton height auto.
 
-## 1.0.13 - 2023.07.09
+## [1.0.13] - 2023.07.09
 
-**Fixed**
+### Fixed
 
 - ToggleButton is navigable.
 
-## 1.0.12 - 2023.07.09
+## [1.0.12] - 2023.07.09
 
-**Fixed**
+### Fixed
 
 - Removed minimum width from ToggleButton label.
 
-## 1.0.11 - 2023.07.09
+## [1.0.11] - 2023.07.09
 
-**Added**
+### Added
 
 - Using ToggleButton in menu.
 
-## 1.0.10 - 2023.07.09
+## [1.0.10] - 2023.07.09
 
-**Added**
+### Added
 
 - ToggleButton is a button that has a toggle state.
 
-## 1.0.9 - 2023.07.07
+## [1.0.9] - 2023.07.07
 
-**Changed**
+### Changed
 
 - ScrollViewAuto keeps elements in the middle.
 
-## 1.0.8 - 2023.07.06
+## [1.0.8] - 2023.07.06
 
-**Added**
+### Added
 
 - Callback when addin element.
 
-## 1.0.7 - 2023.07.06
+## [1.0.7] - 2023.07.06
 
-**Added**
+### Added
 
 - Exposed MenuManager.InputAsset and OnDisplayMenu().
 
-## 1.0.6 - 2023.07.05
+## [1.0.6] - 2023.07.05
 
-**Fixed**
+### Fixed
 
 - Tabs can select subordinate Menu Manager.
 
-## 1.0.5 - 2023.07.05
+## [1.0.5] - 2023.07.05
 
-**Fixed**
+### Fixed
 
 - ScrollViewAuto now works with children that were added prior to runtime.
 
-## 1.0.4 - 2023.07.05
+## [1.0.4] - 2023.07.05
 
-**Added**
+### Added
 
 - ScrollViewAuto is a ScrollView that automatically scrolls to the focused element.
 
-## 1.0.3 - 2023.07.05
+## [1.0.3] - 2023.07.05
 
-**Added**
+### Added
 
 - When you return to a menu, the focused element is still what it was when you left.
 
-## 1.0.2 - 2023.07.03
+## [1.0.2] - 2023.07.03
 
-**Fixed**
+### Fixed
 
 - Null check on control inputs
 
-## 1.0.1 - 2023.07.02
+## [1.0.1] - 2023.07.02
 
-**Changed**
+### Changed
 
 - Changed required Unity version
 
-## 1.0.0 - 2023.06.30
+## [1.0.0] - 2023.06.30
 
-**Added**
+### Added
 
 - Menu Manager
 - Notification
