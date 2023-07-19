@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.26] - 2023.07.19
+
+### Added
+
+- MenuManager can accept arbitrary button input.
+
 ## [1.0.25] - 2023.07.19
 
 ### Fixed

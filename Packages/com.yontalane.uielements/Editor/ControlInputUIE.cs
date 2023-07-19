@@ -15,6 +15,7 @@ namespace YontalaneEditor.UIElements
         private SerializedProperty m_actions;
         private SerializedProperty m_tabLeft;
         private SerializedProperty m_tabRight;
+        private SerializedProperty m_buttons;
         private DropdownField m_tabLeftDropdown;
         private DropdownField m_tabRightDropdown;
         private readonly List<string> m_choices = new();
@@ -26,6 +27,7 @@ namespace YontalaneEditor.UIElements
             m_actions = property.FindPropertyRelative("actions");
             m_tabLeft = property.FindPropertyRelative("tabLeft");
             m_tabRight = property.FindPropertyRelative("tabRight");
+            m_buttons = property.FindPropertyRelative("buttons");
 
             PropertyField actionsField = new(m_actions) { name = "Actions" };
             actionsField.RegisterValueChangeCallback((_) => BuildDropdowns());
@@ -59,6 +61,9 @@ namespace YontalaneEditor.UIElements
 
             container.Add(m_tabLeftDropdown);
             container.Add(m_tabRightDropdown);
+
+            PropertyField buttonsField = new(m_buttons) { name = "Buttons" };
+            container.Add(buttonsField);
         }
 
         private void BuildDropdowns()

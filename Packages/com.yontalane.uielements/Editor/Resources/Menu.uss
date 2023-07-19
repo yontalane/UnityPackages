@@ -71,3 +71,7 @@
 #MenuItem.subordinateMenuItem #TargetSubordinate {
     display: flex;
 }
+
+#Buttons {
+    margin-top: 12px;
+}

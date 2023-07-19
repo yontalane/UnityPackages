@@ -23,6 +23,7 @@ namespace Yontalane.UIElements
             public InputActionAsset actions;
             public string tabLeft;
             public string tabRight;
+            public string[] buttons;
         }
         #endregion
 
@@ -62,8 +63,9 @@ namespace Yontalane.UIElements
             m_input = new()
             {
                 actions = null,
-                tabLeft = "TabLeft",
-                tabRight = "TabRight"
+                tabLeft = "UI/TabLeft",
+                tabRight = "UI/TabRight",
+                buttons = new string[0]
             };
         }
 
@@ -140,6 +142,15 @@ namespace Yontalane.UIElements
                 m_input.actions[m_input.tabRight].Enable();
                 m_input.actions[m_input.tabRight].performed += OnTabRight;
             }
+
+            foreach (string button in m_input.buttons)
+            {
+                if (!string.IsNullOrEmpty(button))
+                {
+                    m_input.actions[button].Enable();
+                    m_input.actions[button].performed += OnButton;
+                }
+            }
         }
 
         private void OnDisable()
@@ -157,6 +168,14 @@ namespace Yontalane.UIElements
             if (!string.IsNullOrEmpty(m_input.tabRight))
             {
                 m_input.actions[m_input.tabRight].performed -= OnTabRight;
+            }
+
+            foreach (string button in m_input.buttons)
+            {
+                if (!string.IsNullOrEmpty(button))
+                {
+                    m_input.actions[button].performed -= OnButton;
+                }
             }
         }
 
@@ -1015,6 +1034,19 @@ namespace Yontalane.UIElements
                 m_menus.subordinates[m_globalMenu.menu.items[index].targetSubordinate].SetMenu(m_globalMenu.menu.items[index].targetMenu);
                 UpdateGlobalMenuHighlight(m_globalMenu.menu.items[index].targetMenu, m_globalMenu.menu.items[index].type, m_globalMenu.menu.items[index].targetSubordinate);
             }
+        }
+
+        private void OnButton(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnButtonInput(context.action);
+            }
+        }
+
+        protected virtual void OnButtonInput(InputAction action)
+        {
+            
         }
         #endregion
     }
