@@ -1,14 +1,16 @@
 # Changelog
 
+## 1.0.8 - 2023.07.28
+
+**Fixed**
+
+* Removed broken using statement on script.
+
 ## 1.0.7 - 2023.03.04
 
 **Added**
 
 * Can set initially selected response.
-
-**Changed**
-
-**Fixed**
 
 ## 1.0.6 - 2023.02.24
 
@@ -16,35 +18,19 @@
 
 * Optional callback on select response.
 
-**Changed**
-
-**Fixed**
-
 ## 1.0.5 - 2023.02.07
 
 **Added**
 
 * Returning more data on callback.
 
-**Changed**
-
-**Fixed**
-
 ## 1.0.4 - 2023.01.28
-
-**Added**
 
 **Changed**
 
 * Made OnClickResponse public.
 
-**Fixed**
-
 ## 1.0.3 - 2023.01.21
-
-**Added**
-
-**Changed**
 
 **Fixed**
 
@@ -56,26 +42,14 @@
 
 * Added option to show/hide window using GameObject.SetActive(), Animator, or do nothing.
 
-**Changed**
-
-**Fixed**
-
 ## 1.0.1 - 2022.12.30
-
-**Added**
 
 **Changed**
 
 * Switched to Text Mesh Pro.
-
-**Fixed**
 
 ## 1.0.0 - 2021.12.28
 
 **Added**
 
 * Query
-
-**Changed**
-
-**Fixed**

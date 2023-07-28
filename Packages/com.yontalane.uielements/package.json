@@ -1,41 +1,43 @@
 {
-    "name": "com.yontalane.uielements",
-    "version": "1.0.26",
-    "displayName": "UI Elements",
-    "description": "A small library for Unity projects.",
-    "unity": "2021.3",
-    "unityRelease": "26f1",
-    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.uielements/Documentation~/index.md",
-    "dependencies": {
-        "com.yontalane.core": "1.0.29",
-        "com.unity.modules.uielements": "1.0.0",
-        "com.unity.inputsystem": "1.6.1"
-    },
-    "keywords": [
-        "core",
-        "menu",
-        "framework",
-        "utils",
-        "util",
-        "utility",
-        "utilities",
-        "navigation",
-        "ui",
-        "controller",
-        "gamepad",
-        "input"
-    ],
-    "author": {
-        "name": "Yontalane",
-        "email": "unitypackages@yontalane.com",
-        "url": "https://yontalane.com/"
-    },
-    "samples": [
-        {
-            "displayName": "UI Elements Demo",
-            "description": "Shows examples of the package's various functionality.",
-            "path": "Samples~/UIElementsDemo"
-        }
-    ],
-    "type": "library"
+  "name": "com.yontalane.uielements",
+  "version": "1.0.27",
+  "displayName": "UI Elements",
+  "description": "A small library for Unity projects.",
+  "unity": "2022.3",
+  "unityRelease": "5f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.uielements/Documentation~/index.md",
+  "dependencies": {
+    "com.yontalane.core": "1.0.29",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.inputsystem": "1.6.1",
+    "com.unity.modules.ui": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0"
+  },
+  "keywords": [
+    "core",
+    "menu",
+    "framework",
+    "utils",
+    "util",
+    "utility",
+    "utilities",
+    "navigation",
+    "ui",
+    "controller",
+    "gamepad",
+    "input"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "samples": [
+    {
+      "displayName": "UI Elements Demo",
+      "description": "Shows examples of the package's various functionality.",
+      "path": "Samples~/UIElementsDemo"
+    }
+  ],
+  "type": "library"
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.27] - 2023.07.28
+
+### Fixed
+
+- Package was missing required dependencies.
+
 ## [1.0.26] - 2023.07.19
 
 ### Added
