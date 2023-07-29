@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.28] - 2023.07.28
+
+### Fixed
+
+- Set the Editor AssemblyDef to target the editor only.
+
 ## [1.0.27] - 2023.07.28
 
 ### Fixed
