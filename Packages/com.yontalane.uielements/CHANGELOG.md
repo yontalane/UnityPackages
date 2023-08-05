@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.29] - 2023.08.04
+
+### Changed
+
+- MenuManager OnEnabled and OnDisabled are now protected virtual.
+
 ## [1.0.28] - 2023.07.28
 
 ### Fixed

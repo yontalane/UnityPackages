@@ -122,7 +122,7 @@ namespace Yontalane.UIElements
             SetMenu(m_menus.firstMenu);
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (m_input.actions == null)
             {
@@ -153,7 +153,7 @@ namespace Yontalane.UIElements
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (m_input.actions == null)
             {
