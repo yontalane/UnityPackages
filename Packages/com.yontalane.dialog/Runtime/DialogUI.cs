@@ -44,11 +44,18 @@ namespace Yontalane.Dialog
         [Tooltip("Color of fallback speaker name in dialog header text.")]
         private Color m_fallbackSpeakerColor = Color.white;
         [SerializeField]
+        [Tooltip("Whether or not the speaker name is bold.")]
+        private bool m_speakerBold = false;
+        [SerializeField]
+        [Tooltip("Whether or not the speaker name is in caps.")]
+        private bool m_speakerCaps = false;
+        [SerializeField]
         [Tooltip("The string to appear between the speaker name and dialog text.")]
         private string m_speakerSeparator = ": ";
         [SerializeField]
-        [Tooltip("Whether or not there is a line break between the speaker name and the dialog text.")]
-        private bool m_speakerLineBreak = false;
+        [Tooltip("Line breaks between the speaker name and the dialog text.")]
+        [Range(0, 2)]
+        private int m_speakerLineBreaks = 0;
         [SerializeField]
         [Tooltip("Whether to write out text character by character.")]
         private bool m_useTypeCharacterInterval = true;
@@ -161,7 +168,32 @@ namespace Yontalane.Dialog
             m_continueButton.gameObject.SetActive(false);
             m_canUseContinueHandler = true;
 
-            m_speaker = string.IsNullOrEmpty(line.speaker) ? "" : "<color=#" + ColorUtility.ToHtmlStringRGBA(GetSpeakerColor(line.speaker)) + ">" + replaceInlineText(line.speaker) + m_speakerSeparator + "</color>" + (m_speakerLineBreak ? "\n" : string.Empty);
+            string lineBreak = string.Empty;
+            for (int i = 0; i < m_speakerLineBreaks; i++)
+            {
+                lineBreak += "\n";
+            }
+            if (string.IsNullOrEmpty(line.speaker))
+            {
+                m_speaker = string.Empty;
+            }
+            else
+            {
+                string speakerColor = ColorUtility.ToHtmlStringRGBA(GetSpeakerColor(line.speaker));
+                string speaker = replaceInlineText(line.speaker);
+                if (m_speakerCaps)
+                {
+                    speaker = speaker.ToUpper();
+                }
+                if (m_speakerBold)
+                {
+                    m_speaker = "<color=#" + speakerColor + "><b>" + speaker + m_speakerSeparator + "</b></color>" + lineBreak;
+                }
+                else
+                {
+                    m_speaker = "<color=#" + speakerColor + ">" + speaker + m_speakerSeparator + "</color>" + lineBreak;
+                }
+            }
             m_text = replaceInlineText(line.text);
 
             m_line = line;

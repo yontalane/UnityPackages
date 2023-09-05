@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.17 - 2023.09.05
+
+**Added**
+
+* More styling options for the dialog speaker.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.16 - 2023.07.28
 
 **Added**
