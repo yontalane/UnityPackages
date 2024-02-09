@@ -33,17 +33,19 @@ namespace Yontalane.GridNav
         private Vector2Int m_endCoord;
         private readonly List<VisitedNode> m_path;
         private Vector2Int m_gridSize;
-        private Func<int, int, bool> m_nodeIsValid;
+        private readonly Func<int, int, bool> m_nodeIsValid;
+        private readonly Func<int, int, int, int, bool> m_stepIsValid;
         #endregion
 
-        public GridNavigator(Vector2Int gridSize, Func<int, int, bool> nodeIsValid)
+        public GridNavigator(Vector2Int gridSize, Func<int, int, bool> nodeIsValid, Func<int, int, int, int, bool> stepIsValid = null)
         {
             m_gridSize = gridSize;
             m_nodeIsValid = nodeIsValid;
+            m_stepIsValid = stepIsValid;
             m_path = new List<VisitedNode>();
         }
 
-        public GridNavigator(int gridWidth, int gridHeight, Func<int, int, bool> nodeIsValid) : this(new Vector2Int(gridWidth, gridHeight), nodeIsValid)
+        public GridNavigator(int gridWidth, int gridHeight, Func<int, int, bool> nodeIsValid, Func<int, int, int, int, bool> stepIsValid = null) : this(new Vector2Int(gridWidth, gridHeight), nodeIsValid, stepIsValid)
         {
 
         }
@@ -128,9 +130,9 @@ namespace Yontalane.GridNav
 
         private bool SetPath(bool invokeCallback)
         {
-            int step;
+            int step = 0;
             Vector2Int coord = m_endCoord;
-            List<VisitedNode> tempList = new List<VisitedNode>();
+            List<VisitedNode> tempList = new();
             m_path.Clear();
             Vector2Int test = m_visitedNodes[m_endCoord.x, m_endCoord.y].coordinate;
             if (coord.x >= 0 && coord.x < m_visitedNodes.GetLength(0) && coord.y >= 0 && coord.y < m_visitedNodes.GetLength(1) && m_nodeIsValid(test.x, test.y) && m_visitedNodes[m_endCoord.x, m_endCoord.y].visited > 0)
@@ -146,7 +148,8 @@ namespace Yontalane.GridNav
                 }
                 return false;
             }
-            for (int i = step; step > -1; step--)
+
+            for (; step > -1; step--)
             {
                 if (TestDirection(coord, step, Direction.Up))
                 {
@@ -201,6 +204,10 @@ namespace Yontalane.GridNav
                 case Direction.Up:
                     if (coord.y + 1 < m_visitedNodes.GetLength(1) && m_nodeIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y) && m_visitedNodes[coord.x, coord.y + 1].visited == step)
                     {
+                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        {
+                            return false;
+                        }
                         return true;
                     }
                     else
@@ -210,6 +217,10 @@ namespace Yontalane.GridNav
                 case Direction.Right:
                     if (coord.x + 1 < m_visitedNodes.GetLength(0) && m_nodeIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y) && m_visitedNodes[coord.x + 1, coord.y].visited == step)
                     {
+                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        {
+                            return false;
+                        }
                         return true;
                     }
                     else
@@ -219,6 +230,10 @@ namespace Yontalane.GridNav
                 case Direction.Down:
                     if (coord.y - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y) && m_visitedNodes[coord.x, coord.y - 1].visited == step)
                     {
+                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        {
+                            return false;
+                        }
                         return true;
                     }
                     else
@@ -228,6 +243,10 @@ namespace Yontalane.GridNav
                 case Direction.Left:
                     if (coord.x - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y) && m_visitedNodes[coord.x - 1, coord.y].visited == step)
                     {
+                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        {
+                            return false;
+                        }
                         return true;
                     }
                     else

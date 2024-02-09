@@ -1,10 +1,10 @@
 {
   "name": "com.yontalane.gridnav",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "displayName": "Grid Nav",
   "description": "A* grid navigation.",
-  "unity": "2021.3",
-  "unityRelease": "16f1",
+  "unity": "2022.3",
+  "unityRelease": "5f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.gridnav/Documentation~/index.md",
   "dependencies": {
     "com.unity.inputsystem": "1.2.0"

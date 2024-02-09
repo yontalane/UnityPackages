@@ -62,7 +62,7 @@ namespace Yontalane.GridNav.Example
         {
             m_gridGenerator = FindObjectOfType<GridGenerator>();
 
-            m_gridNavigator = new GridNavigator(new Vector2Int(m_gridGenerator.GridArray.GetLength(0), m_gridGenerator.GridArray.GetLength(1)), NodeIsValid);
+            m_gridNavigator = new GridNavigator(new Vector2Int(m_gridGenerator.GridArray.GetLength(0), m_gridGenerator.GridArray.GetLength(1)), NodeIsValid, StepIsValid);
             m_gridNavigator.OnComplete += OnPathingComplete;
 
             m_initialized = true;
@@ -100,6 +100,62 @@ namespace Yontalane.GridNav.Example
                 }
             }
             return false;
+        }
+
+        private bool StepIsValid(int startX, int startY, int endX, int endY)
+        {
+            if (!(startX == endX && Mathf.Abs(startY - endY) == 1) && !(startY == endY && Mathf.Abs(startX - endX) == 1))
+            {
+                return true;
+            }
+
+            if (startX < 0 || startX >= m_gridGenerator.GridArray.GetLength(0))
+            {
+                return true;
+            }
+            if (startY < 0 || startY >= m_gridGenerator.GridArray.GetLength(1))
+            {
+                return true;
+            }
+            if (endX < 0 || endX >= m_gridGenerator.GridArray.GetLength(0))
+            {
+                return true;
+            }
+            if (endY < 0 || endY >= m_gridGenerator.GridArray.GetLength(1))
+            {
+                return true;
+            }
+
+            GridNode startNode = m_gridGenerator.GridArray[startX, startY];
+            GridNode endNode = m_gridGenerator.GridArray[endX, endY];
+
+            if (startNode == null || endNode == null)
+            {
+                return true;
+            }
+
+            if (Mathf.Approximately(startNode.transform.position.x, endNode.transform.position.x))
+            {
+                if (startNode.transform.position.z > endNode.transform.position.z)
+                {
+                    return !startNode.BlockerS && !endNode.BlockerN;
+                }
+                else
+                {
+                    return !endNode.BlockerS && !startNode.BlockerN;
+                }
+            }
+            else
+            {
+                if (startNode.transform.position.x > endNode.transform.position.x)
+                {
+                    return !startNode.BlockerW && !endNode.BlockerE;
+                }
+                else
+                {
+                    return !endNode.BlockerW && !startNode.BlockerE;
+                }
+            }
         }
 
         private void OnPathingComplete(bool foundExists)

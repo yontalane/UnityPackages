@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 - 2024.02.09
+
+**Added**
+
+* Now supports grid tiles with walls.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.4 - 2022.12.24
 
 **Added**

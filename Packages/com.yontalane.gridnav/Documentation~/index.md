@@ -19,6 +19,17 @@ GridNavigator navigator = new GridNavigator(grid.GetLength(0), grid.GetLength(1)
 
 
 
+Optionally, you can also create a function to determine if you can pass between two nodes. (Even if two nodes are pathable, some map designs might allow for a wall to exist between them.)
+
+```c#
+private bool CanStepBetween(int startX, int startY, int endX, int endY)
+{
+  // Return FALSE if a wall exists between the two nodes.
+}
+```
+
+
+
 Listen for the navigator's completion event.
 
 ```c#
