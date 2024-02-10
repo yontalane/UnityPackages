@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Yontalane.GridNav.Example
 {
@@ -7,6 +9,8 @@ namespace Yontalane.GridNav.Example
     [RequireComponent(typeof(Renderer))]
     public class GridNode : MonoBehaviour
     {
+        private bool m_highlighting = false;
+
         #region Serialized Fields
         [Header("Materials")]
 
@@ -94,12 +98,49 @@ namespace Yontalane.GridNav.Example
             m_blockerW = null;
         }
 
-        private void Start()
+        private void Awake()
         {
-            BlockerN = Random.value < 0.05f;
-            BlockerE = Random.value < 0.05f;
-            BlockerS = Random.value < 0.05f;
-            BlockerW = Random.value < 0.05f;
+            //BlockerN = Random.value < 0.05f;
+            //BlockerE = Random.value < 0.05f;
+            //BlockerS = Random.value < 0.05f;
+            //BlockerW = Random.value < 0.05f;
+            ClearBlockers();
+        }
+
+        public void ClearBlockers()
+        {
+            BlockerN = false;
+            BlockerE = false;
+            BlockerS = false;
+            BlockerW = false;
+        }
+
+        public void Highlight()
+        {
+            if (m_highlighting)
+            {
+                return;
+            }
+
+            StartCoroutine(HighlightAnimation());
+        }
+
+        private IEnumerator HighlightAnimation()
+        {
+            m_highlighting = true;
+
+            float offset = 0.1f;
+            Vector3 originalPosition = transform.position;
+            transform.position = originalPosition + new Vector3()
+            {
+                x = Random.Range(-offset, offset),
+                y = Random.Range(-offset, offset),
+                z = Random.Range(-offset, offset)
+            };
+            yield return new WaitForEndOfFrame();
+            transform.position = originalPosition;
+
+            m_highlighting = false;
         }
     }
 }

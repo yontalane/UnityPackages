@@ -8,6 +8,8 @@ namespace Yontalane.GridNav.Example
     [AddComponentMenu("Yontalane/Grid Nav/Example/Grid Nav Agent")]
     public class GridNavAgent : MonoBehaviour
     {
+        private bool m_navigating = false;
+
         #region Serialized Fields
         [SerializeField]
         [Range(0f, 1f)]
@@ -68,7 +70,27 @@ namespace Yontalane.GridNav.Example
             m_initialized = true;
         }
 
-        public void ClickGo() => m_go = true;
+        public void ClickGo()
+        {
+            if (m_navigating)
+            {
+                return;
+            }
+
+            m_go = true;
+        }
+
+        public void GoTo(Vector2Int target)
+        {
+            if (m_navigating)
+            {
+                return;
+            }
+
+            m_inputX.text = target.x.ToString();
+            m_inputY.text = target.y.ToString();
+            m_go = true;
+        }
 
         private void Update()
         {
@@ -168,6 +190,8 @@ namespace Yontalane.GridNav.Example
 
         private IEnumerator NavigatePath()
         {
+            m_navigating = true;
+
             m_shouldDrawGizmos = true;
             for (int i = 0; i < m_gridNavigator.PathCount; i++)
             {
@@ -177,6 +201,8 @@ namespace Yontalane.GridNav.Example
             }
             m_shouldDrawGizmos = false;
             m_startCoord = m_endCoord;
+
+            m_navigating = false;
         }
 
         private void OnDrawGizmos()

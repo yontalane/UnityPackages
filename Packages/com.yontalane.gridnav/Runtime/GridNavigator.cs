@@ -204,10 +204,10 @@ namespace Yontalane.GridNav
                 case Direction.Up:
                     if (coord.y + 1 < m_visitedNodes.GetLength(1) && m_nodeIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y) && m_visitedNodes[coord.x, coord.y + 1].visited == step)
                     {
-                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
-                        {
-                            return false;
-                        }
+                        //if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y + 1].coordinate.x, m_visitedNodes[coord.x, coord.y + 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        //{
+                        //    return false;
+                        //}
                         return true;
                     }
                     else
@@ -217,10 +217,10 @@ namespace Yontalane.GridNav
                 case Direction.Right:
                     if (coord.x + 1 < m_visitedNodes.GetLength(0) && m_nodeIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y) && m_visitedNodes[coord.x + 1, coord.y].visited == step)
                     {
-                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
-                        {
-                            return false;
-                        }
+                        //if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x + 1, coord.y].coordinate.x, m_visitedNodes[coord.x + 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        //{
+                        //    return false;
+                        //}
                         return true;
                     }
                     else
@@ -230,10 +230,10 @@ namespace Yontalane.GridNav
                 case Direction.Down:
                     if (coord.y - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y) && m_visitedNodes[coord.x, coord.y - 1].visited == step)
                     {
-                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
-                        {
-                            return false;
-                        }
+                        //if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x, coord.y - 1].coordinate.x, m_visitedNodes[coord.x, coord.y - 1].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        //{
+                        //    return false;
+                        //}
                         return true;
                     }
                     else
@@ -243,10 +243,10 @@ namespace Yontalane.GridNav
                 case Direction.Left:
                     if (coord.x - 1 >= 0 && m_nodeIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y) && m_visitedNodes[coord.x - 1, coord.y].visited == step)
                     {
-                        if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
-                        {
-                            return false;
-                        }
+                        //if (m_stepIsValid != null && !m_stepIsValid(m_visitedNodes[coord.x - 1, coord.y].coordinate.x, m_visitedNodes[coord.x - 1, coord.y].coordinate.y, m_visitedNodes[coord.x, coord.y].coordinate.x, m_visitedNodes[coord.x, coord.y].coordinate.y))
+                        //{
+                        //    return false;
+                        //}
                         return true;
                     }
                     else

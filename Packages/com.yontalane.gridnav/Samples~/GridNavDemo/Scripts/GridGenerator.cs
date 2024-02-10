@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Yontalane.GridNav.Example
 {
@@ -6,13 +7,18 @@ namespace Yontalane.GridNav.Example
     [AddComponentMenu("Yontalane/Grid Nav/Example/Grid Generator")]
     public sealed class GridGenerator : MonoBehaviour
     {
+        #region Private Variables
+        private GridNavAgent m_agent;
+        private bool m_mouseDown = false;
+        #endregion
+
         #region Serialized Fields
         [SerializeField]
         private Vector2Int m_gridSize;
 
         [Tooltip("Distance between nodes.")]
         [SerializeField]
-        private int m_scale;
+        private float m_scale;
 
         [SerializeField]
         private GridNode m_gridNodePrefab;
@@ -34,7 +40,7 @@ namespace Yontalane.GridNav.Example
         private void Reset()
         {
             m_gridSize = new Vector2Int(10, 10);
-            m_scale = 1;
+            m_scale = 1f;
             m_gridNodePrefab = null;
             m_leftBottomPosition = new Vector3();
             m_pathableChance = 0.15f;
@@ -42,6 +48,8 @@ namespace Yontalane.GridNav.Example
 
         private void Awake()
         {
+            m_agent = FindObjectOfType<GridNavAgent>();
+
             GridArray = new GridNode[m_gridSize.x, m_gridSize.y];
             for (int x = 0; x < m_gridSize.x; x++)
             {
@@ -50,9 +58,47 @@ namespace Yontalane.GridNav.Example
                     GridNode gridNode = Instantiate(m_gridNodePrefab.gameObject, new Vector3(m_leftBottomPosition.x + m_scale * x, m_leftBottomPosition.y, m_leftBottomPosition.z + m_scale * y), Quaternion.identity).GetComponent<GridNode>();
                     gridNode.transform.SetParent(gameObject.transform);
                     gridNode.Coordinate = new Vector2Int(x, y);
-                    gridNode.IsPathable = Random.value < m_pathableChance;
+                    if (x == 0 && y == 0)
+                    {
+                        gridNode.IsPathable = true;
+                        gridNode.ClearBlockers();
+                    }
+                    else
+                    {
+                        gridNode.IsPathable = Random.value < m_pathableChance;
+                    }
                     GridArray[x, y] = gridNode;
                 }
+            }
+        }
+
+        private void Update()
+        {
+            bool highlightingNode = false;
+            GridNode node = null;
+
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.value, Camera.MonoOrStereoscopicEye.Mono);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.collider.TryGetComponent(out node))
+                {
+                    highlightingNode = true;
+                    node.Highlight();
+                }
+            }
+
+            if (Mouse.current.leftButton.isPressed)
+            {
+                if (!m_mouseDown && highlightingNode)
+                {
+                    m_agent.GoTo(node.Coordinate);
+                }
+
+                m_mouseDown = true;
+            }
+            else
+            {
+                m_mouseDown = false;
             }
         }
     }
