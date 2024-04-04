@@ -26,7 +26,7 @@ namespace Yontalane.Dialog
         internal const string STATIC_ID = "Static Dialog";
 
         public string ID { get; private set; } = "";
-        public DialogData Data { get; private set; } = null;
+        public DialogData Data { get; set; } = null;
 
         [Header("Dialog Script Data")]
 

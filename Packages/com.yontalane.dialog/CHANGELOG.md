@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.18 - 2024.04.03
+
+**Added**
+
+* DialogAgent Data can be set publically.
+
+**Changed**
+
+**Fixed**
+
 ## 1.0.17 - 2023.09.05
 
 **Added**
