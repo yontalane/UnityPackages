@@ -16,7 +16,8 @@ namespace Yontalane.Dialog
     {
         Data = 0,
         Json = 1,
-        String = 2
+        String = 2,
+        TextData = 40,
     }
 
     [AddComponentMenu("Yontalane/Dialog/Dialog Agent")]
@@ -41,6 +42,14 @@ namespace Yontalane.Dialog
         [SerializeField]
         [Tooltip("A complex dialog script. Used to generate DialogData.")]
         private DialogDataContainer m_data = null;
+
+        [SerializeField]
+        [Tooltip("The starting node.")]
+        private string m_textDataStart = "";
+
+        [SerializeField]
+        [Tooltip("A complex dialog script. Used to generate DialogData.")]
+        private TextAsset m_textData = null;
 
         [SerializeField]
         [Tooltip("A complex dialog script. Used to generate DialogData.")]
@@ -71,6 +80,15 @@ namespace Yontalane.Dialog
             }
         }
 
+        public void SetTextData(TextAsset textAsset, string startNode)
+        {
+            m_inputType = DialogAgentInputType.TextData;
+            m_textData = textAsset;
+            m_textDataStart = startNode;
+        }
+
+        public void SetTextData(TextAsset textAsset) => SetTextData(textAsset, string.Empty);
+
         public void InitiateDialog(string speaker, UnityAction onExitDialog)
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
@@ -94,6 +112,10 @@ namespace Yontalane.Dialog
                         Data.nodes[0].lines[0] = new LineData();
                         Data.nodes[0].lines[0].speaker = speaker;
                         Data.nodes[0].lines[0].text = m_staticText;
+                        break;
+                    case DialogAgentInputType.TextData:
+                        ID = name;
+                        Data = TextDataConverter.Convert(m_textData.text, m_textDataStart);
                         break;
                 }
             }
