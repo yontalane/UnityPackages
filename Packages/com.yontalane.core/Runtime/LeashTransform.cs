@@ -191,6 +191,8 @@ namespace Yontalane
 
         public void Initialize(Transform target, Config positionConfig, Config rotationConfig) => Initialize(target, positionConfig, rotationConfig, new Config(false), UpdateType.Update);
 
+        public void Initialize(Transform target, Config positionConfig) => Initialize(target, positionConfig, new Config(false));
+
         public void Initialize(Transform target, float positionSmoothTime, float rotationSmoothTime)
         {
             Config positionConfig = new Config()

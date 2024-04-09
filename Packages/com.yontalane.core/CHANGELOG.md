@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.31 - 2024.04.09
+
+**Added**
+
+- Another way to initialize LeashTransform.
+
 ## 1.0.30 - 2024.04.09
 
 **Added**
