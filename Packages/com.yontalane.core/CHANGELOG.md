@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.30 - 2024.04.09
+
+**Added**
+
+- Public getters for LeashTransform config vars.
+
 ## 1.0.29 - 2023.06.30
 
 **Added**

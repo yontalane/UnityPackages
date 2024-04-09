@@ -91,12 +91,15 @@ namespace Yontalane
 
         [SerializeField]
         private Config m_positionConfig = new Config(true);
+        public Config PositionConfig => m_positionConfig;
 
         [SerializeField]
         private Config m_rotationConfig = new Config(false);
+        public Config RotationConfig => m_rotationConfig;
 
         [SerializeField]
         private Config m_scaleConfig = new Config(false);
+        public Config ScaleConfig => m_scaleConfig;
 
         [SerializeField]
         private UpdateType m_updateType = UpdateType.Update;
