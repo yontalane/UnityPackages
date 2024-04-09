@@ -78,3 +78,65 @@ public bool DialogFunction(string call, string parameter, out string result)
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
 
 The demo scene embedded in this package includes dialog data that shows all of this functionality in action.
+
+### Simple Text Format
+
+The DialogData object has an alternate simplified text format that is not JSON. Although it's not quite as versatile as the JSON format, you can still do a lot with it, and it's easier to read and understand.
+
+It looks like this:
+
+```
+//This is a comment.
+
+//This indicates the starting node.
+=> Basic Convo
+
+//This is a node.
+#Basic Convo
+
+  //ifVar is IF:[var]=[val]=>[new node]
+  IF: talked to=true => Already Talked
+  
+  //setVar is SET:[var]:[val]
+  SET: talked to: true
+
+  //Basic dialog is [speaker]:[text]
+  Arm Dude: Hey there.
+
+  //callFunction is DO:[func]:[param]
+  DO: Cutscene: Arm Dude
+
+  Arm Dude: I know what you're thinking.
+
+  //responses are - [text]=>[new node]
+  Arm Dude: Yes, this is a metal arm. No, I am not "happy to see you."
+    - That's weird, man. => Deep Convo
+    - cya. => Done
+
+#Deep Convo
+
+  Arm Dude: Cold, bro. Cold.
+
+  //You can still use double brackets.
+  <<player>>: Gotta speak my mind.
+
+  Arm Dude: You're all right.
+
+#Done
+
+  Arm Dude: Bye now.
+
+#Already Talked
+
+  //ifDialogCount is COUNT[operator][val]=>[new node]
+  COUNT > 3 => Other Already Talked
+
+  //ifFunction is IF FUNCTION:[func],[param]=[result]=>[new node]
+  IF FUNCTION: Randomness, time = true => Other Already Talked
+
+  Arm Dude: Later.
+
+#Other Already Talked
+
+  Arm Dude: G'day.
+```

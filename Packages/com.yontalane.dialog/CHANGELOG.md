@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.20 - 2024.04.09
+
+**Added**
+
+* Documentation for simplified text data format.
+
 ## 1.0.19 - 2024.04.09
 
 **Added**
