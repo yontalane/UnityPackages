@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.21 - 2024.04.09
+
+**Fixed**
+
+* Custom start node wasn't working.
+
 ## 1.0.20 - 2024.04.09
 
 **Added**

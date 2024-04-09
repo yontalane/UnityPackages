@@ -11,20 +11,27 @@ namespace Yontalane.Dialog
 
         internal static DialogData Convert(string data, string start)
         {
+            m_startNode = start;
+
+            m_nodeData.Clear();
+            m_lineData.Clear();
+            m_responseData.Clear();
+
             string[] lines = data.Split('\n');
+
             GetNodeData(lines);
-            return new() { nodes = m_nodeData.ToArray(), start = m_startNode };
+
+            return new()
+            {
+                nodes = m_nodeData.ToArray(),
+                start = m_startNode,
+            };
         }
 
 
         private static void GetNodeData(IReadOnlyList<string> lines)
         {
             bool startedNodes = false;
-
-            m_startNode = string.Empty;
-            m_nodeData.Clear();
-            m_lineData.Clear();
-            m_responseData.Clear();
 
             for (int i = 0; i < lines.Count; i++)
             {
