@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.23 - 2024.04.09
+
+**Changed**
+
+* Not re-parsing simple text data if already done.
+
 ## 1.0.22 - 2024.04.09
 
 **Added**

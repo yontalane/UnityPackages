@@ -10,6 +10,19 @@ namespace Yontalane.Dialog
         public NodeData[] nodes = new NodeData[0];
         public string windowType = "";
         public string data = "";
+
+        public DialogData()
+        {
+
+        }
+
+        public DialogData(DialogData other)
+        {
+            start = other.start;
+            nodes = other.nodes;
+            windowType = other.windowType;
+            data = other.data;
+        }
     }
 
     [Serializable]

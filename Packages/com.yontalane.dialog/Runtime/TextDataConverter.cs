@@ -1,31 +1,57 @@
 using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
 namespace Yontalane.Dialog
 {
+    internal struct TextDataConversion
+    {
+        public TextAsset asset;
+        public DialogData data;
+    }
+
     internal static class TextDataConverter
     {
-        private static string m_startNode = string.Empty;
-        private static readonly List<NodeData> m_nodeData = new();
-        private static readonly List<LineData> m_lineData = new();
-        private static readonly List<ResponseData> m_responseData = new();
+        private static readonly List<TextDataConversion> s_conversions = new();
 
-        internal static DialogData Convert(string data, string start)
+        private static string s_startNode = string.Empty;
+        private static readonly List<NodeData> s_nodeData = new();
+        private static readonly List<LineData> s_lineData = new();
+        private static readonly List<ResponseData> s_responseData = new();
+
+        internal static DialogData Convert(TextAsset asset, string start)
         {
-            m_startNode = start;
+            foreach (TextDataConversion textDataConversion in s_conversions.Where(textDataConversion => textDataConversion.asset == asset))
+            {
+                return new(textDataConversion.data)
+                {
+                    start = start
+                };
+            }
 
-            m_nodeData.Clear();
-            m_lineData.Clear();
-            m_responseData.Clear();
+            s_startNode = start;
 
-            string[] lines = data.Split('\n');
+            s_nodeData.Clear();
+            s_lineData.Clear();
+            s_responseData.Clear();
+
+            string[] lines = asset.text.Split('\n');
 
             GetNodeData(lines);
 
-            return new()
+            DialogData data = new()
             {
-                nodes = m_nodeData.ToArray(),
-                start = m_startNode,
+                nodes = s_nodeData.ToArray(),
+                start = s_startNode,
             };
+
+            s_conversions.Add(new()
+            {
+                asset = asset,
+                data = data,
+            });
+
+            return data;
         }
 
 
@@ -49,9 +75,9 @@ namespace Yontalane.Dialog
 
                 if (!startedNodes && line.IndexOf("=>") == 0)
                 {
-                    if (string.IsNullOrEmpty(m_startNode))
+                    if (string.IsNullOrEmpty(s_startNode))
                     {
-                        m_startNode = FormatLink(line[2..]);
+                        s_startNode = FormatLink(line[2..]);
                     }
                     continue;
                 }
@@ -82,8 +108,8 @@ namespace Yontalane.Dialog
                 }
                 else if (lineUp == "EXIT")
                 {
-                    m_lineData.Add(new() { exit = true, });
-                    m_responseData.Clear();
+                    s_lineData.Add(new() { exit = true, });
+                    s_responseData.Clear();
                     continue;
                 }
 
@@ -95,39 +121,39 @@ namespace Yontalane.Dialog
                 if (poundIndex == 0)
                 {
                     startedNodes = true;
-                    if (m_nodeData.Count > 0 && m_lineData.Count > 0)
+                    if (s_nodeData.Count > 0 && s_lineData.Count > 0)
                     {
-                        m_nodeData[^1].lines = m_lineData.ToArray();
+                        s_nodeData[^1].lines = s_lineData.ToArray();
                     }
-                    m_lineData.Clear();
-                    m_nodeData.Add(new() { name = line[1..].Trim() });
+                    s_lineData.Clear();
+                    s_nodeData.Add(new() { name = line[1..].Trim() });
                 }
                 else if (colonIndex != -1)
                 {
-                    m_lineData.Add(new()
+                    s_lineData.Add(new()
                     {
                         speaker = line[..colonIndex].Trim(),
                         text = line[(colonIndex + 1)..].Trim(),
                     });
-                    m_responseData.Clear();
+                    s_responseData.Clear();
                 }
                 else if (hyphenIndex == 0 && arrowIndex != -1)
                 {
                     string responseText = line[1..arrowIndex].Trim();
                     string responseLink = FormatLink(line[(arrowIndex + 2)..]);
 
-                    m_responseData.Add(new()
+                    s_responseData.Add(new()
                     {
                         text = responseText,
                         link = responseLink,
                     });
-                    m_lineData[^1].responses = m_responseData.ToArray();
+                    s_lineData[^1].responses = s_responseData.ToArray();
                 }
             }
 
-            if (m_nodeData.Count > 0 && m_lineData.Count > 0)
+            if (s_nodeData.Count > 0 && s_lineData.Count > 0)
             {
-                m_nodeData[^1].lines = m_lineData.ToArray();
+                s_nodeData[^1].lines = s_lineData.ToArray();
             }
         }
 
@@ -146,8 +172,8 @@ namespace Yontalane.Dialog
                 value = parts[1].Trim(),
             };
 
-            m_lineData.Add(new() { setVar = varData, });
-            m_responseData.Clear();
+            s_lineData.Add(new() { setVar = varData, });
+            s_responseData.Clear();
         }
 
         private static void LineToCount(string line)
@@ -160,10 +186,10 @@ namespace Yontalane.Dialog
             }
 
             setting[0] = setting[0].Replace(" ", "");
-            m_lineData.Add(new() { ifDialogCount = setting[0], });
-            m_lineData.Add(new() { link = FormatLink(setting[1]), });
-            m_lineData.Add(new() { endIf = true, });
-            m_responseData.Clear();
+            s_lineData.Add(new() { ifDialogCount = setting[0], });
+            s_lineData.Add(new() { link = FormatLink(setting[1]), });
+            s_lineData.Add(new() { endIf = true, });
+            s_responseData.Clear();
         }
 
         private static void LineToIf(string line)
@@ -182,10 +208,10 @@ namespace Yontalane.Dialog
                 return;
             }
 
-            m_lineData.Add(new() { ifVar = $"{checking[0].Trim()}={checking[1].Trim()}", });
-            m_lineData.Add(new() { link = FormatLink(setting[1]), });
-            m_lineData.Add(new() { endIf = true, });
-            m_responseData.Clear();
+            s_lineData.Add(new() { ifVar = $"{checking[0].Trim()}={checking[1].Trim()}", });
+            s_lineData.Add(new() { link = FormatLink(setting[1]), });
+            s_lineData.Add(new() { endIf = true, });
+            s_responseData.Clear();
         }
 
         private static void LineToIfFunction(string line)
@@ -215,10 +241,10 @@ namespace Yontalane.Dialog
                 param = string.Empty;
             }
 
-            m_lineData.Add(new() { ifFunction = $"{func}::{param}={checking[1].Trim()}", });
-            m_lineData.Add(new() { link = FormatLink(setting[1]), });
-            m_lineData.Add(new() { endIf = true, });
-            m_responseData.Clear();
+            s_lineData.Add(new() { ifFunction = $"{func}::{param}={checking[1].Trim()}", });
+            s_lineData.Add(new() { link = FormatLink(setting[1]), });
+            s_lineData.Add(new() { endIf = true, });
+            s_responseData.Clear();
         }
 
         private static void LineToDo(string line)
@@ -233,8 +259,8 @@ namespace Yontalane.Dialog
             string functionName = s[0].Trim();
             string parameter = s.Length > 1 ? s[1].Trim() : string.Empty;
 
-            m_lineData.Add(new() { callFunction = $"{functionName}::{parameter}", });
-            m_responseData.Clear();
+            s_lineData.Add(new() { callFunction = $"{functionName}::{parameter}", });
+            s_responseData.Clear();
         }
 
         private static string FormatLink(string link)

@@ -115,7 +115,7 @@ namespace Yontalane.Dialog
                         break;
                     case DialogAgentInputType.TextData:
                         ID = name;
-                        Data = TextDataConverter.Convert(m_textData.text, m_textDataStart);
+                        Data = TextDataConverter.Convert(m_textData, m_textDataStart);
                         break;
                 }
             }
