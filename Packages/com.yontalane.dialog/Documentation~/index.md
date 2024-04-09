@@ -101,6 +101,7 @@ It looks like this:
   SET: talked to: true
 
   //Basic dialog is [speaker]:[text]
+  //Text with no speaker is :[text]
   Arm Dude: Hey there.
 
   //callFunction is DO:[func]:[param]

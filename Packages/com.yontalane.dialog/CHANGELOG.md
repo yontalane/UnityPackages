@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.22 - 2024.04.09
+
+**Added**
+
+* Documentation for speakerless text.
+
 ## 1.0.21 - 2024.04.09
 
 **Fixed**
