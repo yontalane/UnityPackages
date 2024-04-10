@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using Yontalane;
 
 namespace Yontalane.Dialog
 {
@@ -13,7 +12,7 @@ namespace Yontalane.Dialog
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : MonoBehaviour
     {
-        [System.Serializable]
+        [Serializable]
         private struct ColorSet
         {
             public string speaker;
@@ -127,8 +126,16 @@ namespace Yontalane.Dialog
         [Header("Callbacks")]
 
         [SerializeField]
+        [Tooltip("An action that gets invoked when the dialog starts being typed out.")]
+        private UnityEvent m_onStartTyping = new UnityEvent();
+
+        [SerializeField]
         [Tooltip("An action that gets invoked while the dialog is being typed out.")]
         private UnityEvent m_onType = new UnityEvent();
+
+        [SerializeField]
+        [Tooltip("An action that gets invoked when the dialog is fully typed out.")]
+        private UnityEvent m_onDisplayLine = new UnityEvent();
 
         private string m_speaker = "";
         private LineData m_line = null;
@@ -311,6 +318,7 @@ namespace Yontalane.Dialog
             m_writingInProgress = true;
             if (m_useTypeCharacterInterval)
             {
+                m_onStartTyping?.Invoke();
                 StartCoroutine(WriteOut());
             }
             else
@@ -477,6 +485,9 @@ namespace Yontalane.Dialog
         {
             m_writingInProgress = false;
             m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
+
+            m_onDisplayLine?.Invoke();
+
             if (m_responseContainer != null && m_responseContainer.childCount > 0)
             {
                 m_responseContainer.gameObject.SetActive(true);

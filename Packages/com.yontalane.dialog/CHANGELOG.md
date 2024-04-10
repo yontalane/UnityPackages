@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.24 - 2024.04.10
+
+**Added**
+
+* Invoking events on start and end typing line.
+
 ## 1.0.23 - 2024.04.09
 
 **Changed**
