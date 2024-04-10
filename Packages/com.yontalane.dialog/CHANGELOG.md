@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.27 - 2024.04.10
+
+**Changed**
+
+* SET uses equal sign instead of colon.
+
 ## 1.0.26 - 2024.04.10
 
 **Changed**

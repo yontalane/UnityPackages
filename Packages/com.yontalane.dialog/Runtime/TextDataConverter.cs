@@ -159,7 +159,7 @@ namespace Yontalane.Dialog
 
         private static void LineToSet(string line)
         {
-            string[] parts = line.Split(':');
+            string[] parts = line.Split('=');
 
             if (parts.Length != 2)
             {
@@ -249,11 +249,22 @@ namespace Yontalane.Dialog
 
         private static void LineToDo(string line)
         {
-            string[] s = line.Split(",");
+            int i = line.IndexOf(',');
 
-            if (s.Length < 1)
+            if (i == -1)
             {
                 return;
+            }
+
+            string[] s;
+
+            if (i < line.Length - 1)
+            {
+                s = new string[] { line[..i], line[(i + 1)..] };
+            }
+            else
+            {
+                s = new string[] { line[..i] };
             }
 
             string functionName = s[0].Trim();

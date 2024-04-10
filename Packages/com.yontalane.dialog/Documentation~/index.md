@@ -97,7 +97,7 @@ It looks like this:
   //ifVar is IF:[var]=[val]=>[new node]
   IF: talked to=true => Already Talked
   
-  //setVar is SET:[var]:[val]
+  //setVar is SET:[var]=[val]
   SET: talked to: true
 
   //Basic dialog is [speaker]:[text]
