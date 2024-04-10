@@ -104,8 +104,8 @@ It looks like this:
   //Text with no speaker is :[text]
   Arm Dude: Hey there.
 
-  //callFunction is DO:[func]:[param]
-  DO: Cutscene: Arm Dude
+  //callFunction is DO:[func],[param]
+  DO: Cutscene, Arm Dude
 
   Arm Dude: I know what you're thinking.
 

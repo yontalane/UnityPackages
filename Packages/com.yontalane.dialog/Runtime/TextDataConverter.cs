@@ -249,7 +249,7 @@ namespace Yontalane.Dialog
 
         private static void LineToDo(string line)
         {
-            string[] s = line.Split(":");
+            string[] s = line.Split(",");
 
             if (s.Length < 1)
             {

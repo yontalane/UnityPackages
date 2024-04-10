@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.26 - 2024.04.10
+
+**Changed**
+
+* DO uses comma instead of colon to delineate between function and parameter.
+
 ## 1.0.25 - 2024.04.10
 
 **Fixed**
