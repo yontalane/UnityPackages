@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.25 - 2024.04.10
+
+**Fixed**
+
+* Multiple dialogs were all using the same script. Removed 1.0.23 addition, at least for now.
+
 ## 1.0.24 - 2024.04.10
 
 **Added**
