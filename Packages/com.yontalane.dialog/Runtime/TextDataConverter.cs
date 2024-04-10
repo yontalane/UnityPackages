@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 namespace Yontalane.Dialog
 {
-    //internal struct TextDataConversion
-    //{
-    //    public TextAsset asset;
-    //    public DialogData data;
-    //}
+    internal struct TextDataConversion
+    {
+        public TextAsset asset;
+        public DialogData data;
+    }
 
     internal static class TextDataConverter
     {
-        //private static readonly List<TextDataConversion> s_conversions = new();
+        private static readonly List<TextDataConversion> s_conversions = new();
 
         private static string s_startNode = string.Empty;
         private static readonly List<NodeData> s_nodeData = new();
@@ -21,13 +21,13 @@ namespace Yontalane.Dialog
 
         internal static DialogData Convert(TextAsset asset, string start)
         {
-            //foreach (TextDataConversion textDataConversion in s_conversions.Where(textDataConversion => textDataConversion.asset == asset))
-            //{
-            //    return new(textDataConversion.data)
-            //    {
-            //        start = start
-            //    };
-            //}
+            foreach (TextDataConversion textDataConversion in s_conversions.Where(textDataConversion => textDataConversion.asset == asset))
+            {
+                return new(textDataConversion.data)
+                {
+                    start = start
+                };
+            }
 
             s_startNode = start;
 
@@ -45,11 +45,11 @@ namespace Yontalane.Dialog
                 start = s_startNode,
             };
 
-            //s_conversions.Add(new()
-            //{
-            //    asset = asset,
-            //    data = data,
-            //});
+            s_conversions.Add(new()
+            {
+                asset = asset,
+                data = data,
+            });
 
             return data;
         }

@@ -85,6 +85,7 @@ namespace Yontalane.Dialog
             m_inputType = DialogAgentInputType.TextData;
             m_textData = textAsset;
             m_textDataStart = startNode;
+            Data = null;
         }
 
         public void SetTextData(TextAsset textAsset) => SetTextData(textAsset, string.Empty);

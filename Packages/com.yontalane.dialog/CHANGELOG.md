@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.28 - 2024.04.10
+
+**Fixed**
+
+* SetData() resets the current data.
+
 ## 1.0.27 - 2024.04.10
 
 **Changed**
