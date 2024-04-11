@@ -249,26 +249,31 @@ namespace Yontalane.Dialog
 
         private static void LineToDo(string line)
         {
+            string functionName, parameter;
+
             int i = line.IndexOf(',');
 
             if (i == -1)
             {
-                return;
-            }
-
-            string[] s;
-
-            if (i < line.Length - 1)
-            {
-                s = new string[] { line[..i], line[(i + 1)..] };
+                functionName = line.Trim();
+                parameter = string.Empty;
             }
             else
             {
-                s = new string[] { line[..i] };
-            }
+                string[] s;
 
-            string functionName = s[0].Trim();
-            string parameter = s.Length > 1 ? s[1].Trim() : string.Empty;
+                if (i < line.Length - 1)
+                {
+                    s = new string[] { line[..i], line[(i + 1)..] };
+                }
+                else
+                {
+                    s = new string[] { line[..i] };
+                }
+
+                functionName = s[0].Trim();
+                parameter = s.Length > 1 ? s[1].Trim() : string.Empty;
+            }
 
             s_lineData.Add(new() { callFunction = $"{functionName}::{parameter}", });
             s_responseData.Clear();

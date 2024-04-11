@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.29 - 2024.04.10
+
+**Fixed**
+
+* DO now works without a parameter.
+
 ## 1.0.28 - 2024.04.10
 
 **Fixed**
