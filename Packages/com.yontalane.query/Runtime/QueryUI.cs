@@ -274,6 +274,57 @@ namespace Yontalane.Query
         /// <param name="callback">The function to call when a response is chosen.</param>
         public static void Initiate(string text, string[] responses, Action<string> callback) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback);
 
+        /// <summary>
+        /// Display an alert with a confirm and cancel button.
+        /// </summary>
+        /// <param name="text">The alert text.</param>
+        /// <param name="confirmText">The confirm button label.</param>
+        /// <param name="cancelText">The cancel button label.</param>
+        /// <param name="callback">The function to call when the alert is closed.</param>
+        public static void Alert(string id, string text, string confirmText, string cancelText, Action<string> callback)
+        {
+            if (!string.IsNullOrEmpty(cancelText))
+            {
+                Initiate(id, text, new string[] { confirmText, cancelText }, callback);
+            }
+            else
+            {
+                Initiate(id, text, new string[] { confirmText }, callback);
+            }
+        }
+
+        /// <summary>
+        /// Display an alert with a confirm and cancel button.
+        /// </summary>
+        /// <param name="text">The alert text.</param>
+        /// <param name="confirmText">The confirm button label.</param>
+        /// <param name="cancelText">The cancel button label.</param>
+        /// <param name="callback">The function to call when the alert is closed.</param>
+        public static void Alert(string text, string confirmText, string cancelText, Action<string> callback) => Alert(string.Empty, text, confirmText, cancelText, callback);
+
+        /// <summary>
+        /// Display an alert with a confirm and cancel button.
+        /// </summary>
+        /// <param name="text">The alert text.</param>
+        /// <param name="confirmText">The confirm button label.</param>
+        /// <param name="cancelText">The cancel button label.</param>
+        public static void Alert(string text, string confirmText, string cancelText) => Alert(text, confirmText, cancelText, null);
+
+        /// <summary>
+        /// Display an alert.
+        /// </summary>
+        /// <param name="text">The alert text.</param>
+        /// <param name="callback">The function to call when the alert is closed.</param>
+        /// <param name="confirmText">The confirm button label.</param>
+        public static void Alert(string text, Action<string> callback, string confirmText = "OK") => Alert(text, confirmText, string.Empty, callback);
+
+        /// <summary>
+        /// Display an alert.
+        /// </summary>
+        /// <param name="text">The alert text.</param>
+        /// <param name="confirmText">The confirm button label.</param>
+        public static void Alert(string text, string confirmText = "OK") => Alert(text, confirmText);
+
         private static void CallbackConverter(QueryEventData eventData) => s_stringCallback?.Invoke(eventData.chosenResponse);
 
         /// <summary>

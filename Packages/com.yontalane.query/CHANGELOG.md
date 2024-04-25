@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.9 - 2024.04.25
+
+**Added**
+
+* Added a variant of the query call function to serve as an alert dialog.
+
+# Changelog
+
 ## 1.0.8 - 2023.07.28
 
 **Fixed**
