@@ -108,8 +108,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.29",
-        "com.yontalane.query": "1.0.8"
+        "com.yontalane.core": "1.0.31",
+        "com.yontalane.query": "1.0.9"
       }
     },
     "com.yontalane.gridnav": {
