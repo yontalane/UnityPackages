@@ -98,7 +98,7 @@ It looks like this:
   IF: talked to=true => Already Talked
   
   //setVar is SET:[var]=[val]
-  SET: talked to: true
+  SET: talked to=true
 
   //Basic dialog is [speaker]:[text]
   //Text with no speaker is :[text]

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.31 - 2024.04.30
+
+**Fixed**
+
+* Minor documentation fix.
+
 ## 1.0.30 - 2024.04.25
 
 **Changed**
