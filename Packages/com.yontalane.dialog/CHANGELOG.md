@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.32 - 2024.05.17
+
+**Changed**
+
+* Updated dependency versions.
+
 ## 1.0.31 - 2024.04.30
 
 **Fixed**

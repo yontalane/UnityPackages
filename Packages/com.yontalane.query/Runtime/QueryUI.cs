@@ -73,6 +73,10 @@ namespace Yontalane.Query
         [Header("Prefabs")]
 
         [SerializeField]
+        [Tooltip("The prefab to use for the primary response button.")]
+        private Button m_primaryResponseButtonPrefab = null;
+
+        [SerializeField]
         [Tooltip("The prefab to use for the response buttons.")]
         private Button m_responseButtonPrefab = null;
         #endregion
@@ -166,7 +170,8 @@ namespace Yontalane.Query
 
             for (int i = 0; i < responses.Length; i++)
             {
-                Button instance = Instantiate(queryUI.m_responseButtonPrefab.gameObject).GetComponent<Button>();
+                Button prefab = i == 0 && queryUI.m_primaryResponseButtonPrefab != null ? queryUI.m_primaryResponseButtonPrefab : queryUI.m_responseButtonPrefab;
+                Button instance = Instantiate(prefab.gameObject).GetComponent<Button>();
                 instance.GetComponentInChildren<TMP_Text>().text = responses[i];
                 instance.name = i.ToString();
                 instance.onClick.AddListener(delegate { queryUI.OnClickResponse(instance); });

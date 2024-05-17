@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.10 - 2024.05.17
+
+**Added**
+
+* Optionally different prefab for primary response button.
+
 ## 1.0.9 - 2024.04.25
 
 **Added**
