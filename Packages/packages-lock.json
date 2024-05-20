@@ -68,7 +68,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.7",
+      "version": "3.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -109,7 +109,7 @@
       "source": "embedded",
       "dependencies": {
         "com.yontalane.core": "1.0.31",
-        "com.yontalane.query": "1.0.9"
+        "com.yontalane.query": "1.0.10"
       }
     },
     "com.yontalane.gridnav": {
@@ -149,7 +149,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.29",
+        "com.yontalane.core": "1.0.31",
         "com.unity.inputsystem": "1.2.0"
       }
     },

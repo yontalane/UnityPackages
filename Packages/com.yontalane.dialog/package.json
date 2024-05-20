@@ -1,6 +1,6 @@
 {
     "name": "com.yontalane.dialog",
-    "version": "1.0.32",
+    "version": "1.0.33",
     "displayName": "Dialog",
     "description": "A dialog system.",
     "unity": "2021.3",

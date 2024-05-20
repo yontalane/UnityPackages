@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.33 - 2024.05.19
+
+**Fixed**
+
+* Fixed null reference in sample scene.
+
 ## 1.0.32 - 2024.05.17
 
 **Changed**
