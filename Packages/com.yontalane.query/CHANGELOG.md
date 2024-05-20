@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.11 - 2024.05.19
+
+**Fixed**
+
+* Query response button uses explicit navigation even if there's only one button.
+
 ## 1.0.10 - 2024.05.17
 
 **Added**

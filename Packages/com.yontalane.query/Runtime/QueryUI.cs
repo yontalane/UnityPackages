@@ -179,7 +179,9 @@ namespace Yontalane.Query
                 instance.gameObject.AddComponent<SelectableListener>().OnChangeSelection += queryUI.OnSelectResponse;
                 instance.transform.localPosition = Vector3.zero;
                 instance.transform.localScale = Vector3.one;
-                instance.navigation = Navigation.defaultNavigation;
+                Navigation nav = Navigation.defaultNavigation;
+                nav.mode = Navigation.Mode.Explicit;
+                instance.navigation = nav;
 
                 if (i > 0)
                 {
