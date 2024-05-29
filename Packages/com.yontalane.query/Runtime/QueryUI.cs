@@ -178,6 +178,7 @@ namespace Yontalane.Query
                 instance.GetComponent<RectTransform>().SetParent(queryUI.m_responseContainer);
                 instance.gameObject.AddComponent<SelectableListener>().OnChangeSelection += queryUI.OnSelectResponse;
                 instance.transform.localPosition = Vector3.zero;
+                instance.transform.localEulerAngles = Vector3.zero;
                 instance.transform.localScale = Vector3.one;
                 Navigation nav = Navigation.defaultNavigation;
                 nav.mode = Navigation.Mode.Explicit;

@@ -1,6 +1,6 @@
 {
     "name": "com.yontalane.query",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "displayName": "Query",
     "description": "A dialog input box.",
     "unity": "2021.3",

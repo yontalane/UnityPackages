@@ -289,6 +289,7 @@ namespace Yontalane.Dialog
                     instance.GetComponentInChildren<TMP_Text>().text = FormatInlineText(replaceInlineText(line.responses[i].text));
                     instance.GetComponent<RectTransform>().SetParent(m_responseContainer);
                     instance.transform.localPosition = Vector3.zero;
+                    instance.transform.localEulerAngles = Vector3.zero;
                     instance.transform.localScale = Vector3.one;
                     instance.navigation = Navigation.defaultNavigation;
 

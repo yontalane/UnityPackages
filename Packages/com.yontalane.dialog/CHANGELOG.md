@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.35 - 2024.05.29
+
+**Fixed**
+
+* Response button rotation is zeroed out on instantiation.
+
 ## 1.0.34 - 2024.05.19
 
 **Changed**
