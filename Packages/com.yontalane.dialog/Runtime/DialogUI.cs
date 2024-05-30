@@ -20,6 +20,7 @@ namespace Yontalane.Dialog
         }
 
         [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
+        [Serializable] public class SetSpriteAction : UnityEvent<IDialogAgent, LineData, Image> { }
         [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
 
         private const string ANIMATION_PARAMETER = "Dialog Visible";
@@ -114,7 +115,9 @@ namespace Yontalane.Dialog
         [Header("Overrides")]
 
         [SerializeField]
-        [Tooltip("A callback that can be used to get a custom portrait instead of the one requested by the dialog data.")]
+        [Tooltip("A callback that can be used to set a custom portrait instead of using the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
+        private SetSpriteAction m_setPortrait = new SetSpriteAction();
+        [Tooltip("A callback that can be used to get a custom portrait instead of the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
         private GetSpriteAction m_getPortrait = new GetSpriteAction();
         [SerializeField]
         [Tooltip("A callback that can be used to get a custom sound instead of the one requested by the dialog data.")]
@@ -209,27 +212,35 @@ namespace Yontalane.Dialog
 
             if (m_portraitContainer != null && m_portrait != null)
             {
-                Sprite portrait = null;
-                m_getPortrait?.Invoke(DialogProcessor.Instance.DialogAgent, line, (sprite) => portrait = sprite);
-                if (portrait == null)
+                if (m_setPortrait != null)
                 {
-                    portrait = Resources.Load<Sprite>(line.portrait);
-                }
-
-                if (portrait != null)
-                {
-                    m_portrait.sprite = portrait;
-                    AspectRatioFitter fitter = m_portrait.GetComponent<AspectRatioFitter>();
-                    if (fitter != null)
-                    {
-                        fitter.aspectRatio = portrait.rect.width / portrait.rect.height;
-                    }
-
-                    m_portraitContainer.gameObject.SetActive(true);
+                    m_setPortrait.Invoke(DialogProcessor.Instance.DialogAgent, line, m_portrait);
+                    m_portraitContainer.gameObject.SetActive(m_portrait.sprite != null);
                 }
                 else
                 {
-                    m_portraitContainer.gameObject.SetActive(false);
+                    Sprite portrait = null;
+                    m_getPortrait?.Invoke(DialogProcessor.Instance.DialogAgent, line, (sprite) => portrait = sprite);
+                    if (portrait == null)
+                    {
+                        portrait = Resources.Load<Sprite>(line.portrait);
+                    }
+
+                    if (portrait != null)
+                    {
+                        m_portrait.sprite = portrait;
+                        AspectRatioFitter fitter = m_portrait.GetComponent<AspectRatioFitter>();
+                        if (fitter != null)
+                        {
+                            fitter.aspectRatio = portrait.rect.width / portrait.rect.height;
+                        }
+
+                        m_portraitContainer.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        m_portraitContainer.gameObject.SetActive(false);
+                    }
                 }
             }
 

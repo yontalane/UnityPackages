@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.36 - 2024.05.29
+
+**Added**
+
+* Can use custom event to set portrait.
+
 ## 1.0.35 - 2024.05.29
 
 **Fixed**
