@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.32 - 2024.06.05
+
+**Added**
+
+- Added a lerp method to ranges.
+
 ## 1.0.31 - 2024.04.09
 
 **Added**

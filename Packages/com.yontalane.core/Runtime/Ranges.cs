@@ -22,12 +22,18 @@ namespace Yontalane
         /// <summary>
         /// The midpoint between the range's min and max values.
         /// </summary>
-        public float Mid => Mathf.Lerp(min, max, 0.5f);
+        public float Mid => Lerp(0.5f);
+
+        /// <summary>
+        /// Linearly interpolates between the range's min and max values by t.
+        /// </summary>
+        /// <returns>The interpolated float result between the two float values.</returns>
+        public float Lerp(float t) => Mathf.Lerp(min, max, t);
 
         /// <summary>
         /// A random float between the range's min and max values.
         /// </summary>
-        public float Random => Mathf.Lerp(min, max, UnityEngine.Random.value);
+        public float Random => Lerp(UnityEngine.Random.value);
 
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
     }
@@ -51,12 +57,18 @@ namespace Yontalane
         /// <summary>
         /// The midpoint (rounded to the nearest integer) between the range's min and max values.
         /// </summary>
-        public int Mid => Mathf.RoundToInt(Mathf.Lerp((float)min, (float)max, 0.5f));
+        public int Mid => Lerp(0.5f);
+
+        /// <summary>
+        /// Linearly interpolates between the range's min and max values by t.
+        /// </summary>
+        /// <returns>The interpolated result between the two values, rounded to the nearest int.</returns>
+        public int Lerp(float t) => Mathf.RoundToInt(Mathf.Lerp(min, max, t));
 
         /// <summary>
         /// A random int between the range's min and max values.
         /// </summary>
-        public int Random => Mathf.RoundToInt(Mathf.Lerp((float)min, (float)max, UnityEngine.Random.value));
+        public int Random => Lerp(UnityEngine.Random.value);
 
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
     }
