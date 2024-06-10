@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.37 - 2024.06.09
+
+**Added**
+
+* Can set portrait from simple text.
+
 ## 1.0.36 - 2024.05.29
 
 **Added**

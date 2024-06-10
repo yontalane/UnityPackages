@@ -107,7 +107,8 @@ It looks like this:
   //callFunction is DO:[func],[param]
   DO: Cutscene, Arm Dude
 
-  Arm Dude: I know what you're thinking.
+  //portait can be set by [speaker] [[portrait]]: [dialog]
+  Arm Dude [Arm Dude Contemplative]: I know what you're thinking.
 
   //responses are - [text]=>[new node]
   Arm Dude: Yes, this is a metal arm. No, I am not "happy to see you."

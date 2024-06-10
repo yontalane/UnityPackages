@@ -130,9 +130,11 @@ namespace Yontalane.Dialog
                 }
                 else if (colonIndex != -1)
                 {
+                    (string speaker, string portrait) = GetSpeakerAndPortrait(line[..colonIndex]);
                     s_lineData.Add(new()
                     {
-                        speaker = line[..colonIndex].Trim(),
+                        speaker = speaker,
+                        portrait = portrait,
                         text = line[(colonIndex + 1)..].Trim(),
                     });
                     s_responseData.Clear();
@@ -154,6 +156,26 @@ namespace Yontalane.Dialog
             if (s_nodeData.Count > 0 && s_lineData.Count > 0)
             {
                 s_nodeData[^1].lines = s_lineData.ToArray();
+            }
+        }
+
+        private static (string speaker, string portrait) GetSpeakerAndPortrait(string text)
+        {
+            text = text.Trim();
+
+            int openBracketIndex = text.LastIndexOf("[");
+            int closeBracketIndex = text.LastIndexOf("]");
+
+            if (openBracketIndex == -1 || closeBracketIndex == -1 || openBracketIndex > closeBracketIndex)
+            {
+                return (text, string.Empty);
+            }
+            else
+            {
+                text = text[..closeBracketIndex];
+                string portrait = text[(openBracketIndex + 1)..].Trim();
+                string speaker = text[..openBracketIndex].Trim();
+                return (speaker, portrait);
             }
         }
 
