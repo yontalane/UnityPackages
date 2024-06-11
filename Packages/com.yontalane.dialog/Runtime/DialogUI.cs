@@ -8,6 +8,14 @@ using UnityEngine.UI;
 
 namespace Yontalane.Dialog
 {
+    public struct SetPortraitEvent
+    {
+        public IDialogAgent agent;
+        public LineData data;
+        public Image image;
+        public string speaker;
+    }
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : MonoBehaviour
@@ -20,12 +28,13 @@ namespace Yontalane.Dialog
         }
 
         [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
-        [Serializable] public class SetSpriteAction : UnityEvent<IDialogAgent, LineData, Image> { }
+        [Serializable] public class SetSpriteAction : UnityEvent<SetPortraitEvent> { }
         [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
 
         private const string ANIMATION_PARAMETER = "Dialog Visible";
         private const float HANDLER_DELAY = 0.15f;
 
+        private static readonly List<Button> s_tempResponseButtons = new();
         private static AudioSource s_clickAudioSource = null;
         private static AudioSource s_blastAudioSource = null;
 
@@ -177,6 +186,7 @@ namespace Yontalane.Dialog
         {
             m_continueButton.gameObject.SetActive(false);
             m_canUseContinueHandler = true;
+            string speaker = string.Empty;
 
             string lineBreak = string.Empty;
             for (int i = 0; i < m_speakerLineBreaks; i++)
@@ -190,7 +200,7 @@ namespace Yontalane.Dialog
             else
             {
                 string speakerColor = ColorUtility.ToHtmlStringRGBA(GetSpeakerColor(line.speaker));
-                string speaker = replaceInlineText(line.speaker);
+                speaker = replaceInlineText(line.speaker);
                 if (m_speakerCaps)
                 {
                     speaker = speaker.ToUpper();
@@ -214,7 +224,13 @@ namespace Yontalane.Dialog
             {
                 if (m_setPortrait != null)
                 {
-                    m_setPortrait.Invoke(DialogProcessor.Instance.DialogAgent, line, m_portrait);
+                    m_setPortrait.Invoke(new()
+                    {
+                        agent = DialogProcessor.Instance.DialogAgent,
+                        data = line,
+                        image = m_portrait,
+                        speaker = speaker,
+                    });
                     m_portraitContainer.gameObject.SetActive(m_portrait.sprite != null);
                 }
                 else
@@ -290,6 +306,8 @@ namespace Yontalane.Dialog
                 }
 
                 m_responseContainer.gameObject.SetActive(false);
+                s_tempResponseButtons.Clear();
+
                 for (int i = 0; i < line.responses.Length; i++)
                 {
                     Button instance = Instantiate(m_responseButtonPrefab.gameObject).GetComponent<Button>();
@@ -304,9 +322,11 @@ namespace Yontalane.Dialog
                     instance.transform.localScale = Vector3.one;
                     instance.navigation = Navigation.defaultNavigation;
 
+                    s_tempResponseButtons.Add(instance);
+
                     if (i == 0) continue;
 
-                    Button prev = m_responseContainer.GetChild(i - 1).GetComponent<Button>();
+                    Button prev = s_tempResponseButtons[^2];
 
                     Navigation currNav = instance.navigation;
                     currNav.mode = Navigation.Mode.Explicit;
@@ -320,6 +340,8 @@ namespace Yontalane.Dialog
                     prevNav.selectOnDown = instance;
                     prev.navigation = prevNav;
                 }
+
+                s_tempResponseButtons.Clear();
             }
 
             if (m_animator != null)

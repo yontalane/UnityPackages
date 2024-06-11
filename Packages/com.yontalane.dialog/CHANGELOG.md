@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.38 - 2024.06.10
+
+**Fixed**
+
+* Response button navigation would sometimes break.
+
 ## 1.0.37 - 2024.06.09
 
 **Added**
