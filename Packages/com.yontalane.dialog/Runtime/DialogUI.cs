@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Yontalane.Dialog
 {
-    public struct SetPortraitEvent
+    public struct PortraitEvent
     {
         public IDialogAgent agent;
         public LineData data;
@@ -28,7 +28,7 @@ namespace Yontalane.Dialog
         }
 
         [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
-        [Serializable] public class SetSpriteAction : UnityEvent<SetPortraitEvent> { }
+        [Serializable] public class SetSpriteAction : UnityEvent<PortraitEvent> { }
         [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
 
         private const string ANIMATION_PARAMETER = "Dialog Visible";
@@ -215,6 +215,8 @@ namespace Yontalane.Dialog
                 }
             }
             m_text = replaceInlineText(line.text);
+
+            line.portrait = replaceInlineText(line.portrait);
 
             m_line = line;
             m_lineCompleteCallback = lineCompleteCallback;

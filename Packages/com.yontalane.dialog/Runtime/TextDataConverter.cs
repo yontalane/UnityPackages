@@ -175,6 +175,10 @@ namespace Yontalane.Dialog
                 text = text[..closeBracketIndex];
                 string portrait = text[(openBracketIndex + 1)..].Trim();
                 string speaker = text[..openBracketIndex].Trim();
+                if (string.IsNullOrEmpty(portrait))
+                {
+                    portrait = speaker;
+                }
                 return (speaker, portrait);
             }
         }

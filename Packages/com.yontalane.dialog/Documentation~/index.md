@@ -111,7 +111,8 @@ It looks like this:
   Arm Dude [Arm Dude Contemplative]: I know what you're thinking.
 
   //responses are - [text]=>[new node]
-  Arm Dude: Yes, this is a metal arm. No, I am not "happy to see you."
+  //an empty portrait [] is replaced by the speaker name text
+  Arm Dude []: Yes, this is a metal arm. No, I am not "happy to see you."
     - That's weird, man. => Deep Convo
     - cya. => Done
 

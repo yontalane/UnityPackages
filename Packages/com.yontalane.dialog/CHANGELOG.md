@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.39 - 2024.06.10
+
+**Added**
+
+* Running portrait text through replaceInLineText().
+* If simple-text portrait is [] then it is replaced by the speaker name.
+
 ## 1.0.38 - 2024.06.10
 
 **Fixed**
