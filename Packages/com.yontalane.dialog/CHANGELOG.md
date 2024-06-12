@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.41 - 2024.06.12
+
+**Added**
+
+* Can set static text at runtime.
+
 ## 1.0.40 - 2024.06.12
 
 **Added**

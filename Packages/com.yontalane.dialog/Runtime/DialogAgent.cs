@@ -88,6 +88,13 @@ namespace Yontalane.Dialog
             Data = null;
         }
 
+        public void SetStaticText(string text)
+        {
+            m_inputType = DialogAgentInputType.String;
+            Data = null;
+            m_staticText = text;
+        }
+
         public void SetTextData(TextAsset textAsset) => SetTextData(textAsset, string.Empty);
 
         public void ClearData() => Data = null;
