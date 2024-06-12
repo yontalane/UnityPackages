@@ -90,6 +90,8 @@ namespace Yontalane.Dialog
 
         public void SetTextData(TextAsset textAsset) => SetTextData(textAsset, string.Empty);
 
+        public void ClearData() => Data = null;
+
         public void InitiateDialog(string speaker, UnityAction onExitDialog)
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))

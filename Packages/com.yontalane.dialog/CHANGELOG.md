@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.40 - 2024.06.12
+
+**Added**
+
+* Can manually clear dialog data in agent.
+
 ## 1.0.39 - 2024.06.10
 
 **Added**
