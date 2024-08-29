@@ -121,7 +121,8 @@ It looks like this:
   Arm Dude: Cold, bro. Cold.
 
   //You can still use double brackets.
-  <<player>>: Gotta speak my mind.
+  //|: creates a mid-text linebreak.
+  <<player>>: Hey, look.|:Gotta speak my mind.
 
   Arm Dude: You're all right.
 

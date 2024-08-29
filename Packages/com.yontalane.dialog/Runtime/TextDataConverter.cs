@@ -135,7 +135,7 @@ namespace Yontalane.Dialog
                     {
                         speaker = speaker,
                         portrait = portrait,
-                        text = line[(colonIndex + 1)..].Trim(),
+                        text = ProcessLineBreaks(line[(colonIndex + 1)..].Trim()),
                     });
                     s_responseData.Clear();
                 }
@@ -313,6 +313,11 @@ namespace Yontalane.Dialog
                 link = link[1..];
             }
             return link.TrimStart();
+        }
+
+        private static string ProcessLineBreaks(string text)
+        {
+            return text.Replace("|:", "\n");
         }
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.42 - 2024.08.29
+
+**Added**
+
+* |: creates a mid-text linebreak.
+
 ## 1.0.41 - 2024.06.12
 
 **Added**
