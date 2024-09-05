@@ -534,7 +534,16 @@ namespace Yontalane.Dialog
         private void EndLine()
         {
             m_writingInProgress = false;
-            m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
+
+            if (m_speakerField != null)
+            {
+                m_speakerField.text = FormatInlineText(m_speaker);
+                m_textField.text = FormatInlineText(m_text);
+            }
+            else
+            {
+                m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
+            }
 
             m_onDisplayLine?.Invoke();
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.44 - 2024.09.05
+
+**Changed**
+
+* Fixed bug with optional speaker field.
+
 ## 1.0.43 - 2024.09.05
 
 **Added**
