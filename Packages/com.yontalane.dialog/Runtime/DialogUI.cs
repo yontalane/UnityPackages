@@ -91,6 +91,9 @@ namespace Yontalane.Dialog
         [Tooltip("The field for displaying dialog text.")]
         private TMP_Text m_textField = null;
         [SerializeField]
+        [Tooltip("The optional field for displaying speaker's name. If left blank, the speaker's name will be displayed in the main text field.")]
+        private TMP_Text m_speakerField = null;
+        [SerializeField]
         [Tooltip("Button for skipping text writing sequence. May be the same as the continue button.")]
         private Button m_skipButton = null;
         [SerializeField]
@@ -221,6 +224,11 @@ namespace Yontalane.Dialog
             m_line = line;
             m_lineCompleteCallback = lineCompleteCallback;
             m_textField.text = "";
+
+            if (m_speakerField != null)
+            {
+                m_speakerField.text = string.Empty;
+            }
 
             if (m_portraitContainer != null && m_portrait != null)
             {
@@ -400,8 +408,14 @@ namespace Yontalane.Dialog
             StartCoroutine(DelayHighlightSkipButton());
             List<string> hangingTags = new List<string>();
 
+            bool speakerFieldExists = m_speakerField != null;
+            if (speakerFieldExists)
+            {
+                m_speakerField.text = m_speaker;
+            }
+
             m_textField.text = "";
-            string fullText = FormatInlineText(m_speaker);
+            string fullText = FormatInlineText(speakerFieldExists ? string.Empty : m_speaker);
             for (int i = 0; i < m_text.Length; i++)
             {
                 bool showNextCharacter = true;

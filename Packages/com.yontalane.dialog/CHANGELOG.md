@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.43 - 2024.09.05
+
+**Added**
+
+* Dialog UI supports an optional speaker name text field.
+
 ## 1.0.42 - 2024.08.29
 
 **Added**
