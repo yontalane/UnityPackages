@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.45 - 2025.02.18
+
+**Added**
+
+* You can initiate a query popup from simple script.
+
 ## 1.0.44 - 2024.09.05
 
 **Changed**

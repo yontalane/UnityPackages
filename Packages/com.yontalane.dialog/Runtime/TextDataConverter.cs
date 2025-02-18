@@ -96,6 +96,16 @@ namespace Yontalane.Dialog
                     LineToIfFunction(line["IF FUNCTION:".Length..]);
                     continue;
                 }
+                else if (lineUp.IndexOf("IF FUNC:") == 0)
+                {
+                    LineToIfFunction(line["IF FUNC:".Length..]);
+                    continue;
+                }
+                else if (lineUp.IndexOf("IFF:") == 0)
+                {
+                    LineToIfFunction(line["IFF:".Length..]);
+                    continue;
+                }
                 else if (lineUp.IndexOf("IF:") == 0)
                 {
                     LineToIf(line[3..]);
@@ -104,6 +114,11 @@ namespace Yontalane.Dialog
                 else if (lineUp.IndexOf("DO:") == 0)
                 {
                     LineToDo(line[3..]);
+                    continue;
+                }
+                else if (lineUp.IndexOf("?:") == 0)
+                {
+                    LineToQuery(line["?:".Length..]);
                     continue;
                 }
                 else if (lineUp == "EXIT")
@@ -237,6 +252,57 @@ namespace Yontalane.Dialog
             s_lineData.Add(new() { ifVar = $"{checking[0].Trim()}={checking[1].Trim()}", });
             s_lineData.Add(new() { link = FormatLink(setting[1]), });
             s_lineData.Add(new() { endIf = true, });
+            s_responseData.Clear();
+        }
+
+        private static void LineToQuery(string line)
+        {
+            string[] linePieces = line.Split("&&");
+            if (linePieces.Length < 2)
+            {
+                return;
+            }
+
+            string queryText = linePieces[0].Trim();
+
+            string[] queryResponses = new string[linePieces.Length - 1];
+            for (int i = 1; i < linePieces.Length; i++)
+            {
+                queryResponses[i - 1] = linePieces[i];
+            }
+
+            string[] queryResponseTexts = new string[queryResponses.Length];
+            string[] queryResponseLinks = new string[queryResponses.Length];
+
+            for (int i = 0; i < queryResponses.Length; i++)
+            {
+                string[] pieces = queryResponses[i].Split("=>");
+
+                if (pieces.Length != 2)
+                {
+                    return;
+                }
+
+                queryResponseTexts[i] = pieces[0].Trim();
+                queryResponseLinks[i] = pieces[1].Trim();
+            }
+
+            LineData lineData = new()
+            {
+                query = new()
+                {
+                    text = queryText,
+                    responses = new ResponseData[queryResponses.Length],
+                }
+            };
+
+            for (int i = 0; i < queryResponses.Length; i++)
+            {
+                lineData.query.responses[i].text = queryResponseTexts[i];
+                lineData.query.responses[i].link = queryResponseLinks[i];
+            }
+
+            s_lineData.Add(lineData);
             s_responseData.Clear();
         }
 

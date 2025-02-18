@@ -120,6 +120,11 @@ It looks like this:
 
   Arm Dude: Cold, bro. Cold.
 
+  //A modal query popup is ?:[text]&&[response]=>[node]&&[response]=>[node]...
+  ?: Just leave? && Yes => Done && No => Mind
+
+#Mind
+
   //You can still use double brackets.
   //|: creates a mid-text linebreak.
   <<player>>: Hey, look.|:Gotta speak my mind.
