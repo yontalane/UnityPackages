@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.48 - 2025.02.18
+
+**Fixed**
+
+* Parsing error in query from text script.
+
 ## 1.0.47 - 2025.02.18
 
 **Fixed**

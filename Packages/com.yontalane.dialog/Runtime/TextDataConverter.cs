@@ -303,8 +303,11 @@ namespace Yontalane.Dialog
 
             for (int i = 0; i < queryResponses.Length; i++)
             {
-                lineData.query.responses[i].text = queryResponseTexts[i];
-                lineData.query.responses[i].link = queryResponseLinks[i];
+                lineData.query.responses[i] = new()
+                {
+                    text = queryResponseTexts[i],
+                    link = queryResponseLinks[i],
+                };
             }
 
             s_lineData.Add(lineData);
