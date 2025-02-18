@@ -61,7 +61,7 @@ namespace Yontalane.Dialog
         {
             get
             {
-                if (s_instance == null) s_instance = FindObjectOfType<DialogProcessor>();
+                if (s_instance == null) s_instance = FindAnyObjectByType<DialogProcessor>();
                 return s_instance;
             }
         }

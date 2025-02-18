@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.46 - 2025.02.18
+
+**Changed**
+
+* Allowing earlier Unity version.
+
 ## 1.0.45 - 2025.02.18
 
 **Added**

@@ -121,6 +121,11 @@ namespace Yontalane.Dialog
                     LineToQuery(line["?:".Length..]);
                     continue;
                 }
+                else if (lineUp.IndexOf("?") == 0)
+                {
+                    LineToQuery(line["?".Length..]);
+                    continue;
+                }
                 else if (lineUp == "EXIT")
                 {
                     s_lineData.Add(new() { exit = true, });
