@@ -38,23 +38,23 @@ namespace Yontalane.Dialog
 
         [SerializeField]
         [Tooltip("Callback when dialog begins.")]
-        private UnityEvent m_initiateDialog = new UnityEvent();
+        private UnityEvent m_initiateDialog = new();
 
         [SerializeField]
         [Tooltip("Callback when dialog ends.")]
-        private UnityEvent m_exitDialog = new UnityEvent();
+        private UnityEvent m_exitDialog = new();
         private UnityAction m_exitDialogCode = null;
 
         [SerializeField]
         [Tooltip("Callback when a new line of dialog begins.")]
-        private LineCallback m_initiateLine = new LineCallback();
+        private LineCallback m_initiateLine = new();
 
         [Header("Responders")]
 
         [SerializeField]
         [Tooltip("Every DialogResponder that this DialogProcessor should check for keywords and function calls. Note that this field will accept any GameObject, but only objects that contain IDialogResponder will be used.")]
         private GameObject[] m_dialogResponders = new GameObject[0];
-        private readonly List<IDialogResponder> m_responders = new List<IDialogResponder>();
+        private readonly List<IDialogResponder> m_responders = new();
 
         private static DialogProcessor s_instance = null;
         public static DialogProcessor Instance
@@ -184,9 +184,9 @@ namespace Yontalane.Dialog
 
                 if (leftIndex >= 0 && rightIndex > leftIndex)
                 {
-                    string beforeLeft = text.Substring(0, leftIndex);
+                    string beforeLeft = text[..leftIndex];
                     string interior = text.Substring(leftIndex + 2, rightIndex - leftIndex - 2);
-                    string afterRight = rightIndex < text.Length - 2 ? text.Substring(rightIndex + 2) : "";
+                    string afterRight = rightIndex < text.Length - 2 ? text[(rightIndex + 2)..] : "";
                     if (GetKeyword(interior, out string dialogProcessorResult))
                     {
                         interior = dialogProcessorResult;
@@ -225,8 +225,8 @@ namespace Yontalane.Dialog
             int indexOf = functionName.IndexOf("::");
             if (indexOf >= 0)
             {
-                parameter = functionName.Substring(indexOf + 2);
-                functionName = functionName.Substring(0, indexOf);
+                parameter = functionName[(indexOf + 2)..];
+                functionName = functionName[..indexOf];
                 if (!string.IsNullOrEmpty(parameter))
                 {
                     parameter = ReplaceInlineText(parameter);
@@ -334,19 +334,19 @@ namespace Yontalane.Dialog
 
             if (colonsIndex >= 0 && equalsIndex > colonsIndex && equalsIndex < lineData.ifFunction.Length - 1)
             {
-                functionName = lineData.ifFunction.Substring(0, colonsIndex);
+                functionName = lineData.ifFunction[..colonsIndex];
                 parameter = lineData.ifFunction.Substring(colonsIndex + 2, equalsIndex - colonsIndex - 2);
-                desiredResult = lineData.ifFunction.Substring(equalsIndex + 1);
+                desiredResult = lineData.ifFunction[(equalsIndex + 1)..];
             }
             else if (colonsIndex >= 0 && equalsIndex == -1)
             {
-                functionName = lineData.ifFunction.Substring(0, colonsIndex);
-                parameter = lineData.ifFunction.Substring(colonsIndex + 2);
+                functionName = lineData.ifFunction[..colonsIndex];
+                parameter = lineData.ifFunction[(colonsIndex + 2)..];
             }
             else if (colonsIndex == -1 && equalsIndex >= 0 && equalsIndex < lineData.ifFunction.Length - 1)
             {
-                functionName = lineData.ifFunction.Substring(0, equalsIndex);
-                desiredResult = lineData.ifFunction.Substring(equalsIndex + 1);
+                functionName = lineData.ifFunction[..equalsIndex];
+                desiredResult = lineData.ifFunction[(equalsIndex + 1)..];
             }
             else if (colonsIndex == -1 && equalsIndex == -1)
             {
@@ -431,8 +431,8 @@ namespace Yontalane.Dialog
 
             if (string.IsNullOrEmpty(lineData.ifDialogCount) || lineData.ifDialogCount.Length <= 1) return false;
 
-            string leftSide = lineData.ifDialogCount.Substring(0, 1);
-            string rightSide = lineData.ifDialogCount.Substring(1);
+            string leftSide = lineData.ifDialogCount[..1];
+            string rightSide = lineData.ifDialogCount[1..];
 
             if (int.TryParse(rightSide, out int intValue))
             {

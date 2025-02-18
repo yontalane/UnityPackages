@@ -103,7 +103,7 @@ namespace Yontalane.Dialog
         {
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
             {
-                switch(m_inputType)
+                switch (m_inputType)
                 {
                     case DialogAgentInputType.Data:
                         ID = name;
@@ -115,13 +115,19 @@ namespace Yontalane.Dialog
                         break;
                     case DialogAgentInputType.String:
                         ID = STATIC_ID;
-                        Data = new DialogData();
-                        Data.nodes = new NodeData[1];
-                        Data.nodes[0] = new NodeData();
-                        Data.nodes[0].lines = new LineData[1];
-                        Data.nodes[0].lines[0] = new LineData();
-                        Data.nodes[0].lines[0].speaker = speaker;
-                        Data.nodes[0].lines[0].text = m_staticText;
+                        Data = new DialogData
+                        {
+                            nodes = new NodeData[1]
+                        };
+                        Data.nodes[0] = new NodeData
+                        {
+                            lines = new LineData[1]
+                        };
+                        Data.nodes[0].lines[0] = new LineData
+                        {
+                            speaker = speaker,
+                            text = m_staticText
+                        };
                         break;
                     case DialogAgentInputType.TextData:
                         ID = name;

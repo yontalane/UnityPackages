@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.47 - 2025.02.18
+
+**Fixed**
+
+* Script text file is visible in the inspector.
+
 ## 1.0.46 - 2025.02.18
 
 **Changed**
