@@ -11,6 +11,7 @@ namespace Yontalane.Query
     public struct QueryEventData
     {
         public string prompt;
+        public string description;
         public string[] responses;
         public string chosenResponse;
         public string queryId;
@@ -61,6 +62,10 @@ namespace Yontalane.Query
         [SerializeField]
         [Tooltip("The field for displaying the dialog's message text.")]
         private TMP_Text m_text = null;
+
+        [SerializeField]
+        [Tooltip("An optional field for displaying the dialog's description text.")]
+        private TMP_Text m_description = null;
 
         [SerializeField]
         [Tooltip("The location to instantiate response buttons.")]
@@ -142,6 +147,19 @@ namespace Yontalane.Query
         /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
         public static void Initiate(string id, string text, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
         {
+            Initiate(id, text, string.Empty, responses, initialSelection, callback, selectCallback);
+        }
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="initialSelection">The index of the initially selected response.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void Initiate(string id, string text, string description, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
+        {
             QueryUI queryUI = Instance;
 
             if (queryUI == null)
@@ -155,6 +173,11 @@ namespace Yontalane.Query
             queryUI.m_callback = callback;
             queryUI.m_selectCallback = selectCallback;
             queryUI.m_text.text = text;
+
+            if (queryUI.m_description != null)
+            {
+                queryUI.m_description.text = description;
+            }
 
             for (int i = queryUI.m_responses.Count - 1; i >= 0; i--)
             {
@@ -353,9 +376,10 @@ namespace Yontalane.Query
             m_selectCallback?.Invoke(new QueryEventData()
             {
                 prompt = m_text.text,
+                description = m_description != null ? m_description.text : string.Empty,
                 responses = m_responsesText,
                 chosenResponse = m_responsesText[int.Parse(response.name)],
-                queryId = Id
+                queryId = Id,
             });
         }
 
@@ -375,9 +399,10 @@ namespace Yontalane.Query
             m_callback?.Invoke(new QueryEventData()
             {
                 prompt = m_text.text,
+                description = m_description != null ? m_description.text : string.Empty,
                 responses = m_responsesText,
                 chosenResponse = response,
-                queryId = Id
+                queryId = Id,
             });
         }
 

@@ -269,6 +269,14 @@ namespace Yontalane.Dialog
             }
 
             string queryText = linePieces[0].Trim();
+            string descriptionText = string.Empty;
+
+            if (queryText.Contains("||"))
+            {
+                string[] texts = queryText.Split("||");
+                queryText = texts[0].Trim();
+                descriptionText = texts[1].Trim();
+            }
 
             string[] queryResponses = new string[linePieces.Length - 1];
             for (int i = 1; i < linePieces.Length; i++)
@@ -297,6 +305,7 @@ namespace Yontalane.Dialog
                 query = new()
                 {
                     text = queryText,
+                    description = descriptionText,
                     responses = new ResponseData[queryResponses.Length],
                 }
             };

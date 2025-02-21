@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.13 - 2025.02.20
+
+**Added**
+
+* Optional description text.
+
 ## 1.0.12 - 2024.05.29
 
 **Fixed**

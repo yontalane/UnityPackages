@@ -77,6 +77,7 @@ namespace Yontalane.Dialog
     public class QueryData
     {
         public string text = "";
+        public string description = "";
         public ResponseData[] responses = new ResponseData[0];
     }
 }
