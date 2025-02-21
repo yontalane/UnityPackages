@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.51 - 2025.02.20
+
+**Fixed**
+
+* Supports query box description text.
+
 ## 1.0.50 - 2025.02.20
 
 **Added**

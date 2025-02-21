@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.15 - 2025.02.20
+
+**Fixed**
+
+* InitiateWithDescription() now works.
+
 ## 1.0.14 - 2025.02.20
 
 **Added**
