@@ -154,6 +154,7 @@ namespace Yontalane.Query
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
         /// <param name="text">The query message.</param>
+        /// <param name="description">The query description text.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="initialSelection">The index of the initially selected response.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
@@ -284,6 +285,16 @@ namespace Yontalane.Query
         /// <param name="callback">The function to call when a response is chosen.</param>
         /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
         public static void Initiate(string text, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(Instance != null ? Instance.Id : string.Empty, text, responses, callback, selectCallback);
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="description">The query description text.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void InitiateWithDescription(string text, string description, string[] responses, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(Instance != null ? Instance.Id : string.Empty, text, description, responses, 0, callback, selectCallback);
 
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.

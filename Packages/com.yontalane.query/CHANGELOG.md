@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.14 - 2025.02.20
+
+**Added**
+
+* Initiate query function with description parameter.
+
 ## 1.0.13 - 2025.02.20
 
 **Added**

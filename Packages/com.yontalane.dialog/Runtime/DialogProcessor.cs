@@ -409,7 +409,7 @@ namespace Yontalane.Dialog
                     responses[i] = ReplaceInlineText(queryData.responses[i].text);
                 }
                 string description = !string.IsNullOrEmpty(queryData.description) ? queryData.description : string.Empty;
-                Query.QueryUI.Initiate(ReplaceInlineText(queryData.text), description, responses, OnQueryResponse);
+                Query.QueryUI.InitiateWithDescription(ReplaceInlineText(queryData.text), ReplaceInlineText(description), responses, OnQueryResponse);
                 return true;
             }
 
