@@ -80,6 +80,78 @@ namespace Yontalane.Dialog
             }
         }
 
+        public DialogAgentInputType InputType
+        {
+            get
+            {
+                return m_inputType;
+            }
+
+            set
+            {
+                m_inputType = value;
+            }
+        }
+
+        public TextAsset TextData
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.TextData)
+                {
+                    return null;
+                }
+
+                return m_textData;
+            }
+
+            set
+            {
+                m_inputType = DialogAgentInputType.TextData;
+                m_textData = value;
+                m_textDataStart = string.Empty;
+                Data = null;
+            }
+        }
+
+        public string TextDataStart
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.TextData)
+                {
+                    return string.Empty;
+                }
+
+                return m_textDataStart;
+            }
+
+            set
+            {
+                m_textDataStart = value;
+            }
+        }
+
+        public string StaticText
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.String)
+                {
+                    return string.Empty;
+                }
+
+                return m_staticText;
+            }
+
+            set
+            {
+                m_inputType = DialogAgentInputType.String;
+                Data = null;
+                m_staticText = value;
+            }
+        }
+
         public void SetTextData(TextAsset textAsset, string startNode)
         {
             m_inputType = DialogAgentInputType.TextData;

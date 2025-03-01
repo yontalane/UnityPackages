@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.52 - 2025.03.01
+
+**Added**
+
+* DialogAgent's TextData and StaticText are publicly accessible.
+
 ## 1.0.51 - 2025.02.20
 
 **Fixed**
