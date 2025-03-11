@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.53 - 2025.03.11
+
+**Changed**
+
+* TextDataConverter confirms an dialog line before entering response mode.
+
 ## 1.0.52 - 2025.03.01
 
 **Added**

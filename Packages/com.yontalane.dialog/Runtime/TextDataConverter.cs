@@ -159,7 +159,7 @@ namespace Yontalane.Dialog
                     });
                     s_responseData.Clear();
                 }
-                else if (hyphenIndex == 0 && arrowIndex != -1)
+                else if (hyphenIndex == 0 && arrowIndex != -1 && s_lineData != null && s_lineData.Count > 0)
                 {
                     string responseText = line[1..arrowIndex].Trim();
                     string responseLink = FormatLink(line[(arrowIndex + 2)..]);
