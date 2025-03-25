@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.55 - 2025.03.25
+
+**Fixed**
+
+* Line joiner code caused infinite loop. Fixed.
+
 ## 1.0.54 - 2025.03.24
 
 **Added**

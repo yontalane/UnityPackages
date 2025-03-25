@@ -12,9 +12,12 @@ namespace Yontalane.Dialog
 
     internal static class TextDataConverter
     {
+        private const string LINE_JOINER = "--";
+
         private static readonly List<TextDataConversion> s_conversions = new();
 
         private static string s_startNode = string.Empty;
+        private static readonly List<string> s_lines = new();
         private static readonly List<NodeData> s_nodeData = new();
         private static readonly List<LineData> s_lineData = new();
         private static readonly List<ResponseData> s_responseData = new();
@@ -35,13 +38,12 @@ namespace Yontalane.Dialog
             s_lineData.Clear();
             s_responseData.Clear();
 
-            string text = asset.text;
+            s_lines.Clear();
+            s_lines.AddRange(asset.text.Split('\n'));
 
-            FixForLineJoiners(ref text);
+            FixForLineJoiners(s_lines);
 
-            string[] lines = text.Split('\n');
-
-            GetNodeData(lines);
+            GetNodeData(s_lines);
 
             DialogData data = new()
             {
@@ -58,32 +60,25 @@ namespace Yontalane.Dialog
             return data;
         }
 
-        private static void FixForLineJoiners(ref string text)
+        private static void FixForLineJoiners(List<string> lines)
         {
-            int test;
-            string testChar;
-            int i = text.IndexOf("--");
-
-            while (i != -1)
+            if (lines == null || lines.Count < 2)
             {
-                test = i - 1;
+                return;
+            }
 
-                while (test >= 0)
+            string line;
+            int length = LINE_JOINER.Length;
+
+            for (int i = lines.Count - 1; i >= 1; i--)
+            {
+                line = lines[i].TrimStart();
+
+                if (line.IndexOf(LINE_JOINER) == 0)
                 {
-                    testChar = text.Substring(test, 1);
-
-                    if (testChar == "\n")
-                    {
-                        text = $"{text[..test]}{text[(i + 2)..]}";
-                        break;
-                    }
-                    else if (!string.IsNullOrWhiteSpace(testChar))
-                    {
-                        break;
-                    }
+                    lines[i - 1] += line[length..];
+                    lines.RemoveAt(i);
                 }
-
-                i = text.IndexOf("--");
             }
         }
 
