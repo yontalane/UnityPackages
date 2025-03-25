@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.54 - 2025.03.24
+
+**Added**
+
+* TextDataConverter supports line joiners for splitting a single line over multiple lines.
+
 ## 1.0.53 - 2025.03.11
 
 **Changed**

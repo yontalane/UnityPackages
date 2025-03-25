@@ -35,7 +35,11 @@ namespace Yontalane.Dialog
             s_lineData.Clear();
             s_responseData.Clear();
 
-            string[] lines = asset.text.Split('\n');
+            string text = asset.text;
+
+            FixForLineJoiners(ref text);
+
+            string[] lines = text.Split('\n');
 
             GetNodeData(lines);
 
@@ -52,6 +56,35 @@ namespace Yontalane.Dialog
             });
 
             return data;
+        }
+
+        private static void FixForLineJoiners(ref string text)
+        {
+            int test;
+            string testChar;
+            int i = text.IndexOf("--");
+
+            while (i != -1)
+            {
+                test = i - 1;
+
+                while (test >= 0)
+                {
+                    testChar = text.Substring(test, 1);
+
+                    if (testChar == "\n")
+                    {
+                        text = $"{text[..test]}{text[(i + 2)..]}";
+                        break;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(testChar))
+                    {
+                        break;
+                    }
+                }
+
+                i = text.IndexOf("--");
+            }
         }
 
 
