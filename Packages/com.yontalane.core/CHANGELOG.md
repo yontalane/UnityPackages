@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.34 - 2025.03.28
+
+**Added**
+
+- RemoteMusicPlayer supports per-track volume and loop settings.
+
 ## 1.0.33 - 2025.03.28
 
 **Added**

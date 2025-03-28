@@ -4,29 +4,40 @@ using UnityEngine.Networking;
 
 namespace Yontalane
 {
+    [System.Serializable]
+    public struct RemoteMusicPlayerTrack
+    {
+        public string url;
+
+        [Range(0f, 1f)]
+        public float volume;
+
+        public bool loop;
+    }
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Remote Music Player")]
     public sealed class RemoteMusicPlayer : MonoBehaviour
     {
         [SerializeField]
-        private string[] m_musicUrls;
+        private RemoteMusicPlayerTrack[] m_tracks;
 
         private void Reset()
         {
-            m_musicUrls = new string[0];
+            m_tracks = new RemoteMusicPlayerTrack[0];
         }
 
         private void Start()
         {
-            foreach (string url in m_musicUrls)
+            foreach (RemoteMusicPlayerTrack track in m_tracks)
             {
-                StartCoroutine(PlayMusic(url));
+                StartCoroutine(PlayMusic(track));
             }
         }
 
-        private IEnumerator PlayMusic(string url)
+        private IEnumerator PlayMusic(RemoteMusicPlayerTrack track)
         {
-            if (string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(track.url))
             {
                 yield break;
             }
@@ -38,7 +49,7 @@ namespace Yontalane
             child.transform.localScale = Vector3.one;
             AudioSource audioSource = child.AddComponent<AudioSource>();
 
-            using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
+            using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(track.url, AudioType.MPEG);
 
             yield return www.SendWebRequest();
 
@@ -50,7 +61,8 @@ namespace Yontalane
             {
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
                 audioSource.clip = clip;
-                audioSource.loop = true;
+                audioSource.loop = track.loop;
+                audioSource.volume = track.volume;
                 audioSource.Play();
             }
         }
