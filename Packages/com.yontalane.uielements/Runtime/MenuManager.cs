@@ -71,7 +71,7 @@ namespace Yontalane.UIElements
 
         protected virtual void Awake()
         {
-            m_document = FindObjectOfType<UIDocument>();
+            m_document = FindAnyObjectByType<UIDocument>();
             if (m_document == null)
             {
                 Logger.LogError($"{GetType().Name} could not find the UIDocument.");

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.33 - 2025.03.28
+
+**Added**
+
+- AudioPack for player a random sound.
+- RemoteMusicPlayer for playing music from a web source.
+- AnimationSoundPlayer for playing an AudioPack from an animation.
+- AnimationEventaBroadcaster for broadcasting an event from an animation.
+
 ## 1.0.32 - 2024.06.05
 
 **Added**

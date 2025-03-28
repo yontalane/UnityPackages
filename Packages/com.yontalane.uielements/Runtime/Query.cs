@@ -206,7 +206,7 @@ namespace Yontalane.UIElements
 
         public new void Focus()
         {
-            UIDocument document = UnityEngine.Object.FindObjectOfType<UIDocument>();
+            UIDocument document = UnityEngine.Object.FindAnyObjectByType<UIDocument>();
             if (EventSystem.current != null)
             {
                 EventSystem.current.SetSelectedGameObject(document.gameObject);
