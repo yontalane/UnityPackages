@@ -68,7 +68,7 @@ private void Navigator_OnComplete(bool pathExists)
 
 
 
-If you don't want path asynchronously, you can instead do:
+If you don't want to path asynchronously, you can instead do:
 
 ```c#
 bool pathExists = navigator.FindPathSynchronous(startX, startY, endX, endY);
