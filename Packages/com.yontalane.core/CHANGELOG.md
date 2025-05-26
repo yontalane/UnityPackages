@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.35 - 2025.05.26
+
+**Added**
+
+- RemoteMusicPlayer can be extended and has hookup for basic music settings.
+
 ## 1.0.34 - 2025.03.28
 
 **Added**

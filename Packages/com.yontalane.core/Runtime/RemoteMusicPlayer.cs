@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,18 +18,58 @@ namespace Yontalane
 
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Remote Music Player")]
-    public sealed class RemoteMusicPlayer : MonoBehaviour
+    public class RemoteMusicPlayer : MonoBehaviour
     {
+        private readonly List<AudioSource> m_audioSources = new();
+
+
         [SerializeField]
         private RemoteMusicPlayerTrack[] m_tracks;
 
-        private void Reset()
+        [SerializeField]
+        private bool m_autoPlay = true;
+
+
+        public virtual float MusicVolume => 1f;
+
+        public virtual bool MusicOn => true;
+
+
+        protected virtual void Reset()
         {
             m_tracks = new RemoteMusicPlayerTrack[0];
+            m_autoPlay = true;
         }
 
-        private void Start()
+
+        protected virtual void Start()
         {
+            if (m_autoPlay)
+            {
+                Play();
+            }
+        }
+
+        public void Stop()
+        {
+            for (int i = m_audioSources.Count - 1; i >= 0; i--)
+            {
+                m_audioSources[i].Stop();
+                Destroy(m_audioSources[i].gameObject);
+            }
+
+            m_audioSources.Clear();
+        }
+
+        public void Play()
+        {
+            Stop();
+
+            if (!MusicOn)
+            {
+                return;
+            }
+
             foreach (RemoteMusicPlayerTrack track in m_tracks)
             {
                 StartCoroutine(PlayMusic(track));
@@ -49,6 +90,8 @@ namespace Yontalane
             child.transform.localScale = Vector3.one;
             AudioSource audioSource = child.AddComponent<AudioSource>();
 
+            m_audioSources.Add(audioSource);
+
             using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(track.url, AudioType.MPEG);
 
             yield return www.SendWebRequest();
@@ -62,7 +105,7 @@ namespace Yontalane
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
                 audioSource.clip = clip;
                 audioSource.loop = track.loop;
-                audioSource.volume = track.volume;
+                audioSource.volume = track.volume * Mathf.Clamp01(MusicVolume);
                 audioSource.Play();
             }
         }
