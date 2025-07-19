@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.57 - 2025.07.19
+
+**Fixed**
+
+* Made rewind button accessible in inspector.
+
 ## 1.0.56 - 2025.07.19
 
 **Added**

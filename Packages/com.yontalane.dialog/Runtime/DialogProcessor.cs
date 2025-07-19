@@ -35,6 +35,12 @@ namespace Yontalane.Dialog
         public IDialogAgent DialogAgent { get; private set; } = null;
         public static string PlayerName { get; set; } = "";
 
+        [Header("Settings")]
+
+        [SerializeField]
+        [Tooltip("Can you rewind to previous nodes, or only previous lines?")]
+        private bool m_fullRewind = false;
+
         [Header("Callbacks")]
 
         [SerializeField]
@@ -315,6 +321,11 @@ namespace Yontalane.Dialog
             {
                 m_lineIndex--;
                 RunLine();
+                return;
+            }
+
+            if (!m_fullRewind)
+            {
                 return;
             }
 

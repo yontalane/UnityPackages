@@ -99,7 +99,8 @@ namespace Yontalane.Dialog
         [SerializeField]
         [Tooltip("Button for proceeding to the next line of dialog. May be the same as the skip button.")]
         private Button m_continueButton = null;
-        [Tooltip("Button for rewinding to the previous line of dialog.")]
+        [SerializeField]
+        [Tooltip("Button for rewinding to previous dialog.")]
         private Button m_rewindButton = null;
         [SerializeField]
         [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
