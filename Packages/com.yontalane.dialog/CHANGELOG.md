@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.56 - 2025.07.19
+
+**Added**
+
+* Rewind button functionality.
+
 ## 1.0.55 - 2025.03.25
 
 **Fixed**

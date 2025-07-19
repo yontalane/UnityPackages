@@ -99,6 +99,8 @@ namespace Yontalane.Dialog
         [SerializeField]
         [Tooltip("Button for proceeding to the next line of dialog. May be the same as the skip button.")]
         private Button m_continueButton = null;
+        [Tooltip("Button for rewinding to the previous line of dialog.")]
+        private Button m_rewindButton = null;
         [SerializeField]
         [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
         private RectTransform m_responseContainer = null;
@@ -111,6 +113,9 @@ namespace Yontalane.Dialog
         [SerializeField]
         [Tooltip("Sound effect for clicking a response button.")]
         private AudioClip m_buttonClick = null;
+        [SerializeField]
+        [Tooltip("Sound effect for clicking the rewind button.")]
+        private AudioClip m_rewindClick = null;
         [SerializeField]
         [Tooltip("Sound effect for typing during the text writing sequence.")]
         private AudioClip m_typingDefault = null;
@@ -157,7 +162,9 @@ namespace Yontalane.Dialog
         private string m_text = null;
         private bool m_writingInProgress = false;
         private Action<string> m_lineCompleteCallback = null;
+        private Action m_rewindCallback = null;
         private bool m_canUseContinueHandler = true;
+        private bool m_canUseRewindHandler = true;
 
         public static DialogUI Instance { get; private set; }
 
@@ -171,6 +178,13 @@ namespace Yontalane.Dialog
             m_skipButton.onClick.AddListener(delegate { SkipWriteOut(); });
             m_continueButton.onClick.AddListener(delegate { OnClickResponse(null); });
             m_continueButton.gameObject.SetActive(false);
+
+            if (m_rewindButton != null)
+            {
+                m_rewindButton.onClick.AddListener(delegate { OnClickRewind(); });
+                m_rewindButton.gameObject.SetActive(false);
+            }
+
             if (m_responseContainer != null)
             {
                 m_responseContainer.gameObject.SetActive(false);
@@ -185,10 +199,17 @@ namespace Yontalane.Dialog
             }
         }
 
-        public void Initiate(LineData line, Action<string> lineCompleteCallback, Func<string, string> replaceInlineText)
+        public void Initiate(LineData line, Action<string> lineCompleteCallback, Action rewindCallback, Func<string, string> replaceInlineText)
         {
             m_continueButton.gameObject.SetActive(false);
+
+            if (m_rewindButton != null)
+            {
+                m_rewindButton.gameObject.SetActive(false);
+            }
+
             m_canUseContinueHandler = true;
+            m_canUseRewindHandler = true;
             string speaker = string.Empty;
 
             string lineBreak = string.Empty;
@@ -223,6 +244,7 @@ namespace Yontalane.Dialog
 
             m_line = line;
             m_lineCompleteCallback = lineCompleteCallback;
+            m_rewindCallback = rewindCallback;
             m_textField.text = "";
 
             if (m_speakerField != null)
@@ -559,6 +581,11 @@ namespace Yontalane.Dialog
             {
                 m_continueButton.gameObject.SetActive(true);
                 m_continueButton.Highlight();
+
+                if (m_rewindButton != null)
+                {
+                    m_rewindButton.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -571,6 +598,7 @@ namespace Yontalane.Dialog
             {
                 SkipWriteOut();
                 m_canUseContinueHandler = false;
+                m_canUseRewindHandler = false;
                 if (gameObject.activeSelf)
                 {
                     StartCoroutine(HandlerDelay());
@@ -582,6 +610,7 @@ namespace Yontalane.Dialog
         {
             yield return new WaitForSecondsRealtime(HANDLER_DELAY);
             m_canUseContinueHandler = true;
+            m_canUseRewindHandler = true;
         }
 
         internal void ContinueHandler()
@@ -592,6 +621,17 @@ namespace Yontalane.Dialog
             {
                 m_continueButton.gameObject.SetActive(false);
                 OnClickResponse(null);
+            }
+        }
+
+        internal void RewindHandler()
+        {
+            if (m_canUseRewindHandler
+                && m_rewindButton != null
+                && m_rewindButton.gameObject.activeInHierarchy)
+            {
+                m_rewindButton.gameObject.SetActive(false);
+                OnClickRewind();
             }
         }
 
@@ -608,6 +648,21 @@ namespace Yontalane.Dialog
             }
 
             m_lineCompleteCallback?.Invoke(response == null ? null : m_line.responses[response.GetComponent<RectTransform>().GetSiblingIndex()].link);
+        }
+
+        private void OnClickRewind()
+        {
+            if (m_stopBlastAfterText)
+            {
+                BlastAudioSource.Stop();
+            }
+
+            if (m_rewindClick != null)
+            {
+                ClickAudioSource.PlayOneShot(m_rewindClick);
+            }
+
+            m_rewindCallback?.Invoke();
         }
 
         private IEnumerator CheckForBlastComplete()

@@ -30,6 +30,7 @@ namespace Yontalane.Dialog
         private bool m_isActive = false;
         private NodeData m_nodeData = null;
         private int m_lineIndex = 0;
+        private readonly List<string> m_nodeHistory = new();
 
         public IDialogAgent DialogAgent { get; private set; } = null;
         public static string PlayerName { get; set; } = "";
@@ -95,6 +96,7 @@ namespace Yontalane.Dialog
             }
 
             NodeData nodeData = null;
+            Instance.m_nodeHistory.Clear();
 
             if (GetNode(dialogAgent.Data, dialogAgent.Data.start, out NodeData startNodeData))
             {
@@ -284,11 +286,13 @@ namespace Yontalane.Dialog
 
             if (!string.IsNullOrEmpty(link) && GetNode(DialogAgent.Data, link, out NodeData linkedNodeDataFromResponse))
             {
+                m_nodeHistory.Add(m_nodeData.name);
                 m_nodeData = linkedNodeDataFromResponse;
                 m_lineIndex = 0;
             }
             else if (!string.IsNullOrEmpty(m_nodeData.lines[m_lineIndex].link) && GetNode(DialogAgent.Data, m_nodeData.lines[m_lineIndex].link, out NodeData linkedNodeDataFromEmbed))
             {
+                m_nodeHistory.Add(m_nodeData.name);
                 m_nodeData = linkedNodeDataFromEmbed;
                 m_lineIndex = 0;
             }
@@ -297,6 +301,37 @@ namespace Yontalane.Dialog
                 m_lineIndex++;
             }
 
+            RunLine();
+        }
+
+        private void RewindLine()
+        {
+            if (m_nodeData == null)
+            {
+                return;
+            }
+
+            if (m_lineIndex > 0)
+            {
+                m_lineIndex--;
+                RunLine();
+                return;
+            }
+
+            if (m_nodeHistory.Count == 0)
+            {
+                return;
+            }
+
+            if (!GetNode(DialogAgent.Data, m_nodeHistory[^1], out NodeData previousNode))
+            {
+                return;
+            }
+
+            m_nodeHistory.RemoveAt(m_nodeHistory.Count - 1);
+            m_nodeData = previousNode;
+            m_lineIndex = 0;
+            
             RunLine();
         }
 
@@ -579,7 +614,7 @@ namespace Yontalane.Dialog
             }
             else
             {
-                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
+                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, RewindLine, ReplaceInlineText);
                 m_initiateLine?.Invoke(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
             }
         }
