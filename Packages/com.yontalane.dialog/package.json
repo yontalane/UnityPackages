@@ -1,13 +1,13 @@
 {
     "name": "com.yontalane.dialog",
-    "version": "1.0.58",
+    "version": "1.0.59",
     "displayName": "Dialog",
     "description": "A dialog system.",
     "unity": "2022.3",
     "unityRelease": "43f1",
     "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialog/Documentation~/index.md",
     "dependencies": {
-        "com.yontalane.core": "1.0.35",
+        "com.yontalane.core": "1.0.36",
         "com.yontalane.query": "1.0.15"
     },
     "keywords": [

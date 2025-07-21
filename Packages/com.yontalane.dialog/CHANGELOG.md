@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.59 - 2025.07.21
+
+**Changed**
+
+* Removed rewind functionality for now.
+
 ## 1.0.58 - 2025.07.20
 
 **Fixed**

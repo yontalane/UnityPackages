@@ -2,11 +2,17 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A component that transforms the GameObject based on animation events.
+    /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Yontalane/Animation Event Transform")]
     public sealed class AnimationEventTransform : MonoBehaviour
     {
+        /// <summary>
+        /// Moves the GameObject based on the animation event.
+        /// </summary>
         public void Move(AnimationEvent animationEvent)
         {
             if (!TryGetVector3(animationEvent, out Vector3 v))
@@ -16,6 +22,9 @@ namespace Yontalane
             transform.Translate(v);
         }
 
+        /// <summary>
+        /// Sets the position of the GameObject based on the animation event.
+        /// </summary>
         public void SetPosition(AnimationEvent animationEvent)
         {
             if (!TryGetVector3(animationEvent, out Vector3 v))
@@ -25,6 +34,9 @@ namespace Yontalane
             transform.position = v;
         }
 
+        /// <summary>
+        /// Sets the euler angles of the GameObject based on the animation event.
+        /// </summary>
         public void SetEulerAngles(AnimationEvent animationEvent)
         {
             if (!TryGetVector3(animationEvent, out Vector3 v))
@@ -34,6 +46,9 @@ namespace Yontalane
             transform.eulerAngles = v;
         }
 
+        /// <summary>
+        /// Rotates the GameObject based on the animation event.
+        /// </summary>
         public void Rotate(AnimationEvent animationEvent)
         {
             if (TryGetVector3(animationEvent, out Vector3 v))
@@ -46,6 +61,9 @@ namespace Yontalane
             }
         }
 
+        /// <summary>
+        /// Tries to get the vector3 from the animation event.
+        /// </summary>
         private bool TryGetVector3(AnimationEvent animationEvent, out Vector3 vector3)
         {
             vector3 = default;
@@ -81,6 +99,9 @@ namespace Yontalane
             return true;
         }
 
+        /// <summary>
+        /// Sets the scale of the GameObject based on the animation event.
+        /// </summary>
         public void SetScale(AnimationEvent animationEvent)
         {
             if (!TryGetVector3(animationEvent, out Vector3 v))

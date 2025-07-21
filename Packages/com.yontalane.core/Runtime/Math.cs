@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A static class containing math utility methods.
+    /// </summary>
     public static class Math
     {
         /// <summary>
@@ -17,10 +20,11 @@ namespace Yontalane
         /// <summary>
         /// Rotate the vector.
         /// </summary>
-        public static Vector2 RotateByRadians(this Vector2 vector, float radians) => new Vector2(
-                vector.x * Mathf.Cos(radians) - vector.y * Mathf.Sin(radians),
-                vector.x * Mathf.Sin(radians) + vector.y * Mathf.Cos(radians)
-            );
+        public static Vector2 RotateByRadians(this Vector2 vector, float radians) => new()
+        {
+            x = vector.x * Mathf.Cos(radians) - vector.y * Mathf.Sin(radians),
+            y = vector.x * Mathf.Sin(radians) + vector.y * Mathf.Cos(radians)
+        };
 
         /// <summary>
         /// Rotate the vector.
@@ -30,7 +34,7 @@ namespace Yontalane
         /// <summary>
         /// Set a single value of the vector.
         /// </summary>
-        public static Vector3 SetX(this Vector3 vector, float value) => new Vector3()
+        public static Vector3 SetX(this Vector3 vector, float value) => new()
         {
             x = value,
             y = vector.y,
@@ -40,7 +44,7 @@ namespace Yontalane
         /// <summary>
         /// Set a single value of the vector.
         /// </summary>
-        public static Vector3 SetY(this Vector3 vector, float value) => new Vector3()
+        public static Vector3 SetY(this Vector3 vector, float value) => new()
         {
             x = vector.x,
             y = value,
@@ -50,7 +54,7 @@ namespace Yontalane
         /// <summary>
         /// Set a single value of the vector.
         /// </summary>
-        public static Vector3 SetZ(this Vector3 vector, float value) => new Vector3()
+        public static Vector3 SetZ(this Vector3 vector, float value) => new()
         {
             x = vector.x,
             y = vector.y,
@@ -60,7 +64,7 @@ namespace Yontalane
         /// <summary>
         /// Convert a float-based vector to an integer-based vector.
         /// </summary>
-        public static Vector2Int ToVector2Int(this Vector2 vector) => new Vector2Int()
+        public static Vector2Int ToVector2Int(this Vector2 vector) => new()
         {
             x = Mathf.RoundToInt(vector.x),
             y = Mathf.RoundToInt(vector.y)
@@ -69,7 +73,7 @@ namespace Yontalane
         /// <summary>
         /// Convert a float-based vector to an integer-based vector.
         /// </summary>
-        public static Vector3Int ToVector3Int(this Vector3 vector) => new Vector3Int()
+        public static Vector3Int ToVector3Int(this Vector3 vector) => new()
         {
             x = Mathf.RoundToInt(vector.x),
             y = Mathf.RoundToInt(vector.y),

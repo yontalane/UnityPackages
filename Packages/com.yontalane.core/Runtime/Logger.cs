@@ -2,6 +2,9 @@ using System.Diagnostics;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A static class containing logging utility methods.
+    /// </summary>
     public static class Logger
     {
         /// <summary>

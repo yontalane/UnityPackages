@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.36 - 2025.07.21
+
+**Added**
+
+- Added tooltips and summaries to most core fields and functions.
+
 ## 1.0.35 - 2025.05.26
 
 **Added**

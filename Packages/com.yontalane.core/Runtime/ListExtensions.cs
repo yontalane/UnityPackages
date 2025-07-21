@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A static class containing list extension methods.
+    /// </summary>
     public static class ListExtensions
     {
+        /// <summary>
+        /// Shuffles the list in place.
+        /// </summary>
         public static void Shuffle<T>(this List<T> list)
         {
             T item;

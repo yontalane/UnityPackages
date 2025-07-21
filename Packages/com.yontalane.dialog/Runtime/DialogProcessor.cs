@@ -76,12 +76,6 @@ namespace Yontalane.Dialog
         #endregion
 
         #region Serialized Fields
-        [Header("Settings")]
-
-        [Tooltip("Can you rewind to previous nodes, or only previous lines?")]
-        [SerializeField]
-        private bool m_fullRewind = false;
-
         [Header("Callbacks")]
 
         [Tooltip("Callback when dialog begins.")]
@@ -380,45 +374,6 @@ namespace Yontalane.Dialog
                 m_lineIndex++;
             }
 
-            RunLine();
-        }
-
-        /// <summary>
-        /// Rewinds the line to the previous line if the current line is an if statement.
-        /// </summary>
-        private void RewindLine()
-        {
-            if (m_nodeData == null)
-            {
-                return;
-            }
-
-            if (m_lineIndex > 0)
-            {
-                m_lineIndex--;
-                RunLine();
-                return;
-            }
-
-            if (!m_fullRewind)
-            {
-                return;
-            }
-
-            if (m_nodeHistory.Count == 0)
-            {
-                return;
-            }
-
-            if (!TryGetNode(DialogAgent.Data, m_nodeHistory[^1], out NodeData previousNode))
-            {
-                return;
-            }
-
-            m_nodeHistory.RemoveAt(m_nodeHistory.Count - 1);
-            m_nodeData = previousNode;
-            m_lineIndex = 0;
-            
             RunLine();
         }
 
@@ -774,7 +729,7 @@ namespace Yontalane.Dialog
             else
             {
                 m_nodeHistory.Add(m_nodeData.name);
-                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, RewindLine, ReplaceInlineText);
+                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
                 m_initiateLine?.Invoke(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
             }
         }

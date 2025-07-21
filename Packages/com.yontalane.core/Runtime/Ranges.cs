@@ -3,10 +3,16 @@ using UnityEngine;
 
 namespace Yontalane
 {
-    [System.Serializable]
+    /// <summary>
+    /// A range of float values.
+    /// </summary>
+    [Serializable]
     public class FloatRange
     {
+        [Tooltip("The minimum value of the range.")]
         public float min = 0f;
+
+        [Tooltip("The maximum value of the range.")]
         public float max = 0f;
 
         public FloatRange(float min, float max)
@@ -38,10 +44,16 @@ namespace Yontalane
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
     }
 
-    [System.Serializable]
+    /// <summary>
+    /// A range of int values.
+    /// </summary>
+    [Serializable]
     public class IntRange
     {
+        [Tooltip("The minimum value of the range.")]
         public int min = 0;
+
+        [Tooltip("The maximum value of the range.")]
         public int max = 0;
 
         public IntRange(int min, int max)
@@ -73,10 +85,16 @@ namespace Yontalane
         public override string ToString() => $"{GetType()} {{ {min}, {max} }}";
     }
 
+    /// <summary>
+    /// A property attribute that clamps a float value between a minimum and maximum value.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public sealed class ClampAttribute : PropertyAttribute
     {
+        [Tooltip("The minimum value of the range.")]
         public readonly float min = 0f;
+
+        [Tooltip("The maximum value of the range.")]
         public readonly float max = 1f;
 
         public ClampAttribute(float min = 0f, float max = 1f)

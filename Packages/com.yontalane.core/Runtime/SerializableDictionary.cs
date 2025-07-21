@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A serializable key/value pair.
+    /// </summary>
     [Serializable]
     public class SerializableKeyValuePair<T, U>
     {
@@ -12,9 +15,15 @@ namespace Yontalane
         public U value;
     }
 
+    /// <summary>
+    /// A base class for serializable dictionaries.
+    /// </summary>
     [Serializable]
     public class SerializableDictionaryBase_DoNotUse { }
 
+    /// <summary>
+    /// A serializable dictionary.
+    /// </summary>
     [Serializable]
     public class SerializableDictionary<T, U> : SerializableDictionaryBase_DoNotUse, IEnumerator, IEnumerable
     {
@@ -24,7 +33,7 @@ namespace Yontalane
         #region Get
 
         /// <summary>
-        /// Get the key at the provided index.
+        /// Gets the key at the provided index.
         /// </summary>
         public T GetKeyAt(int index)
         {
@@ -34,7 +43,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Get the value at the provided index.
+        /// Gets the value at the provided index.
         /// </summary>
         public U GetValueAt(int index)
         {
@@ -44,7 +53,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Get the key/value pair at the provided index.
+        /// Gets the key/value pair at the provided index.
         /// </summary>
         public SerializableKeyValuePair<T, U> GetAt(int index)
         {
@@ -58,7 +67,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// If the key exists, set <c>value</c> to its associated value and return true. Otherwise, return false.
+        /// If the key exists, sets <c>value</c> to its associated value and returns true. Otherwise, returns false.
         /// </summary>
         public bool TryGet(T key, out U value)
         {
@@ -76,7 +85,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Return the value for the key.
+        /// Returns the value for the key.
         /// </summary>
         public U Get(T key) => TryGet(key, out U value) ? value : default;
 
@@ -85,7 +94,7 @@ namespace Yontalane
         #region Add
 
         /// <summary>
-        /// Add a key/value pair.
+        /// Adds a key/value pair.
         /// </summary>
         public void Add(T key, U value)
         {
@@ -95,7 +104,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Add a key/value pair.
+        /// Adds a key/value pair.
         /// </summary>
         public void Add(SerializableKeyValuePair<T, U> pair)
         {
@@ -105,7 +114,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Insert a key/value pair at the provided index.
+        /// Inserts a key/value pair at the provided index.
         /// </summary>
         public void Insert(int index, T key, U value)
         {
@@ -115,7 +124,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Insert a key/value pair at the provided index.
+        /// Inserts a key/value pair at the provided index.
         /// </summary>
         public void Insert(int index, SerializableKeyValuePair<T, U> pair)
         {
@@ -129,7 +138,7 @@ namespace Yontalane
         #region Remove
 
         /// <summary>
-        /// Remove the provided key and its associated value.
+        /// Removes the provided key and its associated value.
         /// </summary>
         public void Remove(T key)
         {
@@ -144,7 +153,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Remove the key/value pair at the provided index.
+        /// Removes the key/value pair at the provided index.
         /// </summary>
         public void RemoveAt(int index)
         {
@@ -157,7 +166,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Clear the dictionary.
+        /// Clears the dictionary.
         /// </summary>
         public void Clear()
         {
@@ -170,7 +179,7 @@ namespace Yontalane
         #region Set
 
         /// <summary>
-        /// Set the value associated with the provided key.
+        /// Sets the value associated with the provided key.
         /// </summary>
         public void Set(T key, U value)
         {
@@ -181,7 +190,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Set the key/value pair at the provided index.
+        /// Sets the key/value pair at the provided index.
         /// </summary>
         public void SetAt(int index, SerializableKeyValuePair<T, U> pair)
         {
@@ -197,7 +206,7 @@ namespace Yontalane
         #endregion
 
         /// <summary>
-        /// If the dictionary contains the provided key, return its index; otherwise, return -1.
+        /// If the dictionary contains the provided key, returns its index; otherwise, returns -1.
         /// </summary>
         public int IndexOf(T key)
         {
@@ -210,17 +219,20 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Return true if the dictionary contains the provided key. Otherwise, return false.
+        /// Returns true if the dictionary contains the provided key. Otherwise, returns false.
         /// </summary>
         public bool Contains(T key) => IndexOf(key) != -1;
 
         /// <summary>
-        /// The number of key/value pairs contained within the dictionary.
+        /// Gets the number of key/value pairs contained within the dictionary.
         /// </summary>
         public int Count => Mathf.Min(m_keys.Count, m_values.Count);
 
         #region Utils
 
+        /// <summary>
+        /// Fixes the size of the dictionary.
+        /// </summary>
         private void FixSize()
         {
             int count = Count;
@@ -238,22 +250,37 @@ namespace Yontalane
 
         #region Enumerator / Loop Iteration
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the dictionary.
+        /// </summary>
         public IEnumerator GetEnumerator() => this;
 
+        /// <summary>
+        /// The current position of the enumerator.
+        /// </summary>
         private int m_position = -1;
 
+        /// <summary>
+        /// Gets the current key/value pair.
+        /// </summary>
         public object Current => new SerializableKeyValuePair<T, U>()
         {
             key = m_keys[m_position],
             value = m_values[m_position]
         };
 
+        /// <summary>
+        /// Moves to the next key/value pair.
+        /// </summary>
         public bool MoveNext()
         {
             m_position++;
             return m_position < Count;
         }
 
+        /// <summary>
+        /// Resets the enumerator to the first key/value pair.
+        /// </summary>
         public void Reset() => m_position = 0;
 
         #endregion

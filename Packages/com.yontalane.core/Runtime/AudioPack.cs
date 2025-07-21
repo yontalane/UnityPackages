@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Yontalane
 {
+    /// <summary>
+    /// A scriptable object that contains a list of audio clips and a volume.
+    /// </summary>
     [System.Serializable]
     [CreateAssetMenu(menuName = "Yontalane/AudioPack", fileName = "AudioPack")]
     public class AudioPack : ScriptableObject
@@ -10,37 +13,54 @@ namespace Yontalane
         private static readonly List<AudioPackPlayer> s_players = new();
         private static GameObject s_container = null;
 
+        [Tooltip("The list of audio clips to play.")]
         public AudioClip[] clips = new AudioClip[0];
 
+        [Tooltip("The volume of the audio clips.")]
         [Range(0f, 1f)]
         public float volume = 1f;
 
+        /// <summary>
+        /// Checks if the audio pack can play.
+        /// </summary>
         public bool CanPlay()
         {
             return clips != null && clips.Length > 0;
         }
 
+        /// <summary>
+        /// Tries to play the audio pack.
+        /// </summary>
         public static bool TryPlay( AudioPack audio )
         {
+            // Return false if the audio pack is null.
             if ( audio == null )
             {
                 return false;
             }
 
+            // Return false if the audio pack cannot play.
             if ( !audio.CanPlay() )
             {
                 return false;
             }
 
+            // Play the audio pack.
             audio.Play();
             return true;
         }
 
+        /// <summary>
+        /// Plays the audio pack.
+        /// </summary>
         public static void Play( AudioPack audio )
         {
             _ = TryPlay(audio);
         }
 
+        /// <summary>
+        /// Plays the audio clip.
+        /// </summary>
         public static void Play( AudioClip clip, float volume = 1f )
         {
             if ( clip == null )
@@ -52,6 +72,9 @@ namespace Yontalane
             PlayClipFromPlayer(clip, volume);
         }
 
+        /// <summary>
+        /// Plays the audio clip at the specified index.
+        /// </summary>
         public void Play( int index )
         {
             if ( !CanPlay() || index < 0 || index >= clips.Length )
@@ -65,11 +88,17 @@ namespace Yontalane
             PlayClipFromPlayer(clip, volume);
         }
 
+        /// <summary>
+        /// Plays a random audio clip from the pack.
+        /// </summary>
         public void Play()
         {
             Play(Mathf.FloorToInt(clips.Length * Random.value));
         }
 
+        /// <summary>
+        /// Plays the audio clip from the player.
+        /// </summary>
         private static void PlayClipFromPlayer( AudioClip clip, float volume )
         {
             if ( clip == null )
@@ -87,6 +116,9 @@ namespace Yontalane
             });
         }
 
+        /// <summary>
+        /// Gets or constructs the audio pack player.
+        /// </summary>
         private static AudioPackPlayer GetOrConstructPlayer()
         {
             while ( s_players.Count > 0 )
@@ -122,6 +154,9 @@ namespace Yontalane
             }
         }
 
+        /// <summary>
+        /// Gets or constructs the audio pack container.
+        /// </summary>
         private static GameObject GetOrConstructContainer()
         {
             if ( s_container == null )

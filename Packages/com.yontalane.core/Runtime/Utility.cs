@@ -6,17 +6,23 @@ namespace Yontalane
 {
     public static class Utility
     {
-        public static int LayerCount => UnityEngine.SortingLayer.layers.Length;
+        /// <summary>
+        /// Gets the total number of sorting layers defined in the project.
+        /// </summary>
+        public static int LayerCount => SortingLayer.layers.Length;
 
         /// <summary>
-        /// Visually select the target Selectable.
+        /// Highlights the specified Selectable by selecting it and updating the EventSystem's selected GameObject.
         /// </summary>
         public static void Highlight(this Selectable selectable)
         {
             selectable.Select();
             selectable.OnSelect(null);
 
-            if (EventSystem.current == null) return;
+            if (EventSystem.current == null)
+            {
+                return;
+            }
 
             EventSystem.current.SetSelectedGameObject(selectable.gameObject, new BaseEventData(EventSystem.current));
         }
@@ -34,8 +40,7 @@ namespace Yontalane
                 LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
             }
 
-            LayoutGroup parent = root.GetComponent<LayoutGroup>();
-            if (parent != null)
+            if (root.TryGetComponent(out LayoutGroup parent))
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
             }

@@ -77,7 +77,7 @@ namespace Yontalane.Dialog
         private const string ANIMATION_PARAMETER = "Dialog Visible";
 
         /// <summary>
-        /// The delay before the continue and rewind handlers are enabled.
+        /// The delay before the continue handler are enabled.
         /// </summary>
         private const float HANDLER_DELAY = 0.15f;
         #endregion
@@ -92,9 +92,7 @@ namespace Yontalane.Dialog
         private string m_text = null;
         private bool m_writingInProgress = false;
         private Action<string> m_lineCompleteCallback = null;
-        private Action m_rewindCallback = null;
         private bool m_canUseContinueHandler = true;
-        private bool m_canUseRewindHandler = true;
         #endregion
 
         #region Serialized Fields
@@ -176,10 +174,6 @@ namespace Yontalane.Dialog
         [SerializeField]
         private Button m_continueButton = null;
 
-        [Tooltip("Button for rewinding to previous dialog.")]
-        [SerializeField]
-        private Button m_rewindButton = null;
-
         [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
         [SerializeField]
         private RectTransform m_responseContainer = null;
@@ -195,10 +189,6 @@ namespace Yontalane.Dialog
         [Tooltip("Sound effect for clicking a response button.")]
         [SerializeField]
         private AudioClip m_buttonClick = null;
-
-        [Tooltip("Sound effect for clicking the rewind button.")]
-        [SerializeField]
-        private AudioClip m_rewindClick = null;
 
         [Tooltip("Sound effect for typing during the text writing sequence.")]
         [SerializeField]
@@ -299,13 +289,6 @@ namespace Yontalane.Dialog
             m_continueButton.onClick.AddListener(delegate { OnClickResponse(null); });
             m_continueButton.gameObject.SetActive(false);
 
-            // Add listener to rewind button and hide it initially, if it exists
-            if (m_rewindButton != null)
-            {
-                m_rewindButton.onClick.AddListener(delegate { OnClickRewind(); });
-                m_rewindButton.gameObject.SetActive(false);
-            }
-
             // Hide the response container at start, if it exists
             if (m_responseContainer != null)
             {
@@ -331,18 +314,11 @@ namespace Yontalane.Dialog
         /// </summary>
         /// <param name="line">The line data to initialize the dialog UI with.</param>
         /// <param name="lineCompleteCallback">The callback to invoke when the line is complete.</param>
-        /// <param name="rewindCallback">The callback to invoke when the rewind button is clicked.</param>
-        public void Initiate(LineData line, Action<string> lineCompleteCallback, Action rewindCallback, Func<string, string> replaceInlineText)
+        public void Initiate(LineData line, Action<string> lineCompleteCallback, Func<string, string> replaceInlineText)
         {
             m_continueButton.gameObject.SetActive(false);
 
-            if (m_rewindButton != null)
-            {
-                m_rewindButton.gameObject.SetActive(false);
-            }
-
             m_canUseContinueHandler = true;
-            m_canUseRewindHandler = true;
             string speaker = string.Empty;
 
             string lineBreak = string.Empty;
@@ -377,7 +353,6 @@ namespace Yontalane.Dialog
 
             m_line = line;
             m_lineCompleteCallback = lineCompleteCallback;
-            m_rewindCallback = rewindCallback;
             m_textField.text = "";
 
             if (m_speakerField != null)
@@ -557,12 +532,11 @@ namespace Yontalane.Dialog
                 return;
             }
 
-            // Skip the text writing sequence and disable the continue and rewind handlers
+            // Skip the text writing sequence and disable the continue handler
             SkipWriteOut();
             m_canUseContinueHandler = false;
-            m_canUseRewindHandler = false;
 
-            // If the dialog UI is active, start a delay to enable the continue and rewind handlers
+            // If the dialog UI is active, start a delay to enable the continue handler
             if (gameObject.activeSelf)
             {
                 StartCoroutine(HandlerDelay());
@@ -594,34 +568,6 @@ namespace Yontalane.Dialog
             // Hide the continue button and trigger the response handler when continue is pressed
             m_continueButton.gameObject.SetActive(false);
             OnClickResponse(null);
-        }
-
-        /// <summary>
-        /// Handles the rewind button click.
-        /// </summary>
-        internal void RewindHandler()
-        {
-            // If the rewind handler is not enabled, do nothing
-            if (!m_canUseRewindHandler)
-            {
-                return;
-            }
-
-            // If the rewind button doesn't exist, do nothing
-            if (m_rewindButton == null)
-            {
-                return;
-            }
-
-            // If the rewind button is not active, do nothing
-            if (!m_rewindButton.gameObject.activeInHierarchy)
-            {
-                return;
-            }
-
-            // Hide the rewind button and trigger the rewind handler when rewind is pressed
-            m_rewindButton.gameObject.SetActive(false);
-            OnClickRewind();
         }
         #endregion
 
@@ -896,27 +842,20 @@ namespace Yontalane.Dialog
                 // If there is no response, activate the continue button and highlight it
                 m_continueButton.gameObject.SetActive(true);
                 m_continueButton.Highlight();
-
-                // If the rewind button exists, activate it
-                if (m_rewindButton != null)
-                {
-                    m_rewindButton.gameObject.SetActive(true);
-                }
             }
         }
 
         /// <summary>
-        /// Delays the enabling of the continue and rewind handlers.
+        /// Delays the enabling of the continue handler.
         /// </summary>
-        /// <returns>An enumerator that delays the enabling of the continue and rewind handlers.</returns>
+        /// <returns>An enumerator that delays the enabling of the continue handler.</returns>
         private IEnumerator HandlerDelay()
         {
             // Wait for the handler delay
             yield return new WaitForSecondsRealtime(HANDLER_DELAY);
 
-            // Enable the continue and rewind handlers
+            // Enable the continue handler
             m_canUseContinueHandler = true;
-            m_canUseRewindHandler = true;
         }
 
         /// <summary>
@@ -939,27 +878,6 @@ namespace Yontalane.Dialog
 
             // Invoke the line complete callback
             m_lineCompleteCallback?.Invoke(response == null ? null : m_line.responses[response.GetComponent<RectTransform>().GetSiblingIndex()].link);
-        }
-
-        /// <summary>
-        /// Handles the click of the rewind button.
-        /// </summary>
-        private void OnClickRewind()
-        {
-            // If the stop blast after text flag is set, stop the blast audio source
-            if (m_stopBlastAfterText)
-            {
-                BlastAudioSource.Stop();
-            }
-
-            // If the rewind click sound is set, play it
-            if (m_rewindClick != null)
-            {
-                ClickAudioSource.PlayOneShot(m_rewindClick);
-            }
-
-            // Invoke the rewind callback
-            m_rewindCallback?.Invoke();
         }
 
         /// <summary>
