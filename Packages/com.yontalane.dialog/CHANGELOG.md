@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.58 - 2025.07.20
+
+**Fixed**
+
+* Fixed issue in which rewind history broke on functional (non-text) dialog nodes.
+
 ## 1.0.57 - 2025.07.19
 
 **Fixed**

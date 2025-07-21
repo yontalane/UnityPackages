@@ -8,155 +8,84 @@ using UnityEngine.UI;
 
 namespace Yontalane.Dialog
 {
+    #region Data Structures
+    /// <summary>
+    /// Represents an event containing information about a dialog portrait, including the agent, line data, image, and speaker.
+    /// </summary>
     public struct PortraitEvent
     {
+        [Tooltip("The dialog agent associated with this portrait event.")]
         public IDialogAgent agent;
+
+        [Tooltip("The line data associated with this portrait event.")]
         public LineData data;
+
+        [Tooltip("The UI Image component displaying the portrait.")]
         public Image image;
+
+        [Tooltip("The name of the speaker for this portrait event.")]
         public string speaker;
     }
+    #endregion
 
+    /// <summary>
+    /// Main UI controller for displaying and managing dialog interactions, including speaker display, text typing, responses, and associated UI elements.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
-    public sealed class DialogUI : MonoBehaviour
+    public sealed class DialogUI : Singleton<DialogUI>
     {
+        #region Data Structures
+        /// <summary>
+        /// Represents a set of color values for a specific speaker in the dialog.
+        /// </summary>
         [Serializable]
         private struct ColorSet
         {
+            [Tooltip("The name of the speaker for this color set.")]
             public string speaker;
+
+            [Tooltip("The color value to use for this speaker.")]
             public Color color;
         }
+        #endregion
 
-        [Serializable] public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
-        [Serializable] public class SetSpriteAction : UnityEvent<PortraitEvent> { }
-        [Serializable] public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
+        #region Delegates
+        /// <summary>
+        /// Represents an action that gets invoked when an audio clip is requested.
+        /// </summary>
+        [Serializable]
+        public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
+        
+        /// <summary>
+        /// Represents an action that gets invoked when a sprite is requested.
+        /// </summary>
+        [Serializable]
+        public class SetSpriteAction : UnityEvent<PortraitEvent> { }
+        
+        /// <summary>
+        /// Represents an action that gets invoked when a sprite is requested.
+        /// </summary>
+        [Serializable]
+        public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
+        #endregion
 
+        #region Constants
+        /// <summary>
+        /// The name of the parameter used to control the visibility of the dialog UI.
+        /// </summary>
         private const string ANIMATION_PARAMETER = "Dialog Visible";
-        private const float HANDLER_DELAY = 0.15f;
 
+        /// <summary>
+        /// The delay before the continue and rewind handlers are enabled.
+        /// </summary>
+        private const float HANDLER_DELAY = 0.15f;
+        #endregion
+
+        #region Private Fields
         private static readonly List<Button> s_tempResponseButtons = new();
         private static AudioSource s_clickAudioSource = null;
         private static AudioSource s_blastAudioSource = null;
-
-        [Header("Cosmetics")]
-
-        [SerializeField]
-        [Tooltip("Color of player name in dialog header text.")]
-        private Color m_playerColor = Color.white;
-        [SerializeField]
-        [Tooltip("Color of speaker name in dialog header text.")]
-        private Color m_speakerColor = Color.white;
-        [SerializeField]
-        [Tooltip("Color of other speaker names in dialog header text.")]
-        private ColorSet[] m_speakerColors = new ColorSet[0];
-        [SerializeField]
-        [Tooltip("Color of fallback speaker name in dialog header text.")]
-        private Color m_fallbackSpeakerColor = Color.white;
-        [SerializeField]
-        [Tooltip("Whether or not the speaker name is bold.")]
-        private bool m_speakerBold = false;
-        [SerializeField]
-        [Tooltip("Whether or not the speaker name is in caps.")]
-        private bool m_speakerCaps = false;
-        [SerializeField]
-        [Tooltip("The string to appear between the speaker name and dialog text.")]
-        private string m_speakerSeparator = ": ";
-        [SerializeField]
-        [Tooltip("Line breaks between the speaker name and the dialog text.")]
-        [Range(0, 2)]
-        private int m_speakerLineBreaks = 0;
-        [SerializeField]
-        [Tooltip("Whether to write out text character by character.")]
-        private bool m_useTypeCharacterInterval = true;
-        [SerializeField]
-        [Min(0f)]
-        [Tooltip("How long to wait between characters when writing out text.")]
-        private float m_typeCharacterInterval = 0.05f;
-        [SerializeField]
-        [Tooltip("Whether to continue onto the next line immediately after finishing the current. Otherwise, wait for player input.")]
-        private bool m_autoContinue = false;
-
-        [Header("Scene UI")]
-
-        [SerializeField]
-        [Tooltip("The root container of the dialog UI. Used to recursively refresh child layout groups.")]
-        private RectTransform m_dialogRoot = null;
-        [SerializeField]
-        [Tooltip("Whether to force layout groups to refresh while typing.")]
-        private bool m_refreshLayoutGroups = true;
-        [SerializeField]
-        [Tooltip("The Animator that controls the dialog UI.")]
-        private Animator m_animator = null;
-        [SerializeField]
-        [Tooltip("The field for displaying dialog text.")]
-        private TMP_Text m_textField = null;
-        [SerializeField]
-        [Tooltip("The optional field for displaying speaker's name. If left blank, the speaker's name will be displayed in the main text field.")]
-        private TMP_Text m_speakerField = null;
-        [SerializeField]
-        [Tooltip("Button for skipping text writing sequence. May be the same as the continue button.")]
-        private Button m_skipButton = null;
-        [SerializeField]
-        [Tooltip("Button for proceeding to the next line of dialog. May be the same as the skip button.")]
-        private Button m_continueButton = null;
-        [SerializeField]
-        [Tooltip("Button for rewinding to previous dialog.")]
-        private Button m_rewindButton = null;
-        [SerializeField]
-        [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
-        private RectTransform m_responseContainer = null;
-        [SerializeField]
-        [Tooltip("The object that contains the portrait. Having a reference to both the container and the portrait helps with layout.")]
-        private RectTransform m_portraitContainer = null;
-        [SerializeField]
-        [Tooltip("The Image that will display the speaker's portrait (if there is one).")]
-        private Image m_portrait = null;
-        [SerializeField]
-        [Tooltip("Sound effect for clicking a response button.")]
-        private AudioClip m_buttonClick = null;
-        [SerializeField]
-        [Tooltip("Sound effect for clicking the rewind button.")]
-        private AudioClip m_rewindClick = null;
-        [SerializeField]
-        [Tooltip("Sound effect for typing during the text writing sequence.")]
-        private AudioClip m_typingDefault = null;
-        [SerializeField]
-        [Tooltip("If a line of text has an accompanying sound blast, whether or not to cut the blast short if the text finishes before the sound does.")]
-        private bool m_stopBlastAfterText = true;
-
-        [Header("Prefabs")]
-
-        [SerializeField]
-        [Tooltip("The prefab to use for responses.")]
-        private Button m_responseButtonPrefab = null;
-
-        [Header("Overrides")]
-
-        [SerializeField]
-        [Tooltip("A callback that can be used to set a custom portrait instead of using the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
-        private SetSpriteAction m_setPortrait = new SetSpriteAction();
-        [Tooltip("A callback that can be used to get a custom portrait instead of the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
-        private GetSpriteAction m_getPortrait = new GetSpriteAction();
-        [SerializeField]
-        [Tooltip("A callback that can be used to get a custom sound instead of the one requested by the dialog data.")]
-        private GetAudioClipAction m_getSound = new GetAudioClipAction();
-        [SerializeField]
-        [Tooltip("A callback that can be used to get a custom voice instead of the one requested by the dialog data.")]
-        private GetAudioClipAction m_getVoice = new GetAudioClipAction();
-
-        [Header("Callbacks")]
-
-        [SerializeField]
-        [Tooltip("An action that gets invoked when the dialog starts being typed out.")]
-        private UnityEvent m_onStartTyping = new UnityEvent();
-
-        [SerializeField]
-        [Tooltip("An action that gets invoked while the dialog is being typed out.")]
-        private UnityEvent m_onType = new UnityEvent();
-
-        [SerializeField]
-        [Tooltip("An action that gets invoked when the dialog is fully typed out.")]
-        private UnityEvent m_onDisplayLine = new UnityEvent();
 
         private string m_speaker = "";
         private LineData m_line = null;
@@ -166,32 +95,229 @@ namespace Yontalane.Dialog
         private Action m_rewindCallback = null;
         private bool m_canUseContinueHandler = true;
         private bool m_canUseRewindHandler = true;
+        #endregion
 
-        public static DialogUI Instance { get; private set; }
+        #region Serialized Fields
+        [Header("Cosmetics")]
 
-        private void Awake()
+        [Tooltip("Color of player name in dialog header text.")]
+        [SerializeField]
+        private Color m_playerColor = Color.white;
+
+        [Tooltip("Color of speaker name in dialog header text.")]
+        [SerializeField]
+        private Color m_speakerColor = Color.white;
+
+        [Tooltip("Color of other speaker names in dialog header text.")]
+        [SerializeField]
+        private ColorSet[] m_speakerColors = new ColorSet[0];
+
+        [Tooltip("Color of fallback speaker name in dialog header text.")]
+        [SerializeField]
+        private Color m_fallbackSpeakerColor = Color.white;
+
+        [Tooltip("Whether or not the speaker name is bold.")]
+        [SerializeField]
+        private bool m_speakerBold = false;
+
+        [Tooltip("Whether or not the speaker name is in caps.")]
+        [SerializeField]
+        private bool m_speakerCaps = false;
+
+        [Tooltip("The string to appear between the speaker name and dialog text.")]
+        [SerializeField]
+        private string m_speakerSeparator = ": ";
+
+        [Tooltip("Line breaks between the speaker name and the dialog text.")]
+        [SerializeField]
+        [Range(0, 2)]
+        private int m_speakerLineBreaks = 0;
+
+        [Tooltip("Whether to write out text character by character.")]
+        [SerializeField]
+        private bool m_useTypeCharacterInterval = true;
+
+        [Tooltip("How long to wait between characters when writing out text.")]
+        [SerializeField]
+        [Min(0f)]
+        private float m_typeCharacterInterval = 0.05f;
+
+        [Tooltip("Whether to continue onto the next line immediately after finishing the current. Otherwise, wait for player input.")]
+        [SerializeField]
+        private bool m_autoContinue = false;
+
+        [Header("Scene UI")]
+
+        [Tooltip("The root container of the dialog UI. Used to recursively refresh child layout groups.")]
+        [SerializeField]
+        private RectTransform m_dialogRoot = null;
+
+        [Tooltip("Whether to force layout groups to refresh while typing.")]
+        [SerializeField]
+        private bool m_refreshLayoutGroups = true;
+
+        [Tooltip("The Animator that controls the dialog UI.")]
+        [SerializeField]
+        private Animator m_animator = null;
+
+        [Tooltip("The field for displaying dialog text.")]
+        [SerializeField]
+        private TMP_Text m_textField = null;
+
+        [Tooltip("The optional field for displaying speaker's name. If left blank, the speaker's name will be displayed in the main text field.")]
+        [SerializeField]
+        private TMP_Text m_speakerField = null;
+
+        [Tooltip("Button for skipping text writing sequence. May be the same as the continue button.")]
+        [SerializeField]
+        private Button m_skipButton = null;
+
+        [Tooltip("Button for proceeding to the next line of dialog. May be the same as the skip button.")]
+        [SerializeField]
+        private Button m_continueButton = null;
+
+        [Tooltip("Button for rewinding to previous dialog.")]
+        [SerializeField]
+        private Button m_rewindButton = null;
+
+        [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
+        [SerializeField]
+        private RectTransform m_responseContainer = null;
+
+        [Tooltip("The object that contains the portrait. Having a reference to both the container and the portrait helps with layout.")]
+        [SerializeField]
+        private RectTransform m_portraitContainer = null;
+
+        [Tooltip("The Image that will display the speaker's portrait (if there is one).")]
+        [SerializeField]
+        private Image m_portrait = null;
+
+        [Tooltip("Sound effect for clicking a response button.")]
+        [SerializeField]
+        private AudioClip m_buttonClick = null;
+
+        [Tooltip("Sound effect for clicking the rewind button.")]
+        [SerializeField]
+        private AudioClip m_rewindClick = null;
+
+        [Tooltip("Sound effect for typing during the text writing sequence.")]
+        [SerializeField]
+        private AudioClip m_typingDefault = null;
+        
+        [Tooltip("If a line of text has an accompanying sound blast, whether or not to cut the blast short if the text finishes before the sound does.")]
+        [SerializeField]
+        private bool m_stopBlastAfterText = true;
+
+        [Header("Prefabs")]
+
+        [Tooltip("The prefab to use for responses.")]
+        [SerializeField]
+        private Button m_responseButtonPrefab = null;
+
+        [Header("Overrides")]
+
+        [Tooltip("A callback that can be used to set a custom portrait instead of using the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
+        [SerializeField]
+        private SetSpriteAction m_setPortrait = new SetSpriteAction();
+
+        [Tooltip("A callback that can be used to get a custom portrait instead of the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
+        [SerializeField]
+        private GetSpriteAction m_getPortrait = new GetSpriteAction();
+
+        [Tooltip("A callback that can be used to get a custom sound instead of the one requested by the dialog data.")]
+        [SerializeField]
+        private GetAudioClipAction m_getSound = new GetAudioClipAction();
+
+        [Tooltip("A callback that can be used to get a custom voice instead of the one requested by the dialog data.")]
+        [SerializeField]
+        private GetAudioClipAction m_getVoice = new GetAudioClipAction();
+
+        [Header("Callbacks")]
+
+        [Tooltip("An action that gets invoked when the dialog starts being typed out.")]
+        [SerializeField]
+        private UnityEvent m_onStartTyping = new UnityEvent();
+
+        [Tooltip("An action that gets invoked while the dialog is being typed out.")]
+        [SerializeField]
+        private UnityEvent m_onType = new UnityEvent();
+
+        [Tooltip("An action that gets invoked when the dialog is fully typed out.")]
+        [SerializeField]
+        private UnityEvent m_onDisplayLine = new UnityEvent();
+
+        #endregion
+
+        #region Private Properties
+        /// <summary>
+        /// Gets the static audio source for playing click sounds.
+        /// </summary>
+        private static AudioSource ClickAudioSource
         {
-            Instance = this;
+            get
+            {
+                if (s_clickAudioSource == null)
+                {
+                    s_clickAudioSource = new GameObject().AddComponent<AudioSource>();
+                    s_clickAudioSource.playOnAwake = false;
+                    s_clickAudioSource.loop = false;
+                    s_clickAudioSource.transform.SetParent(Camera.main.transform, false);
+                }
+
+                return s_clickAudioSource;
+            }
         }
 
+        /// <summary>
+        /// Gets the static audio source for playing blast sounds.
+        /// </summary>
+        private static AudioSource BlastAudioSource
+        {
+            get
+            {
+                if (s_blastAudioSource == null)
+                {
+                    s_blastAudioSource = new GameObject().AddComponent<AudioSource>();
+                    s_blastAudioSource.playOnAwake = false;
+                    s_blastAudioSource.loop = false;
+                    s_blastAudioSource.transform.SetParent(Camera.main.transform, false);
+                }
+
+                return s_blastAudioSource;
+            }
+        }
+        #endregion
+
+        #region Unity Lifecycle
+        /// <summary>
+        /// Unity Start method. Initializes button listeners and sets initial UI state for dialog controls.
+        /// </summary>
         private void Start()
         {
+            // Add listeners to skip and continue buttons, and hide the continue button initially
             m_skipButton.onClick.AddListener(delegate { SkipWriteOut(); });
             m_continueButton.onClick.AddListener(delegate { OnClickResponse(null); });
             m_continueButton.gameObject.SetActive(false);
 
+            // Add listener to rewind button and hide it initially, if it exists
             if (m_rewindButton != null)
             {
                 m_rewindButton.onClick.AddListener(delegate { OnClickRewind(); });
                 m_rewindButton.gameObject.SetActive(false);
             }
 
+            // Hide the response container at start, if it exists
             if (m_responseContainer != null)
             {
                 m_responseContainer.gameObject.SetActive(false);
             }
         }
+        #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Closes the dialog UI.
+        /// </summary>
         public void Close()
         {
             if (m_animator != null)
@@ -200,6 +326,12 @@ namespace Yontalane.Dialog
             }
         }
 
+        /// <summary>
+        /// Initializes the dialog UI with the given line data.
+        /// </summary>
+        /// <param name="line">The line data to initialize the dialog UI with.</param>
+        /// <param name="lineCompleteCallback">The callback to invoke when the line is complete.</param>
+        /// <param name="rewindCallback">The callback to invoke when the rewind button is clicked.</param>
         public void Initiate(LineData line, Action<string> lineCompleteCallback, Action rewindCallback, Func<string, string> replaceInlineText)
         {
             m_continueButton.gameObject.SetActive(false);
@@ -393,10 +525,117 @@ namespace Yontalane.Dialog
                 EndLine();
             }
         }
+        #endregion
 
+        #region Internal Methods
+        /// <summary>
+        /// Handles the skip button click.
+        /// </summary>
+        internal void SkipHandler()
+        {
+            // If the skip button doesn't exist, do nothing
+            if (m_skipButton == null)
+            {
+                return;
+            }
+
+            // If the skip button is not active, do nothing
+            if (!m_skipButton.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
+            // If the continue button doesn't exist, do nothing
+            if (m_continueButton == null)
+            {
+                return;
+            }
+
+            // If the continue button is active, do nothing
+            if (m_continueButton.gameObject.activeSelf)
+            {
+                return;
+            }
+
+            // Skip the text writing sequence and disable the continue and rewind handlers
+            SkipWriteOut();
+            m_canUseContinueHandler = false;
+            m_canUseRewindHandler = false;
+
+            // If the dialog UI is active, start a delay to enable the continue and rewind handlers
+            if (gameObject.activeSelf)
+            {
+                StartCoroutine(HandlerDelay());
+            }
+        }
+
+        /// <summary>
+        /// Handles the continue button click.
+        /// </summary>
+        internal void ContinueHandler()
+        {
+            // If the continue handler is not enabled, do nothing
+            if (!m_canUseContinueHandler)
+            {
+                return;
+            }
+
+            // If the continue button doesn't exist, do nothing
+            if (m_continueButton == null)
+            {
+                return;
+            }
+
+            if (!m_continueButton.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+            
+            // Hide the continue button and trigger the response handler when continue is pressed
+            m_continueButton.gameObject.SetActive(false);
+            OnClickResponse(null);
+        }
+
+        /// <summary>
+        /// Handles the rewind button click.
+        /// </summary>
+        internal void RewindHandler()
+        {
+            // If the rewind handler is not enabled, do nothing
+            if (!m_canUseRewindHandler)
+            {
+                return;
+            }
+
+            // If the rewind button doesn't exist, do nothing
+            if (m_rewindButton == null)
+            {
+                return;
+            }
+
+            // If the rewind button is not active, do nothing
+            if (!m_rewindButton.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
+            // Hide the rewind button and trigger the rewind handler when rewind is pressed
+            m_rewindButton.gameObject.SetActive(false);
+            OnClickRewind();
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Gets the color of the speaker's name in the dialog header text.
+        /// </summary>
+        /// <param name="speaker">The name of the speaker to get the color for.</param>
+        /// <returns>The color of the speaker's name in the dialog header text.</returns>
         private Color GetSpeakerColor(string speaker)
         {
             DialogProcessor.SpeakerType speakerType = DialogProcessor.GetSpeakerType(speaker);
+
+            // Return the color of the speaker's name in the dialog header text based on the speaker type
             switch (speakerType)
             {
                 case DialogProcessor.SpeakerType.Player:
@@ -404,6 +643,8 @@ namespace Yontalane.Dialog
                 case DialogProcessor.SpeakerType.Self:
                     return m_speakerColor;
             }
+
+            // Return the color of the speaker's name in the dialog header text based on the speaker colors
             foreach(ColorSet colorSet in m_speakerColors)
             {
                 if (speaker.Contains(colorSet.speaker))
@@ -411,48 +652,79 @@ namespace Yontalane.Dialog
                     return colorSet.color;
                 }
             }
+
+            // Return the fallback color of the speaker's name in the dialog header text
             return m_fallbackSpeakerColor;
         }
 
+        /// <summary>
+        /// Writes out the dialog text character by character.
+        /// </summary>
+        /// <returns>An enumerator that writes out the dialog text character by character.</returns>
         private IEnumerator WriteOut()
         {
             AudioClip typing = null;
 
+            // If the line has a typing sound, load the sound
             if (!string.IsNullOrEmpty(m_line.typing))
             {
                 typing = Resources.Load<AudioClip>(m_line.typing);
             }
 
+            // If the line has no typing sound, use the default typing sound
             if (typing == null)
             {
                 typing = m_typingDefault;
             }
 
+            // Start a coroutine to delay the highlight of the skip button
             StartCoroutine(DelayHighlightSkipButton());
-            List<string> hangingTags = new List<string>();
 
+            // Create a list to store the hanging tags
+            List<string> hangingTags = new();
+
+            // Check if the speaker field exists
             bool speakerFieldExists = m_speakerField != null;
+
+            // If the speaker field exists, set the speaker field text to the speaker
             if (speakerFieldExists)
             {
                 m_speakerField.text = m_speaker;
             }
 
-            m_textField.text = "";
+            // Set the text field text to empty
+            m_textField.text = string.Empty;
+
+            // Format the inline text
             string fullText = FormatInlineText(speakerFieldExists ? string.Empty : m_speaker);
+
+            // Write out the text character by character
             for (int i = 0; i < m_text.Length; i++)
             {
+                // Check if the next character is a special character
                 bool showNextCharacter = true;
                 string nextCharacter = m_text.Substring(i, 1);
+
+                // If the next character is a special character, handle it
                 if (nextCharacter.Equals("%") && i < m_text.Length - 4)
                 {
+                    // Find the index of the closing special character
                     int j = i + 2;
-                    int indexOfClose = m_text.Substring(j).IndexOf("%%");
+                    int indexOfClose = m_text[j..].IndexOf("%%");
+
+                    // If the closing special character is found, handle it
                     if (indexOfClose >= 0)
                     {
                         indexOfClose += j;
                         i = indexOfClose + 1;
-                        string interior = m_text.Substring(j, i - j - 1);
+
+                        // Get the interior of the special character
+                        string interior = m_text[j..i];
+
+                        // Set the text field rich text to true
                         m_textField.richText = true;
+
+                        // Handle interior tags
                         if (interior.Equals("/color"))
                         {
                             fullText += "</color>";
@@ -463,7 +735,7 @@ namespace Yontalane.Dialog
                             string[] colorParameter = interior.Split('=');
                             if (colorParameter.Length == 2 && colorParameter[0].Equals("color"))
                             {
-                                fullText += ("<color=" + colorParameter[1] + ">");
+                                fullText += "<color=" + colorParameter[1] + ">";
                             }
                             hangingTags.Insert(0, "</color>");
                         }
@@ -490,57 +762,89 @@ namespace Yontalane.Dialog
                         showNextCharacter = false;
                     }
                 }
+
+                // If the next character is not a special character, handle it
                 if (showNextCharacter)
                 {
                     fullText += nextCharacter;
                     m_textField.text = fullText;
+
+                    // Add the hanging tags to the text field
                     foreach (string hangingTag in hangingTags)
                     {
                         m_textField.text += hangingTag;
                     }
+
+                    // Invoke the on type event
                     m_onType?.Invoke();
+
+                    // If the line has a typing sound, play it
                     if (typing != null)
                     {
                         ClickAudioSource.PlayOneShot(typing);
                     }
+
+                    // If the refresh layout groups flag is set, refresh the layout groups
                     if (m_refreshLayoutGroups)
                     {
                         Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
                     }
+
+                    // Wait for the next character
                     yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
                 }
             }
             EndLine();
         }
 
+        /// <summary>
+        /// Delays the highlight of the skip button.
+        /// </summary>
+        /// <returns>An enumerator that delays the highlight of the skip button.</returns>
         private IEnumerator DelayHighlightSkipButton()
         {
             yield return new WaitForEndOfFrame();
+
+            // Highlight the skip button if it exists
             if (m_skipButton != null)
             {
                 m_skipButton.Highlight();
             }
         }
 
+        /// <summary>
+        /// Formats the inline text.
+        /// </summary>
+        /// <param name="text">The text to format.</param>
+        /// <returns>The formatted text.</returns>
         private string FormatInlineText(string text)
         {
+            // Initialize the open state
             bool isOpen = true;
 
+            // While the text contains %% tags, format the text
             while (text.Contains("%%"))
             {
                 int i = text.IndexOf("%%");
-                text = text.Substring(0, i) + (isOpen ? "<" : ">") + text.Substring(i + 2);
+                text = text[..i] + (isOpen ? "<" : ">") + text[(i + 2)..];
                 isOpen = !isOpen;
             }
 
             return text;
         }
 
+        /// <summary>
+        /// Skips the text writing sequence.
+        /// </summary>
         private void SkipWriteOut()
         {
+            // Stop all coroutines
             StopAllCoroutines();
+
+            // End the line
             EndLine();
 
+            // If the refresh layout groups flag is set, refresh the layout groups
             if (m_refreshLayoutGroups)
             {
                 Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
@@ -548,16 +852,25 @@ namespace Yontalane.Dialog
             }
         }
 
+        /// <summary>
+        /// Delays the refresh of the layout groups.
+        /// </summary>
+        /// <returns>An enumerator that delays the refresh of the layout groups.</returns>
         private IEnumerator DelayedRefreshLayoutGroups()
         {
             yield return new WaitForEndOfFrame();
             Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
         }
 
+        /// <summary>
+        /// Ends the line.
+        /// </summary>
         private void EndLine()
         {
+            // Set the writing in progress flag to false
             m_writingInProgress = false;
 
+            // If the speaker field exists, format the speaker field text and the text field text individually
             if (m_speakerField != null)
             {
                 m_speakerField.text = FormatInlineText(m_speaker);
@@ -565,24 +878,26 @@ namespace Yontalane.Dialog
             }
             else
             {
+                // If the speaker field does not exist, format the text field text and include the speaker text within it
                 m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
             }
 
+            // Invoke the on display line event
             m_onDisplayLine?.Invoke();
 
+            // If the response container exists and has children, activate the response container and highlight the first child
             if (m_responseContainer != null && m_responseContainer.childCount > 0)
             {
                 m_responseContainer.gameObject.SetActive(true);
-                if (m_responseContainer.childCount > 0)
-                {
-                    m_responseContainer.GetChild(0).GetComponent<Button>().Highlight();
-                }
+                m_responseContainer.GetChild(0).GetComponent<Button>().Highlight();
             }
             else
             {
+                // If there is no response, activate the continue button and highlight it
                 m_continueButton.gameObject.SetActive(true);
                 m_continueButton.Highlight();
 
+                // If the rewind button exists, activate it
                 if (m_rewindButton != null)
                 {
                     m_rewindButton.gameObject.SetActive(true);
@@ -590,87 +905,76 @@ namespace Yontalane.Dialog
             }
         }
 
-        internal void SkipHandler()
-        {
-            if (m_skipButton != null
-                && m_skipButton.gameObject.activeInHierarchy
-                && m_continueButton != null
-                && !m_continueButton.gameObject.activeSelf)
-            {
-                SkipWriteOut();
-                m_canUseContinueHandler = false;
-                m_canUseRewindHandler = false;
-                if (gameObject.activeSelf)
-                {
-                    StartCoroutine(HandlerDelay());
-                }
-            }
-        }
-
+        /// <summary>
+        /// Delays the enabling of the continue and rewind handlers.
+        /// </summary>
+        /// <returns>An enumerator that delays the enabling of the continue and rewind handlers.</returns>
         private IEnumerator HandlerDelay()
         {
+            // Wait for the handler delay
             yield return new WaitForSecondsRealtime(HANDLER_DELAY);
+
+            // Enable the continue and rewind handlers
             m_canUseContinueHandler = true;
             m_canUseRewindHandler = true;
         }
 
-        internal void ContinueHandler()
-        {
-            if (m_canUseContinueHandler
-                && m_continueButton != null
-                && m_continueButton.gameObject.activeInHierarchy)
-            {
-                m_continueButton.gameObject.SetActive(false);
-                OnClickResponse(null);
-            }
-        }
-
-        internal void RewindHandler()
-        {
-            if (m_canUseRewindHandler
-                && m_rewindButton != null
-                && m_rewindButton.gameObject.activeInHierarchy)
-            {
-                m_rewindButton.gameObject.SetActive(false);
-                OnClickRewind();
-            }
-        }
-
+        /// <summary>
+        /// Handles the click of a response button.
+        /// </summary>
+        /// <param name="response">The response button that was clicked.</param>
         private void OnClickResponse(Button response)
         {
+            // If the stop blast after text flag is set, stop the blast audio source
             if (m_stopBlastAfterText)
             {
                 BlastAudioSource.Stop();
             }
 
+            // If the button click sound is set, play it
             if (m_buttonClick != null)
             {
                 ClickAudioSource.PlayOneShot(m_buttonClick);
             }
 
+            // Invoke the line complete callback
             m_lineCompleteCallback?.Invoke(response == null ? null : m_line.responses[response.GetComponent<RectTransform>().GetSiblingIndex()].link);
         }
 
+        /// <summary>
+        /// Handles the click of the rewind button.
+        /// </summary>
         private void OnClickRewind()
         {
+            // If the stop blast after text flag is set, stop the blast audio source
             if (m_stopBlastAfterText)
             {
                 BlastAudioSource.Stop();
             }
 
+            // If the rewind click sound is set, play it
             if (m_rewindClick != null)
             {
                 ClickAudioSource.PlayOneShot(m_rewindClick);
             }
 
+            // Invoke the rewind callback
             m_rewindCallback?.Invoke();
         }
 
+        /// <summary>
+        /// Checks for the completion of the blast audio source.
+        /// </summary>
+        /// <returns>An enumerator that checks for the completion of the blast audio source.</returns>
         private IEnumerator CheckForBlastComplete()
         {
-            while (true)
+            // While the writing is not in progress and the blast audio source is playing, check for the completion of the blast audio source
+            while (m_writingInProgress && BlastAudioSource.isPlaying)
             {
+                // Wait for the end of the frame
                 yield return new WaitForEndOfFrame();
+
+                // If the writing is not in progress and the blast audio source is not playing, continue the line
                 if (!m_writingInProgress && !BlastAudioSource.isPlaying)
                 {
                     ContinueHandler();
@@ -678,37 +982,6 @@ namespace Yontalane.Dialog
                 }
             }
         }
-
-        private static AudioSource ClickAudioSource
-        {
-            get
-            {
-                if (s_clickAudioSource == null)
-                {
-                    s_clickAudioSource = new GameObject().AddComponent<AudioSource>();
-                    s_clickAudioSource.playOnAwake = false;
-                    s_clickAudioSource.loop = false;
-                    s_clickAudioSource.transform.SetParent(Camera.main.transform, false);
-                }
-
-                return s_clickAudioSource;
-            }
-        }
-
-        private static AudioSource BlastAudioSource
-        {
-            get
-            {
-                if (s_blastAudioSource == null)
-                {
-                    s_blastAudioSource = new GameObject().AddComponent<AudioSource>();
-                    s_blastAudioSource.playOnAwake = false;
-                    s_blastAudioSource.loop = false;
-                    s_blastAudioSource.transform.SetParent(Camera.main.transform, false);
-                }
-
-                return s_blastAudioSource;
-            }
-        }
+        #endregion
     }
 }
