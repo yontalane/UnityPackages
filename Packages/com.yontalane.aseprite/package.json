@@ -1,0 +1,27 @@
+{
+    "name": "com.yontalane.aseprite",
+    "version": "1.0.0",
+    "displayName": "Aseprite",
+    "description": "Extras for the Aseprite-to-Unity pipeline.",
+    "unity": "2023.2",
+    "unityRelease": "20f1",
+    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.aseprite/Documentation~/index.md",
+    "dependencies": {
+        "com.yontalane.core": "1.0.36",
+        "com.unity.2d.aseprite": "1.1.9"
+    },
+    "keywords": [
+        "2d",
+        "aseprite",
+        "sprites",
+        "pixelart",
+        "animation"
+    ],
+    "author": {
+        "name": "Yontalane",
+        "email": "unitypackages@yontalane.com",
+        "url": "https://yontalane.com/"
+    },
+    "samples": [],
+    "type": "library"
+}

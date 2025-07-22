@@ -1,0 +1,21 @@
+{
+    "name": "Yontalane.Aseprite.Editor",
+    "rootNamespace": "YontalaneEditor.Aseprite",
+    "references": [
+        "GUID:8579dca4301da4fdb94fc49558ddf5f5",
+        "GUID:1c0efac71f61649eab4850fa3687d8a4",
+        "GUID:cafadeef5bfa1499992661a7b64e12fb",
+        "GUID:bef1323011b164f38a3ede2132562609"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

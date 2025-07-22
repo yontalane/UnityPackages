@@ -1,0 +1,201 @@
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using Yontalane.Aseprite;
+
+namespace YontalaneEditor.Aseprite
+{
+    /// <summary>
+    /// Provides methods for processing individual frames of an Aseprite file, including generating collision data,
+    /// points, and root motion.
+    /// </summary>
+    internal static class FrameProcessor
+    {
+        private static readonly List<Rect> s_collisionRects = new();
+        private static readonly List<AnimationEvent> s_animationEvents = new();
+        private static readonly List<ObjectReferenceKeyframe> s_frameList = new();
+        private static Vector2 s_previousRoot = new();
+
+        /// <summary>
+        /// Initializes the frame processor by resetting the previous root point and clearing the collision rectangles.
+        /// </summary>
+        internal static void Initialize()
+        {
+            s_previousRoot = Vector2.zero;
+            s_collisionRects.Clear();
+        }
+
+        /// <summary>
+        /// Generates animation curves for a collision or trigger layer, setting the BoxCollider2D's enabled state and
+        /// position/size for the specified animation frame range. Returns true if the layer is of type Collision or Trigger
+        /// and curves are generated.
+        /// </summary>
+        /// <param name="frameData">The data describing the layer and frame.</param>
+        /// <returns>True if the layer is of type Collision or Trigger and curves are generated; otherwise, false.</returns>
+        internal static bool TryGenerateCollisionBoxes(this ImportFileData fileData, ImportFrameData frameData)
+        {
+            // Only process if the layer is of type Collision or Trigger
+            if (frameData.layerData.type != LayerType.Collision && frameData.layerData.type != LayerType.Trigger)
+            {
+                return false;
+            }
+
+            // Set the enabled state of the BoxCollider2D to on for the current frame only
+            {
+                EditorCurveBinding binding = new()
+                {
+                    path = fileData.GetBindingPath(frameData.layerData.name),
+                    propertyName = "m_Enabled",
+                    type = typeof(BoxCollider2D),
+                };
+
+                frameData.clip.SetEnabledKey<BoxCollider2D>(binding.path, frameData.timeIn, true);
+
+                if (frameData.clip.IndexOfKey(binding, frameData.timeOut) == -1)
+                {
+                    frameData.clip.SetEnabledKey<BoxCollider2D>(binding.path, frameData.timeOut, false);
+                }
+            }
+
+            // Set the center of the BoxCollider2D
+            {
+                Vector2 offset = Vector2.Lerp(frameData.cellRect.min, frameData.cellRect.max, 0.5f);
+
+                offset.x -= frameData.fileDimensions.x * frameData.filePivot.x;
+                offset.x /= frameData.pixelsPerUnit;
+
+                offset.y = frameData.fileDimensions.y - offset.y;
+                offset.y -= frameData.fileDimensions.y * frameData.filePivot.y;
+                offset.y /= frameData.pixelsPerUnit;
+
+                string path = fileData.GetBindingPath(frameData.layerData.name);
+                frameData.clip.SetOffsetKey(path, frameData.timeIn, offset, true);
+            }
+
+            // Set the size of the BoxCollider2D
+            {
+                Vector2 size = frameData.cellRect.size;
+                size /= frameData.pixelsPerUnit;
+
+                string path = fileData.GetBindingPath(frameData.layerData.name);
+                frameData.clip.SetSizeKey(path, frameData.timeIn, size, true);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Generates animation curves for a point-type layer, setting the GameObject's active state and position
+        /// for the specified animation frame range. Returns true if the layer is of type Point and curves are generated.
+        /// </summary>
+        /// <param name="frameData">The data describing the layer and frame.</param>
+        /// <returns>True if the layer is of type Point and curves are generated; otherwise, false.</returns>
+        internal static bool TryGeneratePoint(this ImportFileData fileData, ImportFrameData frameData)
+        {
+            // Only process if the layer is of type Point
+            if (frameData.layerData.type != LayerType.Point)
+            {
+                return false;
+            }
+
+            // Set the active state of the GameObject to on for the current frame only
+            {
+                EditorCurveBinding binding = new()
+                {
+                    path = fileData.GetBindingPath(frameData.layerData.name),
+                    propertyName = "m_IsActive",
+                    type = typeof(GameObject),
+                };
+
+                frameData.clip.SetIsActiveKey(binding.path, frameData.timeIn, true);
+
+                if (frameData.clip.IndexOfKey(binding, frameData.timeOut) == -1)
+                {
+                    frameData.clip.SetIsActiveKey(binding.path, frameData.timeOut, false);
+                }
+            }
+
+            // Set the position of the GameObject
+            {
+                Vector2 position = Vector2.Lerp(frameData.cellRect.min, frameData.cellRect.max, 0.5f);
+
+                position.x -= frameData.fileDimensions.x * frameData.filePivot.x;
+                position.x /= frameData.pixelsPerUnit;
+
+                position.y = frameData.fileDimensions.y - position.y;
+                position.y -= frameData.fileDimensions.y * frameData.filePivot.y;
+                position.y /= frameData.pixelsPerUnit;
+
+                string path = fileData.GetBindingPath(frameData.layerData.name);
+                frameData.clip.SetPositionKey(path, frameData.timeIn, position, true);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Generates root motion animation curves and events for a RootMotion-type layer.
+        /// Calculates the root position and delta for the current frame, sets the root position
+        /// in the animation clip, and adds an animation event to apply the root motion at the correct time.
+        /// Returns true if the layer is of type RootMotion and root motion is generated; otherwise, false.
+        /// </summary>
+        /// <param name="fileData">The ImportFileData containing all imported Aseprite data.</param>
+        /// <param name="frameData">The data describing the layer and frame.</param>
+        /// <returns>True if root motion is generated; otherwise, false.</returns>
+        internal static bool TryGenerateRootMotion(this ImportFileData fileData, ImportFrameData frameData)
+        {
+            // Only process if the layer is of type RootMotion
+            if (frameData.layerData.type != LayerType.RootMotion)
+            {
+                return false;
+            }
+
+            // Try to get the sprite for the current frame
+            if (!fileData.TryGetSprite(frameData.frameIndex, out Sprite sprite))
+            {
+                return false;
+            }
+
+            // Calculate the center of the cell rectangle in pixel coordinates (from the top-left corner)
+            Vector2 rootInPixelsFromCorner = Vector2.Lerp(frameData.cellRect.min, frameData.cellRect.max, 0.5f);
+
+            // Calculate the root point in pixels relative to the Aseprite file's pivot
+            Vector2 rootInPixels = new()
+            {
+                x = rootInPixelsFromCorner.x - frameData.fileDimensions.x * frameData.filePivot.x,
+                y = frameData.fileDimensions.y - rootInPixelsFromCorner.y - (frameData.fileDimensions.y * frameData.filePivot.y),
+            };
+
+            // Convert the root point from pixels to world space units
+            Vector2 root = rootInPixels / frameData.pixelsPerUnit;
+
+            // Calculate the root motion delta
+            Vector2 rootDelta = root - s_previousRoot;
+            s_previousRoot = root;
+
+            // Set the root point in world space relative to the Aseprite file's pivot
+            frameData.clip.SetPositionKey(AnimationUtilities.SpriteBinding.path, frameData.timeIn, -root, true);
+
+            // Get the object reference curve for the sprite
+            ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AnimationUtilities.SpriteBinding);
+
+            // Get the animation events for the clip
+            s_animationEvents.Clear();
+            s_animationEvents.AddRange(AnimationUtility.GetAnimationEvents(frameData.clip));
+            
+            // Add an animation event to the clip that will call the OnAsepriteRootMotion method with the calculated root motion vector as a string parameter at the correct frame time.
+            s_animationEvents.Add(new()
+            {
+                functionName = nameof(AsepriteMotionReceiver.OnAsepriteRootMotion),
+                stringParameter = $"{rootDelta.x},{rootDelta.y}",
+                time = frames.GetNearestFrameTime(frameData.timeIn),
+            });
+
+            // Set the animation events for the clip
+            AnimationUtility.SetAnimationEvents(frameData.clip, s_animationEvents.ToArray());
+
+            // Return true if the root motion was generated
+            return true;
+        }
+    }
+}
