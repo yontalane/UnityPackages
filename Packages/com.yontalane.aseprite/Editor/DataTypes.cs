@@ -76,8 +76,7 @@ namespace YontalaneEditor.Aseprite
         public AsepriteImporter.ImportEventArgs args;
         public LayerData layerData;
         public AnimationClip clip;
-        public float timeIn;
-        public float timeOut;
+        public float time;
         public Vector2Int fileDimensions;
         public int frameIndex;
         public Vector2 filePivot;

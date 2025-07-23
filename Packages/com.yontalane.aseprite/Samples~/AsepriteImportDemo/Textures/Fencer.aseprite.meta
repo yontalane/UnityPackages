@@ -581,17 +581,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: -115, y: 4}
+    uvTransform: {x: 4, y: 4}
   - name: Frame_23
     originalName: 
-    pivot: {x: 0.13432835, y: 0}
+    pivot: {x: 0.13235295, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 57
-      width: 67
+      width: 68
       height: 46
     spriteID: 7e980dacad0c14da0966b65778ea9f14
     spriteBone: []
@@ -898,10 +898,10 @@ ScriptedImporter:
       frameIndex: 22
       additiveSortOrder: 0
       cellRect:
-        x: -64
+        x: 55
         y: 0
-        width: 256
-        height: 64
+        width: 70
+        height: 45
       spriteId: c1e28553d93f7472e82d2fceaa70f865
     - name: Frame_23
       frameIndex: 23

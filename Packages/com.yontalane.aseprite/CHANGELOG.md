@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.2] - 2025.07.22
+
+### Added
+
+- Hat in sample project
+
+### Fixed
+
+- Collision boxes and points were deactivating in certain frames
+
 ## [1.0.1] - 2025.07.22
 
 ### Added

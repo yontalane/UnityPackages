@@ -41,19 +41,8 @@ namespace YontalaneEditor.Aseprite
 
             // Set the enabled state of the BoxCollider2D to on for the current frame only
             {
-                EditorCurveBinding binding = new()
-                {
-                    path = fileData.GetBindingPath(frameData.layerData.name),
-                    propertyName = "m_Enabled",
-                    type = typeof(BoxCollider2D),
-                };
-
-                frameData.clip.SetEnabledKey<BoxCollider2D>(binding.path, frameData.timeIn, true);
-
-                if (frameData.clip.IndexOfKey(binding, frameData.timeOut) == -1)
-                {
-                    frameData.clip.SetEnabledKey<BoxCollider2D>(binding.path, frameData.timeOut, false);
-                }
+                string path = fileData.GetBindingPath(frameData.layerData.name);
+                frameData.clip.SetEnabledKey<BoxCollider2D>(path, frameData.time, true);
             }
 
             // Set the center of the BoxCollider2D
@@ -68,7 +57,7 @@ namespace YontalaneEditor.Aseprite
                 offset.y /= frameData.pixelsPerUnit;
 
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetOffsetKey(path, frameData.timeIn, offset, true);
+                frameData.clip.SetOffsetKey(path, frameData.time, offset, true);
             }
 
             // Set the size of the BoxCollider2D
@@ -77,7 +66,7 @@ namespace YontalaneEditor.Aseprite
                 size /= frameData.pixelsPerUnit;
 
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetSizeKey(path, frameData.timeIn, size, true);
+                frameData.clip.SetSizeKey(path, frameData.time, size, true);
             }
 
             return true;
@@ -99,19 +88,8 @@ namespace YontalaneEditor.Aseprite
 
             // Set the active state of the GameObject to on for the current frame only
             {
-                EditorCurveBinding binding = new()
-                {
-                    path = fileData.GetBindingPath(frameData.layerData.name),
-                    propertyName = "m_IsActive",
-                    type = typeof(GameObject),
-                };
-
-                frameData.clip.SetIsActiveKey(binding.path, frameData.timeIn, true);
-
-                if (frameData.clip.IndexOfKey(binding, frameData.timeOut) == -1)
-                {
-                    frameData.clip.SetIsActiveKey(binding.path, frameData.timeOut, false);
-                }
+                string path = fileData.GetBindingPath(frameData.layerData.name);
+                frameData.clip.SetIsActiveKey(path, frameData.time, true);
             }
 
             // Set the position of the GameObject
@@ -126,7 +104,7 @@ namespace YontalaneEditor.Aseprite
                 position.y /= frameData.pixelsPerUnit;
 
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetPositionKey(path, frameData.timeIn, position, true);
+                frameData.clip.SetPositionKey(path, frameData.time, position, true);
             }
 
             return true;
@@ -185,10 +163,10 @@ namespace YontalaneEditor.Aseprite
             s_previousRoot = root;
 
             // Set the root point in world space relative to the Aseprite file's pivot
-            frameData.clip.SetPositionKey(AnimationUtilities.SpriteBinding.path, frameData.timeIn, -root.position, true);
+            frameData.clip.SetPositionKey(AsepriteAnimationUtility.SpriteBinding.path, frameData.time, -root.position, true);
 
             // Get the object reference curve for the sprite
-            ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AnimationUtilities.SpriteBinding);
+            ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AsepriteAnimationUtility.SpriteBinding);
 
             // Get the animation events for the clip
             s_animationEvents.Clear();
@@ -199,7 +177,7 @@ namespace YontalaneEditor.Aseprite
             {
                 functionName = nameof(AsepriteMotionReceiver.OnAsepriteRootMotion),
                 stringParameter = $"{rootDelta.x},{rootDelta.y}",
-                time = frames.GetNearestFrameTime(frameData.timeIn),
+                time = frames.GetNearestFrameTime(frameData.time),
             });
 
             // Set the animation events for the clip

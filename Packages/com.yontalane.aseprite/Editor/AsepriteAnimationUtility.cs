@@ -7,7 +7,7 @@ namespace YontalaneEditor.Aseprite
     /// <summary>
     /// Provides utility methods for working with animation data, animation clips, and animated sprites.
     /// </summary>
-    internal static class AnimationUtilities
+    internal static class AsepriteAnimationUtility
     {
         internal static EditorCurveBinding SpriteBinding => new()
         {

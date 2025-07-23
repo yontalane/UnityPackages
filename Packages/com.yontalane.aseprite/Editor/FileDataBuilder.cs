@@ -165,7 +165,7 @@ namespace YontalaneEditor.Aseprite
                 // For all curves bound to the main object sprite property, set them instead to the child object sprite property
                 ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(clip, originalBinding);
                 AnimationUtility.SetObjectReferenceCurve(clip, originalBinding, null);
-                AnimationUtility.SetObjectReferenceCurve(clip, AnimationUtilities.SpriteBinding, frames);
+                AnimationUtility.SetObjectReferenceCurve(clip, AsepriteAnimationUtility.SpriteBinding, frames);
             }
         }
 

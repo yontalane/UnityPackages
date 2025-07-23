@@ -8,7 +8,7 @@ namespace YontalaneEditor.Aseprite
     /// Provides utility methods for working with Aseprite file data, including collision layer detection,
     /// rectangle extraction, and pivot point calculation.
     /// </summary>
-    internal static class FileUtilities
+    internal static class AsepriteFileUtility
     {
         private const float PIXEL_COLOR_MIN = 0.05f;
 
