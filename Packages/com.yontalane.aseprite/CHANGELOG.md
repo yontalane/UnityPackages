@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.6] - 2025.07.23
+
+### Fixed
+
+- Animation start event was at end of animation instead of start
+
 ## [1.0.5] - 2025.07.23
 
 ### Added

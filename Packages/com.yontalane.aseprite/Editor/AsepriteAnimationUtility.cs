@@ -604,7 +604,7 @@ namespace YontalaneEditor.Aseprite
                 stringParameter = clip.name,
                 floatParameter = clip.length,
                 intParameter = clip.isLooping ? 1 : 0,
-                time = clip.length,
+                time = 0f,
             });
         }
 
