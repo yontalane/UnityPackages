@@ -1,6 +1,6 @@
 {
     "name": "com.yontalane.aseprite",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "displayName": "Aseprite",
     "description": "Extras for the Aseprite-to-Unity pipeline.",
     "unity": "2023.2",
@@ -22,6 +22,12 @@
         "email": "unitypackages@yontalane.com",
         "url": "https://yontalane.com/"
     },
-    "samples": [],
+    "samples": [
+        {
+            "displayName": "Aseprite Import Demo",
+            "description": "Contains a sample implementation of Yontalane's Aseprite import pipeline.",
+            "path": "Samples~/AsepriteImportDemo"
+        }
+    ],
     "type": "library"
 }

@@ -325,28 +325,12 @@ namespace YontalaneEditor.Aseprite
                 // Create a new GameObject for the collision layer and add a BoxCollider2D component
                 GameObject go = new(layerData.name);
                 BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
+                collider.enabled = false;
                 collider.isTrigger = layerData.type == LayerType.Trigger;
                 // Add the new GameObject to the import context as an asset
                 fileData.args.context.AddObjectToAsset(go.name, go);
                 // Set the new GameObject as a child of the main imported object
                 go.transform.SetParent(fileData.spriteObject.transform);
-
-                // Set the enabled state of the BoxCollider2D to off at the start of the clip for each animation clip in the import context
-                foreach (Object obj in fileData.objects)
-                {
-                    if (obj is AnimationClip clip)
-                    {
-                        EditorCurveBinding binding = new()
-                        {
-                            path = fileData.GetBindingPath(go),
-                            propertyName = "m_Enabled",
-                            type = typeof(BoxCollider2D),
-                        };
-
-                        AnimationCurve curve = new(new Keyframe[] { new(0f, 0f) });
-                        AnimationUtility.SetEditorCurve(clip, binding, curve);
-                    }
-                }
             }
         }
 
@@ -373,30 +357,11 @@ namespace YontalaneEditor.Aseprite
 
                 // Create a new GameObject to represent the point
                 GameObject go = new(layerData.name);
+                go.SetActive(false);
                 // Add the new GameObject to the import context as an asset
                 fileData.args.context.AddObjectToAsset(go.name, go);
                 // Set the new GameObject as a child of the main imported object
                 go.transform.SetParent(fileData.spriteObject.transform);
-
-                // Set the active state of the GameObject to off at the start of the clip for each animation clip in the import context
-                foreach (Object obj in fileData.objects)
-                {
-                    // If the object is not an animation clip, skip it
-                    if (obj is not AnimationClip clip)
-                    {
-                        continue;
-                    }
-
-                    EditorCurveBinding binding = new()
-                    {
-                        path = fileData.GetBindingPath(go),
-                        propertyName = "m_IsActive",
-                        type = typeof(GameObject),
-                    };
-
-                    AnimationCurve curve = new(new Keyframe[] { new(0f, 0f) });
-                    AnimationUtility.SetEditorCurve(clip, binding, curve);
-                }
             }
         }
 

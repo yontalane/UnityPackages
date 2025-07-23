@@ -17,9 +17,6 @@ namespace YontalaneEditor.Aseprite
         /// <param name="fileData">The ImportFileData containing all extracted data from the Aseprite import.</param>
         internal static void ProcessAsepriteAsset(this ImportFileData fileData)
         {
-            // Initialize the frame processor to reset previous root point and clear collision rectangles before processing frames
-            FrameProcessor.Initialize();
-            
             // Iterate backwards through the frames to process collision boxes and points before root motion
             for (int frameDataIndex = fileData.FrameData.Count - 1; frameDataIndex >= 0; frameDataIndex--)
             {
@@ -34,6 +31,15 @@ namespace YontalaneEditor.Aseprite
                 // Process the frame for root motion and collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
                 fileData.InterateThroughChunks(data, frameDataIndex, true); // Root Motion
+            }
+
+            // Ensure all AnimationClips have their boolean properties initialized to 'off'
+            foreach (Object childObject in fileData.objects)
+            {
+                if (childObject is AnimationClip clip)
+                {
+                    clip.EnsureBoolPropertiesBeginOff();
+                }
             }
         }
 

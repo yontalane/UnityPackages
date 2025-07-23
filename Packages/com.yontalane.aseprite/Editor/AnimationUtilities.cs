@@ -113,6 +113,11 @@ namespace YontalaneEditor.Aseprite
         /// <returns>The index of the key if found; otherwise, -1.</returns>
         internal static int IndexOfKey(this AnimationCurve curve, float time)
         {
+            if (curve == null)
+            {
+                return -1;
+            }
+
             for (int i = 0; i < curve.length; i++)
             {
                 if (Mathf.Approximately(curve.keys[i].time, time))
@@ -366,9 +371,12 @@ namespace YontalaneEditor.Aseprite
                 propertyName = propertyName,
                 type = typeof(T),
             };
-
+            
             // Get the animation curve for the specified property on the given path and type
             AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
+
+            // If the animation curve is null, create a new one
+            curve ??= new();
 
             // Add or replace a keyframe at the specified time with the given value
             AddOrReplaceKey(ref curve, time, value ? 1f : 0f);
@@ -493,6 +501,70 @@ namespace YontalaneEditor.Aseprite
         internal static void SetOffsetKey(this AnimationClip clip, string path, float time, Vector2 value, bool constantify = false)
         {
             clip.SetVector2Key<BoxCollider2D>(path, "m_Offset", time, value, constantify);
+        }
+
+        /// <summary>
+        /// Ensures that all boolean properties in the AnimationClip begin with a keyframe value of 0 at time 0.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to modify.</param>
+        internal static void EnsureBoolPropertiesBeginOff(this AnimationClip clip)
+        {
+            EditorCurveBinding[] bindings = AnimationUtility.GetCurveBindings(clip);
+
+            // Iterate through the bindings and ensure that all boolean properties begin with a keyframe value of 0 at time 0
+            for (int i = 0; i < bindings.Length; i++)
+            {
+                // Get the property name of the current binding
+                string propertyName = bindings[i].propertyName.ToLower();
+
+                // If the property name does not contain "enabled" or "isactive", skip it
+                if (!propertyName.Contains("enabled") && !propertyName.Contains("isactive"))
+                {
+                    continue;
+                }
+
+                // Get the animation curve for the current binding
+                AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, bindings[i]);
+
+                // If the animation curve is null, skip it
+                if (curve == null)
+                {
+                    continue;
+                }
+
+                // If the animation curve already has a key at time 0, skip it
+                if (curve.HasKeyAtTime(0f))
+                {
+                    continue;
+                }
+
+                // Add a keyframe at time 0 with a value of 0
+                AddOrReplaceKey(ref curve, 0f, 0f);
+
+                // Set the tangent mode of the curve to constant
+                ConstantifyCurve(ref curve);
+
+                AnimationUtility.SetEditorCurve(clip, bindings[i], curve);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the AnimationCurve has a key at the specified time.
+        /// </summary>
+        /// <param name="curve">The AnimationCurve to check.</param>
+        /// <param name="time">The time to check for a key.</param>
+        /// <returns>True if the AnimationCurve has a key at the specified time; otherwise, false.</returns>
+        internal static bool HasKeyAtTime(this AnimationCurve curve, float time)
+        {
+            foreach(Keyframe keyframe in curve.keys)
+            {
+                if (Mathf.Approximately(keyframe.time, time))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

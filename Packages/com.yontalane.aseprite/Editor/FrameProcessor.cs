@@ -11,19 +11,18 @@ namespace YontalaneEditor.Aseprite
     /// </summary>
     internal static class FrameProcessor
     {
-        private static readonly List<Rect> s_collisionRects = new();
+        /// <summary>
+        /// Stores root motion data for a single frame, including position and animation name.
+        /// </summary>
+        private struct RootData
+        {
+            public Vector2 position;
+            public string animation;
+        }
+
         private static readonly List<AnimationEvent> s_animationEvents = new();
         private static readonly List<ObjectReferenceKeyframe> s_frameList = new();
-        private static Vector2 s_previousRoot = new();
-
-        /// <summary>
-        /// Initializes the frame processor by resetting the previous root point and clearing the collision rectangles.
-        /// </summary>
-        internal static void Initialize()
-        {
-            s_previousRoot = Vector2.zero;
-            s_collisionRects.Clear();
-        }
+        private static RootData s_previousRoot = new();
 
         /// <summary>
         /// Generates animation curves for a collision or trigger layer, setting the BoxCollider2D's enabled state and
@@ -166,15 +165,27 @@ namespace YontalaneEditor.Aseprite
                 y = frameData.fileDimensions.y - rootInPixelsFromCorner.y - (frameData.fileDimensions.y * frameData.filePivot.y),
             };
 
-            // Convert the root point from pixels to world space units
-            Vector2 root = rootInPixels / frameData.pixelsPerUnit;
+            // Create a new RootData instance to store the root position and animation name for this frame
+            RootData root = new()
+            {
+                position = rootInPixels / frameData.pixelsPerUnit,
+                animation = frameData.clip.name,
+            };
 
-            // Calculate the root motion delta
-            Vector2 rootDelta = root - s_previousRoot;
+            // If the animation name has changed, reset the previous root data
+            if (root.animation != s_previousRoot.animation)
+            {
+                s_previousRoot = new();
+            }
+
+            // Calculate the root motion delta between the current frame and the previous frame
+            Vector2 rootDelta = root.position - s_previousRoot.position;
+
+            // Update the previous root data to the current frame's root data
             s_previousRoot = root;
 
             // Set the root point in world space relative to the Aseprite file's pivot
-            frameData.clip.SetPositionKey(AnimationUtilities.SpriteBinding.path, frameData.timeIn, -root, true);
+            frameData.clip.SetPositionKey(AnimationUtilities.SpriteBinding.path, frameData.timeIn, -root.position, true);
 
             // Get the object reference curve for the sprite
             ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AnimationUtilities.SpriteBinding);
