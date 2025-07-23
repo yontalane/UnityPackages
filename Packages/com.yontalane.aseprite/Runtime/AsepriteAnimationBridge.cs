@@ -4,6 +4,23 @@ using UnityEngine.Events;
 namespace Yontalane.Aseprite
 {
     /// <summary>
+    /// A struct containing information about an animation lifecycle event.
+    /// </summary>
+    [System.Serializable]
+    public struct AnimationLifecycleEvent
+    {
+        /// <summary>
+        /// The name of the animation.
+        /// </summary>
+        public string animationName;
+
+        /// <summary>
+        /// Whether the animation is looping.
+        /// </summary>
+        public bool isLooping;
+    }
+
+    /// <summary>
     /// A bridge between Aseprite animations and Unity Animator.
     /// Facilitates interaction between Aseprite animations and Unity's Animator by handling root motion events, animation lifecycle events, and providing utility methods for animation control and querying.
     /// </summary>
@@ -24,7 +41,7 @@ namespace Yontalane.Aseprite
         /// UnityEvent that is invoked upon animation lifecycle events.
         /// </summary>
         [System.Serializable]
-        public class OnLifecycleHandler : UnityEvent<string, bool> { }
+        public class OnLifecycleHandler : UnityEvent<AnimationLifecycleEvent> { }
 
         [Tooltip("Event invoked when root motion data is received from the Aseprite animation.")]
         [SerializeField]
@@ -98,7 +115,11 @@ namespace Yontalane.Aseprite
         public void OnAsepriteAnimationStart(AnimationEvent animationEvent)
         {
             CurrentAnimation = animationEvent.stringParameter;
-            OnStart?.Invoke(animationEvent.stringParameter, animationEvent.intParameter > 0);
+            OnStart?.Invoke(new()
+            {
+                animationName = animationEvent.stringParameter,
+                isLooping = animationEvent.intParameter > 0,
+            });
         }
 
         /// <summary>
@@ -107,7 +128,11 @@ namespace Yontalane.Aseprite
         /// <param name="animationEvent">The AnimationEvent that triggered the completion.</param>
         public void OnAsepriteAnimationComplete(AnimationEvent animationEvent)
         {
-            OnComplete?.Invoke(animationEvent.stringParameter, animationEvent.intParameter > 0);
+            OnComplete?.Invoke(new()
+            {
+                animationName = animationEvent.stringParameter,
+                isLooping = animationEvent.intParameter > 0,
+            });
         }
 
         /// <summary>
@@ -162,8 +187,9 @@ namespace Yontalane.Aseprite
         /// Tries to play an animation with the specified name.
         /// </summary>
         /// <param name="animationName">The name of the animation to play.</param>
+        /// <param name="startTime">The start time offset between zero and one.</param>
         /// <returns>True if the animation was played, false otherwise.</returns>
-        public bool TryPlay(string animationName)
+        public bool TryPlay(string animationName, float startTime = 0f)
         {
             // Try to get the animation clip with the specified name
             if (!TryGetAnimationClip(animationName, out AnimationClip clip))
@@ -172,7 +198,7 @@ namespace Yontalane.Aseprite
             }
 
             // Play the animation
-            Animator.Play(clip.name);
+            Animator.Play(clip.name, -1, startTime);
             return true;
         }
 
@@ -180,10 +206,11 @@ namespace Yontalane.Aseprite
         /// Plays an animation with the specified name.
         /// </summary>
         /// <param name="animationName">The name of the animation to play.</param>
-        public void Play(string animationName)
+        /// <param name="startTime">The start time offset between zero and one.</param>
+        public void Play(string animationName, float startTime = 0f)
         {
             // Play the animation
-            TryPlay(animationName);
+            TryPlay(animationName, startTime);
         }
     }
 }

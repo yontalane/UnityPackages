@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.5] - 2025.07.23
+
+### Added
+
+- AsepriteAnimationBridge can play animations starting at a normalized offset
+
+### Changed
+
+- AsepriteAnimationBridge lifecycle events use a single struct parameter
+
+### Changed
+
+- Updated documentation
+
 ## [1.0.4] - 2025.07.22
 
 ### Changed
@@ -8,14 +22,14 @@
 
 ## [1.0.3] - 2025.07.22
 
-### Changed
-
-- MotionReceiver is now AnimationBridge
-
 ### Added
 
 - AnimationBridge can be used to play animations
 - AnimationBridge can be used to detect current animation
+
+### Changed
+
+- MotionReceiver is now AnimationBridge
 
 ## [1.0.2] - 2025.07.22
 
