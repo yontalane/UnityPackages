@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.7] - 2025.07.23
+
+### Change
+
+- AsepriteAnimationBridge.Play() now defaults to not restarting a looping animation, but this can be overridden
+
 ## [1.0.6] - 2025.07.23
 
 ### Fixed

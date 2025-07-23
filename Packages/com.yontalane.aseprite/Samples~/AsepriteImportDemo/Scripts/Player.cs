@@ -45,10 +45,10 @@ namespace Yontalane.Demos.Aseprite
         /// <summary>
         /// Called when the current animation completes. This is used to set the player to ready and play the idle animation.
         /// </summary>
-        public void OnAnimationComplete(string _, bool isLooping)
+        public void OnAnimationComplete(AnimationLifecycleEvent lifecycleEvent)
         {
             // If the animation is looping, do nothing
-            if (isLooping)
+            if (lifecycleEvent.isLooping)
             {
                 return;
             }

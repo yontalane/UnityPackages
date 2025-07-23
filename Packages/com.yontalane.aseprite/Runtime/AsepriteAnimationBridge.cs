@@ -188,11 +188,18 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="animationName">The name of the animation to play.</param>
         /// <param name="startTime">The start time offset between zero and one.</param>
+        /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
         /// <returns>True if the animation was played, false otherwise.</returns>
-        public bool TryPlay(string animationName, float startTime = 0f)
+        public bool TryPlay(string animationName, float startTime = 0f, bool restartLoop = false)
         {
             // Try to get the animation clip with the specified name
             if (!TryGetAnimationClip(animationName, out AnimationClip clip))
+            {
+                return false;
+            }
+
+            // If the animation is looping and the current animation is the same as the specified animation name, and restartLoop is false, return false
+            if (!restartLoop && clip.isLooping && CurrentAnimation == animationName)
             {
                 return false;
             }
@@ -207,10 +214,11 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="animationName">The name of the animation to play.</param>
         /// <param name="startTime">The start time offset between zero and one.</param>
-        public void Play(string animationName, float startTime = 0f)
+        /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
+        public void Play(string animationName, float startTime = 0f, bool restartLoop = false)
         {
             // Play the animation
-            TryPlay(animationName, startTime);
+            TryPlay(animationName, startTime, restartLoop);
         }
     }
 }
