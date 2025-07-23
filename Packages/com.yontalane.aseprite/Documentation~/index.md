@@ -35,24 +35,34 @@ Animate your character such that their position translates within Aseprite. Add 
 
 Upon import into Unity, the animation will be adjusted such that the root point remains at 0,0 in local space. However, each frame at which the root would have moved, an `OnMotion` event is broadcast. You can have your game's character class listen for this event and move the character in world space.
 
-(An AsepriteAnimationBridge component is added to the imported Aseprite file, and it's this component, specifically, that broadcasts `OnMotion`.)
+(An AsepriteAnimationBridge component is added to the imported Aseprite file, and it is this component, specifically, that broadcasts `OnMotion`.)
 
-## Bridge
+## Aseprite Animation Bridge
 
-An AsepriteAnimationBridge component is added to the imported Aseprite file.
+The Aseprite Animation Bridge is a bridge between Aseprite animations and the Unity Animator. It is automatically added to the imported Aseprite file.
 
-The Bridge broadcasts the following events:
+The Bridge facilitates interaction between Aseprite animations and Unity's Animator by handling root motion events, animation lifecycle events, and providing utility methods for animation control and querying.
 
-* OnStart: with string parameter animationName and bool parameter isLooping
-* OnComplete: with string parameter animationName and bool parameter isLooping
-* OnMotion: with Vector2 parameter motion
+### Delegates
 
-The Bridge's other features include a Play() method, allowing you to play an animation by name, and a CurrentAnimation property, allowing you to get the name of the currently playing animation.
+| Name           | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| **OnMotion**   | Event invoked when root motion data is received from the Aseprite animation. |
+| **OnStart**    | Event invoked when an animation starts.                      |
+| **OnComplete** | Event invoked when an animation completes.                   |
 
-A complete list of methods and properties:
+### Properties
 
-* string CurrentAnimation: A read-only string denoting the name of the active animation.
-* bool TryGetAnimationClip(string animationName, out AnimationClip animationClip): Returns the animation clip with the given name if it exists.
-* bool HasClip(string animationName): Returns true if the animator contains an animation with the given name.
-* bool TryPlay(string animationName): Plays the animation if it exists. Returns false if the animation doesn't exist.
-* void Play(string animationName): Plays the animation if it exists.
+| Name                 | Description                                        |
+| -------------------- | -------------------------------------------------- |
+| **Animator**         | The Animator component attached to the GameObject. |
+| **CurrentAnimation** | Gets the name of the currently playing animation.  |
+
+### Methods
+
+| Name                    | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| **TryGetAnimationClip** | Tries to get an animation clip with the specified name.      |
+| **HasAnimation**        | Checks if the Animator has an animation with the specified name. |
+| **TryPlay**             | Tries to play an animation with the specified name.          |
+| **Play**                | Plays an animation with the specified name.                  |

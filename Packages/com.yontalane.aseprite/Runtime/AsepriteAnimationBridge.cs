@@ -5,8 +5,7 @@ namespace Yontalane.Aseprite
 {
     /// <summary>
     /// A bridge between Aseprite animations and Unity Animator.
-    /// It receives root motion data from Aseprite animations and invokes a UnityEvent with the parsed motion vector.
-    /// It also invokes a UnityEvent when the animation completes.
+    /// Facilitates interaction between Aseprite animations and Unity's Animator by handling root motion events, animation lifecycle events, and providing utility methods for animation control and querying.
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]

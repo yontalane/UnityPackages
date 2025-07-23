@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2025.07.22
+
+### Changed
+
+- Updated documentation
+
 ## [1.0.3] - 2025.07.22
 
 ### Changed
