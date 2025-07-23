@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Yontalane.Aseprite;
@@ -20,8 +19,6 @@ namespace YontalaneEditor.Aseprite
             public string animation;
         }
 
-        private static readonly List<AnimationEvent> s_animationEvents = new();
-        private static readonly List<ObjectReferenceKeyframe> s_frameList = new();
         private static RootData s_previousRoot = new();
 
         /// <summary>
@@ -168,20 +165,13 @@ namespace YontalaneEditor.Aseprite
             // Get the object reference curve for the sprite
             ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AsepriteAnimationUtility.SpriteBinding);
 
-            // Get the animation events for the clip
-            s_animationEvents.Clear();
-            s_animationEvents.AddRange(AnimationUtility.GetAnimationEvents(frameData.clip));
-            
             // Add an animation event to the clip that will call the OnAsepriteRootMotion method with the calculated root motion vector as a string parameter at the correct frame time.
-            s_animationEvents.Add(new()
+            frameData.clip.AddAnimationEvent(new()
             {
-                functionName = nameof(AsepriteMotionReceiver.OnAsepriteRootMotion),
+                functionName = nameof(AsepriteAnimationBridge.OnAsepriteRootMotion),
                 stringParameter = $"{rootDelta.x},{rootDelta.y}",
                 time = frames.GetNearestFrameTime(frameData.time),
             });
-
-            // Set the animation events for the clip
-            AnimationUtility.SetAnimationEvents(frameData.clip, s_animationEvents.ToArray());
 
             // Return true if the root motion was generated
             return true;

@@ -1,61 +1,39 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Yontalane.Aseprite;
 
 namespace Yontalane.Demos.Aseprite
 {
     /// <summary>
-    /// Controls the player character, handling movement, animation state, and input events.
+    /// The player controller. This is a simple example of how to use the AsepriteAnimationBridge component.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(AsepriteAnimationBridge))]
     [RequireComponent(typeof(PlayerInput))]
     [AddComponentMenu("Yontalane/Demos/Aseprite/Player")]
     public class Player : MonoBehaviour
     {
         /// <summary>
-        /// The animator component controlling the player's animations.
+        /// The AsepriteAnimationBridge component.
         /// </summary>
-        public Animator Animator { get; private set; } = null;
+        public AsepriteAnimationBridge AnimationBridge { get; private set; } = null;
 
         /// <summary>
-        /// Whether the player is ready to move and perform actions.
+        /// Whether the player is ready to move and perform actions. This is used to prevent the player from moving before the animation is complete.
         /// </summary>
         public bool Ready { get; private set; } = true;
 
         /// <summary>
-        /// Initializes the player's components and sets up animation events.
+        /// Initializes the player's components.
         /// </summary>
         private void Start()
         {
-            // Get the animator component
-            Animator = GetComponent<Animator>();
-
-            // Loop through all the animations
-            for (int i = 0; i < Animator.runtimeAnimatorController.animationClips.Length; i++)
-            {
-                // Get the current animation clip
-                AnimationClip clip = Animator.runtimeAnimatorController.animationClips[i];
-
-                // Only modify non-looping animations
-                if (clip.isLooping)
-                {
-                    continue;
-                }
-
-                // Add an event to the animation clip to call OnAnimationComplete when the animation completes
-                clip.AddEvent(new()
-                {
-                    functionName = nameof(OnAnimationComplete),
-                    time = clip.length,
-                });
-
-                // Set the animation clip to the modified animation clip
-                Animator.runtimeAnimatorController.animationClips[i] = clip;
-            }
+            // Get the AsepriteAnimationBridge component
+            AnimationBridge = GetComponent<AsepriteAnimationBridge>();
         }
 
         /// <summary>
-        /// Handles the player's movement based on the Aseprite motion input.
+        /// Handles the player's movement based on the Aseprite motion input. This is used to move the player based on the Aseprite motion input.
         /// </summary>
         /// <param name="value">The movement direction and speed.</param>
         public void OnAsepriteMotion(Vector2 value)
@@ -65,44 +43,50 @@ namespace Yontalane.Demos.Aseprite
         }
 
         /// <summary>
-        /// Called when the current animation completes.
+        /// Called when the current animation completes. This is used to set the player to ready and play the idle animation.
         /// </summary>
-        public void OnAnimationComplete()
+        public void OnAnimationComplete(string _, bool isLooping)
         {
-            // Play the idle animation and set the player to ready
-            Animator.Play("Idle");
+            // If the animation is looping, do nothing
+            if (isLooping)
+            {
+                return;
+            }
+
+            // Play the idle animation and set the player to ready. This is used to set the player to ready and play the idle animation.
+            AnimationBridge.Play("Idle");
             Ready = true;
         }
 
         /// <summary>
-        /// Handles player movement input.
+        /// Handles player movement input. This is used to move the player based on the input.
         /// </summary>
         /// <param name="inputValue">The input value containing the movement direction.</param>
         public void OnMove(InputValue inputValue)
         {
-            // Check if the player is ready before processing the movement input
+            // Check if the player is ready before processing the movement input. This is used to prevent the player from moving before the animation is complete.
             if (!Ready)
             {
                 return;
             }
 
-            // Get the horizontal movement direction
+            // Get the horizontal movement direction. This is used to move the player based on the input.
             float x = inputValue.Get<Vector2>().x;
 
             // Check if the player is idle
             if (Mathf.Approximately(x, 0f))
             {
-                Animator.Play("Idle");
+                AnimationBridge.Play("Idle");
             }
             // Check if the player is advancing
             else if (x > 0f)
             {
-                Animator.Play("Advance");
+                AnimationBridge.Play("Advance");
             }
             // Check if the player is retreating
             else
             {
-                Animator.Play("Retreat");
+                AnimationBridge.Play("Retreat");
             }
         }
 
@@ -125,7 +109,7 @@ namespace Yontalane.Demos.Aseprite
             }
 
             // Play the attack animation and set the player to not ready
-            Animator.Play("Lunge");
+            AnimationBridge.Play("Lunge");
             Ready = false;
         }
     }

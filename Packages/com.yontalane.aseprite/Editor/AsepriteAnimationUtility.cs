@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Yontalane.Aseprite;
 
 namespace YontalaneEditor.Aseprite
 {
@@ -9,6 +10,11 @@ namespace YontalaneEditor.Aseprite
     /// </summary>
     internal static class AsepriteAnimationUtility
     {
+        /// <summary>
+        /// A list of animation events to be added to the animation clip.
+        /// </summary>
+        private static readonly List<AnimationEvent> s_animationEvents = new();
+
         internal static EditorCurveBinding SpriteBinding => new()
         {
             path = "Sprite",
@@ -565,6 +571,58 @@ namespace YontalaneEditor.Aseprite
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Adds an AnimationEvent to the specified AnimationClip.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to which the event will be added.</param>
+        /// <param name="animationEvent">The AnimationEvent to add.</param>
+        internal static void AddAnimationEvent(this AnimationClip clip, AnimationEvent animationEvent)
+        {
+            // Get the animation events for the clip
+            s_animationEvents.Clear();
+            s_animationEvents.AddRange(AnimationUtility.GetAnimationEvents(clip));
+
+            // Add the animation event to the list
+            s_animationEvents.Add(animationEvent);
+
+            // Set the animation events for the clip
+            AnimationUtility.SetAnimationEvents(clip, s_animationEvents.ToArray());
+        }
+
+        /// <summary>
+        /// Adds an AnimationEvent to the specified AnimationClip that triggers when the animation starts.
+        /// The event will call the OnAsepriteAnimationStart method of AsepriteAnimationBridge, passing the clip's name, length, and loop status.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to which the completion event will be added.</param>
+        internal static void AddOnStartEvent(this AnimationClip clip)
+        {
+            clip.AddAnimationEvent(new()
+            {
+                functionName = nameof(AsepriteAnimationBridge.OnAsepriteAnimationStart),
+                stringParameter = clip.name,
+                floatParameter = clip.length,
+                intParameter = clip.isLooping ? 1 : 0,
+                time = clip.length,
+            });
+        }
+
+        /// <summary>
+        /// Adds an AnimationEvent to the specified AnimationClip that triggers when the animation completes.
+        /// The event will call the OnAsepriteAnimationComplete method of AsepriteAnimationBridge, passing the clip's name, length, and loop status.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to which the completion event will be added.</param>
+        internal static void AddOnCompleteEvent(this AnimationClip clip)
+        {
+            clip.AddAnimationEvent(new()
+            {
+                functionName = nameof(AsepriteAnimationBridge.OnAsepriteAnimationComplete),
+                stringParameter = clip.name,
+                floatParameter = clip.length,
+                intParameter = clip.isLooping ? 1 : 0,
+                time = clip.length,
+            });
         }
     }
 }

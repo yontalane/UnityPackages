@@ -15,7 +15,7 @@ namespace YontalaneEditor.Aseprite
         /// A reusable list to temporarily store layer data during asset processing.
         /// As we process each layer, we remove it from the list. The remaining layers will need a 'off' key set for the current frame.
         /// </summary>
-        private static readonly List<LayerData> s_layers = new();
+        private static readonly List<LayerData> s_remainingLayers = new();
 
         /// <summary>
         /// Processes the imported Aseprite asset by iterating through each frame and relevant chunks,
@@ -28,15 +28,15 @@ namespace YontalaneEditor.Aseprite
             for (int frameDataIndex = 0; frameDataIndex < fileData.FrameData.Count; frameDataIndex++)
             {
                 // Clear the list of layers and add all layers from the file data
-                s_layers.Clear();
-                s_layers.AddRange(fileData.layers);
+                s_remainingLayers.Clear();
+                s_remainingLayers.AddRange(fileData.layers);
 
                 // Process the frame for collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_layers, false, out float time); // Collision Boxes and Points
+                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, out float time); // Collision Boxes and Points
 
                 // Set the 'off' key for the remaining layers
-                fileData.HideEmptyLayerObjects(frameDataIndex, time, s_layers);
+                fileData.HideEmptyLayerObjects(frameDataIndex, time, s_remainingLayers);
             }
 
             // Iterate through the frames to process root motion
@@ -44,15 +44,17 @@ namespace YontalaneEditor.Aseprite
             {
                 // Process the frame for root motion and collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_layers, true, out _); // Root Motion
+                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, true, out _); // Root Motion
             }
 
-            // Ensure all AnimationClips have their boolean properties initialized to 'off'
+            // Ensure all AnimationClips have their boolean properties initialized to 'off' and add an on start and on complete event
             foreach (Object childObject in fileData.objects)
             {
                 if (childObject is AnimationClip clip)
                 {
                     clip.EnsureBoolPropertiesBeginOff();
+                    clip.AddOnStartEvent();
+                    clip.AddOnCompleteEvent();
                 }
             }
         }

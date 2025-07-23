@@ -39,7 +39,7 @@ namespace YontalaneEditor.Aseprite
             fileData.FixAnimations();
             fileData.MakeColliders();
             fileData.MakePoints();
-            fileData.AddMotionReceiver();
+            fileData.AddAnimationBridge();
         }
 
         /// <summary>
@@ -366,10 +366,10 @@ namespace YontalaneEditor.Aseprite
         }
 
         /// <summary>
-        /// Adds an AsepriteMotionReceiver component to the main object in the import context.
+        /// Adds an AsepriteAnimationBridge component to the main object in the import context.
         /// </summary>
-        /// <param name="fileData">The ImportFileData object to store the created motion receiver.</param>
-        internal static void AddMotionReceiver(this ImportFileData fileData)
+        /// <param name="fileData">The ImportFileData object to store the created animation bridge.</param>
+        internal static void AddAnimationBridge(this ImportFileData fileData)
         {
             // If the main object is not a game object, skip it (this should never happen)
             if (fileData.MainObject is not GameObject mainObject)
@@ -377,8 +377,8 @@ namespace YontalaneEditor.Aseprite
                 return;
             }
 
-            // Add an AsepriteMotionReceiver component to the main object
-            _ = mainObject.AddComponent<AsepriteMotionReceiver>();
+            // Add an AsepriteAnimationBridge component to the main object
+            _ = mainObject.AddComponent<AsepriteAnimationBridge>();
         }
     }
 }
