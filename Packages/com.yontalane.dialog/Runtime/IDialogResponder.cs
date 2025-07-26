@@ -1,5 +1,9 @@
 ﻿namespace Yontalane.Dialog
 {
+    /// <summary>
+    /// Defines the interface for responding to dialog events and custom function calls in the Yontalane dialog system.
+    /// Implement this interface to provide custom logic for dialog script functions and keyword replacements.
+    /// </summary>
     public interface IDialogResponder
     {
         /// <summary>

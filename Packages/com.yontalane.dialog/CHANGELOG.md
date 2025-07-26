@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.62] - 2025.07.25
+
+### Added
+
+- Text data includes voice and other speaker display/audio
+
+### Changed
+
+- Sample uses text data rather than json
+
 ## [1.0.61] - 2025.07.25
 
 ### Fixed

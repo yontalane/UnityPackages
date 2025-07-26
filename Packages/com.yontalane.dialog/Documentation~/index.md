@@ -86,32 +86,33 @@ The DialogData object has an alternate simplified text format that is not JSON. 
 It looks like this:
 
 ```
-//This is a comment.
+// This is a comment.
 
-//This indicates the starting node.
-=> Basic Convo
+// This indicates the starting node:
+==> Basic Convo
 
-//This is a node.
+// This is a node:
 #Basic Convo
 
-  //ifVar is IF:[var]=[val]=>[new node]
+  // ifVar is IF: VAR = VAL => NODE
   IF: talked to=true => Already Talked
   
-  //setVar is SET:[var]=[val]
+  // setVar is SET: VAR = VAL
   SET: talked to=true
 
-  //Basic dialog is [speaker]:[text]
-  //Text with no speaker is :[text]
+  // Basic dialog is SPEAKER: TEXT
+  // If you don't want a speaker, just start the line with a colon.
   Arm Dude: Hey there.
 
-  //callFunction is DO:[func],[param]
+  // callFunction is DO: FUNC, PARAM
   DO: Cutscene, Arm Dude
 
-  //portait can be set by [speaker] [[portrait]]: [dialog]
+  // portait can be set by SPEAKER [PORTRAIT]: TEXT
   Arm Dude [Arm Dude Contemplative]: I know what you're thinking.
 
-  //responses are - [text]=>[new node]
-  //an empty portrait [] is replaced by the speaker name text
+  // Responses are - TEXT => NODE
+  // An empty portrait [] is replaced by the speaker name text
+  
   Arm Dude []: Yes, this is a metal arm. No, I am not "happy to see you."
     - That's weird, man. => Deep Convo
     - cya. => Done
@@ -120,28 +121,48 @@ It looks like this:
 
   Arm Dude: Cold, bro. Cold.
 
-  //A modal query popup is ?:[text]&&[response]=>[node]&&[response]=>[node]...
+  // A modal query popup is ?: TEXT && RESPONSE => NODE && RESPONSE => NODE...
+  
   ?: Just leave? && Yes => Done && No => Mind
 
 #Mind
 
-  //You can still use double brackets.
-  //|: creates a mid-text linebreak.
+  // You can still use double brackets.
+  // |: creates a mid-text linebreak.
+  
   <<player>>: Hey, look.|:Gotta speak my mind.
 
   Arm Dude: You're all right.
 
 #Done
 
+  // Using key/value pairs, you can populate the speaker brackets
+  // with any or all of the following display data:
+  // * Portrait graphic asset name
+  // * Voice audio clip asset name
+  // * Sound audio clip asset name
+  // * Typing audio clip asset name
+  
+  Arm Dude [Portrait = Arm Dude Tired, Voice = Allrighty, Sound = Bang, Typing = Typewriter]: All righty.
+  
+  // This jumps to another node:
+  => Done Part Two
+
+#Done Part Two
+
   Arm Dude: Bye now.
 
 #Already Talked
 
-  //ifDialogCount is COUNT[operator][val]=>[new node]
+  // ifDialogCount is COUNT OPERATOR VAL => NODE
   COUNT > 3 => Other Already Talked
 
-  //ifFunction is IF FUNCTION:[func],[param]=[result]=>[new node]
-  IF FUNCTION: Randomness, time = true => Other Already Talked
+  // ifFunction is IF FUNCTION: FUNC, PARAM = RESULT => NODE
+  // -- joins lines together. Use this to break up a single line.
+  
+  IF FUNCTION:
+  -- Randomness, time = true =>
+  -- Other Already Talked
 
   Arm Dude: Later.
 

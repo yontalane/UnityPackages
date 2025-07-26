@@ -8,7 +8,8 @@ namespace Yontalane.Demos.Dialog
     /// Manages the main game logic, including handling player input for dialog initiation and updating the player's name.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GameManager : MonoBehaviour
+    [AddComponentMenu("Yontalane/Demos/Dialog/Game Manager")]
+    public sealed class GameManager : Singleton<GameManager>
     {
         [SerializeField]
         [Tooltip("Reference to the NPC DialogAgent that the player will interact with.")]
@@ -17,6 +18,12 @@ namespace Yontalane.Demos.Dialog
         [Tooltip("Input field for entering the player's name.")]
         [SerializeField]
         private TMP_InputField m_playerNameField = null;
+
+        [Tooltip("Input field for the NPC's desired item.")]
+        [SerializeField]
+        private TMP_InputField m_desiredItemField = null;
+
+        public static string DesiredItem => Instance.m_desiredItemField.text;
 
         /// <summary>
         /// Dialog is initiated by clicking on the talk button.

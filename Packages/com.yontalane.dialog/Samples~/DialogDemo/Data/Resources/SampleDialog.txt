@@ -1,0 +1,130 @@
+# Start
+
+  <<player>> [Sound = Positive]: Hello.
+  
+  COUNT > 1 => Short Exit
+  
+  <<self>>
+  -- [Portrait = Portrait A, Voice = Who Are You, Sound = Negative, Typing = Beep]:
+  -- Oh, hi. Who are you?
+  
+    - My name is <<player>>. => Gift
+    - You don't know? => Exit
+    - I forgot. => Forgot
+
+
+
+# Forgot
+
+  SET: soYouForgot = true
+  => Exit
+
+
+
+# Gift
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = Are You a Giver]:
+  -- Are you a giver or a taker?
+  
+    - Giver. => Give
+    - Taker. => Take
+
+
+
+# Take
+
+  <<self>>
+  -- [Portrait A, Voice = Okay]:
+  -- Ok.
+  
+  DO: GiveToPlayer, Apple
+  
+  ?: You received an apple. && OK => Take Two
+
+
+
+# Take Two
+
+  <<player>>: Thanks.
+  => Exit
+
+
+
+# Give
+
+  IF FUNCTION: Possesses, <<DesiredItem>> = true => Can Give
+  
+  <<self>>
+  -- [Portrait = Portrait A, Voice = But You Don't Have It]:
+  -- But you don't have a <<DesiredItem>>.
+  
+  => Exit
+
+
+
+# Can Give
+
+    ?: Hand over the <<DesiredItem>>? && Sure. => Hand Over && No. => Do Not Hand Over
+
+
+
+# Hand Over
+
+  DO: TakeFromPlayer, <<DesiredItem>>
+  
+  ?: You handed over the <<DesiredItem>>. && OK => Hand Over Complete
+
+
+
+# Hand Over Complete
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = Thanks]:
+  -- Thanks.
+
+
+
+# Do Not Hand Over
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = Too Bad]:
+  -- Too bad.
+  
+  => Exit
+
+
+
+# Short Exit
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = Oh Hi, Typing = Beep]:
+  -- Oh, hi.
+  
+  => Exit
+
+
+
+# Exit
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = I Have to Go Now, Typing = Beep]:
+  -- I have to go now.
+  
+  IF: soYouForgot = true => Exit Forgot
+  
+  <<self>>
+  -- [Portrait = Portrait B, Voice = Bye, Typing = Beep]:
+  -- Bye.
+  
+  <<player>>: Goodbye.
+
+
+
+# Exit Forgot
+
+  <<self>>
+  -- [Portrait = Portrait A, Voice = I Hope You Remember Yourself, Typing = Beep]:
+  -- I hope you remember yourself.
+  
+  <<player>>: Goodbye.

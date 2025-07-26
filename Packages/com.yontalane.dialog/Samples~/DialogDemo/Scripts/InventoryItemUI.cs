@@ -7,6 +7,7 @@ namespace Yontalane.Demos.Dialog
     /// Handles the UI representation of a single inventory item, including its name and count, and provides methods to modify the item count.
     /// </summary>
     [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Demos/Dialog/Inventory Item UI")]
     public sealed class InventoryItemUI : MonoBehaviour
     {
         [Header("References")]

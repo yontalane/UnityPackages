@@ -7,7 +7,8 @@ namespace Yontalane.Demos.Dialog
     /// Manages the player's inventory, handles inventory UI, and responds to dialog system queries about inventory state.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class InventoryManager : MonoBehaviour, IDialogResponder
+    [AddComponentMenu("Yontalane/Demos/Dialog/Inventory Manager")]
+    public sealed class InventoryManager : Singleton<InventoryManager>, IDialogResponder
     {
         [Header("Inventory")]
 
@@ -24,10 +25,6 @@ namespace Yontalane.Demos.Dialog
         [Tooltip("The prefab used to instantiate UI elements for each inventory item.")]
         [SerializeField]
         private InventoryItemUI m_inventoryItemPrefabUI = null;
-
-        private static InventoryManager s_instance = null;
-
-        private void Awake() => s_instance = this;
 
         /// <summary>
         /// Instantiate UI fields for each inventory item.
@@ -97,11 +94,14 @@ namespace Yontalane.Demos.Dialog
         /// </summary>
         private static InventoryItemUI GetItemUI(string itemName)
         {
-            if (s_instance == null) return null;
-
-            for (int i = 0; i < s_instance.m_inventoryContainerUI.childCount; i++)
+            if (Instance == null)
             {
-                InventoryItemUI testInventoryItemUI = s_instance.m_inventoryContainerUI.GetChild(i).GetComponent<InventoryItemUI>();
+                return null;
+            }
+
+            for (int i = 0; i < Instance.m_inventoryContainerUI.childCount; i++)
+            {
+                InventoryItemUI testInventoryItemUI = Instance.m_inventoryContainerUI.GetChild(i).GetComponent<InventoryItemUI>();
                 if (testInventoryItemUI != null && testInventoryItemUI.Name.Equals(itemName))
                 {
                     return testInventoryItemUI;

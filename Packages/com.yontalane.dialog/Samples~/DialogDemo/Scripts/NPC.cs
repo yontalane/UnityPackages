@@ -3,19 +3,14 @@ using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
 {
-    [DisallowMultipleComponent]
     /// <summary>
     /// Represents a non-player character (NPC) that can interact with the dialog system,
     /// handle inventory-related dialog functions, and provide keyword replacements such as the desired item.
     /// </summary>
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Yontalane/Demos/Dialog/NPC")]
     public sealed class NPC : DialogAgent
     {
-        [Header("NPC")]
-
-        [Tooltip("The item that this NPC desires from the player.")]
-        [SerializeField]
-        private string m_desiredItem = "";
-
         /// <summary>
         /// Callback to be used in DialogProcess thanks to this class inheriting from DialogResponder.
         /// Checks if we're invoking inventory-related keywords and updates the inventory accordingly.
@@ -45,7 +40,7 @@ namespace Yontalane.Demos.Dialog
         {
             if (key.Equals("DesiredItem"))
             {
-                result = m_desiredItem;
+                result = GameManager.DesiredItem;
                 return true;
             }
 
