@@ -365,10 +365,49 @@ namespace Yontalane.Dialog
                 m_speakerField.text = string.Empty;
             }
 
+            // Portrait UI code below
             if (m_portraitContainer != null && m_portrait != null)
             {
+                Sprite portrait = null;
+
+                // Trying to get portrait from callback
+                m_getPortrait?.Invoke(DialogProcessor.Instance.DialogAgent, line, (sprite) => portrait = sprite);
+
+                // If callback did not provide a portrait, then try to get portrait from line data
+                if (portrait == null)
+                {
+                    portrait = Resources.Load<Sprite>(line.portrait);
+                }
+
+                // If portrait is not null, then display it
+                if (portrait != null)
+                {
+                    // Set the portrait UI image sprite
+                    m_portrait.sprite = portrait;
+
+                    // If the image has an aspect ratio fitter, then update that
+                    if (m_portrait.TryGetComponent(out AspectRatioFitter fitter))
+                    {
+                        fitter.aspectRatio = portrait.rect.width / portrait.rect.height;
+                    }
+
+                    // Make the portrait UI container visible
+                    m_portraitContainer.gameObject.SetActive(true);
+                }
+                else
+                // If the portrait is null, then hide the UI
+                {
+                    // Set the portrait UI image sprite
+                    m_portrait.sprite = null;
+
+                    // Make the portrait UI container invisible
+                    m_portraitContainer.gameObject.SetActive(false);
+                }
+
+                // If there is a SetPortrait callback, then invoke it
                 if (m_setPortrait != null)
                 {
+                    // Invoke the SetPortrait callback (this may override the portrait UI code above)
                     m_setPortrait.Invoke(new()
                     {
                         agent = DialogProcessor.Instance.DialogAgent,
@@ -376,32 +415,9 @@ namespace Yontalane.Dialog
                         image = m_portrait,
                         speaker = speaker,
                     });
+
+                    // Show or hide the portrait UI depending on if the portrait sprite exists
                     m_portraitContainer.gameObject.SetActive(m_portrait.sprite != null);
-                }
-                else
-                {
-                    Sprite portrait = null;
-                    m_getPortrait?.Invoke(DialogProcessor.Instance.DialogAgent, line, (sprite) => portrait = sprite);
-                    if (portrait == null)
-                    {
-                        portrait = Resources.Load<Sprite>(line.portrait);
-                    }
-
-                    if (portrait != null)
-                    {
-                        m_portrait.sprite = portrait;
-                        AspectRatioFitter fitter = m_portrait.GetComponent<AspectRatioFitter>();
-                        if (fitter != null)
-                        {
-                            fitter.aspectRatio = portrait.rect.width / portrait.rect.height;
-                        }
-
-                        m_portraitContainer.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        m_portraitContainer.gameObject.SetActive(false);
-                    }
                 }
             }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.61] - 2025.07.25
+
+### Fixed
+
+- Portraits were not displaying.
+
 ## [1.0.60] - 2025.07.25
 
 ### Change

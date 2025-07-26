@@ -1,205 +1,231 @@
 {
-  "start": "Start",
-  "nodes": [{
-      "name": "Start",
-      "lines": [{
-          "speaker": "<<player>>",
-          "text": "Hello.",
-          "sound": "Positive"
-        },
+    "start": "Start",
+    "nodes": [
         {
-          "showCoding": true,
-          "ifDialogCount": "=1"
-        },
-        {
-          "speaker": "<<self>>",
-          "text": "Oh, hi. Who are you?",
-          "responses": [{
-              "text": "My name is <<player>>.",
-              "link": "Gift"
-            },
-            {
-              "text": "You don't know?",
-              "link": "Exit"
-            },
-            {
-              "text": "I forgot.",
-              "link": "Forgot"
-            }
-          ],
-          "portrait": "Portrait A",
-          "voice": "Who Are You",
-          "sound": "Negative",
-          "typing": "Beep"
-        },
-        {
-          "elseIf": true
-        },
-        {
-          "speaker": "<<self>>",
-          "text": "Oh, hi.",
-          "link": "Exit",
-          "voice": "Oh Hi",
-          "typing": "Beep"
-        }
-      ]
-    },
-    {
-      "name": "Forgot",
-      "lines": [{
-        "showText": true,
-        "link": "Exit",
-        "setVar": {
-          "key": "soYouForgot",
-          "value": "true"
-        }
-      }]
-    },
-    {
-      "name": "Gift",
-      "lines": [{
-        "showText": true,
-        "speaker": "<<self>>",
-        "text": "Are you a giver or a taker?",
-        "responses": [{
-            "text": "Giver.",
-            "link": "Give"
-          },
-          {
-            "text": "Taker.",
-            "link": "Take"
-          }
-        ],
-        "showAssets": true,
-        "voice": "Are You a Giver"
-      }]
-    },
-    {
-      "name": "Give",
-      "lines": [{
-          "ifFunction": "Possesses::<<DesiredItem>>=true"
-        },
-        {
-          "query": {
-            "text": "Hand over the <<DesiredItem>>?",
-            "responses": [{
-                "text": "Sure.",
-                "link": "HandOver"
-              },
-              {
-                "text": "No.",
-                "link": "DoNotHandOver"
-              }
+            "name": "Start",
+            "lines": [
+                {
+                    "speaker": "<<player>>",
+                    "text": "Hello.",
+                    "sound": "Positive"
+                },
+                {
+                    "showCoding": true,
+                    "ifDialogCount": "=1"
+                },
+                {
+                    "speaker": "<<self>>",
+                    "text": "Oh, hi. Who are you?",
+                    "responses": [
+                        {
+                            "text": "My name is <<player>>.",
+                            "link": "Gift"
+                        },
+                        {
+                            "text": "You don't know?",
+                            "link": "Exit"
+                        },
+                        {
+                            "text": "I forgot.",
+                            "link": "Forgot"
+                        }
+                    ],
+                    "portrait": "Portrait A",
+                    "voice": "Who Are You",
+                    "sound": "Negative",
+                    "typing": "Beep"
+                },
+                {
+                    "elseIf": true
+                },
+                {
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "Oh, hi.",
+                    "link": "Exit",
+                    "voice": "Oh Hi",
+                    "typing": "Beep"
+                }
             ]
-          }
         },
         {
-          "elseIf": true
+            "name": "Forgot",
+            "lines": [
+                {
+                    "showText": true,
+                    "link": "Exit",
+                    "setVar": {
+                        "key": "soYouForgot",
+                        "value": "true"
+                    }
+                }
+            ]
         },
         {
-          "speaker": "<<self>>",
-          "text": "But you don't have a <<DesiredItem>>.",
-          "link": "Exit",
-          "voice": "But You Don't Have It"
+            "name": "Gift",
+            "lines": [
+                {
+                    "showText": true,
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "Are you a giver or a taker?",
+                    "responses": [
+                        {
+                            "text": "Giver.",
+                            "link": "Give"
+                        },
+                        {
+                            "text": "Taker.",
+                            "link": "Take"
+                        }
+                    ],
+                    "showAssets": true,
+                    "voice": "Are You a Giver"
+                }
+            ]
+        },
+        {
+            "name": "Give",
+            "lines": [
+                {
+                    "ifFunction": "Possesses::<<DesiredItem>>=true"
+                },
+                {
+                    "query": {
+                        "text": "Hand over the <<DesiredItem>>?",
+                        "responses": [
+                            {
+                                "text": "Sure.",
+                                "link": "HandOver"
+                            },
+                            {
+                                "text": "No.",
+                                "link": "DoNotHandOver"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "elseIf": true
+                },
+                {
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "But you don't have a <<DesiredItem>>.",
+                    "link": "Exit",
+                    "voice": "But You Don't Have It"
+                }
+            ]
+        },
+        {
+            "name": "Take",
+            "lines": [
+                {
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "Ok.",
+                    "voice": "Okay"
+                },
+                {
+                    "callFunction": "GiveToPlayer::Apple",
+                    "query": {
+                        "text": "You received an apple.",
+                        "responses": [
+                            {
+                                "text": "OK",
+                                "link": ""
+                            }
+                        ]
+                    }
+                },
+                {
+                    "speaker": "<<player>>",
+                    "text": "Thanks.",
+                    "link": "Exit"
+                }
+            ]
+        },
+        {
+            "name": "HandOver",
+            "lines": [
+                {
+                    "callFunction": "TakeFromPlayer::<<DesiredItem>>",
+                    "query": {
+                        "text": "You handed over the <<DesiredItem>>.",
+                        "responses": [
+                            {
+                                "text": "OK",
+                                "link": ""
+                            }
+                        ]
+                    }
+                },
+                {
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "Thanks.",
+                    "voice": "Thanks"
+                }
+            ]
+        },
+        {
+            "name": "DoNotHandOver",
+            "lines": [
+                {
+                    "showText": true,
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "Too bad.",
+                    "link": "Exit",
+                    "showAssets": true,
+                    "voice": "Too Bad"
+                }
+            ]
+        },
+        {
+            "name": "Exit",
+            "lines": [
+                {
+                    "speaker": "<<self>>",
+                    "text": "I have to go now.",
+                    "portrait": "Portrait A",
+                    "voice": "I Have to Go Now",
+                    "typing": "Beep"
+                },
+                {
+                    "ifVar": "soYouForgot=true"
+                },
+                {
+                    "speaker": "<<self>>",
+                    "portrait": "Portrait A",
+                    "text": "I hope you remember yourself.",
+                    "voice": "I Hope You Remember Yourself",
+                    "typing": "Beep"
+                },
+                {
+                    "elseIf": true
+                },
+                {
+                    "speaker": "<<self>>",
+                    "text": "Bye.",
+                    "portrait": "Portrait B",
+                    "voice": "Bye",
+                    "typing": "Beep"
+                },
+                {
+                    "endIf": true
+                },
+                {
+                    "speaker": "<<player>>",
+                    "text": "Goodbye."
+                },
+                {
+                    "ifDialogCount": ">2"
+                },
+                {
+                    "callFunction": "DisableDialog"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "name": "Take",
-      "lines": [{
-          "speaker": "<<self>>",
-          "text": "Ok.",
-          "voice": "Okay"
-        },
-        {
-          "callFunction": "GiveToPlayer::Apple",
-          "query": {
-            "text": "You received an apple.",
-            "responses": [{
-              "text": "OK",
-              "link": ""
-            }]
-          }
-        },
-        {
-          "speaker": "<<player>>",
-          "text": "Thanks.",
-          "link": "Exit"
-        }
-      ]
-    },
-    {
-      "name": "HandOver",
-      "lines": [{
-          "callFunction": "TakeFromPlayer::<<DesiredItem>>",
-          "query": {
-            "text": "You handed over the <<DesiredItem>>.",
-            "responses": [{
-              "text": "OK",
-              "link": ""
-            }]
-          }
-        },
-        {
-          "speaker": "<<self>>",
-          "text": "Thanks.",
-          "voice": "Thanks"
-        }
-      ]
-    },
-    {
-      "name": "DoNotHandOver",
-      "lines": [{
-        "showText": true,
-        "speaker": "<<self>>",
-        "text": "Too bad.",
-        "link": "Exit",
-        "showAssets": true,
-        "voice": "Too Bad"
-      }]
-    },
-    {
-      "name": "Exit",
-      "lines": [{
-          "speaker": "<<self>>",
-          "text": "I have to go now.",
-          "portrait": "Portrait A",
-          "voice": "I Have to Go Now",
-          "typing": "Beep"
-        },
-        {
-          "ifVar": "soYouForgot=true"
-        },
-        {
-          "speaker": "<<self>>",
-          "text": "I hope you remember yourself.",
-          "voice": "I Hope You Remember Yourself",
-          "typing": "Beep"
-        },
-        {
-          "elseIf": true
-        },
-        {
-          "speaker": "<<self>>",
-          "text": "Bye.",
-          "portrait": "Portrait B",
-          "voice": "Bye",
-          "typing": "Beep"
-        },
-        {
-          "endIf": true
-        },
-        {
-          "speaker": "<<player>>",
-          "text": "Goodbye."
-        },
-        {
-          "ifDialogCount": ">2"
-        },
-        {
-          "callFunction": "DisableDialog"
-        }
-      ]
-    }
-  ]
+    ]
 }
