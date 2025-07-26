@@ -41,6 +41,7 @@ LineData contains the following data for displaying dialog:
 * string **text**: The line of dialog.
 * string **portrait**: The name of the portrait graphic to display.
 * string **typing**: The name of the sound effect to play as each character is typed out.
+* string **typingLoop**: The name of the sound effect to loop while the characters are typed out.
 * string **sound**: The name of the sound to play when the line begins.
 * string **voice**: The name of the voice line audio clip to play.
 * string **link**: The name of the next dialog node to go to when this one is finished.
@@ -142,8 +143,9 @@ It looks like this:
   // * Voice audio clip asset name
   // * Sound audio clip asset name
   // * Typing audio clip asset name
+  // * Typing Loop audio clip asset name
   
-  Arm Dude [Portrait = Arm Dude Tired, Voice = Allrighty, Sound = Bang, Typing = Typewriter]: All righty.
+  Arm Dude [Portrait = Arm Dude Tired, Voice = Allrighty, Sound = Bang, Typing = TelegraphClick, Typing Loop = TelegraphHum]: All righty.
   
   // This jumps to another node:
   => Done Part Two

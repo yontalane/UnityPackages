@@ -204,7 +204,7 @@ namespace Yontalane.Dialog
                 }
                 else if (colonIndex != -1)
                 {
-                    (string speaker, string portrait, string sound, string voice, string typing) = GetSpeakerAndDisplayData(line[..colonIndex]);
+                    (string speaker, string portrait, string sound, string voice, string typing, string typingLoop) = GetSpeakerAndDisplayData(line[..colonIndex]);
                     s_lineData.Add(new()
                     {
                         speaker = speaker,
@@ -212,6 +212,7 @@ namespace Yontalane.Dialog
                         sound = sound,
                         voice = voice,
                         typing = typing,
+                        typingLoop = typingLoop,
                         text = ProcessLineBreaks(line[(colonIndex + 1)..].Trim()),
                     });
                     s_responseData.Clear();
@@ -240,8 +241,8 @@ namespace Yontalane.Dialog
         /// Parse the speaker and display data text.
         /// </summary>
         /// <param name="text">The snippet of dialog script that we're parsing. This should be the beginning of a line of script, up to, but not including, the colon.</param>
-        /// <returns>The speaker name, and, optionally: portrait asset name, sound asset name, voice clip asset name, and typing sound effect asset name.</returns>
-        private static (string speaker, string portrait, string sound, string voice, string typing) GetSpeakerAndDisplayData(string text)
+        /// <returns>The speaker name, and, optionally: portrait asset name, sound asset name, voice clip asset name, typing sound effect asset name, and typing loop sound effect asset name.</returns>
+        private static (string speaker, string portrait, string sound, string voice, string typing, string typingLoop) GetSpeakerAndDisplayData(string text)
         {
             // Trim white space from the beginning and end of the line.
             text = text.Trim();
@@ -259,7 +260,7 @@ namespace Yontalane.Dialog
             // If the brackets don't exist, then there's no display data. Return the speaker name and nothing else.
             if (openBracketIndex == -1 || closeBracketIndex == -1 || openBracketIndex > closeBracketIndex)
             {
-                return (text, string.Empty, string.Empty, string.Empty, string.Empty);
+                return (text, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
             }
             // If the brackets do exist, then return the speaker name plus the display data.
             else
@@ -272,12 +273,12 @@ namespace Yontalane.Dialog
                 // If the brackets are empty ("[]"), then that's a shortcut to use the speaker name as the portrait.
                 if (string.IsNullOrEmpty(displayData))
                 {
-                    return (speaker, speaker, string.Empty, string.Empty, string.Empty);
+                    return (speaker, speaker, string.Empty, string.Empty, string.Empty, string.Empty);
                 }
 
                 // Return the speaker and display data.
-                (string portrait, string sound, string voice, string typing) = GetDisplayData(displayData);
-                return (speaker, portrait, sound, voice, typing);
+                (string portrait, string sound, string voice, string typing, string typingLoop) = GetDisplayData(displayData);
+                return (speaker, portrait, sound, voice, typing, typingLoop);
             }
         }
 
@@ -285,8 +286,8 @@ namespace Yontalane.Dialog
         /// Parse the display data text.
         /// </summary>
         /// <param name="text">The snippet of dialog script that we're parsing. This should be the text between the square brackets, before the colon, at the beginning of a single line of dialog script.</param>
-        /// <returns>The portrait asset name, sound asset name, voice clip asset name, and typing sound effect asset name.</returns>
-        private static (string portrait, string sound, string voice, string typing) GetDisplayData(string text)
+        /// <returns>The portrait asset name, sound asset name, voice clip asset name, typing sound effect asset name, and typing loop sound effect asset name.</returns>
+        private static (string portrait, string sound, string voice, string typing, string typingLoop) GetDisplayData(string text)
         {
             // Trim white space from the beginning and end of the line.
             text = text.Trim();
@@ -304,27 +305,31 @@ namespace Yontalane.Dialog
             // then return the text as the portrait name and all other display data as empty strings.
             if (sections.Length == 1 && !sections[0].Contains('='))
             {
-                return (sections[0].Trim(), string.Empty, string.Empty, string.Empty);
+                return (sections[0].Trim(), string.Empty, string.Empty, string.Empty, string.Empty);
             }
 
             // Parse each piece of display data and return it.
-            string portrait = ParseDisplayData("Portrait", sections);
-            string sound = ParseDisplayData("Sound", sections);
-            string voice = ParseDisplayData("Voice", sections);
-            string typing = ParseDisplayData("Typing", sections);
-            return (portrait, sound, voice, typing);
+            string portrait = ParseDisplayData(sections, "Portrait");
+            string sound = ParseDisplayData(sections, "Sound");
+            string voice = ParseDisplayData(sections, "Voice");
+            string typing = ParseDisplayData(sections, "Typing");
+            string typingLoop = ParseDisplayData(sections, "Typing Loop", "TypingLoop");
+            return (portrait, sound, voice, typing, typingLoop);
         }
 
         /// <summary>
         /// Search through a list of key/value pair strings and find the value for the given key.
         /// </summary>
-        /// <param name="key">The key we're searching for.</param>
+        /// <param name="keys">The keys we're searching for.</param>
         /// <param name="texts">A list of key/value pairs.</param>
         /// <returns>The value for the key. If none is found, then an empty string.</returns>
-        private static string ParseDisplayData(string key, IReadOnlyList<string> texts)
+        private static string ParseDisplayData(IReadOnlyList<string> texts, params string[] keys)
         {
             // Key is case-insensitive, so make it lowercase;
-            key = key.ToLower();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                keys[i] = keys[i].ToLower();
+            }
 
             // Scan through each text item in the provided list.
             foreach (string text in texts)
@@ -338,10 +343,13 @@ namespace Yontalane.Dialog
                     continue;
                 }
 
-                // If the key is the key we're searching for, then return the value.
-                if (parts[0].Trim().ToLower() == key)
+                // If we've found the key is the key we're searching for, then return the value.
+                foreach (string key in keys)
                 {
-                    return parts[1].Trim();
+                    if (parts[0].Trim().ToLower() == key)
+                    {
+                        return parts[1].Trim();
+                    }
                 }
             }
 

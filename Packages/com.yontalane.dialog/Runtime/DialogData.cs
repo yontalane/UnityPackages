@@ -104,6 +104,12 @@ namespace Yontalane.Dialog
         public string typing = "";
 
         /// <summary>
+        /// The name or identifier of the typing sound effect to loop while writing this line.
+        /// </summary>
+        [Tooltip("The name or identifier of the typing sound effect to loop while writing this line.")]
+        public string typingLoop = "";
+
+        /// <summary>
         /// The name or identifier of the sound effect to play for this line.
         /// </summary>
         [Tooltip("The name or identifier of the sound effect to play for this line.")]

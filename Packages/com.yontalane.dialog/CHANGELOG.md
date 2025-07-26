@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.63] - 2025.07.26
+
+### Added
+
+- Can play looping audio while text is being typed
+
 ## [1.0.62] - 2025.07.25
 
 ### Added

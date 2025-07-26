@@ -85,6 +85,7 @@ namespace Yontalane.Dialog
         #region Private Fields
         private static readonly List<Button> s_tempResponseButtons = new();
         private static AudioSource s_clickAudioSource = null;
+        private static AudioSource s_clickLoopAudioSource = null;
         private static AudioSource s_blastAudioSource = null;
 
         private string m_speaker = "";
@@ -198,7 +199,11 @@ namespace Yontalane.Dialog
         [Tooltip("Sound effect for typing during the text writing sequence.")]
         [SerializeField]
         private AudioClip m_typingDefault = null;
-        
+
+        [Tooltip("Sound effect to loop during typing during the text writing sequence.")]
+        [SerializeField]
+        private AudioClip m_typingLoopDefault = null;
+
         [Tooltip("If a line of text has an accompanying sound blast, whether or not to cut the blast short if the text finishes before the sound does.")]
         [SerializeField]
         private bool m_stopBlastAfterText = true;
@@ -260,6 +265,25 @@ namespace Yontalane.Dialog
                 }
 
                 return s_clickAudioSource;
+            }
+        }
+
+        /// <summary>
+        /// Gets the static audio source for playing click loop sounds.
+        /// </summary>
+        private static AudioSource ClickLoopAudioSource
+        {
+            get
+            {
+                if (s_clickLoopAudioSource == null)
+                {
+                    s_clickLoopAudioSource = new GameObject().AddComponent<AudioSource>();
+                    s_clickLoopAudioSource.playOnAwake = false;
+                    s_clickLoopAudioSource.loop = true;
+                    s_clickLoopAudioSource.transform.SetParent(Camera.main.transform, false);
+                }
+
+                return s_clickLoopAudioSource;
             }
         }
 
@@ -630,18 +654,30 @@ namespace Yontalane.Dialog
         /// <returns>An enumerator that writes out the dialog text character by character.</returns>
         private IEnumerator WriteOut()
         {
-            AudioClip typing = null;
-
             // If the line has a typing sound, load the sound
+            // If the line has no typing sound, use the default typing sound
+
+            AudioClip typing = null;
             if (!string.IsNullOrEmpty(m_line.typing))
             {
                 typing = Resources.Load<AudioClip>(m_line.typing);
             }
-
-            // If the line has no typing sound, use the default typing sound
             if (typing == null)
             {
                 typing = m_typingDefault;
+            }
+
+            // If the line has a typing loop sound, load the sound
+            // If the line has no typing loop sound, use the default typing loop sound
+
+            AudioClip typingLoop = null;
+            if (!string.IsNullOrEmpty(m_line.typingLoop))
+            {
+                typingLoop = Resources.Load<AudioClip>(m_line.typingLoop);
+            }
+            if (typingLoop == null)
+            {
+                typingLoop = m_typingLoopDefault;
             }
 
             // Length in seconds of the typing sound
@@ -670,6 +706,13 @@ namespace Yontalane.Dialog
 
             // Format the inline text
             string fullText = FormatInlineText(speakerFieldExists ? string.Empty : m_speaker);
+
+            // If the line has a typing loop sound, play it
+            if (typingLoop != null)
+            {
+                ClickLoopAudioSource.clip = typingLoop;
+                ClickLoopAudioSource.Play();
+            }
 
             // Write out the text character by character
             for (int i = 0; i < m_text.Length; i++)
@@ -770,6 +813,9 @@ namespace Yontalane.Dialog
                     yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
                 }
             }
+
+            ClickLoopAudioSource.Stop();
+
             EndLine();
         }
 
