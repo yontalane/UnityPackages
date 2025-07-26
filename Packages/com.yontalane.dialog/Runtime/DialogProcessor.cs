@@ -390,7 +390,7 @@ namespace Yontalane.Dialog
             if (!string.IsNullOrEmpty(lineData.ifVar))
             {
                 string[] parts = lineData.ifVar.Split('=');
-                if (parts.Length == 2 && DataStorage.Vars.TryGetValue(parts[0], out string value))
+                if (parts.Length == 2 && DataStorage.TryGetValue(parts[0], out string value))
                 {
                     result = parts[1].Equals(value);
                 }
@@ -625,14 +625,7 @@ namespace Yontalane.Dialog
         {
             if (!string.IsNullOrEmpty(varData.key))
             {
-                if (DataStorage.Vars.ContainsKey(varData.key))
-                {
-                    DataStorage.Vars[varData.key] = varData.value;
-                }
-                else
-                {
-                    DataStorage.Vars.Add(varData.key, varData.value);
-                }
+                DataStorage.SetValue(varData.key, varData.value);
             }
         }
 
@@ -740,16 +733,16 @@ namespace Yontalane.Dialog
         /// <param name="id">The unique identifier for the dialog.</param>
         private static void AddDialogCount(string id)
         {
-            if (DataStorage.Vars.TryGetValue(id, out string value))
+            if (DataStorage.TryGetValue(id, out string value))
             {
                 if (int.TryParse(value, out int result))
                 {
-                    DataStorage.Vars[id] = (++result).ToString();
+                    DataStorage.SetValue(id, (++result).ToString());
                 }
             }
             else
             {
-                DataStorage.Vars.Add(id, "1");
+                DataStorage.Add(id, "1");
             }
         }
 
@@ -760,7 +753,7 @@ namespace Yontalane.Dialog
         /// <returns>The count of dialog initiations for the given ID, or 0 if none exist.</returns>
         private static int GetDialogCount(string id)
         {
-            if (DataStorage.Vars.TryGetValue(id, out string value) && int.TryParse(value, out int result))
+            if (DataStorage.TryGetValue(id, out string value) && int.TryParse(value, out int result))
             {
                 return result;
             }

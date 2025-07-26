@@ -10,7 +10,7 @@ You also need one or more DialogAgent objects. The DialogAgent initiates dialog,
 
 Finally, you have the option to include IDialogResponder objects in your scene. IDialogResponder works with the DialogProcessor and can modify dialog text or run actions based on keywords within the text. DialogAgent inherits from IDialogResponder, but non-agents can be responders as well. For example, a line of dialog might read: `My name is <<speaker>> and I see that you have a lot of <<most common item>>.` The DialogProcessor takes each keyword--designated by double angle brackets--and checks how they should be modified by each IDialogResponder. The DialogAgent, which is a type of responder, replaces `<<speaker>>` with its name. And an inventory manager singleton that also inherits from IDialogResponder might replace `<<most common item>>` with whatever item the player has the most of. So, after processing, the dialog could read: `My name is Lulu and I see that you have a lot of fish.`
 
-## Dialog Data Format
+## Dialog Script Format
 
 There are two types of DialogAgent: DialogAgent, that inherits from MonoBehaviour, and SerializedDialogAgent, that inherits from SerializedObject. You can use either in your project; both contain the same methods and functionality.
 
@@ -172,3 +172,9 @@ It looks like this:
 
   Arm Dude: G'day.
 ```
+
+## Data Storage
+
+Dialog variables from `ifVar`, `setVar`, and `ifDialogCount` are stored behind the scenes by the DataStorage static class. These variables are universal; this means that if you `setVar` in one DialogAgent's dialog, and then check `ifVar` on the same variable name in another DialogAgent's dialog, you will get the result set in the initial script.
+
+If you want to save and load the dialog state, use `DataStorage.ExportToJson()` and `DataStorage.ImportFromJson(string json)`.

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.64] - 2025.07.26
+
+### Added
+
+- Can import and export dialog data
+
+### Changed
+
+- Dialog storage data format (behind the scenes)
+
 ## [1.0.63] - 2025.07.26
 
 ### Added
