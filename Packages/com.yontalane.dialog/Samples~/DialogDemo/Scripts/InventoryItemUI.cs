@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Yontalane.Demos.Dialog
 {
+    /// <summary>
+    /// Handles the UI representation of a single inventory item, including its name and count, and provides methods to modify the item count.
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class InventoryItemUI : MonoBehaviour
     {

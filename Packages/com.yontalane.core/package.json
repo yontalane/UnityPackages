@@ -1,10 +1,10 @@
 {
   "name": "com.yontalane.core",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "displayName": "Core",
   "description": "A small library for Unity projects.",
-  "unity": "2021.3",
-  "unityRelease": "10f1",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.core/Documentation~/index.md",
   "keywords": [
     "core",

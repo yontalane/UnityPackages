@@ -1,15 +1,16 @@
 {
   "name": "com.yontalane.uielements",
-  "version": "1.0.29",
+  "version": "1.0.30",
   "displayName": "UI Elements",
   "description": "A small library for Unity projects.",
-  "unity": "2022.3",
-  "unityRelease": "5f1",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.uielements/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.29",
+    "com.yontalane.core": "1.0.37",
+    "com.unity.ugui": "2.0.0",
     "com.unity.modules.uielements": "1.0.0",
-    "com.unity.inputsystem": "1.6.1",
+    "com.unity.inputsystem": "1.14.1",
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.imgui": "1.0.0"
   },

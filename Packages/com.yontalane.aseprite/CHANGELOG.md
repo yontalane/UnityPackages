@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.8] - 2025.07.25
+
+### Change
+
+- Supporting Unity 6+.
+
 ## [1.0.7] - 2025.07.23
 
 ### Change

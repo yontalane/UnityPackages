@@ -3,17 +3,27 @@ using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
 {
+    /// <summary>
+    /// Manages the player's inventory, handles inventory UI, and responds to dialog system queries about inventory state.
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class InventoryManager : MonoBehaviour, IDialogResponder
     {
         [Header("Inventory")]
 
-        [SerializeField] private string[] m_allItems = new string[] { "Apple", "Pear", "Banana", "Avocado", "Pineapple" };
+        [Tooltip("A list of all possible items that can exist in the player's inventory.")]
+        [SerializeField]
+        private string[] m_allItems = new string[] { "Apple", "Pear", "Banana", "Avocado", "Pineapple" };
 
         [Header("References")]
 
-        [SerializeField] private RectTransform m_inventoryContainerUI = null;
-        [SerializeField] private InventoryItemUI m_inventoryItemPrefabUI = null;
+        [Tooltip("The UI container that will hold all inventory item UI elements.")]
+        [SerializeField]
+        private RectTransform m_inventoryContainerUI = null;
+
+        [Tooltip("The prefab used to instantiate UI elements for each inventory item.")]
+        [SerializeField]
+        private InventoryItemUI m_inventoryItemPrefabUI = null;
 
         private static InventoryManager s_instance = null;
 
@@ -101,6 +111,9 @@ namespace Yontalane.Demos.Dialog
             return null;
         }
 
+        /// <summary>
+        /// Retrieves the value associated with the specified inventory-related keyword.
+        /// </summary>
         public bool GetKeyword(string key, out string result)
         {
             result = null;

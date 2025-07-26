@@ -6,23 +6,30 @@ namespace Yontalane.GridNav.Example
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Grid Nav/Example/Grid Nav Agent")]
+    /// <summary>
+    /// Controls an agent that navigates a grid using pathfinding, manages user input for destination coordinates, and handles movement logic and UI integration.
+    /// </summary>
     public class GridNavAgent : MonoBehaviour
     {
         private bool m_navigating = false;
 
         #region Serialized Fields
+        [Tooltip("The movement speed of the agent (0 = stationary, 1 = maximum speed).")]
         [SerializeField]
         [Range(0f, 1f)]
         private float m_speed;
 
+        [Tooltip("If true, the agent will begin navigating to the specified destination.")]
         [SerializeField]
         private bool m_go;
 
         [Header("UI")]
 
+        [Tooltip("Input field for the X coordinate of the destination.")]
         [SerializeField]
         private InputField m_inputX;
 
+        [Tooltip("Input field for the Y coordinate of the destination.")]
         [SerializeField]
         private InputField m_inputY;
         #endregion
@@ -60,9 +67,12 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Initializes the grid generator and grid navigator, and subscribes to the pathing complete event.
+        /// </summary>
         private void Start()
         {
-            m_gridGenerator = FindObjectOfType<GridGenerator>();
+            m_gridGenerator = FindAnyObjectByType<GridGenerator>();
 
             m_gridNavigator = new GridNavigator(new Vector2Int(m_gridGenerator.GridArray.GetLength(0), m_gridGenerator.GridArray.GetLength(1)), NodeIsValid, StepIsValid);
             m_gridNavigator.OnComplete += OnPathingComplete;
@@ -70,6 +80,9 @@ namespace Yontalane.GridNav.Example
             m_initialized = true;
         }
 
+        /// <summary>
+        /// Called by UI to start navigation if not already navigating.
+        /// </summary>
         public void ClickGo()
         {
             if (m_navigating)
@@ -80,6 +93,10 @@ namespace Yontalane.GridNav.Example
             m_go = true;
         }
 
+        /// <summary>
+        /// Sets the destination coordinates and triggers navigation.
+        /// </summary>
+        /// <param name="target">The target grid coordinate to navigate to.</param>
         public void GoTo(Vector2Int target)
         {
             if (m_navigating)
@@ -92,6 +109,9 @@ namespace Yontalane.GridNav.Example
             m_go = true;
         }
 
+        /// <summary>
+        /// Checks for navigation trigger and initiates pathfinding if requested.
+        /// </summary>
         private void Update()
         {
             if (m_go)
@@ -111,6 +131,9 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Determines if a node at the given coordinates is valid and pathable.
+        /// </summary>
         private bool NodeIsValid(int x, int y)
         {
             if (x >= 0 && x < m_gridGenerator.GridArray.GetLength(0))
@@ -124,13 +147,18 @@ namespace Yontalane.GridNav.Example
             return false;
         }
 
+        /// <summary>
+        /// Determines if a step between two nodes is valid, considering blockers and adjacency.
+        /// </summary>
         private bool StepIsValid(int startX, int startY, int endX, int endY)
         {
+            // Only restrict steps that are directly adjacent (not diagonals)
             if (!(startX == endX && Mathf.Abs(startY - endY) == 1) && !(startY == endY && Mathf.Abs(startX - endX) == 1))
             {
                 return true;
             }
 
+            // Out of bounds checks
             if (startX < 0 || startX >= m_gridGenerator.GridArray.GetLength(0))
             {
                 return true;
@@ -156,6 +184,7 @@ namespace Yontalane.GridNav.Example
                 return true;
             }
 
+            // Check for blockers between nodes
             if (Mathf.Approximately(startNode.transform.position.x, endNode.transform.position.x))
             {
                 if (startNode.transform.position.z > endNode.transform.position.z)
@@ -180,6 +209,10 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Callback for when pathfinding completes; starts navigation if a path was found.
+        /// </summary>
+        /// <param name="foundExists">Whether a valid path was found.</param>
         private void OnPathingComplete(bool foundExists)
         {
             if (foundExists)
@@ -188,6 +221,9 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Coroutine that moves the agent along the found path, animating step by step.
+        /// </summary>
         private IEnumerator NavigatePath()
         {
             m_navigating = true;
@@ -205,6 +241,9 @@ namespace Yontalane.GridNav.Example
             m_navigating = false;
         }
 
+        /// <summary>
+        /// Draws gizmos in the editor to visualize the current path.
+        /// </summary>
         private void OnDrawGizmos()
         {
             if (m_shouldDrawGizmos && m_gridNavigator.PathCount > 1)

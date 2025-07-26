@@ -1,13 +1,13 @@
 {
   "name": "com.yontalane.gridnav",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "displayName": "Grid Nav",
   "description": "A* grid navigation.",
-  "unity": "2022.3",
-  "unityRelease": "5f1",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.gridnav/Documentation~/index.md",
   "dependencies": {
-    "com.unity.inputsystem": "1.2.0"
+    "com.unity.inputsystem": "1.14.1"
   },
   "keywords": [
     "pathing",

@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Yontalane.GridNav.Example
 {
+    /// <summary>
+    /// Represents a single node in the grid, managing its pathability, blockers, and visual state.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Grid Nav/Example/Grid Node")]
     [RequireComponent(typeof(Renderer))]
@@ -42,14 +45,23 @@ namespace Yontalane.GridNav.Example
         #endregion
 
         #region Accessors
+        /// <summary>
+        /// The grid coordinate of this node.
+        /// </summary>
         public Vector2Int Coordinate { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether this node is pathable (walkable).
+        /// </summary>
         public bool IsPathable
         {
             get => GetComponent<Renderer>().sharedMaterial == m_pathableMaterial;
             set => GetComponent<Renderer>().sharedMaterial = value ? m_pathableMaterial : m_nonPathableMaterial;
         }
 
+        /// <summary>
+        /// Gets or sets whether the north blocker is active.
+        /// </summary>
         public bool BlockerN
         {
             get => m_blockerN.activeSelf;
@@ -59,6 +71,9 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the east blocker is active.
+        /// </summary>
         public bool BlockerE
         {
             get => m_blockerE.activeSelf;
@@ -68,6 +83,9 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the south blocker is active.
+        /// </summary>
         public bool BlockerS
         {
             get => m_blockerS.activeSelf;
@@ -77,6 +95,9 @@ namespace Yontalane.GridNav.Example
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the west blocker is active.
+        /// </summary>
         public bool BlockerW
         {
             get => m_blockerW.activeSelf;
@@ -107,6 +128,9 @@ namespace Yontalane.GridNav.Example
             ClearBlockers();
         }
 
+        /// <summary>
+        /// Disables all blockers (north, east, south, and west) for this grid node.
+        /// </summary>
         public void ClearBlockers()
         {
             BlockerN = false;
@@ -115,6 +139,9 @@ namespace Yontalane.GridNav.Example
             BlockerW = false;
         }
 
+        /// <summary>
+        /// Triggers a highlight animation for this grid node if it is not already highlighting.
+        /// </summary>
         public void Highlight()
         {
             if (m_highlighting)
@@ -125,6 +152,9 @@ namespace Yontalane.GridNav.Example
             StartCoroutine(HighlightAnimation());
         }
 
+        /// <summary>
+        /// Coroutine that animates the grid node by briefly offsetting its position to create a highlight effect.
+        /// </summary>
         private IEnumerator HighlightAnimation()
         {
             m_highlighting = true;

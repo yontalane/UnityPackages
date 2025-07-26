@@ -1,31 +1,32 @@
 {
-    "name": "com.yontalane.layouttilemap",
-    "version": "1.0.19",
-    "displayName": "Layout Tilemap",
-    "description": "Enables creation of prefab-based level layouts using 2D UnityEngine.Tilemap objects as blueprints.",
-    "unity": "2021.3",
-    "unityRelease": "10f1",
-    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.layouttilemap/Documentation~/index.md",
-    "dependencies": {
-        "com.yontalane.core": "1.0.29",
-        "com.unity.2d.tilemap": "1.0.0"
-    },
-    "keywords": [
-        "maps",
-        "tilemap",
-        "levels"
-    ],
-    "author": {
-        "name": "Yontalane",
-        "email": "unitypackages@yontalane.com",
-        "url": "https://yontalane.com/"
-    },
-    "samples": [
-        {
-            "displayName": "Layout Tilemap Demo",
-            "description": "Contains a sample implementation of the layout tilemap.",
-            "path": "Samples~/LayoutTilemapDemo"
-        }
-    ],
-    "type": "library"
+  "name": "com.yontalane.layouttilemap",
+  "version": "1.0.20",
+  "displayName": "Layout Tilemap",
+  "description": "Enables creation of prefab-based level layouts using 2D UnityEngine.Tilemap objects as blueprints.",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.layouttilemap/Documentation~/index.md",
+  "dependencies": {
+    "com.yontalane.core": "1.0.37",
+    "com.unity.2d.tilemap": "1.0.0",
+    "com.unity.inputsystem": "1.14.1"
+  },
+  "keywords": [
+    "maps",
+    "tilemap",
+    "levels"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "samples": [
+    {
+      "displayName": "Layout Tilemap Demo",
+      "description": "Contains a sample implementation of the layout tilemap.",
+      "path": "Samples~/LayoutTilemapDemo"
+    }
+  ],
+  "type": "library"
 }

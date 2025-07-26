@@ -26,6 +26,10 @@ namespace Yontalane.Interaction
         public UnityEngine.Object data;
     }
 
+    /// <summary>
+    /// Handles detection and interaction with nearby interactable objects, including raycasting for interactables,
+    /// managing interaction events, and optionally highlighting interactables.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Interaction/Interactor")]
     public class Interactor : MonoBehaviour

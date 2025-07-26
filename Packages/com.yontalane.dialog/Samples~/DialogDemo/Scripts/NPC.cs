@@ -4,11 +4,17 @@ using Yontalane.Dialog;
 namespace Yontalane.Demos.Dialog
 {
     [DisallowMultipleComponent]
+    /// <summary>
+    /// Represents a non-player character (NPC) that can interact with the dialog system,
+    /// handle inventory-related dialog functions, and provide keyword replacements such as the desired item.
+    /// </summary>
     public sealed class NPC : DialogAgent
     {
         [Header("NPC")]
 
-        [SerializeField] private string m_desiredItem = "";
+        [Tooltip("The item that this NPC desires from the player.")]
+        [SerializeField]
+        private string m_desiredItem = "";
 
         /// <summary>
         /// Callback to be used in DialogProcess thanks to this class inheriting from DialogResponder.

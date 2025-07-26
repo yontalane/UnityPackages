@@ -18,12 +18,19 @@ namespace Yontalane.Query
     }
     #endregion
 
+    /// <summary>
+    /// Handles the display and interaction logic for query dialogs, including showing prompts,
+    /// managing response buttons, and invoking events when a query is loaded or a response is chosen.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Query/Query UI")]
     public sealed class QueryUI : MonoBehaviour
     {
         #region Structs
         [Serializable]
+        /// <summary>
+        /// Specifies how the query dialog should be shown or hidden.
+        /// </summary>
         private enum ShowType
         {
             None = 0,
@@ -33,7 +40,15 @@ namespace Yontalane.Query
         #endregion
 
         #region Delegates
+        /// <summary>
+        /// Delegate for handling events related to the QueryUI, such as when a query UI is loaded.
+        /// </summary>
+        /// <param name="queryUI">The QueryUI instance involved in the event.</param>
         public delegate void QueryUIHandler(QueryUI queryUI);
+
+        /// <summary>
+        /// Event triggered when a QueryUI is loaded and ready.
+        /// </summary>
         public static QueryUIHandler OnQueryUILoaded = null;
         #endregion
 
@@ -161,25 +176,29 @@ namespace Yontalane.Query
         /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
         public static void Initiate(string id, string text, string description, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null)
         {
+            // Get the singleton instance of QueryUI.
             QueryUI queryUI = Instance;
 
+            // If the QueryUI instance is not found, log an error and exit.
             if (queryUI == null)
             {
                 Debug.LogError("QueryUI could not be found.");
                 return;
             }
 
+            // Set the query ID and assign the provided callbacks and main text.
             queryUI.Id = id;
-
             queryUI.m_callback = callback;
             queryUI.m_selectCallback = selectCallback;
             queryUI.m_text.text = text;
 
+            // Set the description text if the description field exists.
             if (queryUI.m_description != null)
             {
                 queryUI.m_description.text = description;
             }
 
+            // Remove all existing response buttons and their listeners.
             for (int i = queryUI.m_responses.Count - 1; i >= 0; i--)
             {
                 if (queryUI.m_responses[i].TryGetComponent(out SelectableListener selectableListener))
@@ -190,10 +209,13 @@ namespace Yontalane.Query
             }
             queryUI.m_responses.Clear();
 
+            // Store the new set of response texts.
             queryUI.m_responsesText = responses;
 
+            // Create new response buttons for each response option.
             for (int i = 0; i < responses.Length; i++)
             {
+                // Use the primary response button prefab for the first response if available, otherwise use the default.
                 Button prefab = i == 0 && queryUI.m_primaryResponseButtonPrefab != null ? queryUI.m_primaryResponseButtonPrefab : queryUI.m_responseButtonPrefab;
                 Button instance = Instantiate(prefab.gameObject).GetComponent<Button>();
                 instance.GetComponentInChildren<TMP_Text>().text = responses[i];
@@ -208,6 +230,7 @@ namespace Yontalane.Query
                 nav.mode = Navigation.Mode.Explicit;
                 instance.navigation = nav;
 
+                // Set up explicit navigation between buttons for keyboard/controller support.
                 if (i > 0)
                 {
                     Button prev = queryUI.m_responses[i - 1];
@@ -228,6 +251,7 @@ namespace Yontalane.Query
                 queryUI.m_responses.Add(instance);
             }
 
+            // Highlight the initial selection and start a coroutine to ensure highlight is set.
             if (responses.Length > 0)
             {
                 initialSelection = initialSelection < 0 ? 0 : initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
@@ -235,6 +259,7 @@ namespace Yontalane.Query
                 queryUI.StartCoroutine(queryUI.DelayedHighlight(queryUI, initialSelection));
             }
 
+            // Show the query UI using the appropriate method (Animator or SetActive).
             if (queryUI.m_showType == ShowType.Animator && queryUI.m_animator != null)
             {
                 queryUI.m_animator.SetBool(ANIMATION_PARAMETER, true);
@@ -244,8 +269,10 @@ namespace Yontalane.Query
                 queryUI.m_rootObject.SetActive(true);
             }
 
+            // Notify listeners that the QueryUI has loaded.
             OnQueryUILoaded?.Invoke(queryUI);
 
+            // Refresh the layout groups to ensure UI updates immediately.
             if (queryUI.m_rootObject != null)
             {
                 Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_rootObject);
@@ -255,6 +282,7 @@ namespace Yontalane.Query
                 Utility.RefreshLayoutGroupsImmediateAndRecursive(queryUI.m_responseContainer.gameObject);
             }
 
+            // Mark the QueryUI as active.
             queryUI.m_isOn = true;
         }
 

@@ -140,6 +140,11 @@ namespace Yontalane.Dialog
         [Min(0f)]
         private float m_typeCharacterInterval = 0.05f;
 
+        [Tooltip("How long to wait before we can play another type sound effect. If zero, play the sound as soon as a new character is written. If one, wait for the previous sound to finish before playing. If 0.5, we can play new typing sound after the previous is at least halfway done.")]
+        [SerializeField]
+        [Range(0f, 1f)]
+        private float m_typeSoundDelay = 0f;
+
         [Tooltip("Whether to continue onto the next line immediately after finishing the current. Otherwise, wait for player input.")]
         [SerializeField]
         private bool m_autoContinue = false;
@@ -623,6 +628,12 @@ namespace Yontalane.Dialog
                 typing = m_typingDefault;
             }
 
+            // Length in seconds of the typing sound
+            float typingSoundLength = typing != null ? typing.length : 0f;
+
+            // The time when the last character was typed
+            float lastTypedTime = Time.time - 10f;
+
             // Start a coroutine to delay the highlight of the skip button
             StartCoroutine(DelayHighlightSkipButton());
 
@@ -725,7 +736,7 @@ namespace Yontalane.Dialog
                     m_onType?.Invoke();
 
                     // If the line has a typing sound, play it
-                    if (typing != null)
+                    if (typing != null && Time.time - lastTypedTime >= typingSoundLength * m_typeSoundDelay)
                     {
                         ClickAudioSource.PlayOneShot(typing);
                     }
@@ -735,6 +746,9 @@ namespace Yontalane.Dialog
                     {
                         Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
                     }
+
+                    // Update the last typed character time
+                    lastTypedTime = Time.time;
 
                     // Wait for the next character
                     yield return new WaitForSecondsRealtime(m_typeCharacterInterval);

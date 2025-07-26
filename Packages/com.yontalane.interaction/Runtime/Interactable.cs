@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace Yontalane.Interaction
 {
+    /// <summary>
+    /// Represents an object in the scene that can be interacted with by an Interactor.
+    /// Manages references to its root, renderer, animator, audio source, and interaction behaviors.
+    /// Handles highlighting and provides access to its interaction components.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Interaction/Interactable")]
     public class Interactable : MonoBehaviour

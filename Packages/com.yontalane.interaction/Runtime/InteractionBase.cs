@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace Yontalane.Interaction
 {
+    /// <summary>
+    /// Base class for all interaction behaviors. Inherit from this class to define custom interactions
+    /// that can be triggered by an Interactor. Handles common setup and provides a contract for interaction logic.
+    /// </summary>
     public abstract class InteractionBase : MonoBehaviour
     {
         public Interactable Interactable { get; set; } = null;
@@ -82,7 +86,7 @@ namespace Yontalane.Interaction
             {
                 return false;
             }
-            rigidbody.velocity = Vector3.zero;
+            rigidbody.linearVelocity = Vector3.zero;
             rigidbody.angularVelocity = Vector3.zero;
             return true;
         }

@@ -1,199 +1,205 @@
 # Changelog
 
-## 1.0.19 - 2023.01.09
+## [1.0.20] - 2025.07.25
 
-**Added**
+### Change
+
+- Supporting Unity 6+.
+
+## [1.0.19] - 2023.01.09
+
+### Added
 
 - `MapBuilder.LoadMap()` can now accept a Grid instance as a parameter.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.18 - 2023.01.04
+## [1.0.18] - 2023.01.04
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 - Removed entity tags. Styling based on name.
 
-**Fixed**
+### Fixed
 
-## 1.0.17 - 2023.01.03
+## [1.0.17] - 2023.01.03
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Map entity project settings are now handled properly.
 
-## 1.0.16 - 2023.01.03
+## [1.0.16] - 2023.01.03
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Map entity project settings are now stored in ProjectSettings.
 
-## 1.0.15 - 2023.01.03
+## [1.0.15] - 2023.01.03
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 - Map entity settings is now a part of Project Settings.
 
-**Fixed**
+### Fixed
 
-## 1.0.14 - 2022.12.31
+## [1.0.14] - 2022.12.31
 
-**Added**
+### Added
 
 - Sample scene.
 
-**Changed**
+### Changed
 
 - Visually dynamic map entities.
 
-**Fixed**
+### Fixed
 
-## 1.0.13 - 2022.12.13
+## [1.0.13] - 2022.12.13
 
-**Added**
+### Added
 
 - Map data contains tile data.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Map entity icon was sometimes not centered.
 
-## 1.0.12 - 2022.07.25
+## [1.0.12] - 2022.07.25
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Fixed - Editor scripts in build.
 
-## 1.0.11 - 2022.07.02
+## [1.0.11] - 2022.07.02
 
-**Added**
+### Added
 
 - Passing map parent Transform in MapData.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.10 - 2022.06.27
+## [1.0.10] - 2022.06.27
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Persistent object retains scale.
 
-## 1.0.9 - 2022.06.27
+## [1.0.9] - 2022.06.27
 
-**Added**
+### Added
 
 - Persistent Object to be copied wholesale from the source map into the final.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.8 - 2022.04.09
+## [1.0.8] - 2022.04.09
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 * Added null check when loading map entity resources.
 
-## 1.0.6 - 2022.02.13
+## [1.0.6] - 2022.02.13
 
-**Added**
+### Added
 
 * Added map name to MapData.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.5 - 2022.02.13
+## [1.0.5] - 2022.02.13
 
-**Added**
+### Added
 
 * Entity draws collider bounds as gizmo.
 
-**Changed**
+### Changed
 
 * Entity data contains map properties as dictionary rather than component.
 
-**Fixed**
+### Fixed
 
 * Entity bounds not exporting properly.
 
-## 1.0.4 - 2022.02.13
+## [1.0.4] - 2022.02.13
 
-**Added**
-
-* Exporting additional entity data.
-
-**Changed**
-
-**Fixed**
-
-## 1.0.3 - 2022.02.12
-
-**Added**
+### Added
 
 * Exporting additional entity data.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.2 - 2022.02.12
+## [1.0.3] - 2022.02.12
 
-**Added**
+### Added
+
+* Exporting additional entity data.
+
+### Changed
+
+### Fixed
+
+## [1.0.2] - 2022.02.12
+
+### Added
 
 * Map bounds to build callback event data.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.1 - 2022.02.09
+## [1.0.1] - 2022.02.09
 
-**Added**
+### Added
 
 * Gizmo icon.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.0 - 2022.02.09
+## [1.0.0] - 2022.02.09
 
-**Added**
+### Added
 
 * Core functionality (building prefab-based level layout using 2D UnityEngine.Tilemap as blueprint).
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed

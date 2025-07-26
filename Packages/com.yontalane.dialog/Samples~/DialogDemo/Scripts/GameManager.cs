@@ -4,11 +4,19 @@ using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
 {
+    /// <summary>
+    /// Manages the main game logic, including handling player input for dialog initiation and updating the player's name.
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class GameManager : MonoBehaviour
     {
-        [SerializeField] private DialogAgent m_npc = null;
-        [SerializeField] private TMP_InputField m_playerNameField = null;
+        [SerializeField]
+        [Tooltip("Reference to the NPC DialogAgent that the player will interact with.")]
+        private DialogAgent m_npc = null;
+
+        [Tooltip("Input field for entering the player's name.")]
+        [SerializeField]
+        private TMP_InputField m_playerNameField = null;
 
         /// <summary>
         /// Dialog is initiated by clicking on the talk button.

@@ -1,99 +1,105 @@
 # Changelog
 
-## 1.0.15 - 2025.02.20
+## [1.0.16] - 2025.07.25
 
-**Fixed**
+### Change
+
+- Supporting Unity 6+.
+
+## [1.0.15] - 2025.02.20
+
+### Fixed
 
 * InitiateWithDescription() now works.
 
-## 1.0.14 - 2025.02.20
+## [1.0.14] - 2025.02.20
 
-**Added**
+### Added
 
 * Initiate query function with description parameter.
 
-## 1.0.13 - 2025.02.20
+## [1.0.13] - 2025.02.20
 
-**Added**
+### Added
 
 * Optional description text.
 
-## 1.0.12 - 2024.05.29
+## [1.0.12] - 2024.05.29
 
-**Fixed**
+### Fixed
 
 * Response button rotation is zeroed out on instantiation.
 
-## 1.0.11 - 2024.05.19
+## [1.0.11] - 2024.05.19
 
-**Fixed**
+### Fixed
 
 * Query response button uses explicit navigation even if there's only one button.
 
-## 1.0.10 - 2024.05.17
+## [1.0.10] - 2024.05.17
 
-**Added**
+### Added
 
 * Optionally different prefab for primary response button.
 
-## 1.0.9 - 2024.04.25
+## [1.0.9] - 2024.04.25
 
-**Added**
+### Added
 
 * Added a variant of the query call function to serve as an alert dialog.
 
 # Changelog
 
-## 1.0.8 - 2023.07.28
+## [1.0.8] - 2023.07.28
 
-**Fixed**
+### Fixed
 
 * Removed broken using statement on script.
 
-## 1.0.7 - 2023.03.04
+## [1.0.7] - 2023.03.04
 
-**Added**
+### Added
 
 * Can set initially selected response.
 
-## 1.0.6 - 2023.02.24
+## [1.0.6] - 2023.02.24
 
-**Added**
+### Added
 
 * Optional callback on select response.
 
-## 1.0.5 - 2023.02.07
+## [1.0.5] - 2023.02.07
 
-**Added**
+### Added
 
 * Returning more data on callback.
 
-## 1.0.4 - 2023.01.28
+## [1.0.4] - 2023.01.28
 
-**Changed**
+### Changed
 
 * Made OnClickResponse public.
 
-## 1.0.3 - 2023.01.21
+## [1.0.3] - 2023.01.21
 
-**Fixed**
+### Fixed
 
 * Refreshing layout group height upon showing.
 
-## 1.0.2 - 2023.01.21
+## [1.0.2] - 2023.01.21
 
-**Added**
+### Added
 
 * Added option to show/hide window using GameObject.SetActive(), Animator, or do nothing.
 
-## 1.0.1 - 2022.12.30
+## [1.0.1] - 2022.12.30
 
-**Changed**
+### Changed
 
 * Switched to Text Mesh Pro.
 
-## 1.0.0 - 2021.12.28
+## [1.0.0] - 2021.12.28
 
-**Added**
+### Added
 
 * Query

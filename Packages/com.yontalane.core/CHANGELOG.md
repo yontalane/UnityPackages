@@ -1,343 +1,349 @@
 # Changelog
 
-## 1.0.36 - 2025.07.21
+## [1.0.37] - 2025.07.25
 
-**Added**
+### Change
+
+- Supporting Unity 6+.
+
+## [1.0.36] - 2025.07.21
+
+### Added
 
 - Added tooltips and summaries to most core fields and functions.
 
-## 1.0.35 - 2025.05.26
+## [1.0.35] - 2025.05.26
 
-**Added**
+### Added
 
 - RemoteMusicPlayer can be extended and has hookup for basic music settings.
 
-## 1.0.34 - 2025.03.28
+## [1.0.34] - 2025.03.28
 
-**Added**
+### Added
 
 - RemoteMusicPlayer supports per-track volume and loop settings.
 
-## 1.0.33 - 2025.03.28
+## [1.0.33] - 2025.03.28
 
-**Added**
+### Added
 
 - AudioPack for player a random sound.
 - RemoteMusicPlayer for playing music from a web source.
 - AnimationSoundPlayer for playing an AudioPack from an animation.
 - AnimationEventaBroadcaster for broadcasting an event from an animation.
 
-## 1.0.32 - 2024.06.05
+## [1.0.32] - 2024.06.05
 
-**Added**
+### Added
 
 - Added a lerp method to ranges.
 
-## 1.0.31 - 2024.04.09
+## [1.0.31] - 2024.04.09
 
-**Added**
+### Added
 
 - Another way to initialize LeashTransform.
 
-## 1.0.30 - 2024.04.09
+## [1.0.30] - 2024.04.09
 
-**Added**
+### Added
 
 - Public getters for LeashTransform config vars.
 
-## 1.0.29 - 2023.06.30
+## [1.0.29] - 2023.06.30
 
-**Added**
+### Added
 
 - OptionalSingleton class.
 
-## 1.0.28 - 2023.06.07
+## [1.0.28] - 2023.06.07
 
-**Added**
+### Added
 
 - TagAttribute can affect strings as well as ints.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.27 - 2023.06.07
+## [1.0.27] - 2023.06.07
 
-**Added**
+### Added
 
 - TagAttribute - Attribute for displaying int as popup of tags in inspector.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.26 - 2023.06.06
+## [1.0.26] - 2023.06.06
 
-**Added**
-
-- LeashTransform can now be restricted to bounds.
-
-**Changed**
-
-**Fixed**
-
-## 1.0.25 - 2023.06.06
-
-**Added**
+### Added
 
 - LeashTransform can now be restricted to bounds.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.24 - 2023.06.06
+## [1.0.25] - 2023.06.06
 
-**Added**
+### Added
+
+- LeashTransform can now be restricted to bounds.
+
+### Changed
+
+### Fixed
+
+## [1.0.24] - 2023.06.06
+
+### Added
 
 - LayerAttribute; static LayerCount getter.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.23 - 2023.06.06
+## [1.0.23] - 2023.06.06
 
-**Added**
+### Added
 
 - LayerAttribute; static LayerCount getter.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.22 - 2023.06.04
+## [1.0.22] - 2023.06.04
 
-**Added**
+### Added
 
 - Added List.Shuffle().
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.21 - 2023.05.27
+## [1.0.21] - 2023.05.27
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
-
-- Can set Target on LeashTransform.
-
-## 1.0.20 - 2023.05.27
-
-**Added**
+### Fixed
 
 - Can set Target on LeashTransform.
 
-**Changed**
+## [1.0.20] - 2023.05.27
 
-**Fixed**
+### Added
 
-## 1.0.19 - 2023.05.04
+- Can set Target on LeashTransform.
 
-**Added**
+### Changed
+
+### Fixed
+
+## [1.0.19] - 2023.05.04
+
+### Added
 
 - Added Singleton.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.18 - 2023.02.24
+## [1.0.18] - 2023.02.24
 
-**Added**
+### Added
 
 - Added delegate to SelectableListener.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.17 - 2023.02.24
+## [1.0.17] - 2023.02.24
 
-**Added**
+### Added
 
 - Added SelectableListener.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.16 - 2022.07.25
+## [1.0.16] - 2022.07.25
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 - Editor scripts should no longer be included in build.
 
-## 1.0.15 - 2022.06.23
+## [1.0.15] - 2022.06.23
 
-**Added**
+### Added
 
 * Clamp Attribute for Float Range and Int Range
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.14 - 2022.06.16
+## [1.0.14] - 2022.06.16
 
-**Added**
+### Added
 
 * Logger
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.13 - 2022.06.05
+## [1.0.13] - 2022.06.05
 
-**Added**
+### Added
 
 * Character Bump Controller
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.12 - 2022.06.02
+## [1.0.12] - 2022.06.02
 
-**Added**
+### Added
 
 * Animation Event Transform
 * Bump Listener
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.11 - 2022.05.24
+## [1.0.11] - 2022.05.24
 
-**Added**
+### Added
 
 * Added parent space option to Leash Transform.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.10 - 2022.05.21
+## [1.0.10] - 2022.05.21
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
 * Added Rigidbody toggle to Leash Transform's Inspector.
 
-## 1.0.9 - 2022.05.21
+## [1.0.9] - 2022.05.21
 
-**Added**
+### Added
 
 * Added a toggle to Leash Transform for leashing using Rigidbody.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.8 - 2022.05.19
+## [1.0.8] - 2022.05.19
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 * Converted Collision Listener delegates to Unity Events.
 * Added Layer Mask filter to Collision Listener.
 
-**Fixed**
+### Fixed
 
-## 1.0.7 - 2022.05.19
+## [1.0.7] - 2022.05.19
 
-**Added**
+### Added
 
 * Collision Listener now includes ControllerColliderHit.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.6 - 2022.05.17
+## [1.0.6] - 2022.05.17
 
-**Added**
+### Added
 
 * Leash Transform can be initialized in code at runtime.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.5 - 2022.05.17
+## [1.0.5] - 2022.05.17
 
-**Added**
+### Added
 
 * Leash scale.
 * Leash local/world space option.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.4 - 2022.05.17
+## [1.0.4] - 2022.05.17
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 * Minor changes.
 
-**Fixed**
+### Fixed
 
-## 1.0.3 - 2022.05.16
+## [1.0.3] - 2022.05.16
 
-**Added**
+### Added
 
 * Leash Transform
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.2 - 2022.02.16
+## [1.0.2] - 2022.02.16
 
-**Added**
+### Added
 
 * Collision Listener
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.1 - 2022.01.14
+## [1.0.1] - 2022.01.14
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 * Detailed documentation
 * Small tweaks to SerializableDictionary
 
-**Fixed**
+### Fixed
 
-## 1.0.0 - 2021.12.22
+## [1.0.0] - 2021.12.22
 
-**Added**
+### Added
 
 * Math
   * Including simple vector math.
@@ -345,6 +351,6 @@
 * Float Range
 * Int Range
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed

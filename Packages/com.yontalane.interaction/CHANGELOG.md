@@ -1,65 +1,71 @@
 # Changelog
 
-## 1.0.6 - 2022.06.06
+## [1.0.7] - 2025.07.25
 
-**Added**
+### Change
 
-**Changed**
+- Supporting Unity 6+.
 
-**Fixed**
+## [1.0.6] - 2022.06.06
+
+### Added
+
+### Changed
+
+### Fixed
 
 * Simple Interaction respects rigidbodies and character controllers when teleporting interactor.
 
-## 1.0.5 - 2022.06.05
+## [1.0.5] - 2022.06.05
 
-**Added**
+### Added
 
 * Carry and Simple interactions toggle Interactable highlight visibility.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.4 - 2022.06.05
+## [1.0.4] - 2022.06.05
 
-**Added**
+### Added
 
 * Interactable's highlight visible can be toggled as a separate thing from the highlighted state.
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed
 
-## 1.0.3 - 2022.06.02
+## [1.0.3] - 2022.06.02
 
-**Added**
+### Added
 
-**Changed**
+### Changed
 
 * Cleaned up AddComponentMenu text.
 
-**Fixed**
+### Fixed
 
-## 1.0.2 - 2022.06.01
+## [1.0.2] - 2022.06.01
 
-**Added**
+### Added
 
 * Simple interaction has trigger strings to animate the interactable in addition to the interactor.
 
-**Changed**
+### Changed
 
 * Moved carry and simple interactions to Samples namespace.
 
-**Fixed**
+### Fixed
 
-## 1.0.1 - 2022.06.01
+## [1.0.1] - 2022.06.01
 
-**Added**
+### Added
 
 * Interactor
 * Interactable
 * InteractionBase
 
-**Changed**
+### Changed
 
-**Fixed**
+### Fixed

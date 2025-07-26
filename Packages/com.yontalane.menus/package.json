@@ -1,39 +1,39 @@
 {
-    "name": "com.yontalane.menus",
-    "version": "1.0.20",
-    "displayName": "Menus",
-    "description": "A menu navigation library that supports both controller and mouse and keyboard.",
-    "unity": "2021.3",
-    "unityRelease": "10f1",
-    "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.menus/Documentation~/index.md",
-    "dependencies": {
-        "com.yontalane.core": "1.0.29",
-        "com.unity.inputsystem": "1.2.0"
-    },
-    "keywords": [
-        "menu",
-        "framework",
-        "utils",
-        "util",
-        "utility",
-        "utilities",
-        "navigation",
-        "ui",
-        "controller",
-        "gamepad",
-        "input"
-    ],
-    "author": {
-        "name": "Yontalane",
-        "email": "unitypackages@yontalane.com",
-        "url": "https://yontalane.com/"
-    },
-    "samples": [
-        {
-            "displayName": "Menus Controller Demo",
-            "description": "Contains a sample implementation of the menu controller.",
-            "path": "Samples~/MenusControllerDemo"
-        }
-    ],
-    "type": "library"
+  "name": "com.yontalane.menus",
+  "version": "1.0.21",
+  "displayName": "Menus",
+  "description": "A menu navigation library that supports both controller and mouse and keyboard.",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.menus/Documentation~/index.md",
+  "dependencies": {
+    "com.yontalane.core": "1.0.37",
+    "com.unity.inputsystem": "1.14.1"
+  },
+  "keywords": [
+    "menu",
+    "framework",
+    "utils",
+    "util",
+    "utility",
+    "utilities",
+    "navigation",
+    "ui",
+    "controller",
+    "gamepad",
+    "input"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "samples": [
+    {
+      "displayName": "Menus Controller Demo",
+      "description": "Contains a sample implementation of the menu controller.",
+      "path": "Samples~/MenusControllerDemo"
+    }
+  ],
+  "type": "library"
 }
