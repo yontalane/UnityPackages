@@ -23,6 +23,26 @@ namespace Yontalane.Dialog
 
         [Header("Dialog Script Data")]
 
+        [Tooltip("The agent's name in dialog. If blank, will default to the name of this asset.")]
+        [SerializeField]
+        private string m_displayName = "";
+
+        [Tooltip("The type of dialog script this object expects.")]
+        [SerializeField]
+        private DialogAgentInputType m_inputType = DialogAgentInputType.Json;
+
+        [Tooltip("A complex dialog script. Used to generate DialogData.")]
+        [SerializeField]
+        private DialogDataContainer m_data = null;
+
+        [Tooltip("The starting node.")]
+        [SerializeField]
+        private string m_textDataStart = "";
+
+        [Tooltip("A complex dialog script. Used to generate DialogData.")]
+        [SerializeField]
+        private TextAsset m_textData = null;
+
         [Tooltip("A complex dialog script. Used to generate DialogData.")]
         [SerializeField]
         private TextAsset m_json = null;
@@ -31,10 +51,6 @@ namespace Yontalane.Dialog
         [SerializeField]
         [TextArea]
         private string m_staticText = "";
-
-        [Tooltip("The agent's name in dialog. If blank, will default to the name of this asset.")]
-        [SerializeField]
-        private string m_displayName = "";
 
         [Header("Keyword Replacement")]
 
@@ -74,6 +90,125 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// The type of dialog script this agent expects (e.g., Json, TextData, String).
+        /// </summary>
+        public DialogAgentInputType InputType
+        {
+            get
+            {
+                return m_inputType;
+            }
+            set
+            {
+                m_inputType = value;
+            }
+        }
+
+        /// <summary>
+        /// The TextAsset containing dialog data if using TextData input type.
+        /// Returns null if not using TextData.
+        /// Setting this also sets the input type to TextData and clears the start node and dialog data.
+        /// </summary>
+        public TextAsset TextData
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.TextData)
+                {
+                    return null;
+                }
+                return m_textData;
+            }
+            set
+            {
+                m_inputType = DialogAgentInputType.TextData;
+                m_textData = value;
+                m_textDataStart = string.Empty;
+                Data = null;
+            }
+        }
+
+        /// <summary>
+        /// The starting node for TextData dialog scripts.
+        /// Returns empty string if not using TextData.
+        /// </summary>
+        public string TextDataStart
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.TextData)
+                {
+                    return string.Empty;
+                }
+                return m_textDataStart;
+            }
+            set
+            {
+                m_textDataStart = value;
+            }
+        }
+
+        /// <summary>
+        /// The static text for this agent if using String input type.
+        /// Returns empty string if not using String input type.
+        /// Setting this also sets the input type to String and clears dialog data.
+        /// </summary>
+        public string StaticText
+        {
+            get
+            {
+                if (m_inputType != DialogAgentInputType.String)
+                {
+                    return string.Empty;
+                }
+                return m_staticText;
+            }
+            set
+            {
+                m_inputType = DialogAgentInputType.String;
+                Data = null;
+                m_staticText = value;
+            }
+        }
+
+        /// <summary>
+        /// Sets the dialog agent to use TextData input type with the specified TextAsset and start node.
+        /// Clears any existing dialog data.
+        /// </summary>
+        /// <param name="textAsset">The TextAsset containing the dialog script.</param>
+        /// <param name="startNode">The starting node for the dialog script.</param>
+        public void SetTextData(TextAsset textAsset, string startNode)
+        {
+            m_inputType = DialogAgentInputType.TextData;
+            m_textData = textAsset;
+            m_textDataStart = startNode;
+            Data = null;
+        }
+
+        /// <summary>
+        /// Sets the dialog agent to use String input type with the specified static text.
+        /// Clears any existing dialog data.
+        /// </summary>
+        /// <param name="text">The static text to use for dialog.</param>
+        public void SetStaticText(string text)
+        {
+            m_inputType = DialogAgentInputType.String;
+            Data = null;
+            m_staticText = text;
+        }
+
+        /// <summary>
+        /// Sets the dialog agent to use TextData input type with the specified TextAsset and an empty start node.
+        /// </summary>
+        /// <param name="textAsset">The TextAsset containing the dialog script.</param>
+        public void SetTextData(TextAsset textAsset) => SetTextData(textAsset, string.Empty);
+
+        /// <summary>
+        /// Clears the current dialog data.
+        /// </summary>
+        public void ClearData() => Data = null;
+
+        /// <summary>
         /// Initiates a dialog session with the specified speaker and an optional callback to invoke when the dialog ends.
         /// If dialog data is not already set, it will be initialized from the JSON asset if available,
         /// otherwise a simple dialog node will be created using the static text and provided speaker.
@@ -85,29 +220,43 @@ namespace Yontalane.Dialog
             // Check if dialog data is missing or empty, and initialize it from JSON or static text as appropriate.
             if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
             {
-                // If a JSON asset is assigned, parse dialog data from it.
-                if (m_json != null)
+                switch (m_inputType)
                 {
-                    ID = name;
-                    Data = JsonUtility.FromJson<DialogData>(m_json.text);
-                }
-                // Otherwise, create a simple dialog node with static text and the provided speaker.
-                else
-                {
-                    ID = DialogAgent.STATIC_ID;
-                    Data = new()
-                    {
-                        nodes = new NodeData[1],
-                    };
-                    Data.nodes[0] = new()
-                    {
-                        lines = new LineData[1],
-                    };
-                    Data.nodes[0].lines[0] = new()
-                    {
-                        speaker = speaker,
-                        text = m_staticText,
-                    };
+                    case DialogAgentInputType.Data:
+                        // Initialize dialog data from the assigned DialogData asset.
+                        ID = name;
+                        Data = m_data.data;
+                        break;
+
+                    case DialogAgentInputType.Json:
+                        // Parse dialog data from the provided JSON TextAsset.
+                        ID = name;
+                        Data = JsonUtility.FromJson<DialogData>(m_json.text);
+                        break;
+
+                    case DialogAgentInputType.String:
+                        // Create a simple dialog node with static text and the provided speaker.
+                        ID = DialogAgent.STATIC_ID;
+                        Data = new DialogData
+                        {
+                            nodes = new NodeData[1]
+                        };
+                        Data.nodes[0] = new NodeData
+                        {
+                            lines = new LineData[1]
+                        };
+                        Data.nodes[0].lines[0] = new LineData
+                        {
+                            speaker = speaker,
+                            text = m_staticText
+                        };
+                        break;
+
+                    case DialogAgentInputType.TextData:
+                        // Convert TextAsset dialog data using the specified start node.
+                        ID = name;
+                        Data = TextDataConverter.Convert(m_textData, m_textDataStart);
+                        break;
                 }
             }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.65] - 2025.07.27
+
+### Added
+
+- Fields and methods from MonoBehaviour DialogAgent now in ScriptableDialogAgent as well
+
 ## [1.0.64] - 2025.07.26
 
 ### Added
