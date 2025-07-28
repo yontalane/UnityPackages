@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.68] - 2025.07.27
+
+### Fixed
+
+- Skipping line does not show all text
+
 ## [1.0.67] - 2025.07.27
 
 ### Fixed

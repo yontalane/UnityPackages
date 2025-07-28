@@ -865,6 +865,9 @@ namespace Yontalane.Dialog
                 m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
             }
 
+            // Make all characters visible
+            m_textField.maxVisibleCharacters = int.MaxValue;
+
             // Invoke the on display line event
             m_onDisplayLine?.Invoke();
 
