@@ -6,7 +6,7 @@
   
   <<self>>
   -- [Portrait = Portrait A, Voice = Who Are You, Sound = Negative, Typing = Beep]:
-  -- Oh, hi. Who are you?
+  -- Oh, hi. <i>Who are you?</i>
   
     - My name is <<player>>. => Gift
     - You don't know? => Exit

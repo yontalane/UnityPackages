@@ -654,9 +654,14 @@ namespace Yontalane.Dialog
         /// <returns>An enumerator that writes out the dialog text character by character.</returns>
         private IEnumerator WriteOut()
         {
+            // Summary:
+            // This section prepares the typing and typing loop audio clips for the dialog line. It attempts to load custom sounds
+            // specified in the line data, falling back to default sounds if none are provided. It also calculates the length of the
+            // typing sound, initializes the last typed time, and starts playing the typing loop sound if available. Finally, it
+            // initiates a coroutine to delay the highlight of the skip button.
+
             // If the line has a typing sound, load the sound
             // If the line has no typing sound, use the default typing sound
-
             AudioClip typing = null;
             if (!string.IsNullOrEmpty(m_line.typing))
             {
@@ -667,9 +672,14 @@ namespace Yontalane.Dialog
                 typing = m_typingDefault;
             }
 
+            // Length in seconds of the typing sound
+            float typingSoundLength = typing != null ? typing.length : 0f;
+
+            // The time when the last character was typed; to be used with the typing sound
+            float lastTypedTime = Time.time - 10f;
+
             // If the line has a typing loop sound, load the sound
             // If the line has no typing loop sound, use the default typing loop sound
-
             AudioClip typingLoop = null;
             if (!string.IsNullOrEmpty(m_line.typingLoop))
             {
@@ -680,33 +690,6 @@ namespace Yontalane.Dialog
                 typingLoop = m_typingLoopDefault;
             }
 
-            // Length in seconds of the typing sound
-            float typingSoundLength = typing != null ? typing.length : 0f;
-
-            // The time when the last character was typed
-            float lastTypedTime = Time.time - 10f;
-
-            // Start a coroutine to delay the highlight of the skip button
-            StartCoroutine(DelayHighlightSkipButton());
-
-            // Create a list to store the hanging tags
-            List<string> hangingTags = new();
-
-            // Check if the speaker field exists
-            bool speakerFieldExists = m_speakerField != null;
-
-            // If the speaker field exists, set the speaker field text to the speaker
-            if (speakerFieldExists)
-            {
-                m_speakerField.text = m_speaker;
-            }
-
-            // Set the text field text to empty
-            m_textField.text = string.Empty;
-
-            // Format the inline text
-            string fullText = FormatInlineText(speakerFieldExists ? string.Empty : m_speaker);
-
             // If the line has a typing loop sound, play it
             if (typingLoop != null)
             {
@@ -714,108 +697,86 @@ namespace Yontalane.Dialog
                 ClickLoopAudioSource.Play();
             }
 
-            // Write out the text character by character
-            for (int i = 0; i < m_text.Length; i++)
+            // Start a coroutine to delay the highlight of the skip button
+            StartCoroutine(DelayHighlightSkipButton());
+
+
+            // Summary:
+            // This section prepares the speaker's name and dialog text for display. If a separate speaker field UI element exists,
+            // it sets the speaker's name there; otherwise, it prepares to show the speaker's name inline with the dialog text.
+            // It ensures rich text formatting is enabled, calculates the parsed lengths of the speaker and combined text,
+            // and initially limits visible characters to only the speaker's name (if any), so the dialog text can be revealed character by character.
+
+            // Check if the speaker field UI element exists
+            bool speakerFieldExists = m_speakerField != null;
+
+            // Format the speaker's name for inline display (e.g., replacing keywords)
+            string formattedSpeakerText = FormatInlineText(m_speaker);
+
+            // If the speaker field exists, set its text to the formatted speaker name
+            if (speakerFieldExists)
             {
-                // Check if the next character is a special character
-                bool showNextCharacter = true;
-                string nextCharacter = m_text.Substring(i, 1);
-
-                // If the next character is a special character, handle it
-                if (nextCharacter.Equals("%") && i < m_text.Length - 4)
-                {
-                    // Find the index of the closing special character
-                    int j = i + 2;
-                    int indexOfClose = m_text[j..].IndexOf("%%");
-
-                    // If the closing special character is found, handle it
-                    if (indexOfClose >= 0)
-                    {
-                        indexOfClose += j;
-                        i = indexOfClose + 1;
-
-                        // Get the interior of the special character
-                        string interior = m_text[j..i];
-
-                        // Set the text field rich text to true
-                        m_textField.richText = true;
-
-                        // Handle interior tags
-                        if (interior.Equals("/color"))
-                        {
-                            fullText += "</color>";
-                            hangingTags.Remove("</color>");
-                        }
-                        else if (interior.Contains("color"))
-                        {
-                            string[] colorParameter = interior.Split('=');
-                            if (colorParameter.Length == 2 && colorParameter[0].Equals("color"))
-                            {
-                                fullText += "<color=" + colorParameter[1] + ">";
-                            }
-                            hangingTags.Insert(0, "</color>");
-                        }
-                        else if (interior.Equals("b"))
-                        {
-                            fullText += "<b>";
-                            hangingTags.Insert(0, "</b>");
-                        }
-                        else if (interior.Equals("/b"))
-                        {
-                            fullText += "</b>";
-                            hangingTags.Remove("</b>");
-                        }
-                        else if (interior.Equals("i"))
-                        {
-                            fullText += "<i>";
-                            hangingTags.Insert(0, "</i>");
-                        }
-                        else if (interior.Equals("/i"))
-                        {
-                            fullText += "</i>";
-                            hangingTags.Remove("</i>");
-                        }
-                        showNextCharacter = false;
-                    }
-                }
-
-                // If the next character is not a special character, handle it
-                if (showNextCharacter)
-                {
-                    fullText += nextCharacter;
-                    m_textField.text = fullText;
-
-                    // Add the hanging tags to the text field
-                    foreach (string hangingTag in hangingTags)
-                    {
-                        m_textField.text += hangingTag;
-                    }
-
-                    // Invoke the on type event
-                    m_onType?.Invoke();
-
-                    // If the line has a typing sound, play it
-                    if (typing != null && Time.time - lastTypedTime >= typingSoundLength * m_typeSoundDelay)
-                    {
-                        ClickAudioSource.PlayOneShot(typing);
-                    }
-
-                    // If the refresh layout groups flag is set, refresh the layout groups
-                    if (m_refreshLayoutGroups)
-                    {
-                        Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
-                    }
-
-                    // Update the last typed character time
-                    lastTypedTime = Time.time;
-
-                    // Wait for the next character
-                    yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
-                }
+                m_speakerField.text = formattedSpeakerText;
             }
 
+            // Ensure the main text field supports rich text formatting
+            m_textField.richText = true;
+
+            // If the speaker field does not exist, prepare to display the speaker name inline with the dialog text
+            string inlineSpeakerText = speakerFieldExists ? string.Empty : formattedSpeakerText;
+
+            // Set the text field to only the inline speaker text and force a mesh update to parse it
+            // Get the length of the parsed speaker text
+            m_textField.text = inlineSpeakerText;
+            m_textField.ForceMeshUpdate(true, true);
+            string inlineSpeakerTextParsed = m_textField.GetParsedText();
+            int inlineSpeakerTextParsedLength = inlineSpeakerTextParsed.Length;
+
+            // Set the text field to the full dialog line (speaker + text) and force a mesh update to parse it
+            m_textField.text = $"{inlineSpeakerText}{m_text}";
+            m_textField.ForceMeshUpdate(true, true);
+            string combinedTextParsed = m_textField.GetParsedText();
+            int combinedTextParsedLength = combinedTextParsed.Length;
+
+            // Initially, only show the speaker text (if any) by limiting visible characters
+            m_textField.maxVisibleCharacters = inlineSpeakerTextParsedLength;
+
+            // Summary:
+            // This loop reveals the dialog text one character at a time, starting after the speaker's name (if present).
+            // For each character revealed, it updates the visible character count, invokes an optional "on type" event,
+            // plays a typing sound if appropriate, refreshes layout groups if needed, updates the last typed time,
+            // and waits for a specified interval before revealing the next character.
+            for (int currentIndex = inlineSpeakerTextParsedLength; currentIndex < combinedTextParsedLength; currentIndex++)
+            {
+                // Reveal the next character in the dialog text
+                m_textField.maxVisibleCharacters = currentIndex + 1;
+
+                // Invoke the on type event
+                m_onType?.Invoke();
+
+                // If the line has a typing sound, play it
+                if (typing != null && Time.time - lastTypedTime >= typingSoundLength * m_typeSoundDelay)
+                {
+                    ClickAudioSource.PlayOneShot(typing);
+                }
+
+                // If the refresh layout groups flag is set, refresh the layout groups
+                if (m_refreshLayoutGroups)
+                {
+                    Utility.RefreshLayoutGroupsImmediateAndRecursive(m_dialogRoot.gameObject);
+                }
+
+                // Update the last typed character time
+                lastTypedTime = Time.time;
+
+                // Wait for the next character
+                yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
+            }
+
+            // Stop the looping click audio source to end any ongoing typing sound effect
             ClickLoopAudioSource.Stop();
 
+            // Call EndLine to finalize the current dialog line and trigger any end-of-line logic
             EndLine();
         }
 

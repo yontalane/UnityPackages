@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.66] - 2025.07.27
+
+### Changed
+
+- UI uses maxVisibleCharacters for cleaner line wrapping
+- Supports standard rich text tag notation
+
 ## [1.0.65] - 2025.07.27
 
 ### Added

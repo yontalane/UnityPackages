@@ -113,9 +113,10 @@ It looks like this:
 
   // Responses are - TEXT => NODE
   // An empty portrait [] is replaced by the speaker name text
+  // Dialog supports rich text
   
   Arm Dude []: Yes, this is a metal arm. No, I am not "happy to see you."
-    - That's weird, man. => Deep Convo
+    - That's <i>weird</i>, man. => Deep Convo
     - cya. => Done
 
 #Deep Convo
