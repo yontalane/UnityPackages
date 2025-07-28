@@ -277,6 +277,11 @@ namespace Yontalane.Dialog
         /// <returns>The modified string with inline text replaced by keyword or function results.</returns>
         private string ReplaceInlineText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+
             while (true)
             {
                 int leftIndex = text.IndexOf("<<");

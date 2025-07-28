@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.67] - 2025.07.27
+
+### Fixed
+
+- Dialog breaks when receiving an empty portrait name
+
 ## [1.0.66] - 2025.07.27
 
 ### Changed
