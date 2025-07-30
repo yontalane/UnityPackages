@@ -25,10 +25,10 @@
 
   <<self>>
   -- [Portrait = Portrait A, Voice = Are You a Giver]:
-  -- Are you a giver or a taker?
+  -- Are you a %G giver or a %T taker?
   
-    - Giver. => Give
-    - Taker. => Take
+    - %G Giver. => Give
+    - %T Taker. => Take
 
 
 

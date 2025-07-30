@@ -16,6 +16,7 @@ namespace YontalaneEditor.Dialog
         private SerializedProperty m_json;
         private SerializedProperty m_staticText;
         private SerializedProperty m_keywords;
+        private SerializedProperty m_inlineImageReplacementInfo;
         private GUIContent m_dataLabel;
         private GUIContent m_textDataStartLabel;
         private GUIContent m_textDataLabel;
@@ -32,6 +33,7 @@ namespace YontalaneEditor.Dialog
             m_json = serializedObject.FindProperty("m_json");
             m_staticText = serializedObject.FindProperty("m_staticText");
             m_keywords = serializedObject.FindProperty("m_keywords");
+            m_inlineImageReplacementInfo = serializedObject.FindProperty("m_inlineImageReplacementInfo");
 
             m_dataLabel = new GUIContent(string.Empty, m_data.tooltip);
             m_textDataStartLabel = new GUIContent("Starting Node", m_textDataStart.tooltip);
@@ -66,6 +68,7 @@ namespace YontalaneEditor.Dialog
             EditorGUI.indentLevel--;
 
             EditorGUILayout.PropertyField(m_keywords);
+            EditorGUILayout.PropertyField(m_inlineImageReplacementInfo);
 
             serializedObject.ApplyModifiedProperties();
         }

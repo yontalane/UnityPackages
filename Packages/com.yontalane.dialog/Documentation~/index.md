@@ -10,6 +10,8 @@ You also need one or more DialogAgent objects. The DialogAgent initiates dialog,
 
 Finally, you have the option to include IDialogResponder objects in your scene. IDialogResponder works with the DialogProcessor and can modify dialog text or run actions based on keywords within the text. DialogAgent inherits from IDialogResponder, but non-agents can be responders as well. For example, a line of dialog might read: `My name is <<speaker>> and I see that you have a lot of <<most common item>>.` The DialogProcessor takes each keyword--designated by double angle brackets--and checks how they should be modified by each IDialogResponder. The DialogAgent, which is a type of responder, replaces `<<speaker>>` with its name. And an inventory manager singleton that also inherits from IDialogResponder might replace `<<most common item>>` with whatever item the player has the most of. So, after processing, the dialog could read: `My name is Lulu and I see that you have a lot of fish.`
 
+Another DialogResponder feature is the ability to replace pieces of text with inline images. Add entries to the `Inline Image Replacement Info` list on a DialogAgent or other responder. For example, you might have an entry where the text is `%S` and the image is an icon of the sun. Now, anywhere in your dialog where `%S` appears, it will be replaced with the sun.
+
 ## Dialog Script Format
 
 There are two types of DialogAgent: DialogAgent, that inherits from MonoBehaviour, and SerializedDialogAgent, that inherits from SerializedObject. You can use either in your project; both contain the same methods and functionality.

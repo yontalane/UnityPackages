@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Yontalane.Dialog;
 
 namespace Yontalane.Demos.Dialog
@@ -117,6 +118,14 @@ namespace Yontalane.Demos.Dialog
         public bool GetKeyword(string key, out string result)
         {
             result = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Adds inline image replacement information for inventory-related keywords to the provided list.
+        /// </summary>
+        public bool GetInlineImageInfo(List<InlineImageReplacementInfo> info)
+        {
             return false;
         }
     }

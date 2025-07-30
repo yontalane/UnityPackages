@@ -15,25 +15,6 @@ namespace Yontalane.Dialog
     public sealed class DialogProcessor : MonoBehaviour, IDialogResponder
     {
         #region Data Structures
-        /// <summary>
-        /// Enum representing the type of speaker in a dialog.
-        /// </summary>
-        public enum SpeakerType
-        {
-            /// <summary>
-            /// The player is speaking.
-            /// </summary>
-            Player,
-            /// <summary>
-            /// The owner of the dialog agent is speaking.
-            /// </summary>
-            Self,
-            /// <summary>
-            /// Some other character is speaking.
-            /// </summary>
-            Other
-        }
-
         [Serializable]
         /// <summary>
         /// UnityEvent callback for when a new line of dialog begins.
@@ -194,6 +175,23 @@ namespace Yontalane.Dialog
 
             result = null;
             return false;
+        }
+
+        /// <summary>
+        /// Aggregates inline image replacement information from all dialog responders.
+        /// </summary>
+        /// <param name="info">A list to which inline image replacement info will be added.</param>
+        /// <returns>True if any responder added or modified inline image info; otherwise, false.</returns>
+        public bool GetInlineImageInfo(List<InlineImageReplacementInfo> info)
+        {
+            bool changed = false;
+
+            foreach (IDialogResponder responder in m_responders)
+            {
+                changed = responder.GetInlineImageInfo(info) || changed;
+            }
+
+            return changed;
         }
         #endregion
 

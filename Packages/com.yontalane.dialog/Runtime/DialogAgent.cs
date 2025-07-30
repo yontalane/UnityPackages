@@ -1,40 +1,10 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Yontalane.Dialog
 {
-    /// <summary>
-    /// Represents a key-value pair used for keyword replacement in dialog scripts.
-    /// </summary>
-    [Serializable]
-    internal class KeywordPair
-    {
-        /// <summary>
-        /// The keyword to be replaced in the dialog script.
-        /// </summary>
-        [Tooltip("The keyword to be replaced in the dialog script.")]
-        public string key = "";
-
-        /// <summary>
-        /// The value to replace the keyword with in the dialog script.
-        /// </summary>
-        [Tooltip("The value to replace the keyword with in the dialog script.")]
-        public string value = "";
-    }
-
-    /// <summary>
-    /// Specifies the type of input used to provide dialog data to a DialogAgent.
-    /// </summary>
-    public enum DialogAgentInputType
-    {
-        Data = 0,
-        Json = 1,
-        String = 2,
-        TextData = 40,
-    }
-
     /// <summary>
     /// A MonoBehaviour implementation of IDialogAgent for use in the Yontalane dialog system.
     /// Handles dialog data, keyword replacement, and dialog session management for in-scene agents such as NPCs.
@@ -91,6 +61,12 @@ namespace Yontalane.Dialog
         [Tooltip("Text to replace keywords in dialog.")]
         [SerializeField]
         private KeywordPair[] m_keywords = new KeywordPair[0];
+
+        [Header("Inline Image Replacement")]
+
+        [Tooltip("Info for swapping text with inline images.")]
+        [SerializeField]
+        private InlineImageReplacementInfo[] m_inlineImageReplacementInfo = new InlineImageReplacementInfo[0];
 
         private UnityAction m_onExitDialog;
 
@@ -337,6 +313,22 @@ namespace Yontalane.Dialog
         {
             result = null;
             return false;
+        }
+
+        /// <summary>
+        /// Adds this agent's inline image replacement information to the provided list.
+        /// </summary>
+        /// <param name="info">A list to which inline image replacement info will be added.</param>
+        /// <returns>True if any inline image info was added; otherwise, false.</returns>
+        public bool GetInlineImageInfo(List<InlineImageReplacementInfo> info)
+        {
+            if (m_inlineImageReplacementInfo == null || m_inlineImageReplacementInfo.Length == 0)
+            {
+                return false;
+            }
+
+            info.AddRange(m_inlineImageReplacementInfo);
+            return true;
         }
     }
 }

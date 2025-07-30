@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.69] - 2025.07.30
+
+### Added
+
+- Inline images
+
 ## [1.0.68] - 2025.07.27
 
 ### Fixed

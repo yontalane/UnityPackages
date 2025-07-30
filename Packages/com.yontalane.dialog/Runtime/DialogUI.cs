@@ -8,26 +8,6 @@ using UnityEngine.UI;
 
 namespace Yontalane.Dialog
 {
-    #region Data Structures
-    /// <summary>
-    /// Represents an event containing information about a dialog portrait, including the agent, line data, image, and speaker.
-    /// </summary>
-    public struct PortraitEvent
-    {
-        [Tooltip("The dialog agent associated with this portrait event.")]
-        public IDialogAgent agent;
-
-        [Tooltip("The line data associated with this portrait event.")]
-        public LineData data;
-
-        [Tooltip("The UI Image component displaying the portrait.")]
-        public Image image;
-
-        [Tooltip("The name of the speaker for this portrait event.")]
-        public string speaker;
-    }
-    #endregion
-
     /// <summary>
     /// Main UI controller for displaying and managing dialog interactions, including speaker display, text typing, responses, and associated UI elements.
     /// </summary>
@@ -35,34 +15,19 @@ namespace Yontalane.Dialog
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : Singleton<DialogUI>
     {
-        #region Data Structures
-        /// <summary>
-        /// Represents a set of color values for a specific speaker in the dialog.
-        /// </summary>
-        [Serializable]
-        private struct ColorSet
-        {
-            [Tooltip("The name of the speaker for this color set.")]
-            public string speaker;
-
-            [Tooltip("The color value to use for this speaker.")]
-            public Color color;
-        }
-        #endregion
-
         #region Delegates
         /// <summary>
         /// Represents an action that gets invoked when an audio clip is requested.
         /// </summary>
         [Serializable]
         public class GetAudioClipAction : UnityEvent<IDialogAgent, LineData, Action<AudioClip>> { }
-        
+
         /// <summary>
         /// Represents an action that gets invoked when a sprite is requested.
         /// </summary>
         [Serializable]
         public class SetSpriteAction : UnityEvent<PortraitEvent> { }
-        
+
         /// <summary>
         /// Represents an action that gets invoked when a sprite is requested.
         /// </summary>
@@ -84,6 +49,8 @@ namespace Yontalane.Dialog
 
         #region Private Fields
         private static readonly List<Button> s_tempResponseButtons = new();
+        private static readonly List<InlineImageReplacementInfo> s_inlineImageReplacementInfo = new();
+        private static readonly List<InlineImageReplacementPostProcessingInfo> s_inlineImageReplacementPostProcessingInfo = new();
         private static AudioSource s_clickAudioSource = null;
         private static AudioSource s_clickLoopAudioSource = null;
         private static AudioSource s_blastAudioSource = null;
@@ -218,33 +185,33 @@ namespace Yontalane.Dialog
 
         [Tooltip("A callback that can be used to set a custom portrait instead of using the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
         [SerializeField]
-        private SetSpriteAction m_setPortrait = new SetSpriteAction();
+        private SetSpriteAction m_setPortrait = new();
 
         [Tooltip("A callback that can be used to get a custom portrait instead of the one requested by the dialog data. SetPortrait overrides GetPortrait, which in turn overrides the dialog data.")]
         [SerializeField]
-        private GetSpriteAction m_getPortrait = new GetSpriteAction();
+        private GetSpriteAction m_getPortrait = new();
 
         [Tooltip("A callback that can be used to get a custom sound instead of the one requested by the dialog data.")]
         [SerializeField]
-        private GetAudioClipAction m_getSound = new GetAudioClipAction();
+        private GetAudioClipAction m_getSound = new();
 
         [Tooltip("A callback that can be used to get a custom voice instead of the one requested by the dialog data.")]
         [SerializeField]
-        private GetAudioClipAction m_getVoice = new GetAudioClipAction();
+        private GetAudioClipAction m_getVoice = new();
 
         [Header("Callbacks")]
 
         [Tooltip("An action that gets invoked when the dialog starts being typed out.")]
         [SerializeField]
-        private UnityEvent m_onStartTyping = new UnityEvent();
+        private UnityEvent m_onStartTyping = new();
 
         [Tooltip("An action that gets invoked while the dialog is being typed out.")]
         [SerializeField]
-        private UnityEvent m_onType = new UnityEvent();
+        private UnityEvent m_onType = new();
 
         [Tooltip("An action that gets invoked when the dialog is fully typed out.")]
         [SerializeField]
-        private UnityEvent m_onDisplayLine = new UnityEvent();
+        private UnityEvent m_onDisplayLine = new();
 
         #endregion
 
@@ -336,6 +303,8 @@ namespace Yontalane.Dialog
             {
                 m_animator.SetBool(ANIMATION_PARAMETER, false);
             }
+
+            DestroyInlineImages();
         }
 
         /// <summary>
@@ -345,6 +314,8 @@ namespace Yontalane.Dialog
         /// <param name="lineCompleteCallback">The callback to invoke when the line is complete.</param>
         public void Initiate(LineData line, Action<string> lineCompleteCallback, Func<string, string> replaceInlineText)
         {
+            s_inlineImageReplacementPostProcessingInfo.Clear();
+
             m_continueButton.gameObject.SetActive(false);
 
             m_canUseContinueHandler = true;
@@ -377,6 +348,9 @@ namespace Yontalane.Dialog
                 }
             }
             m_text = replaceInlineText(line.text);
+
+            // Destroy any inline images from the previous dialog line before initializing the new one
+            DestroyInlineImages();
 
             line.portrait = replaceInlineText(line.portrait);
 
@@ -445,6 +419,7 @@ namespace Yontalane.Dialog
                 }
             }
 
+            // Play the sound effect specified in the line, if any
             if (!string.IsNullOrEmpty(line.sound))
             {
                 AudioClip blast = null;
@@ -464,6 +439,7 @@ namespace Yontalane.Dialog
                 }
             }
 
+            // Play the voice audio specified in the line, if any
             if (!string.IsNullOrEmpty(line.voice))
             {
                 AudioClip blast = null;
@@ -483,42 +459,57 @@ namespace Yontalane.Dialog
                 }
             }
 
+            // If the response container exists, clear its children and set up new response buttons for each response in the line
             if (m_responseContainer != null)
             {
+                // Destroy all existing child GameObjects in the response container
                 for (int i = m_responseContainer.childCount - 1; i >= 0; i--)
                 {
                     Destroy(m_responseContainer.GetChild(i).gameObject);
                 }
 
+                // Hide the response container and clear the temporary response buttons list
                 m_responseContainer.gameObject.SetActive(false);
                 s_tempResponseButtons.Clear();
 
+                // Create a new button for each response in the line
                 for (int i = 0; i < line.responses.Length; i++)
                 {
+                    // Instantiate a new response button and set up its click listener
                     Button instance = Instantiate(m_responseButtonPrefab.gameObject).GetComponent<Button>();
                     instance.onClick.AddListener(delegate
                     {
                         OnClickResponse(instance);
                     });
-                    instance.GetComponentInChildren<TMP_Text>().text = FormatInlineText(replaceInlineText(line.responses[i].text));
+
+                    // Set the button's text to the formatted response text
+                    TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
+                    text.text = FormatInlineText(replaceInlineText(line.responses[i].text));
+
+                    // Set the button's transform properties and add it to the response container
                     instance.GetComponent<RectTransform>().SetParent(m_responseContainer);
                     instance.transform.localPosition = Vector3.zero;
                     instance.transform.localEulerAngles = Vector3.zero;
                     instance.transform.localScale = Vector3.one;
                     instance.navigation = Navigation.defaultNavigation;
 
+                    // Add the button to the temporary response buttons list
                     s_tempResponseButtons.Add(instance);
 
+                    // If this is the first button, skip navigation setup
                     if (i == 0) continue;
 
+                    // Set up explicit navigation between this button and the previous one
                     Button prev = s_tempResponseButtons[^2];
 
+                    // Set up explicit navigation for the current button to point left and up to the previous button
                     Navigation currNav = instance.navigation;
                     currNav.mode = Navigation.Mode.Explicit;
                     currNav.selectOnLeft = prev;
                     currNav.selectOnUp = prev;
                     instance.navigation = currNav;
 
+                    // Set up explicit navigation for the previous button to point right and down to the current button
                     Navigation prevNav = prev.navigation;
                     prevNav.mode = Navigation.Mode.Explicit;
                     prevNav.selectOnRight = instance;
@@ -526,20 +517,26 @@ namespace Yontalane.Dialog
                     prev.navigation = prevNav;
                 }
 
+                // Clear the temporary response buttons list after setup
                 s_tempResponseButtons.Clear();
             }
 
+            // If an animator is assigned, trigger the dialog open animation by setting the appropriate parameter.
             if (m_animator != null)
             {
                 m_animator.SetBool(ANIMATION_PARAMETER, true);
             }
 
+            // Mark that the dialog is currently writing out text.
             m_writingInProgress = true;
+
+            // If typewriter effect is enabled, invoke the start typing event and begin the coroutine to write out text character by character.
             if (m_useTypeCharacterInterval)
             {
                 m_onStartTyping?.Invoke();
                 StartCoroutine(WriteOut());
             }
+            // Otherwise, immediately end the line (show all text at once).
             else
             {
                 EndLine();
@@ -609,7 +606,7 @@ namespace Yontalane.Dialog
             {
                 return;
             }
-            
+
             // Hide the continue button and trigger the response handler when continue is pressed
             m_continueButton.gameObject.SetActive(false);
             OnClickResponse(null);
@@ -624,19 +621,19 @@ namespace Yontalane.Dialog
         /// <returns>The color of the speaker's name in the dialog header text.</returns>
         private Color GetSpeakerColor(string speaker)
         {
-            DialogProcessor.SpeakerType speakerType = DialogProcessor.GetSpeakerType(speaker);
+            SpeakerType speakerType = DialogProcessor.GetSpeakerType(speaker);
 
             // Return the color of the speaker's name in the dialog header text based on the speaker type
             switch (speakerType)
             {
-                case DialogProcessor.SpeakerType.Player:
+                case SpeakerType.Player:
                     return m_playerColor;
-                case DialogProcessor.SpeakerType.Self:
+                case SpeakerType.Self:
                     return m_speakerColor;
             }
 
             // Return the color of the speaker's name in the dialog header text based on the speaker colors
-            foreach(ColorSet colorSet in m_speakerColors)
+            foreach (ColorSet colorSet in m_speakerColors)
             {
                 if (speaker.Contains(colorSet.speaker))
                 {
@@ -717,6 +714,7 @@ namespace Yontalane.Dialog
             if (speakerFieldExists)
             {
                 m_speakerField.text = formattedSpeakerText;
+                PrepareInlineImages(ref m_speakerField, null);
             }
 
             // Ensure the main text field supports rich text formatting
@@ -728,12 +726,18 @@ namespace Yontalane.Dialog
             // Set the text field to only the inline speaker text and force a mesh update to parse it
             // Get the length of the parsed speaker text
             m_textField.text = inlineSpeakerText;
+            PrepareInlineImages(ref m_textField, null);
             m_textField.ForceMeshUpdate(true, true);
             string inlineSpeakerTextParsed = m_textField.GetParsedText();
             int inlineSpeakerTextParsedLength = inlineSpeakerTextParsed.Length;
 
             // Set the text field to the full dialog line (speaker + text) and force a mesh update to parse it
             m_textField.text = $"{inlineSpeakerText}{m_text}";
+            yield return new WaitForEndOfFrame();
+            PrepareInlineImages(ref m_textField, s_inlineImageReplacementPostProcessingInfo);
+
+            RefreshInlineImages(-1);
+
             m_textField.ForceMeshUpdate(true, true);
             string combinedTextParsed = m_textField.GetParsedText();
             int combinedTextParsedLength = combinedTextParsed.Length;
@@ -769,6 +773,8 @@ namespace Yontalane.Dialog
                 // Update the last typed character time
                 lastTypedTime = Time.time;
 
+                RefreshInlineImages(currentIndex);
+
                 // Wait for the next character
                 yield return new WaitForSecondsRealtime(m_typeCharacterInterval);
             }
@@ -800,7 +806,7 @@ namespace Yontalane.Dialog
         /// </summary>
         /// <param name="text">The text to format.</param>
         /// <returns>The formatted text.</returns>
-        private string FormatInlineText(string text)
+        private static string FormatInlineText(string text)
         {
             // Initialize the open state
             bool isOpen = true;
@@ -846,7 +852,8 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
-        /// Ends the line.
+        /// Ends the line. Finalizes the current dialog line, updates UI elements to display the full text and responses,
+        /// prepares inline images, and manages the visibility and highlighting of response or continue buttons.
         /// </summary>
         private void EndLine()
         {
@@ -857,12 +864,15 @@ namespace Yontalane.Dialog
             if (m_speakerField != null)
             {
                 m_speakerField.text = FormatInlineText(m_speaker);
+                PrepareInlineImages(ref m_speakerField, null);
                 m_textField.text = FormatInlineText(m_text);
+                PrepareInlineImages(ref m_textField, null);
             }
             else
             {
                 // If the speaker field does not exist, format the text field text and include the speaker text within it
                 m_textField.text = FormatInlineText(m_speaker) + FormatInlineText(m_text);
+                PrepareInlineImages(ref m_textField, null);
             }
 
             // Make all characters visible
@@ -871,17 +881,194 @@ namespace Yontalane.Dialog
             // Invoke the on display line event
             m_onDisplayLine?.Invoke();
 
-            // If the response container exists and has children, activate the response container and highlight the first child
+            // If there are response options available, show the response container and prepare inline images for each response
             if (m_responseContainer != null && m_responseContainer.childCount > 0)
             {
+                // Show the response container so the user can select a response option
                 m_responseContainer.gameObject.SetActive(true);
+
+                // Iterate through each response option and prepare its inline images
+                foreach (Transform child in m_responseContainer)
+                {
+                    TMP_Text text = child.GetComponentInChildren<TMP_Text>();
+                    PrepareInlineImages(ref text, s_inlineImageReplacementPostProcessingInfo);
+                }
+
+                // Highlight the first response button by default
                 m_responseContainer.GetChild(0).GetComponent<Button>().Highlight();
             }
             else
             {
-                // If there is no response, activate the continue button and highlight it
+                // If there are no responses, activate and highlight the continue button
                 m_continueButton.gameObject.SetActive(true);
                 m_continueButton.Highlight();
+            }
+
+            // Start a coroutine to refresh inline images after UI updates
+            StartCoroutine(DelayedRefreshInlineImages());
+        }
+
+        /// <summary>
+        /// Prepares and inserts inline images into the specified TMP_Text field by searching for special markers in the text.
+        /// If a list of image replacement info is provided, it creates and positions image GameObjects at the locations of the markers.
+        /// </summary>
+        /// <param name="textField">The TMP_Text field to process and insert inline images into.</param>
+        /// <param name="parsedText">The parsed text to search for image markers (used for positioning images).</param>
+        /// <param name="info">A list to store information about each inline image replacement; if null, only text formatting is performed.</param>
+        private static void PrepareInlineImages(ref TMP_Text textField, List<InlineImageReplacementPostProcessingInfo> info)
+        {
+            // Clear the static list of inline image replacement info and populate it with info from the DialogProcessor
+            s_inlineImageReplacementInfo.Clear();
+            DialogProcessor.Instance.GetInlineImageInfo(s_inlineImageReplacementInfo);
+
+            // Track whether any inline image markers were found and replaced in the text
+            bool foundAny = false;
+
+            // Iterate through each inline image replacement info to process inline images in the text
+            foreach (InlineImageReplacementInfo inlineInfo in s_inlineImageReplacementInfo)
+            {
+                string seeking = inlineInfo.textToReplace;
+                string before = "<color=#FFFFFF00>";
+                string after = "</color>";
+                
+                // Loop through the text to find all occurrences of the marker and wrap them in invisible color tags
+                for (int i = 0; i <= textField.text.Length - seeking.Length; i++)
+                {
+                    if (textField.text.Substring(i, seeking.Length) != seeking)
+                    {
+                        continue;
+                    }
+
+                    textField.text = textField.text[..i] + before + seeking + after + textField.text[(i + seeking.Length)..];
+                    i += before.Length + seeking.Length + after.Length;
+
+                    foundAny = true;
+                }
+
+                // If no image replacement info list is provided, exit early
+                if (info == null)
+                {
+                    continue;
+                }
+
+                // Force the text field to update its mesh so character positions are accurate
+                textField.ForceMeshUpdate();
+
+                string parsedText = textField.GetParsedText();
+
+                // Loop through the parsed text to find all occurrences of the marker and create inline image GameObjects for each
+                for (int i = 0; i <= parsedText.Length - seeking.Length; i++)
+                {
+                    // Check if the current substring matches the inline image marker; if not, skip to the next iteration
+                    if (parsedText.Substring(i, seeking.Length) != seeking)
+                    {
+                        continue;
+                    }
+
+                    // Create a new GameObject for the inline image and set its transform properties
+                    GameObject gameObject = new("Inline Image", typeof(RectTransform), typeof(Image));
+                    gameObject.transform.SetParent(textField.canvas.transform);
+                    gameObject.transform.localPosition = Vector3.zero;
+                    gameObject.transform.localEulerAngles = Vector3.zero;
+                    gameObject.transform.localScale = Vector3.one;
+
+                    // Configure the Image component and assign the sprite
+                    Image image = gameObject.GetComponent<Image>();
+                    image.enabled = false;
+                    image.sprite = inlineInfo.sprite;
+
+                    // Set up the RectTransform for the image
+                    RectTransform rt = image.rectTransform;
+                    rt.pivot = 0.5f * Vector2.one;
+                    rt.anchorMin = Vector2.zero;
+                    rt.anchorMax = Vector2.zero;
+                    rt.offsetMin = Vector2.zero;
+                    rt.offsetMax = Vector2.zero;
+                    rt.sizeDelta = inlineInfo.scale * image.sprite.rect.size;
+
+                    // Add the image replacement info to the list for later positioning and management
+                    info.Add(new()
+                    {
+                        text = seeking,
+                        startIndex = i,
+                        endIndex = i + (seeking.Length - 1),
+                        textField = textField,
+                        image = image,
+                    });
+                }
+            }
+
+            // Warn the user if inline images are being used on a Canvas that is not set to "Screen Space Camera" mode,
+            // since inline images are only supported in that render mode.
+            if (foundAny && textField.canvas.renderMode != RenderMode.ScreenSpaceCamera)
+            {
+                Debug.LogWarning($"{nameof(DialogUI)} inline images are only compatible with Canvas render mode \"Screen Space Camera.\"");
+            }
+        }
+
+        /// <summary>
+        /// Waits until the end of the current frame, then refreshes the positions and visibility of all inline images in the dialog text.
+        /// This ensures that the inline images are correctly aligned with the updated text mesh after UI changes.
+        /// </summary>
+        private static IEnumerator DelayedRefreshInlineImages()
+        {
+            yield return new WaitForEndOfFrame();
+            RefreshInlineImages(int.MaxValue);
+        }
+
+        /// <summary>
+        /// Updates the position and visibility of all inline images in the dialog text based on the currently revealed character index.
+        /// For each inline image marker, this method:
+        /// - Forces a mesh update on the associated text field to ensure character positions are current.
+        /// - Enables the image if its marker's start index is less than or equal to the currently showing character index.
+        /// - Calculates the world and viewport position of the marker in the text and positions the image accordingly.
+        /// - Maintains the image's size.
+        /// </summary>
+        /// <param name="currentlyShowingIndex">The index of the last character currently visible in the dialog text.</param>
+        private static void RefreshInlineImages(int currentlyShowingIndex)
+        {
+            for (int i = 0; i < s_inlineImageReplacementPostProcessingInfo.Count; i++)
+            {
+                InlineImageReplacementPostProcessingInfo info = s_inlineImageReplacementPostProcessingInfo[i];
+
+                // Ensure the text mesh is up to date for accurate character positions
+                info.textField.ForceMeshUpdate();
+
+                // Enable the image if its marker is within the revealed text range
+                info.image.enabled = info.startIndex <= currentlyShowingIndex;
+
+                // Calculate the center position of the inline image marker in the text
+                Vector3 bl = info.textField.textInfo.characterInfo[info.startIndex].bottomLeft;
+                Vector3 tr = info.textField.textInfo.characterInfo[info.endIndex].topRight;
+                Vector3 localPosition = Vector3.Lerp(bl, tr, 0.5f);
+                Vector3 worldPosition = info.textField.transform.TransformPoint(localPosition);
+                Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPosition);
+                Vector2 viewportPosition = Camera.main.ScreenToViewportPoint(screenPosition);
+                //Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldPosition, Camera.MonoOrStereoscopicEye.Mono);
+
+                // Set the image's RectTransform to match the calculated position and maintain its size
+                Vector2 sizeDelta = info.image.rectTransform.sizeDelta;
+                info.image.rectTransform.anchorMin = viewportPosition;
+                info.image.rectTransform.anchorMax = viewportPosition;
+                info.image.rectTransform.offsetMin = Vector2.zero;
+                info.image.rectTransform.offsetMax = Vector2.zero;
+                info.image.rectTransform.sizeDelta = sizeDelta;
+            }
+        }
+
+        /// <summary>
+        /// Destroys all inline images currently displayed in the dialog text and clears their tracking information.
+        /// </summary>
+        private static void DestroyInlineImages()
+        {
+            for (int i = s_inlineImageReplacementPostProcessingInfo.Count - 1; i >= 0; i--)
+            {
+                if (s_inlineImageReplacementPostProcessingInfo[i].image != null)
+                {
+                    Destroy(s_inlineImageReplacementPostProcessingInfo[i].image.gameObject);
+                }
+
+                s_inlineImageReplacementPostProcessingInfo.RemoveAt(i);
             }
         }
 
@@ -904,6 +1091,9 @@ namespace Yontalane.Dialog
         /// <param name="response">The response button that was clicked.</param>
         private void OnClickResponse(Button response)
         {
+            // Reset inline images
+            DestroyInlineImages();
+
             // If the stop blast after text flag is set, stop the blast audio source
             if (m_stopBlastAfterText)
             {
