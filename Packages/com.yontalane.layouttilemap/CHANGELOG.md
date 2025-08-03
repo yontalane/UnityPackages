@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.21] - 2025.08.03
+
+### Fixed
+
+- Editor code was including in runtime.
+
 ## [1.0.20] - 2025.07.25
 
 ### Change

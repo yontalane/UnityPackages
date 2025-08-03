@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -6,33 +7,6 @@ namespace Yontalane.LayoutTilemap
     [FilePath("ProjectSettings/LayoutTilemapSettings.asset", FilePathAttribute.Location.ProjectFolder)]
     public class LayoutTilemapSettings : ScriptableSingleton<LayoutTilemapSettings>
     {
-        [System.Serializable]
-        public struct MapEntityData
-        {
-            [Min(0.01f)]
-            public float scale;
-
-            public Color outerColor;
-
-            public Color innerColor;
-
-            [Min(0.01f)]
-            public float pointerLength;
-
-            [Min(0.01f)]
-            public float pointerScale;
-
-            [Range(1, 5)]
-            public int thickness;
-        }
-
-        [System.Serializable]
-        public struct NamedMapEntityData
-        {
-            public string name;
-            public MapEntityData data;
-        }
-
         public MapEntityData defaultData;
         public NamedMapEntityData[] specialCaseData;
 
@@ -69,3 +43,4 @@ namespace Yontalane.LayoutTilemap
         }
     }
 }
+#endif

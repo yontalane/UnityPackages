@@ -2,6 +2,33 @@ using UnityEngine;
 
 namespace Yontalane.LayoutTilemap
 {
+    [System.Serializable]
+    public struct MapEntityData
+    {
+        [Min(0.01f)]
+        public float scale;
+
+        public Color outerColor;
+
+        public Color innerColor;
+
+        [Min(0.01f)]
+        public float pointerLength;
+
+        [Min(0.01f)]
+        public float pointerScale;
+
+        [Range(1, 5)]
+        public int thickness;
+    }
+
+    [System.Serializable]
+    public struct NamedMapEntityData
+    {
+        public string name;
+        public MapEntityData data;
+    }
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Layout Tilemap/Map Entity")]
     [RequireComponent(typeof(MapProperties))]
@@ -20,9 +47,10 @@ namespace Yontalane.LayoutTilemap
             }
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            LayoutTilemapSettings.MapEntityData data = LayoutTilemapSettings.instance.GetData(name);
+            MapEntityData data = LayoutTilemapSettings.instance.GetData(name);
             float scale = data.scale;
             Color outerColor = data.outerColor;
             Color innerColor = data.innerColor;
@@ -66,5 +94,6 @@ namespace Yontalane.LayoutTilemap
                 Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
             }
         }
+#endif
     }
 }
