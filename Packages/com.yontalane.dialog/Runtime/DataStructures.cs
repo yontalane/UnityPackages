@@ -16,7 +16,7 @@ namespace Yontalane.Dialog
     /// Represents a key-value pair used for keyword replacement in dialog scripts.
     /// </summary>
     [Serializable]
-    internal class KeywordPair
+    public class KeywordPair
     {
         /// <summary>
         /// The keyword to be replaced in the dialog script.
@@ -29,6 +29,25 @@ namespace Yontalane.Dialog
         /// </summary>
         [Tooltip("The value to replace the keyword with in the dialog script.")]
         public string value = "";
+
+        /// <summary>
+        /// Construct a new key-value pair used for keyword replacement in dialog scripts.
+        /// </summary>
+        /// <param name="key">The keyword to be replaced in the dialog script.</param>
+        /// <param name="value">The value to replace the keyword with in the dialog script.</param>
+        public KeywordPair(string key, string value)
+        {
+            this.key = key;
+            this.value = value;
+        }
+
+        /// <summary>
+        /// Construct a new key-value pair used for keyword replacement in dialog scripts.
+        /// </summary>
+        public KeywordPair() : this(string.Empty, string.Empty)
+        {
+
+        }
     }
 
     /// <summary>
@@ -83,7 +102,7 @@ namespace Yontalane.Dialog
     /// Represents a set of color values for a specific speaker in the dialog.
     /// </summary>
     [Serializable]
-    internal struct ColorSet
+    public struct ColorSet
     {
         [Tooltip("The name of the speaker for this color set.")]
         public string speaker;
@@ -121,7 +140,7 @@ namespace Yontalane.Dialog
     /// <summary>
     /// Data for replacing text with an inline image.
     /// </summary>
-    internal struct InlineImageReplacementPostProcessingInfo
+    public struct InlineImageReplacementPostProcessingInfo
     {
         /// <summary>
         /// The text string that is being replaced.

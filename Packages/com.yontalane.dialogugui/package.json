@@ -1,14 +1,15 @@
 {
-  "name": "com.yontalane.dialog",
-  "version": "1.0.70",
-  "displayName": "Dialog",
+  "name": "com.yontalane.dialogugui",
+  "version": "1.0.0",
+  "displayName": "Dialog UGUI",
   "description": "A dialog system.",
   "unity": "6000.0",
   "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialog/Documentation~/index.md",
   "dependencies": {
+    "com.unity.ugui": "2.0.0",
     "com.yontalane.core": "1.0.37",
-    "com.yontalane.query": "1.0.16"
+    "com.yontalane.dialog": "1.0.70"
   },
   "keywords": [
     "dialog",
@@ -22,5 +23,12 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
+  "samples": [
+    {
+      "displayName": "Dialog Demo UGUI",
+      "description": "Contains a sample UGUI implementation of the dialog system.",
+      "path": "Samples~/DialogDemo"
+    }
+  ],
   "type": "library"
 }

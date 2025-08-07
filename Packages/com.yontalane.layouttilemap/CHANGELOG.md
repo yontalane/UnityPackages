@@ -8,7 +8,7 @@
 
 ## [1.0.20] - 2025.07.25
 
-### Change
+### Changed
 
 - Supporting Unity 6+.
 

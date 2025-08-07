@@ -57,6 +57,12 @@ namespace Yontalane.Dialog
         #endregion
 
         #region Serialized Fields
+        [Header("UI")]
+
+        [Tooltip("The UI.")]
+        [SerializeField]
+        private GameObject m_dialogUI;
+
         [Header("Callbacks")]
 
         [Tooltip("Callback when dialog begins.")]
@@ -193,6 +199,25 @@ namespace Yontalane.Dialog
 
             return changed;
         }
+
+        /// <summary>
+        /// Determines the speaker type based on the given speaker string.
+        /// </summary>
+        /// <param name="speaker">The speaker string to check.</param>
+        /// <returns>The speaker type based on the speaker string.</returns>
+        public static SpeakerType GetSpeakerType(string speaker)
+        {
+            if (speaker.Contains("player"))
+            {
+                return SpeakerType.Player;
+            }
+            else if (speaker.Contains("self"))
+            {
+                return SpeakerType.Self;
+            }
+
+            return SpeakerType.Other;
+        }
         #endregion
 
         #region Internal Methods
@@ -246,25 +271,6 @@ namespace Yontalane.Dialog
         /// </summary>
         /// <param name="dialogAgent">The DialogAgent to initiate the dialog with.</param>
         internal static void InitiateDialog(IDialogAgent dialogAgent) => InitiateDialog(dialogAgent, null);
-
-        /// <summary>
-        /// Determines the speaker type based on the given speaker string.
-        /// </summary>
-        /// <param name="speaker">The speaker string to check.</param>
-        /// <returns>The speaker type based on the speaker string.</returns>
-        internal static SpeakerType GetSpeakerType(string speaker)
-        {
-            if (speaker.Contains("player"))
-            {
-                return SpeakerType.Player;
-            }
-            else if (speaker.Contains("self"))
-            {
-                return SpeakerType.Self;
-            }
-
-            return SpeakerType.Other;
-        }
         #endregion
 
         #region Private Methods
@@ -604,7 +610,11 @@ namespace Yontalane.Dialog
             {
                 StartCoroutine(DelayedExit());
             }
-            DialogUI.Instance.Close();
+            if (m_dialogUI.TryGetComponent(out IDialogUI ui))
+            {
+                ui.Close();
+            }
+
             m_exitDialog?.Invoke();
             OnExitDialog?.Invoke();
             m_exitDialogCode?.Invoke();
@@ -725,7 +735,17 @@ namespace Yontalane.Dialog
             else
             {
                 m_nodeHistory.Add(m_nodeData.name);
-                DialogUI.Instance.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
+
+                if (m_dialogUI.TryGetComponent(out IDialogUI ui))
+                {
+                    ui.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
+                }
+                else
+                {
+                    Debug.LogError($"{nameof(DialogProcessor)} \"{name}\" is missing the required {nameof(IDialogUI)}.");
+                    return;
+                }
+
                 m_initiateLine?.Invoke(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
             }
         }

@@ -1,6 +1,6 @@
 # Dialog
 
-A dialog system. This incorporates branching dialog functionality and dialog display UI.
+A dialog system. This incorporates branching dialog functionality. Dialog display UI is handled through a separate package.
 
 ### Roadmap
 

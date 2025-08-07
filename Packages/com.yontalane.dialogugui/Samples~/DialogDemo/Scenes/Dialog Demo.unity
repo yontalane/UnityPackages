@@ -2308,6 +2308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d7198958f971480cac3fd0163dcf470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_dialogUI: {fileID: 1088614296}
   m_initiateDialog:
     m_PersistentCalls:
       m_Calls: []
@@ -2655,7 +2656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1088614298}
-  - component: {fileID: 1088614297}
+  - component: {fileID: 1088614299}
   m_Layer: 0
   m_Name: Dialog UI
   m_TagString: Untagged
@@ -2663,7 +2664,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &1088614297
+--- !u!4 &1088614298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088614296}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2085251287}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1088614299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2672,11 +2688,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1088614296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d32c312803aa4f5ab55bff1a3f411e3, type: 3}
+  m_Script: {fileID: 11500000, guid: e855032648d4241f5bf8e224ba5c4fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerColor: {r: 0.30980393, g: 0.70980394, b: 0.8117648, a: 1}
-  m_speakerColor: {r: 0.3254902, g: 0.8470589, b: 0.65882355, a: 1}
+  m_playerColor: {r: 0.30980393, g: 0.70980394, b: 0.8117647, a: 1}
+  m_speakerColor: {r: 0.3254902, g: 0.84705883, b: 0.65882355, a: 1}
   m_speakerColors: []
   m_fallbackSpeakerColor: {r: 1, g: 1, b: 1, a: 1}
   m_speakerBold: 0
@@ -2723,21 +2739,6 @@ MonoBehaviour:
   m_onDisplayLine:
     m_PersistentCalls:
       m_Calls: []
---- !u!4 &1088614298
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1088614296}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 2085251287}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1093816011
 GameObject:
   m_ObjectHideFlags: 0

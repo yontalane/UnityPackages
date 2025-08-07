@@ -1,10 +1,12 @@
 # Dialog
 
-A dialog system. This incorporates branching dialog functionality and dialog display UI.
+A dialog system. This incorporates branching dialog functionality; dialog display UI is handled through a separate package.
 
 ## Structure
 
 For the dialog system to work, you need two singletons in your scene: DialogProcessor and DialogUI. DialogProcessor manages the overall flow; it handles on-the-fly changes to dialog text, it manages branching dialog and stored variables, it manages player response input, and it provides callbacks to external functions depending on the state of your dialog tree. DialogUI handles the visual representation of the dialog: It works with an Animator to show and hide your text box, it plays sounds, it allows you to control whether letters type out in sequence or display all at once, et cetera.
+
+(As mentioned above, note that **dialog display UI is handloed through a separate package**.)
 
 You also need one or more DialogAgent objects. The DialogAgent initiates dialog, and it stores the dialog's text script, formatted as a DialogData object. If you're making an RPG and you can talk to various NPCs, each NPC might contain a DialogAgent component. Alternatively, you might have a singleton DialogAgent and switch its script on the fly.
 

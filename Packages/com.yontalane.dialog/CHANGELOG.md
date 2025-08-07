@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.70] - 2025.08.07
+
+### Changed
+
+- Moved display UI to a separate package
+
 ## [1.0.69] - 2025.07.30
 
 ### Added
