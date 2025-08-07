@@ -2,7 +2,7 @@
 
 A dialog input box. It displays a message and allows for any number of user response buttons that are generated on the fly. It is designed to work with controller as well as keyboard and mouse.
 
-**Note:** QueryUI relies on the Unity Animator component. The Animator handles opening and closing the window.
+**Note:** QueryUI is handled through a separate package.
 
 ### Variables
 

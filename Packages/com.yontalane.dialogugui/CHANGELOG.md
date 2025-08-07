@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.5] - 2025.08.07
+
+### Changed
+
+- Using query system that separates backend from display.
+
 ## [1.0.4] - 2025.08.07
 ## [1.0.3] - 2025.08.07
 ## [1.0.2] - 2025.08.07

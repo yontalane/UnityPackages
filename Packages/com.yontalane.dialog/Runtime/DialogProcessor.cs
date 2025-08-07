@@ -547,7 +547,7 @@ namespace Yontalane.Dialog
 
                 // Initialize the query UI with the description and responses, and set the OnQueryResponse callback
                 string description = !string.IsNullOrEmpty(queryData.description) ? queryData.description : string.Empty;
-                Query.QueryUI.InitiateWithDescription(ReplaceInlineText(queryData.text), ReplaceInlineText(description), responses, OnQueryResponse);
+                Query.QueryProcessor.InitiateWithDescription(ReplaceInlineText(queryData.text), ReplaceInlineText(description), responses, OnQueryResponse);
                 return true;
             }
 

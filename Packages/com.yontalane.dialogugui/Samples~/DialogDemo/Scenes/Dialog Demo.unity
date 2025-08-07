@@ -343,7 +343,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 28661806}
-  - component: {fileID: 28661805}
+  - component: {fileID: 28661808}
+  - component: {fileID: 28661807}
   m_Layer: 0
   m_Name: Query UI
   m_TagString: Untagged
@@ -351,27 +352,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &28661805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28661804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6096c5bc5202a47eca227000dd488001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_showType: 1
-  m_rootObject: {fileID: 0}
-  m_animator: {fileID: 1055781276}
-  m_text: {fileID: 11775226}
-  m_description: {fileID: 0}
-  m_responseContainer: {fileID: 1477817061}
-  m_buttonClick: {fileID: 8300000, guid: 0ec034b777fe1493e845bd0e4b9fae6a, type: 3}
-  m_primaryResponseButtonPrefab: {fileID: 0}
-  m_responseButtonPrefab: {fileID: 7420053337213988506, guid: 53e8619231ba7c247a16c7aa588f7bc4, type: 3}
 --- !u!4 &28661806
 Transform:
   m_ObjectHideFlags: 0
@@ -387,6 +367,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2085251287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &28661807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28661804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627450911fbaf4fb48e16db801fb1886, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_showType: 1
+  m_rootObject: {fileID: 0}
+  m_animator: {fileID: 1055781276}
+  m_text: {fileID: 11775226}
+  m_description: {fileID: 0}
+  m_responseContainer: {fileID: 1477817061}
+  m_buttonClick: {fileID: 8300000, guid: 0ec034b777fe1493e845bd0e4b9fae6a, type: 3}
+  m_primaryResponseButtonPrefab: {fileID: 0}
+  m_responseButtonPrefab: {fileID: 7420053337213988506, guid: 53e8619231ba7c247a16c7aa588f7bc4, type: 3}
+--- !u!114 &28661808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28661804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75947409738c34f23be8bf0b21e7c25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_queryUI: {fileID: 28661804}
 --- !u!1 &30695875
 GameObject:
   m_ObjectHideFlags: 0

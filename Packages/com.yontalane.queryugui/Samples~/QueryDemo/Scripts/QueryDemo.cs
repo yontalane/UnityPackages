@@ -1,19 +1,19 @@
 using Yontalane.Query;
+using Yontalane.QueryUGUI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Yontalane.Demos.Query
+namespace Yontalane.Demos.QueryUGUI
 {
     /// <summary>
     /// Demonstrates the use of the QueryUI system by initiating a query with random responses,
     /// handling the result, and updating the UI accordingly in the Query Demo scene.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(QueryUI))]
+    [AddComponentMenu("Yontalane/Demos/Query UGUI/Query Demo")]
+    [RequireComponent(typeof(QueryProcessor))]
     public sealed class QueryDemo : MonoBehaviour
     {
-        public QueryUI QueryUI { get; private set; } = null;
-
         [Tooltip("Text field for displaying the result of the query.")]
         [SerializeField]
         private Text m_resultText = null;
@@ -22,12 +22,10 @@ namespace Yontalane.Demos.Query
         [SerializeField]
         private Button m_goButton = null;
 
-        private void Start() => QueryUI = GetComponent<QueryUI>();
-
         /// <summary>
         /// Initiates a query with a random set of response options.
         /// - Generates between 2 and 4 random response strings.
-        /// - Passes the prompt and responses to the QueryUI system.
+        /// - Passes the prompt and responses to the Query system.
         /// </summary>
         public void InitiateQuery()
         {
@@ -41,7 +39,7 @@ namespace Yontalane.Demos.Query
             }
             
             // Initiate the query UI with the prompt and generated responses, specifying a callback for the result.
-            QueryUI.Initiate("Pick something.", responses, OnQueryGetResult);
+            QueryProcessor.Initiate("Pick something.", responses, OnQueryGetResult);
         }
 
         /// <summary>

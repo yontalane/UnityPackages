@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.17] - 2025.08.07
+
+### Change
+
+- Separating query UI into separate package.
+
 ## [1.0.16] - 2025.07.25
 
 ### Change

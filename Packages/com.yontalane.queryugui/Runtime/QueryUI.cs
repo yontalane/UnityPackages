@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Yontalane.Query;
 
-namespace Yontalane.Query
+namespace Yontalane.QueryUGUI
 {
     /// <summary>
     /// Handles the display and interaction logic for query dialogs, including showing prompts,
     /// managing response buttons, and invoking events when a query is loaded or a response is chosen.
     /// </summary>
-    [Obsolete("QueryUI has been moved to a separate package and will be removed from the Query package in a future update. Please replace this component in your project with the QueryUI component found in the QueryUGUI package.")]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Yontalane/Query/Query UI")]
+    [AddComponentMenu("Yontalane/Query UGUI/Query UI")]
     public sealed class QueryUI : Singleton<QueryUI>, IQueryUI
     {
         #region Delegates
@@ -105,7 +105,6 @@ namespace Yontalane.Query
             }
         }
 
-        [Obsolete("QueryUI has been moved to a separate package and will be removed from the Query package in a future update. Please replace this component in your project with the QueryUI component found in the QueryUGUI package.")]
         public void Initialize(string text, string description, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback)
         {
             m_callback = callback;

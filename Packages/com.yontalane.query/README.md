@@ -1,6 +1,6 @@
 # Query
 
-A dialog input box.
+A dialog input box. Query display UI is handled through a separate package.
 
 ### Roadmap
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.75] - 2025.08.07
+
+### Fixed
+
+- Dialog text displayed for one frame.
+
+### Changed
+
+- Using query system that separates backend from display.
+
 ## [1.0.74] - 2025.08.07
 
 ### Changed

@@ -1,13 +1,14 @@
 {
-  "name": "com.yontalane.query",
-  "version": "1.0.17",
-  "displayName": "Query",
+  "name": "com.yontalane.queryugui",
+  "version": "1.0.0",
+  "displayName": "Query UGUI",
   "description": "A dialog input box.",
   "unity": "6000.0",
   "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.query/Documentation~/index.md",
   "dependencies": {
     "com.yontalane.core": "1.0.37",
+    "com.yontalane.query": "1.0.17",
     "com.unity.inputsystem": "1.14.1"
   },
   "keywords": [
@@ -22,5 +23,12 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
+  "samples": [
+    {
+      "displayName": "Query Demo",
+      "description": "Contains a sample implementation of the query UI.",
+      "path": "Samples~/QueryDemo"
+    }
+  ],
   "type": "library"
 }

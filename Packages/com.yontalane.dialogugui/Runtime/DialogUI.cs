@@ -734,6 +734,7 @@ namespace Yontalane.DialogUGUI
             int inlineSpeakerTextParsedLength = inlineSpeakerTextParsed.Length;
 
             // Set the text field to the full dialog line (speaker + text) and force a mesh update to parse it
+            m_textField.maxVisibleCharacters = 0;
             m_textField.text = $"{inlineSpeakerText}{m_text}";
             yield return new WaitForEndOfFrame();
             PrepareInlineImages(ref m_textField, s_inlineImageReplacementPostProcessingInfo);
