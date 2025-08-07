@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.72] - 2025.08.07
+
+### Changed
+
+- This package's obsolete DialogUI implements the IDialogUI interface.
+
 ## [1.0.71] - 2025.08.07
 
 ### Changed

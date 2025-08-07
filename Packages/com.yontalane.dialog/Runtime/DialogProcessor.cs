@@ -275,6 +275,32 @@ namespace Yontalane.Dialog
 
         #region Private Methods
         /// <summary>
+        /// Attempts to retrieve the dialog UI component implementing <see cref="IDialogUI"/>.
+        /// Checks if the cached dialog UI object exists and contains the required component.
+        /// If not, tries to get the component from the current GameObject and caches it if found.
+        /// </summary>
+        /// <param name="ui">The found <see cref="IDialogUI"/> component, or null if not found.</param>
+        /// <returns>True if the dialog UI component was found; otherwise, false.</returns>
+        private bool TryGetDialogUI(out IDialogUI ui)
+        {
+            // Check if the cached dialog UI GameObject exists and contains the required IDialogUI component.
+            if (m_dialogUI != null && m_dialogUI.TryGetComponent(out ui))
+            {
+                return true;
+            }
+
+            // Attempt to get the IDialogUI component from the current GameObject and cache it if found.
+            if (TryGetComponent(out ui))
+            {
+                m_dialogUI = gameObject;
+                return true;
+            }
+
+            // Return false if the IDialogUI component could not be found.
+            return false;
+        }
+
+        /// <summary>
         /// Replaces the inline text in the given string with the appropriate keyword or function result.
         /// </summary>
         /// <param name="text">The string containing inline text to be replaced.</param>
@@ -610,7 +636,7 @@ namespace Yontalane.Dialog
             {
                 StartCoroutine(DelayedExit());
             }
-            if (m_dialogUI.TryGetComponent(out IDialogUI ui))
+            if (TryGetDialogUI(out IDialogUI ui))
             {
                 ui.Close();
             }
@@ -736,7 +762,7 @@ namespace Yontalane.Dialog
             {
                 m_nodeHistory.Add(m_nodeData.name);
 
-                if (m_dialogUI.TryGetComponent(out IDialogUI ui))
+                if (TryGetDialogUI(out IDialogUI ui))
                 {
                     ui.Initiate(m_nodeData.lines[m_lineIndex], AdvanceLine, ReplaceInlineText);
                 }
