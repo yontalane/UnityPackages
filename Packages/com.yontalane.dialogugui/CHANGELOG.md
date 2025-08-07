@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] - 2025.08.07
+
+### Changed
+
+* Requires latest version of Dialog package.
+
 ## [1.0.0] - 2025.08.07
 
 ### Added

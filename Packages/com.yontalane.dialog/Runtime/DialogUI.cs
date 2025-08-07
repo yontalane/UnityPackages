@@ -11,6 +11,7 @@ namespace Yontalane.Dialog
     /// <summary>
     /// Main UI controller for displaying and managing dialog interactions, including speaker display, text typing, responses, and associated UI elements.
     /// </summary>
+    [Obsolete("DialogUI has been moved to a separate package and will be removed from the Dialog package in a future update. Please replace thie component in your project with the DialogUI component found in the DialogUGUI package.")]
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
     public sealed class DialogUI : Singleton<DialogUI>
@@ -295,23 +296,11 @@ namespace Yontalane.Dialog
 
         #region Public Methods
         /// <summary>
-        /// Closes the dialog UI.
-        /// </summary>
-        public void Close()
-        {
-            if (m_animator != null)
-            {
-                m_animator.SetBool(ANIMATION_PARAMETER, false);
-            }
-
-            DestroyInlineImages();
-        }
-
-        /// <summary>
         /// Initializes the dialog UI with the given line data.
         /// </summary>
         /// <param name="line">The line data to initialize the dialog UI with.</param>
         /// <param name="lineCompleteCallback">The callback to invoke when the line is complete.</param>
+        [Obsolete("DialogUI has been moved to a separate package and will be removed from the Dialog package in a future update. Please replace thie component in your project with the DialogUI component found in the DialogUGUI package.")]
         public void Initiate(LineData line, Action<string> lineCompleteCallback, Func<string, string> replaceInlineText)
         {
             s_inlineImageReplacementPostProcessingInfo.Clear();
@@ -541,6 +530,19 @@ namespace Yontalane.Dialog
             {
                 EndLine();
             }
+        }
+
+        /// <summary>
+        /// Closes the dialog UI.
+        /// </summary>
+        public void Close()
+        {
+            if (m_animator != null)
+            {
+                m_animator.SetBool(ANIMATION_PARAMETER, false);
+            }
+
+            DestroyInlineImages();
         }
         #endregion
 

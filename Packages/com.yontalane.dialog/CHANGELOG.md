@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.71] - 2025.08.07
+
+### Changed
+
+- Marked this package's DialogUI class as obsolete; transitioning to the DialogUGUI package.
+
 ## [1.0.70] - 2025.08.07
 
 ### Changed
