@@ -41,19 +41,39 @@ namespace Yontalane.Dialog
         /// Get all keys as a list of strings.
         /// </summary>
         /// <param name="keys">The string list to populate with keys.</param>
-        public static void GetAllKeys(ref List<string> keys)
+        public static void GetAllKeys(List<string> keys)
         {
             if (keys == null)
             {
-                Debug.LogWarning($"{nameof(GetAllKeys)} requires a non-null parameter.");
+                Debug.LogWarning($"{nameof(GetAllKeys)} requires a non-null list parameter.");
                 return;
             }
 
             keys.Clear();
 
-            foreach(DataStorageVar var in Vars)
+            foreach (DataStorageVar var in Vars)
             {
                 keys.Add(var.key);
+            }
+        }
+
+        /// <summary>
+        /// Get all pairs as a dictionary.
+        /// </summary>
+        /// <param name="pairs">The dictionary to populate with pairs.</param>
+        public static void GetAllKeyValuePairs(Dictionary<string, string> pairs)
+        {
+            if (pairs == null)
+            {
+                Debug.LogWarning($"{nameof(GetAllKeys)} requires a non-null dictionary parameter.");
+                return;
+            }
+
+            pairs.Clear();
+
+            foreach (DataStorageVar var in Vars)
+            {
+                pairs.Add(var.key, var.value);
             }
         }
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.74] - 2025.08.07
+
+### Changed
+
+- DataStorage does not seek list by ref.
+
+### Added
+
+- DataStorage can return pairs as dictionary.
+
 ## [1.0.73] - 2025.08.07
 
 ### Added
