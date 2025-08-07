@@ -28,9 +28,34 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// Gets the number of elements contained in the storage list.
+        /// </summary>
+        public static int Count => Vars.Count;
+
+        /// <summary>
         /// A static dictionary that the DialogProcessor can use to keep track of the dialog state.
         /// </summary>
         private static List<DataStorageVar> Vars { get; set; } = new();
+
+        /// <summary>
+        /// Get all keys as a list of strings.
+        /// </summary>
+        /// <param name="keys">The string list to populate with keys.</param>
+        public static void GetAllKeys(ref List<string> keys)
+        {
+            if (keys == null)
+            {
+                Debug.LogWarning($"{nameof(GetAllKeys)} requires a non-null parameter.");
+                return;
+            }
+
+            keys.Clear();
+
+            foreach(DataStorageVar var in Vars)
+            {
+                keys.Add(var.key);
+            }
+        }
 
         /// <summary>
         /// Adds a DataStorageVar to the storage list.
@@ -132,6 +157,11 @@ namespace Yontalane.Dialog
             key = key,
             value = value,
         });
+
+        /// <summary>
+        /// Removes all elements from the storage list.
+        /// </summary>
+        public static void Clear() => Vars.Clear();
 
         #region Import/Export
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.73] - 2025.08.07
+
+### Added
+
+- Added back functionality to DataStorage class.
+
 ## [1.0.72] - 2025.08.07
 
 ### Changed
