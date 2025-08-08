@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.18] - 2025.08.08
+
+### Change
+
+- OnLoadedUI delegate now generic across different types of UI.
+
 ## [1.0.17] - 2025.08.07
 
 ### Change

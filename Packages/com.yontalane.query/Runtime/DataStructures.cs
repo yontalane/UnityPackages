@@ -43,4 +43,10 @@ namespace Yontalane.Query
         Animator = 1,
         SetActive = 2,
     }
+
+    /// <summary>
+    /// Delegate for handling events related to the QueryUI, such as when a query UI is loaded.
+    /// </summary>
+    /// <param name="queryUI">The QueryUI instance involved in the event.</param>
+    public delegate void QueryUIHandler(IQueryUI queryUI);
 }

@@ -18,12 +18,6 @@ namespace Yontalane.Query
     {
         #region Delegates
         /// <summary>
-        /// Delegate for handling events related to the QueryUI, such as when a query UI is loaded.
-        /// </summary>
-        /// <param name="queryUI">The QueryUI instance involved in the event.</param>
-        public delegate void QueryUIHandler(QueryUI queryUI);
-
-        /// <summary>
         /// Event triggered when a QueryUI is loaded and ready.
         /// </summary>
         public static QueryUIHandler OnQueryUILoaded = null;

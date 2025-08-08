@@ -213,7 +213,7 @@
       "source": "embedded",
       "dependencies": {
         "com.yontalane.core": "1.0.37",
-        "com.yontalane.query": "1.0.17",
+        "com.yontalane.query": "1.0.18",
         "com.unity.inputsystem": "1.14.1"
       }
     },
