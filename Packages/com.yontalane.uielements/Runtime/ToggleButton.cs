@@ -3,58 +3,53 @@ using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
 {
-    public class ToggleButton : Button
+    /// <summary>
+    /// A toggleable button UI element that extends <see cref="IconButton"/>, allowing users to switch between checked and unchecked states.
+    /// </summary>
+    [UxmlElement]
+    public partial class ToggleButton : IconButton
     {
-        #region Constants
-        private const string STYLESHEET_RESOURCE = "ToggleButton";
+        private const string STYLESHEET_RESOURCE = "YontalaneToggleButton";
         public const string CHECKED_STYLE_CLASS = "checked";
-        #endregion
 
-        #region UXML Methods
-        public new class UxmlFactory : UxmlFactory<ToggleButton, UxmlTraits> { }
-
-        public new class UxmlTraits : VisualElement.UxmlTraits
-        {
-            private readonly UxmlStringAttributeDescription m_bindingPath = new() { name = "binding-path", defaultValue = string.Empty };
-            private readonly UxmlBoolAttributeDescription m_value = new() { name = "value", defaultValue = false };
-            private readonly UxmlStringAttributeDescription m_text = new() { name = "text", defaultValue = string.Empty };
-            private readonly UxmlStringAttributeDescription m_icon = new() { name = "icon", defaultValue = string.Empty };
-
-            public override void Init(VisualElement visualElement, IUxmlAttributes attributes, CreationContext context)
-            {
-                base.Init(visualElement, attributes, context);
-                ToggleButton element = visualElement as ToggleButton;
-                element.bindingPath = m_bindingPath.GetValueFromBag(attributes, context);
-                element.value = m_value.GetValueFromBag(attributes, context);
-                element.text = m_text.GetValueFromBag(attributes, context);
-                element.Icon = m_icon.GetValueFromBag(attributes, context);
-            }
-        }
-        #endregion
-
+        /// <summary>
+        /// Represents the data for a change event on a <see cref="ToggleButton"/>, 
+        /// including the previous value, the new value, and the button instance that triggered the event.
+        /// </summary>
         public struct ToggleButtonChangeEvent
         {
+            /// <summary>
+            /// The value of the toggle before the change occurred.
+            /// </summary>
             public bool oldValue;
+
+            /// <summary>
+            /// The value of the toggle after the change occurred.
+            /// </summary>
             public bool newValue;
+
+            /// <summary>
+            /// The <see cref="ToggleButton"/> that triggered the change event.
+            /// </summary>
             public ToggleButton target;
         }
 
         public delegate void ToggleButtonChangeEventHandler(ToggleButtonChangeEvent e);
+        /// <summary>
+        /// Event invoked when the value of the toggle button changes.
+        /// </summary>
         public ToggleButtonChangeEventHandler OnChange = null;
 
-        #region Private Variables
         private bool m_value;
-        private string m_iconResource;
-        private readonly VisualElement m_icon;
-        private Label m_label;
-        private string m_labelValue;
-        #endregion
 
-        #region Accessors
-        public bool value
+        /// <summary>
+        /// Gets or sets the current checked state of the toggle button.
+        /// Setting this property updates the visual state and triggers the <see cref="OnChange"/> event.
+        /// </summary>
+        [UxmlAttribute]
+        public bool Value
         {
             get => m_value;
-
             set
             {
                 bool oldValue = m_value;
@@ -68,79 +63,25 @@ namespace Yontalane.UIElements
             }
         }
 
-        public string Icon
-        {
-            get => m_iconResource;
-
-            set
-            {
-                m_iconResource = value;
-                Sprite sprite = Resources.Load<Sprite>(m_iconResource);
-                m_icon.style.backgroundImage = new StyleBackground(sprite);
-                if (sprite != null)
-                {
-                    AddToClassList("with-image");
-                }
-                else
-                {
-                    RemoveFromClassList("with-image");
-                }
-            }
-        }
-
-        public new string text
-        {
-            get => m_labelValue;
-
-            set
-            {
-                base.text = string.Empty;
-                m_labelValue = value;
-                m_label.text = value;
-                if (!string.IsNullOrEmpty(value))
-                {
-                    AddToClassList("with-text");
-                }
-                else
-                {
-                    RemoveFromClassList("with-text");
-                }
-            }
-        }
-        #endregion
-
-        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ToggleButton"/> class,
+        /// setting up the toggle button's style, click behavior, and stylesheet.
+        /// </summary>
         public ToggleButton() : base()
         {
             AddToClassList("yontalane-toggle-button");
-
-            base.text = string.Empty;
-
-            m_icon = new()
-            {
-                name = "icon",
-                focusable = false,
-                pickingMode = PickingMode.Ignore
-            };
-            Add(m_icon);
-
-            m_label = new()
-            {
-                name = "label",
-                focusable = false,
-                pickingMode = PickingMode.Ignore
-            };
-            Add(m_label);
-            
             clicked += () =>
             {
-                value = !value;
+                Value = !Value;
             };
-            
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
         }
-        #endregion
 
+        /// <summary>
+        /// Sets the value of the toggle button without invoking the <see cref="OnChange"/> event.
+        /// Updates the visual state to reflect the new value.
+        /// </summary>
+        /// <param name="value">The new value to set for the toggle button.</param>
         public void SetValueWithoutNotify(bool value)
         {
             m_value = value;

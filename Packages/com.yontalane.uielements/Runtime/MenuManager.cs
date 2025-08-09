@@ -7,22 +7,46 @@ using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
 {
+    /// <summary>
+    /// Abstract base class for managing UI menus in a Unity application.
+    /// Handles menu navigation, input actions, and menu state management.
+    /// </summary>
     [DisallowMultipleComponent]
     public abstract class MenuManager : MonoBehaviour
     {
         #region Structs
         [System.Serializable]
+        /// <summary>
+        /// Represents the input configuration for menu controls, including input actions and button mappings.
+        /// </summary>
         public struct ControlInput
         {
 #if UNITY_EDITOR
 #pragma warning disable IDE0079
+            /// <summary>
+            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
+            /// </summary>
             public bool editorExpanded;
 #pragma warning restore IDE0079
 #endif
-
+            /// <summary>
+            /// The InputActionAsset containing all input actions for menu navigation.
+            /// </summary>
             public InputActionAsset actions;
+
+            /// <summary>
+            /// The action name or path for navigating to the previous tab.
+            /// </summary>
             public string tabLeft;
+
+            /// <summary>
+            /// The action name or path for navigating to the next tab.
+            /// </summary>
             public string tabRight;
+
+            /// <summary>
+            /// An array of action names or paths for menu button actions (e.g., submit, cancel).
+            /// </summary>
             public string[] buttons;
         }
         #endregion
@@ -40,19 +64,33 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Serialized Fields
+        [Tooltip("The global menu instance that manages global menu items and actions.")]
         [SerializeField]
         private GlobalMenu m_globalMenu;
 
+        [Tooltip("The collection of menus managed by this MenuManager, including subordinates and menu definitions.")]
         [SerializeField]
         private MenuCollection m_menus;
 
+        [Tooltip("The input configuration for menu navigation and button actions.")]
         [SerializeField]
         private ControlInput m_input;
         #endregion
 
         #region Accessors
+        /// <summary>
+        /// Gets the UIDocument associated with this MenuManager.
+        /// </summary>
         public UIDocument Document => m_document;
+
+        /// <summary>
+        /// Gets the root VisualElement of the associated UIDocument.
+        /// </summary>
         public VisualElement Root => Document.rootVisualElement;
+
+        /// <summary>
+        /// Gets the InputActionAsset used for menu navigation and actions.
+        /// </summary>
         public InputActionAsset InputActions => m_input.actions;
         #endregion
 
@@ -71,19 +109,24 @@ namespace Yontalane.UIElements
 
         protected virtual void Awake()
         {
+            // Find and assign the UIDocument component in the scene. Log an error if not found.
             m_document = FindAnyObjectByType<UIDocument>();
             if (m_document == null)
             {
                 Logger.LogError($"{GetType().Name} could not find the UIDocument.");
             }
 
+            // Validate subordinate menu managers and their relationships.
             for (int i = 0; i < m_menus.subordinates.Length; i++)
             {
+                // Check for null or self-reference in subordinates.
                 if (m_menus.subordinates[i] == null || m_menus.subordinates[i] == this)
                 {
                     Logger.LogError($"{GetType().Name} is not properly constructed.");
                     return;
                 }
+
+                // Ensure no circular subordinate relationships.
                 foreach (MenuManager innerSubordinate in m_menus.subordinates[i].m_menus.subordinates)
                 {
                     if (innerSubordinate == this)
@@ -92,20 +135,25 @@ namespace Yontalane.UIElements
                         return;
                     }
                 }
+
+                // Validate menu items and assign dominant reference.
                 foreach (Menu menu in m_menus.menus)
                 {
                     foreach (MenuItem menuItem in menu.items)
                     {
+                        // Check for valid subordinate menu item targets.
                         if (menuItem.type == MenuItemType.Subordinate && (menuItem.targetSubordinate < 0 || menuItem.targetSubordinate >= m_menus.subordinates.Length))
                         {
                             Logger.LogError($"{GetType().Name} is not properly constructed.");
                             return;
                         }
                     }
+                    // Assign this MenuManager as the dominant for the subordinate.
                     m_menus.subordinates[i].m_dominant = this;
                 }
             }
 
+            // Register click handlers for the global menu and all managed menus.
             RegisterClick(m_globalMenu.menu);
             foreach (Menu menu in m_menus.menus)
             {
@@ -215,8 +263,8 @@ namespace Yontalane.UIElements
                     OnCancelInternal(menu, item.name, out bool blockEvent);
                     if (blockEvent)
                     {
-                        e.PreventDefault();
                         e.StopPropagation();
+                        item.focusController.IgnoreEvent(e);
                     }
                 });
                 item.RegisterCallback((NavigationMoveEvent e) =>
@@ -226,8 +274,8 @@ namespace Yontalane.UIElements
                         OnSideNavigationInternal(menu, item.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
                         if (blockEvent)
                         {
-                            e.PreventDefault();
                             e.StopPropagation();
+                            item.focusController.IgnoreEvent(e);
                         }
                     }
                 });
@@ -255,8 +303,8 @@ namespace Yontalane.UIElements
                 OnCancelInternal(menu, buttonOrToggle.name, out bool blockEvent);
                 if (blockEvent)
                 {
-                    e.PreventDefault();
                     e.StopPropagation();
+                    buttonOrToggle.focusController.IgnoreEvent(e);
                 }
             });
             buttonOrToggle.RegisterCallback((NavigationMoveEvent e) =>
@@ -266,8 +314,8 @@ namespace Yontalane.UIElements
                     OnSideNavigationInternal(menu, buttonOrToggle.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
                     if (blockEvent)
                     {
-                        e.PreventDefault();
                         e.StopPropagation();
+                        buttonOrToggle.focusController.IgnoreEvent(e);
                     }
                 }
             });
@@ -306,6 +354,12 @@ namespace Yontalane.UIElements
             OnClick(menu.name, item);
         }
 
+        /// <summary>
+        /// Called when a menu item is clicked.
+        /// Implement this method in a derived class to define custom behavior when a user selects a menu item.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the clicked item.</param>
+        /// <param name="item">The name of the item that was clicked.</param>
         protected abstract void OnClick(string menu, string item);
 
         private void OnCancelInternal(Menu menu, string item, out bool blockEvent)
@@ -335,6 +389,13 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Called when a cancel event occurs within a menu.
+        /// Override this method to implement custom behavior when the user cancels or backs out of a menu or menu item.
+        /// </summary>
+        /// <param name="menu">The name of the menu where the cancel event occurred.</param>
+        /// <param name="item">The name of the item within the menu that triggered the cancel event.</param>
+        /// <param name="blockEvent">Set to true to block further processing of the cancel event; otherwise, false.</param>
         protected virtual void OnCancel(string menu, string item, out bool blockEvent)
         {
             blockEvent = false;
@@ -346,6 +407,14 @@ namespace Yontalane.UIElements
             blockEvent = blockEvent || menu.blockSideNavigation;
         }
 
+        /// <summary>
+        /// Called when a side navigation (e.g., left/right tab or arrow) event occurs within a menu.
+        /// Override this method to handle custom side navigation behavior for specific menus or items.
+        /// </summary>
+        /// <param name="menu">The name of the menu where the navigation event occurred.</param>
+        /// <param name="item">The name of the item within the menu that is currently selected or focused.</param>
+        /// <param name="isRight">True if the navigation is to the right; false if to the left.</param>
+        /// <param name="blockEvent">Set to true to block further processing of the navigation event; otherwise, false.</param>
         protected virtual void OnSideNavigation(string menu, string item, bool isRight, out bool blockEvent)
         {
             blockEvent = false;
@@ -353,6 +422,13 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Display Menus
+        /// <summary>
+        /// Retrieves the currently active menu, its root VisualElement, and the currently focused VisualElement within that menu.
+        /// Also records the name of the focused element in the menu's focusItem property.
+        /// </summary>
+        /// <param name="menu">Outputs the active Menu object, or default if none is active.</param>
+        /// <param name="root">Outputs the root VisualElement of the active menu, or null if none is active.</param>
+        /// <param name="element">Outputs the currently focused VisualElement within the active menu, or null if none is focused.</param>
         private void GetActiveMenuAndRecordCurrentFocus(out Menu menu, out VisualElement root, out VisualElement element)
         {
             int activeMenuIndex = IndexOfActiveMenu();
@@ -383,6 +459,11 @@ namespace Yontalane.UIElements
             m_menus.menus[activeMenuIndex].focusItem = element.name;
         }
 
+        /// <summary>
+        /// Sets the currently active menu by its index in the menus array.
+        /// If the index is valid, activates the corresponding menu; otherwise, hides all menus.
+        /// </summary>
+        /// <param name="menu">The index of the menu to activate.</param>
         private void SetMenu(int menu)
         {
             if (menu >= 0 && menu < m_menus.menus.Length)
@@ -395,6 +476,10 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Sets the currently active menu by name, manages menu visibility, focus, and global menu state.
+        /// </summary>
+        /// <param name="menu">The name of the menu to activate.</param>
         protected void SetMenu(string menu)
         {
             bool sourceIsGlobal = m_sourceIsGlobal;
@@ -460,6 +545,11 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Called when a menu is displayed. Override this method in a derived class to perform custom actions
+        /// (such as updating UI elements, playing sounds, or logging) whenever a menu becomes visible.
+        /// </summary>
+        /// <param name="menu">The menu that is being displayed.</param>
         protected virtual void OnDisplayMenu(Menu menu)
         {
         }
@@ -482,7 +572,7 @@ namespace Yontalane.UIElements
                 {
                     continue;
                 }
-                toggle.value = m_globalMenu.menu.items[i].targetMenu == menuName && m_globalMenu.menu.items[i].type == type;
+                toggle.Value = m_globalMenu.menu.items[i].targetMenu == menuName && m_globalMenu.menu.items[i].type == type;
             }
         }
 
@@ -521,6 +611,11 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Hides all menus managed by this MenuManager by setting their display style to None.
+        /// Optionally hides the global menu as well.
+        /// </summary>
+        /// <param name="includingGlobalMenu">If true, also hides the global menu; otherwise, only hides regular menus.</param>
         protected void HideAllMenus(bool includingGlobalMenu = true)
         {
             GetActiveMenuAndRecordCurrentFocus(out _, out _, out _);
@@ -538,11 +633,22 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Get Menu
+        /// <summary>
+        /// Returns the array of menus managed by this MenuManager.
+        /// </summary>
         public Menu[] GetMenus()
         {
             return m_menus.menus;
         }
 
+        /// <summary>
+        /// Attempts to retrieve a <see cref="Menu"/> by its name, along with its root <see cref="VisualElement"/> and container <see cref="VisualElement"/>.
+        /// </summary>
+        /// <param name="menuName">The name of the menu to retrieve. If null or empty, the first menu in the collection is used.</param>
+        /// <param name="menu">When this method returns, contains the <see cref="Menu"/> if found; otherwise, the default value.</param>
+        /// <param name="root">When this method returns, contains the root <see cref="VisualElement"/> of the menu if found; otherwise, null.</param>
+        /// <param name="container">When this method returns, contains the container <see cref="VisualElement"/> for addable items if specified; otherwise, the root element or null.</param>
+        /// <returns>True if the menu is found; otherwise, false.</returns>
         protected bool TryGetMenu(string menuName, out Menu menu, out VisualElement root, out VisualElement container)
         {
             menu = default;
@@ -580,21 +686,45 @@ namespace Yontalane.UIElements
             return false;
         }
 
+        /// <summary>
+        /// Attempts to retrieve a <see cref="Menu"/> by name.
+        /// </summary>
+        /// <param name="name">The name of the menu to retrieve.</param>
+        /// <param name="menu">When this method returns, contains the <see cref="Menu"/> if found; otherwise, the default value.</param>
+        /// <returns>True if the menu is found; otherwise, false.</returns>
         public bool TryGetMenu(string name, out Menu menu)
         {
             return TryGetMenu(name, out menu, out _, out _);
         }
 
+        /// <summary>
+        /// Attempts to retrieve the root <see cref="VisualElement"/> of a menu by name.
+        /// </summary>
+        /// <param name="name">The name of the menu to retrieve.</param>
+        /// <param name="menu">When this method returns, contains the root <see cref="VisualElement"/> of the menu if found; otherwise, null.</param>
+        /// <returns>True if the menu is found; otherwise, false.</returns>
         public bool TryGetMenu(string name, out VisualElement menu)
         {
             return TryGetMenu(name, out _, out menu, out _);
         }
 
+        /// <summary>
+        /// Attempts to retrieve the container <see cref="VisualElement"/> for addable elements in a menu by name.
+        /// </summary>
+        /// <param name="name">The name of the menu to retrieve the container from.</param>
+        /// <param name="container">When this method returns, contains the container <see cref="VisualElement"/> if found; otherwise, null.</param>
+        /// <returns>True if the container is found; otherwise, false.</returns>
         public bool TryGetContainer(string name, out VisualElement container)
         {
             return TryGetMenu(name, out _, out _, out container);
         }
 
+        /// <summary>
+        /// Attempts to retrieve the currently active menu and its root VisualElement.
+        /// </summary>
+        /// <param name="menu">When this method returns, contains the active <see cref="Menu"/>, if found; otherwise, the default value.</param>
+        /// <param name="root">When this method returns, contains the root <see cref="VisualElement"/> of the active menu, if found; otherwise, null.</param>
+        /// <returns>True if an active menu is found; otherwise, false.</returns>
         public bool TryGetActiveMenu(out Menu menu, out VisualElement root)
         {
             int index = IndexOfActiveMenu();
@@ -612,6 +742,9 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Returns the index of the currently active menu in the menus array.
+        /// </summary>
         public int IndexOfActiveMenu()
         {
             VisualElement root;
@@ -630,6 +763,12 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Adjust Elements
+        /// <summary>
+        /// Sets the enabled state of a UI element with the specified name in the specified menu.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the UI element.</param>
+        /// <param name="item">The name of the UI element to enable or disable.</param>
+        /// <param name="value">True to enable the element, false to disable it.</param>
         public void SetEnabled(string menu, string item, bool value)
         {
             if (!TryGetMenu(menu, out VisualElement root))
@@ -647,6 +786,11 @@ namespace Yontalane.UIElements
             element.SetEnabled(value);
         }
 
+        /// <summary>
+        /// Sets the enabled state of a UI element with the specified name in the currently active menu.
+        /// </summary>
+        /// <param name="item">The name of the UI element to enable or disable.</param>
+        /// <param name="value">True to enable the element, false to disable it.</param>
         public void SetEnabled(string item, bool value)
         {
             VisualElement element = Root.Q<VisualElement>(item);
@@ -659,6 +803,12 @@ namespace Yontalane.UIElements
             element.SetEnabled(value);
         }
 
+        /// <summary>
+        /// Adds a CSS class to a UI element with the specified name within a given menu.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the UI element.</param>
+        /// <param name="item">The name of the UI element to update.</param>
+        /// <param name="className">The CSS class name to add to the element.</param>
         public void AddClass(string menu, string item, string className)
         {
             if (!TryGetMenu(menu, out VisualElement root))
@@ -676,6 +826,12 @@ namespace Yontalane.UIElements
             element.AddToClassList(className);
         }
 
+        /// <summary>
+        /// Removes a CSS class from a UI element with the specified name within a given menu.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the UI element.</param>
+        /// <param name="item">The name of the UI element to update.</param>
+        /// <param name="className">The CSS class name to remove from the element.</param>
         public void RemoveClass(string menu, string item, string className)
         {
             if (!TryGetMenu(menu, out VisualElement root))
@@ -693,6 +849,12 @@ namespace Yontalane.UIElements
             element.RemoveFromClassList(className);
         }
 
+        /// <summary>
+        /// Sets the text of a UI element with the specified name within a given menu.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the UI element.</param>
+        /// <param name="item">The name of the UI element to update.</param>
+        /// <param name="value">The new text value to set.</param>
         public void SetText(string menu, string item, string value)
         {
             if (!TryGetMenu(menu, out VisualElement root))
@@ -710,6 +872,11 @@ namespace Yontalane.UIElements
             element.text = value;
         }
 
+        /// <summary>
+        /// Sets the text of a UI element with the specified name in the root visual element.
+        /// </summary>
+        /// <param name="item">The name of the UI element to update.</param>
+        /// <param name="value">The new text value to set.</param>
         public void SetText(string item, string value)
         {
             TextElement element = Root.Q<TextElement>(item);
@@ -722,6 +889,10 @@ namespace Yontalane.UIElements
             element.text = value;
         }
 
+        /// <summary>
+        /// Sets keyboard focus to the specified UI element within the currently active menu, if possible.
+        /// </summary>
+        /// <param name="item">The name of the UI element to focus.</param>
         public void SetFocus(string item)
         {
             if (!TryGetActiveMenu(out _, out VisualElement root))
@@ -746,6 +917,10 @@ namespace Yontalane.UIElements
         #endregion
 
         #region Manage Addables
+        /// <summary>
+        /// Removes all child elements from the specified menu's container, effectively clearing its contents.
+        /// </summary>
+        /// <param name="menu">The name of the menu to clear.</param>
         public void Clear(string menu)
         {
             if (!TryGetContainer(menu, out VisualElement container))
@@ -763,11 +938,24 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Adds an addable UI item to the specified menu using the provided data.
+        /// This method appends the item to the end of the menu's container.
+        /// </summary>
+        /// <param name="menu">The name of the menu to add the item to.</param>
+        /// <param name="data">The data describing the addable item, including template, name, label, and text.</param>
         public void Add(string menu, AddableItemData data)
         {
             Insert(menu, -1, data);
         }
 
+        /// <summary>
+        /// Inserts an addable UI item into the specified menu at the given index using the provided data.
+        /// Handles template instantiation, element naming, and text assignment for the new UI element.
+        /// </summary>
+        /// <param name="menu">The name of the menu to insert the item into.</param>
+        /// <param name="index">The index at which to insert the item. Use -1 to append to the end.</param>
+        /// <param name="data">The data describing the addable item, including template, name, label, and text.</param>
         public void Insert(string menu, int index, AddableItemData data)
         {
             if (!TryGetMenu(menu, out Menu menuObject, out _, out VisualElement container))
@@ -901,6 +1089,11 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Adds a range of UI elements to the specified menu using the provided list of <see cref="AddableItemData"/>.
+        /// </summary>
+        /// <param name="menu">The name of the menu to which the items will be added.</param>
+        /// <param name="datas">A read-only list of <see cref="AddableItemData"/> representing the items to add.</param>
         public void AddRange(string menu, IReadOnlyList<AddableItemData> datas)
         {
             foreach (AddableItemData data in datas)
@@ -909,6 +1102,11 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Removes a UI element with the specified name from the given menu's container.
+        /// </summary>
+        /// <param name="menu">The name of the menu containing the item.</param>
+        /// <param name="item">The name of the item to remove.</param>
         public void Remove(string menu, string item)
         {
             if (!TryGetContainer(menu, out VisualElement container))

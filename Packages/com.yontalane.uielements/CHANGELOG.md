@@ -1,8 +1,23 @@
 # Changelog
 
+## [1.0.31] - 2025.08.09
+
+### Fixed
+
+- Uxml attributes written with Unity 6 syntax.
+
+### Added
+
+- Selectable button.
+- Icon button.
+
+### Changed
+
+- Toggle button inherits from icon button, inherits from selectable button.
+
 ## [1.0.30] - 2025.07.25
 
-### Change
+### Changed
 
 - Supporting Unity 6+.
 

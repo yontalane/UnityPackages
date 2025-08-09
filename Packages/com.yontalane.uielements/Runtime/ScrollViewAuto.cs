@@ -5,34 +5,35 @@ using UnityEngine.UIElements;
 
 namespace Yontalane.UIElements
 {
-    public class ScrollViewAuto : ScrollView
+    /// <summary>
+    /// A custom ScrollView that automatically registers its child elements for navigation and interaction.
+    /// </summary>
+    [UxmlElement]
+    public partial class ScrollViewAuto : ScrollView
     {
-        #region UXML Methods
-        public new class UxmlFactory : UxmlFactory<ScrollViewAuto, UxmlTraits> { }
-
-        public new class UxmlTraits : ScrollView.UxmlTraits
-        {
-            public override void Init(VisualElement visualElement, IUxmlAttributes attributes, CreationContext context)
-            {
-                base.Init(visualElement, attributes, context);
-            }
-        }
-        #endregion
-
         private readonly VisualElement m_container;
         private readonly List<VisualElement> m_registeredChildren;
 
-        #region Constructors
-        public ScrollViewAuto() : base()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScrollViewAuto"/> class,
+        /// setting up automatic registration of child elements for navigation and interaction.
+        /// </summary>
+        public ScrollViewAuto()
         {
+            // Initialize the container by querying for the "unity-content-container" VisualElement.
             m_container = this.Q<VisualElement>("unity-content-container");
+            // Initialize the list to keep track of registered child elements.
             m_registeredChildren = new();
 
+            // Register a callback to handle the AttachToPanelEvent, which occurs when the element is added to the UI panel.
             RegisterCallback<AttachToPanelEvent>((e) =>
             {
+                // Only perform registration if the application is running (play mode).
                 if (Application.isPlaying)
                 {
+                    // Get all direct children of this ScrollView.
                     IEnumerable<VisualElement> children = Children();
+                    // Register each child element for navigation and interaction.
                     foreach (VisualElement child in children)
                     {
                         RegisterElement(child);
@@ -40,20 +41,26 @@ namespace Yontalane.UIElements
                 }
             });
         }
-        #endregion
 
+        /// <summary>
+        /// Handles navigation move events (e.g., up/down arrow keys) to move focus between child elements within the ScrollView.
+        /// </summary>
+        /// <param name="e">The navigation move event data.</param>
         private void NavigationMoveListener(NavigationMoveEvent e)
         {
+            // Check if the event target is a VisualElement; if not, exit early.
             if (e.target is not VisualElement element)
             {
                 return;
             }
 
+            // Get all children of the container, the index of the current element, and the total child count.
             IEnumerable<VisualElement> children = m_container.Children();
             int index = m_container.IndexOf(element);
             int count = ChildCount;
             VisualElement target = null;
 
+            // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
             if (e.direction == NavigationMoveEvent.Direction.Up)
             {
                 if (index == 0)
@@ -65,6 +72,7 @@ namespace Yontalane.UIElements
                     target = children.ElementAt(index - 1);
                 }
             }
+            // Handle navigation in the Down direction: wrap to first if at the bottom, otherwise move to next.
             else if (e.direction == NavigationMoveEvent.Direction.Down)
             {
                 if (index == count - 1)
@@ -77,15 +85,21 @@ namespace Yontalane.UIElements
                 }
             }
 
+            // If no valid target was found, exit early.
             if (target == null)
             {
                 return;
             }
 
+            // Move focus to the target element and scroll it into view.
             target.Focus();
             ScrollToChild(target);
         }
 
+        /// <summary>
+        /// Scrolls the view to bring the specified child <see cref="VisualElement"/> into view, centering it vertically if possible.
+        /// </summary>
+        /// <param name="child">The child element to scroll to.</param>
         private void ScrollToChild(VisualElement child)
         {
             if (m_container.worldBound.height <= worldBound.height)
@@ -106,11 +120,17 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Returns an enumerable collection of the child <see cref="VisualElement"/> objects contained within the scroll view.
+        /// </summary>
         public new IEnumerable<VisualElement> Children()
         {
             return m_container.Children();
         }
 
+        /// <summary>
+        /// Gets the number of child elements contained in the scroll view.
+        /// </summary>
         public int ChildCount => m_container.childCount;
 
         private void RegisterElement(VisualElement element)
@@ -134,6 +154,9 @@ namespace Yontalane.UIElements
         }
 
         #region Add & Remove
+        /// <summary>
+        /// Removes all child elements from the scroll view.
+        /// </summary>
         public new void Clear()
         {
             for (int i = ChildCount - 1; i >= 0; i--)
@@ -142,18 +165,31 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Adds a <see cref="VisualElement"/> to the scroll view and registers it for navigation events.
+        /// </summary>
+        /// <param name="element">The element to add.</param>
         public new void Add(VisualElement element)
         {
             RegisterElement(element);
             m_container.Add(element);
         }
 
+        /// <summary>
+        /// Inserts a <see cref="VisualElement"/> at the specified index and registers it for navigation events.
+        /// </summary>
+        /// <param name="index">The index at which to insert the element.</param>
+        /// <param name="element">The element to insert.</param>
         public new void Insert(int index, VisualElement element)
         {
             RegisterElement(element);
             m_container.Insert(index, element);
         }
 
+        /// <summary>
+        /// Adds a range of <see cref="VisualElement"/> objects to the scroll view.
+        /// </summary>
+        /// <param name="elements">The elements to add.</param>
         public void AddRange(IReadOnlyList<VisualElement> elements)
         {
             foreach (VisualElement element in elements)
@@ -162,12 +198,20 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Removes a <see cref="VisualElement"/> from the scroll view and unregisters it from navigation events.
+        /// </summary>
+        /// <param name="element">The element to remove.</param>
         public new void Remove(VisualElement element)
         {
             UnregisterElement(element);
             m_container.Remove(element);
         }
 
+        /// <summary>
+        /// Removes a <see cref="VisualElement"/> from the scroll view by its name.
+        /// </summary>
+        /// <param name="elementName">The name of the element to remove.</param>
         public void Remove(string elementName)
         {
             VisualElement element = m_container.Q<VisualElement>(elementName);
@@ -177,6 +221,10 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Removes the child element at the specified index from the scroll view and unregisters it from navigation events.
+        /// </summary>
+        /// <param name="index">The index of the element to remove.</param>
         public new void RemoveAt(int index)
         {
             IEnumerable<VisualElement> children = Children();
@@ -196,6 +244,12 @@ namespace Yontalane.UIElements
             }
         }
 
+        /// <summary>
+        /// Clones a <see cref="VisualTreeAsset"/> into the scroll view's container and registers the added elements for navigation events.
+        /// </summary>
+        /// <param name="treeAsset">The visual tree asset to clone.</param>
+        /// <param name="firstElementIndex">The index of the first added element.</param>
+        /// <param name="elementAddedCount">The number of elements added.</param>
         public void CloneTreeAsset(VisualTreeAsset treeAsset, out int firstElementIndex, out int elementAddedCount)
         {
             treeAsset.CloneTree(m_container, out firstElementIndex, out elementAddedCount);

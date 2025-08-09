@@ -1,0 +1,78 @@
+.yontalane-icon-button {
+    color: #FFF;
+    background-color: #444;
+    padding: 4px 12px 4px 12px;
+    border-color: #444;
+    border-width: 3px;
+    border-radius: 6px;
+    -unity-font-style: normal;
+    width: auto;
+    height: 32px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.yontalane-icon-button.image-on-right {
+    flex-direction: row-reverse;
+}
+
+.yontalane-icon-button:hover {
+    border-color: #222;
+    background-color: #222;
+}
+
+.yontalane-icon-button:active {
+    border-color: #111;
+    background-color: #111;
+}
+
+.yontalane-icon-button:disabled {
+    color: #666;
+}
+
+.yontalane-icon-button.checked {
+    border-color: rgb(222, 64, 12);
+    background-color: rgb(222, 64, 12);
+}
+
+.yontalane-icon-button:focus {
+    border-color: #0AA;
+    background-color: #0AA;
+}
+
+.yontalane-icon-button:focus.checked {
+    background-color: rgb(222, 64, 12);
+    border-color: #0AA;
+}
+
+#label {
+    display: none;
+    position: relative;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.with-text #label {
+    display: flex;
+}
+
+#icon {
+    display: none;
+    padding: 0;
+    margin: 0;
+}
+
+.with-image #icon {
+    display: flex;
+    position: relative;
+}
+
+.with-text.with-image #icon {
+    margin-right: 8px;
+}

@@ -1,0 +1,43 @@
+.yontalane-selectable-button {
+    color: #FFF;
+    background-color: #444;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 4px 12px 4px 12px;
+    border-color: #444;
+    border-width: 3px;
+    border-radius: 6px;
+    -unity-font-style: normal;
+    width: auto;
+    height: 32px;
+}
+
+.yontalane-selectable-button:hover {
+    border-color: #222;
+    background-color: #222;
+}
+
+.yontalane-selectable-button:active {
+    border-color: #111;
+    background-color: #111;
+}
+
+.yontalane-selectable-button:disabled {
+    color: #666;
+}
+
+.yontalane-selectable-button.checked {
+    border-color: rgb(222, 64, 12);
+    background-color: rgb(222, 64, 12);
+}
+
+.yontalane-selectable-button:focus {
+    border-color: #0AA;
+    background-color: #0AA;
+}
+
+.yontalane-selectable-button:focus.checked {
+    background-color: rgb(222, 64, 12);
+    border-color: #0AA;
+}
