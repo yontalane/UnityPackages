@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.32] - 2025.08.09
+
+### Fixed
+
+- An icon button can only have a gap if there is both an icon and text.
+- Selecting first response in query.
+
 ## [1.0.31] - 2025.08.09
 
 ### Fixed

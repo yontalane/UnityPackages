@@ -165,6 +165,11 @@ namespace Yontalane.UIElements
         }
 
         /// <summary>
+        /// The response buttons.
+        /// </summary>
+        public List<Button> ResponseButtons => m_responses;
+
+        /// <summary>
         /// Sets the callback to be invoked when a response is chosen.
         /// </summary>
         /// <param name="callback">The callback action to invoke with the query event.</param>
@@ -228,6 +233,8 @@ namespace Yontalane.UIElements
 
             // Add the main frame to the root of this VisualElement.
             Add(m_frame);
+
+            Focus();
 
             // Add the stylesheet for styling the query dialog.
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));

@@ -118,6 +118,16 @@ namespace Yontalane.UIElements
         }
 
         /// <summary>
+        /// Does this button have an icon?
+        /// </summary>
+        public bool HasIcon => ClassListContains("with-image");
+
+        /// <summary>
+        /// Does this button have text?
+        /// </summary>
+        public bool HasText => ClassListContains("with-text");
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IconButton"/> class, setting up the icon and label UI elements,
         /// applying default styles, and configuring initial layout and appearance.
         /// </summary>
@@ -196,7 +206,13 @@ namespace Yontalane.UIElements
             m_iconUI.style.marginBottom = new(new Length(0f, LengthUnit.Pixel));
 
             // Apply the gap to the correct side of the icon depending on its position.
-            if (IconOnLeft)
+            if (!HasIcon || !HasText)
+            {
+                // There can only be a gap if there is both an icon and text.
+                m_iconUI.style.marginLeft = new(new Length(0f, LengthUnit.Pixel));
+                m_iconUI.style.marginRight = new(new Length(0f, LengthUnit.Pixel));
+            }
+            else if (IconOnLeft)
             {
                 // If the icon is on the left, set right margin to the gap and left margin to zero.
                 m_iconUI.style.marginLeft = new(new Length(0f, LengthUnit.Pixel));

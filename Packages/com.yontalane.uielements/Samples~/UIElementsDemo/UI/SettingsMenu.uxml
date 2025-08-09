@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Samples/UI%20Elements/1.0.31/UI%20Elements%20Demo/UI/Menu.uss?fileID=7433441132597879392&amp;guid=1a03f4978d7564982bb94c61f5192400&amp;type=3#Menu" />
+    <Style src="project://database/Assets/Samples/UI%20Elements/1.0.32/UI%20Elements%20Demo/UI/Menu.uss?fileID=7433441132597879392&amp;guid=1a03f4978d7564982bb94c61f5192400&amp;type=3#Menu" />
     <ui:VisualElement name="SettingsGlobals" picking-mode="Ignore" class="menu full">
         <ui:Button text="Back" display-tooltip-when-elided="true" name="Back" focusable="false" />
         <Yontalane.UIElements.ToggleButton focusable="true" name="GameplayButton" label="Gameplay" icon="Gameplay" text="Gameplay" />
