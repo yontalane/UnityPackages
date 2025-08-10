@@ -1,0 +1,20 @@
+{
+    "name": "Yontalane.DialogUIElements.Runtime",
+    "rootNamespace": "Yontalane.DialogUIElements",
+    "references": [
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:8579dca4301da4fdb94fc49558ddf5f5",
+        "GUID:c6c71bf257e5e49228df84313d238a03",
+        "GUID:4498c88d6cea046869d2da7e80e7a88f",
+        "GUID:9308885fa78f441ea8f89a3ffeecf3ef"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

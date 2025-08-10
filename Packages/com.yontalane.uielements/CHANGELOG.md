@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.33] - 2025.08.09
+
+### Changed
+
+- Query uses selectable button and supports on-selection-changed callbacks.
+
 ## [1.0.32] - 2025.08.09
 
 ### Fixed

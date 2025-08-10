@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.6] - 2025.08.09
+
+### Changed
+
+- Requires updated dependency packages.
+
 ## [1.0.5] - 2025.08.07
 
 ### Changed

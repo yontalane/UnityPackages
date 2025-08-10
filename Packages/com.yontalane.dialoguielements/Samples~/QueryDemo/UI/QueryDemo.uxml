@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Wrapper" style="align-items: center; position: absolute; width: 100%; height: 100%; justify-content: center;">
+        <Yontalane.UIElements.IconButton text="Go" name="GoButton" style="-unity-font-style: bold;" />
+        <ui:Label name="Result" style="margin-top: 20px; color: rgb(255, 255, 255);" />
+    </ui:VisualElement>
+    <ui:VisualElement name="QueryContainer" picking-mode="Ignore" style="align-items: center; position: absolute; width: 100%; height: 100%; justify-content: center;" />
+</ui:UXML>

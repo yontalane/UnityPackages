@@ -1,0 +1,37 @@
+{
+  "name": "com.yontalane.dialoguielements",
+  "version": "1.0.0",
+  "displayName": "Dialog UI Toolkit",
+  "description": "A dialog system.",
+  "unity": "6000.0",
+  "unityRelease": "54f1",
+  "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialoguielements/Documentation~/index.md",
+  "dependencies": {
+    "com.unity.ugui": "2.0.0",
+    "com.yontalane.core": "1.0.37",
+    "com.yontalane.dialog": "1.0.75",
+    "com.yontalane.query": "1.0.18",
+    "com.yontalane.uielements": "1.0.33"
+  },
+  "keywords": [
+    "dialog",
+    "ui",
+    "dialogue",
+    "tree",
+    "alert",
+    "branching"
+  ],
+  "author": {
+    "name": "Yontalane",
+    "email": "unitypackages@yontalane.com",
+    "url": "https://yontalane.com/"
+  },
+  "samples": [
+    {
+      "displayName": "Query Demo",
+      "description": "Contains a sample implementation of the query UI.",
+      "path": "Samples~/QueryDemo"
+    }
+  ],
+  "type": "library"
+}

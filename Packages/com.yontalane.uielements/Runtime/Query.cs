@@ -37,6 +37,9 @@ namespace Yontalane.UIElements
     /// </summary>
     public partial class Query : VisualElement
     {
+        public delegate void ChangeSelectedButtonHandler(SelectableButton newSelectedButton);
+        public ChangeSelectedButtonHandler OnChangeSelectedButton = null;
+
         private const string STYLESHEET_RESOURCE = "YontalaneQuery";
         public const string DEFAULT_RESPONSE = "OK";
         public const string CANCEL = "Cancel";
@@ -45,7 +48,7 @@ namespace Yontalane.UIElements
         private readonly Label m_headerLabel;
         private readonly Label m_textLabel;
         private readonly VisualElement m_responseContainer;
-        private readonly List<Button> m_responses = new();
+        private readonly List<SelectableButton> m_responses = new();
         private Action<QueryEvent> m_callback;
         private Action<QueryEvent> m_onNavigate;
 
@@ -141,7 +144,7 @@ namespace Yontalane.UIElements
                 for (int i = 0; i < value.Length; i++)
                 {
                     int index = i;
-                    m_responses.Add(new Button());
+                    m_responses.Add(new SelectableButton());
                     m_responses[^1].text = value[index];
                     // Register the click event to call OnRespond with the button's index.
                     m_responses[^1].clicked += () => OnRespond(index);
@@ -150,7 +153,7 @@ namespace Yontalane.UIElements
                 }
 
                 // Register navigation and cancel event handlers for each response button.
-                foreach(Button button in m_responses)
+                foreach(SelectableButton button in m_responses)
                 {
                     RegisterNavigation(button);
                     button.RegisterCallback((NavigationCancelEvent e) =>
@@ -167,7 +170,7 @@ namespace Yontalane.UIElements
         /// <summary>
         /// The response buttons.
         /// </summary>
-        public List<Button> ResponseButtons => m_responses;
+        public List<SelectableButton> ResponseButtons => m_responses;
 
         /// <summary>
         /// Sets the callback to be invoked when a response is chosen.
@@ -234,7 +237,18 @@ namespace Yontalane.UIElements
             // Add the main frame to the root of this VisualElement.
             Add(m_frame);
 
+            // Give the query focus.
             Focus();
+
+            // Listen for selectable button events.
+            SelectableButton.OnButtonEvent += (SelectableButtonEventInfo eventInfo) =>
+            {
+                // If the event is of type focus-in and the button belongs to this query, then invoke the change button delegate.
+                if (eventInfo.type == SelectableButtonEventType.FocusIn && eventInfo.hasFocus && eventInfo.target != null && ResponseButtons.Contains(eventInfo.target))
+                {
+                    OnChangeSelectedButton?.Invoke(eventInfo.target);
+                }
+            };
 
             // Add the stylesheet for styling the query dialog.
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
@@ -282,7 +296,7 @@ namespace Yontalane.UIElements
         public Query()
             : this(string.Empty, DEFAULT_RESPONSE, null) { }
         #endregion
-        
+
         /// <summary>
         /// Handles the user's response selection by invoking the callback with the chosen response index and text,
         /// then removes the query dialog from the UI.
@@ -325,7 +339,7 @@ namespace Yontalane.UIElements
         /// focus moves to the appropriate button and the navigation callback is invoked.
         /// </summary>
         /// <param name="button">The response button to register navigation for.</param>
-        private void RegisterNavigation(Button button)
+        private void RegisterNavigation(SelectableButton button)
         {
             // Get the index of the button in the list of response buttons.
             int index = m_responses.IndexOf(button);

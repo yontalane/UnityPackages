@@ -161,8 +161,20 @@
       "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.37",
-        "com.yontalane.dialog": "1.0.72",
-        "com.yontalane.queryugui": "1.0.0"
+        "com.yontalane.dialog": "1.0.75",
+        "com.yontalane.queryugui": "1.0.1"
+      }
+    },
+    "com.yontalane.dialoguielements": {
+      "version": "file:com.yontalane.dialoguielements",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0",
+        "com.yontalane.core": "1.0.37",
+        "com.yontalane.dialog": "1.0.75",
+        "com.yontalane.query": "1.0.18",
+        "com.yontalane.uielements": "1.0.33"
       }
     },
     "com.yontalane.gridnav": {
