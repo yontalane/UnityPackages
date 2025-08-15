@@ -162,10 +162,26 @@ namespace YontalaneEditor.Aseprite
                     type = typeof(SpriteRenderer),
                 };
 
+                // Create a new editor curve binding for the enabled property
+                EditorCurveBinding originalEnabledBinding = new()
+                {
+                    path = string.Empty,
+                    propertyName = "m_Enabled",
+                    type = typeof(SpriteRenderer),
+                };
+
                 // For all curves bound to the main object sprite property, set them instead to the child object sprite property
                 ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(clip, originalBinding);
                 AnimationUtility.SetObjectReferenceCurve(clip, originalBinding, null);
                 AnimationUtility.SetObjectReferenceCurve(clip, AsepriteAnimationUtility.SpriteBinding, frames);
+
+                // For all curves that enable or disable the sprite renderer on the main object, set them instead to the child object
+                AnimationCurve enabledFrames = AnimationUtility.GetEditorCurve(clip, originalEnabledBinding);
+                if (enabledFrames != null)
+                {
+                    AnimationUtility.SetEditorCurve(clip, originalEnabledBinding, null);
+                    AnimationUtility.SetEditorCurve(clip, AsepriteAnimationUtility.SpriteEnabledBinding, enabledFrames);
+                }
             }
         }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.9] - 2025.08.15
+
+### Fixed
+
+- Aseprite import takes into account animation curves that enable and disable the SpriteRenderer.
+
 ## [1.0.8] - 2025.07.25
 
 ### Change

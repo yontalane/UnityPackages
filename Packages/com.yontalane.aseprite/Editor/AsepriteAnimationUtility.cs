@@ -15,10 +15,23 @@ namespace YontalaneEditor.Aseprite
         /// </summary>
         private static readonly List<AnimationEvent> s_animationEvents = new();
 
+        /// <summary>
+        /// The animation binding for a frame animation curve.
+        /// </summary>
         internal static EditorCurveBinding SpriteBinding => new()
         {
             path = "Sprite",
             propertyName = "m_Sprite",
+            type = typeof(SpriteRenderer),
+        };
+
+        /// <summary>
+        /// The animation binding for enabling a sprite renderer.
+        /// </summary>
+        internal static EditorCurveBinding SpriteEnabledBinding => new()
+        {
+            path = "Sprite",
+            propertyName = "m_Enabled",
             type = typeof(SpriteRenderer),
         };
 
