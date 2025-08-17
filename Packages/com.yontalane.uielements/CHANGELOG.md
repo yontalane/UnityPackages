@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.34] - 2025.08.16
+
+### Fixed
+
+- Added UI Toolkit panel settings style theme to sample.
+
 ## [1.0.33] - 2025.08.09
 
 ### Changed
