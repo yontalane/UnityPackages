@@ -29,7 +29,7 @@ namespace Yontalane.Aseprite
     [AddComponentMenu("Yontalane/Aseprite/Aseprite Animation Bridge")]
     public class AsepriteAnimationBridge : MonoBehaviour
     {
-        private Animator m_animator = null;
+        #region Event Types
 
         /// <summary>
         /// UnityEvent that is invoked with a Vector2 representing root motion data from an Aseprite animation.
@@ -43,6 +43,17 @@ namespace Yontalane.Aseprite
         [System.Serializable]
         public class OnLifecycleHandler : UnityEvent<AnimationLifecycleEvent> { }
 
+        #endregion
+
+        #region Private Fields
+
+        private Animator m_animator = null;
+        private SpriteRenderer m_spriteRenderer = null;
+
+        #endregion
+
+        #region Serialized Fields
+
         [Tooltip("Event invoked when root motion data is received from the Aseprite animation.")]
         [SerializeField]
         private OnMotionHandler m_onMotion = null;
@@ -54,6 +65,10 @@ namespace Yontalane.Aseprite
         [Tooltip("Event invoked when the animation completes.")]
         [SerializeField]
         private OnLifecycleHandler m_onComplete = null;
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Event invoked when root motion data is received from the Aseprite animation.
@@ -69,6 +84,10 @@ namespace Yontalane.Aseprite
         /// Event invoked when the animation completes.
         /// </summary>
         public OnLifecycleHandler OnComplete => m_onComplete;
+
+        #endregion
+
+        #region Component Properties
 
         /// <summary>
         /// The Animator component attached to the GameObject.
@@ -89,9 +108,77 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
+        /// Gets the SpriteRenderer.
+        /// </summary>
+        public SpriteRenderer SpriteRenderer
+        {
+            get
+            {
+                // Check if the SpriteRenderer reference is null and assign it if necessary
+                if (m_spriteRenderer == null)
+                {
+                    m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+                }
+
+                // Return the cached SpriteRenderer component
+                return m_spriteRenderer;
+            }
+        }
+
+        #endregion
+
+        #region Sprite Properties
+
+        /// <summary>
+        /// The Sprite to render.
+        /// </summary>
+        public Sprite Sprite => SpriteRenderer.sprite;
+
+        /// <summary>
+        /// Rendering color for the Sprite graphic.
+        /// </summary>
+        public Color Color
+        {
+            get => SpriteRenderer.color;
+            set => SpriteRenderer.color = value;
+        }
+
+        /// <summary>
+        /// Renderer's order within a sorting layer.
+        /// </summary>
+        public int SortingOrder
+        {
+            get => SpriteRenderer.sortingOrder;
+            set => SpriteRenderer.sortingOrder = value;
+        }
+
+        /// <summary>
+        /// Flips the sprite on the X axis.
+        /// </summary>
+        public bool FlipX
+        {
+            get => SpriteRenderer.flipX;
+            set => SpriteRenderer.flipX = value;
+        }
+
+        /// <summary>
+        /// Flips the sprite on the Y axis.
+        /// </summary>
+        public bool FlipY
+        {
+            get => SpriteRenderer.flipY;
+            set => SpriteRenderer.flipY = value;
+        }
+
+        /// <summary>
         /// Gets the name of the currently playing animation.
         /// </summary>
         public string CurrentAnimation { get; private set; } = string.Empty;
+
+        #endregion
+
+
+        #region Aseprite Animation Events
 
         /// <summary>
         /// Parses the root motion data from the Aseprite animation and invokes the OnMotion event with the parsed motion vector.
@@ -109,7 +196,7 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
-        /// Invoked when the animation completes.
+        /// Invoked when the animation starts.
         /// </summary>
         /// <param name="animationEvent">The AnimationEvent that triggered the start.</param>
         public void OnAsepriteAnimationStart(AnimationEvent animationEvent)
@@ -134,6 +221,10 @@ namespace Yontalane.Aseprite
                 isLooping = animationEvent.intParameter > 0,
             });
         }
+
+        #endregion
+
+        #region Animation Clip Utilities
 
         /// <summary>
         /// Tries to get an animation clip with the specified name.
@@ -183,6 +274,10 @@ namespace Yontalane.Aseprite
             return TryGetAnimationClip(animationName, out _);
         }
 
+        #endregion
+
+        #region Animation Playback
+
         /// <summary>
         /// Tries to play an animation with the specified name.
         /// </summary>
@@ -220,5 +315,7 @@ namespace Yontalane.Aseprite
             // Play the animation
             TryPlay(animationName, startTime, restartLoop);
         }
+
+        #endregion
     }
 }

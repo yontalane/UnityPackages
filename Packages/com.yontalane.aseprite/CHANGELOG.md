@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.10] - 2025.08.18
+
+### Added
+
+- Added Sprite-related fields to the Bridge.
+
 ## [1.0.9] - 2025.08.15
 
 ### Fixed
