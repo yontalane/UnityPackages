@@ -169,7 +169,7 @@ namespace YontalaneEditor.Aseprite
             frameData.clip.AddAnimationEvent(new()
             {
                 functionName = nameof(AsepriteAnimationBridge.OnAsepriteRootMotion),
-                stringParameter = $"{frameData.frameIndex},{frameData.time},{rootDelta.x},{rootDelta.y}",
+                stringParameter = $"{frameData.frameIndex - frameData.animationData.fromFrame},{rootDelta.x},{rootDelta.y}",
                 time = frames.GetNearestFrameTime(frameData.time),
             });
 

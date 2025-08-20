@@ -112,6 +112,7 @@ namespace YontalaneEditor.Aseprite
                     fileDimensions = fileData.Size,
                     filePivot = fileData.args.GetPivot(),
                     frameIndex = frameDataIndex,
+                    animationData = animationData,
                     cellRect = rect,
                     frameRect = fileData.frameRects[frameDataIndex],
                     pixelsPerUnit = fileData.args.importer.spritePixelsPerUnit,

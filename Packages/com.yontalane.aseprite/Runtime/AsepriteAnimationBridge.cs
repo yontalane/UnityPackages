@@ -27,14 +27,9 @@ namespace Yontalane.Aseprite
     public struct AnimationMotionEvent
     {
         /// <summary>
-        /// The frame at which the motion takes place.
+        /// The animation frame at which the motion takes place.
         /// </summary>
         public int frameIndex;
-
-        /// <summary>
-        /// The time at which the motion takes place.
-        /// </summary>
-        public float time;
 
         /// <summary>
         /// The root motion value.
@@ -211,15 +206,13 @@ namespace Yontalane.Aseprite
             // Split the position string into an array of strings
             string[] pos = position.Split(',');
             int frameIndex = int.TryParse(pos[0].Trim(), out int outFrameIndex) ? outFrameIndex : -1;
-            float time = float.TryParse(pos[1].Trim(), out float outTime) ? outTime : 0f;
-            float x = float.TryParse(pos[2].Trim(), out float outX) ? outX : 0f;
-            float y = float.TryParse(pos[3].Trim(), out float outY) ? outY : 0f;
+            float x = float.TryParse(pos[1].Trim(), out float outX) ? outX : 0f;
+            float y = float.TryParse(pos[2].Trim(), out float outY) ? outY : 0f;
 
             // Invoke the OnMotion event with the parsed motion vector
             OnMotion?.Invoke(new()
             {
                 frameIndex = frameIndex,
-                time = time,
                 motion = new Vector2(x, y),
             });
         }

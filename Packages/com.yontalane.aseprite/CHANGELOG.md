@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.13] - 2025.08.20
+
+### Changed
+
+- Changed root motion event data. Passing local animation frame.
+
 ## [1.0.12] - 2025.08.20
 
 ### Added

@@ -79,6 +79,7 @@ namespace YontalaneEditor.Aseprite
         public float time;
         public Vector2Int fileDimensions;
         public int frameIndex;
+        public AnimationData animationData;
         public Vector2 filePivot;
         public RectInt cellRect;
         public RectInt frameRect;
