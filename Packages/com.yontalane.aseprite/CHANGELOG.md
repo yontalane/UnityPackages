@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.12] - 2025.08.20
+
+### Added
+
+- Added more data to the root motion event.
+
 ## [1.0.11] - 2025.08.20
 
 ### Changed
