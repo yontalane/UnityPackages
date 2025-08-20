@@ -11,15 +11,19 @@ namespace Yontalane.Interaction
         public Interactable Interactable { get; set; } = null;
 
         #region Serialized fields
+
         [Header("Interaction")]
-        [SerializeField]
+
         [Tooltip("This interaction's type. Interactors can only interact with one type at a time.")]
+        [SerializeField]
         protected string m_interactionType = string.Empty;
+
         public string InteractionType => m_interactionType;
 
-        [SerializeField]
         [Tooltip("The root object of this interaction. If left blank, this will default to this object's gameobject.")]
+        [SerializeField]
         protected GameObject m_root = null;
+
         #endregion
 
         private void Awake()
@@ -31,6 +35,7 @@ namespace Yontalane.Interaction
         }
 
         #region Interacting
+
         /// <summary>
         /// Is the interaction currently happening?
         /// </summary>
@@ -44,7 +49,9 @@ namespace Yontalane.Interaction
         /// <summary>
         /// Some interactions may require feedback from the interactor while they're running. For example, if you're pulling a lever, the moment your pull animation gets to the end, you may want to signal an event. At that point, the interaction will then slide open a door.
         /// </summary>
-        public virtual void DoEvent() { }
+        public virtual void DoEvent()
+        { }
+
         #endregion
 
         /// <summary>
@@ -56,38 +63,48 @@ namespace Yontalane.Interaction
             {
                 return false;
             }
+
             if (info.interactor == null)
             {
                 return false;
             }
+
             if (info.rootTransform == null)
             {
                 return false;
             }
+
             if (info.animator == null)
             {
                 return false;
             }
+
             if (includeData && info.data == null)
             {
                 return false;
             }
+
             return true;
         }
 
         #region Physics helpers
+
         /// <summary>
         /// Presumably this will be called on <c>m_root</c>. If a rigidbody is attached to the gameobject, then zero out its velocity.
         /// </summary>
         protected bool TryKillRigidbodyMovement(GameObject gameObject)
         {
-            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (rigidbody == null)
+            if (!gameObject.TryGetComponent(out Rigidbody rigidbody))
             {
                 return false;
             }
-            rigidbody.linearVelocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
+
+            if (!rigidbody.isKinematic)
+            {
+                rigidbody.linearVelocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3.zero;
+            }
+
             return true;
         }
 
@@ -96,14 +113,15 @@ namespace Yontalane.Interaction
         /// </summary>
         protected bool TrySetRigidbodyKinematic(GameObject gameObject, bool isKinematic)
         {
-            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (rigidbody == null)
+            if (!gameObject.TryGetComponent(out Rigidbody rigidbody))
             {
                 return false;
             }
+
             rigidbody.isKinematic = isKinematic;
             return true;
         }
+
         #endregion
     }
 }

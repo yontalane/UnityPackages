@@ -1,8 +1,14 @@
 # Changelog
 
+## [1.0.8] - 2025.08.20
+
+### Fixed
+
+- Setting the velocity of a kinematic body is not supported.
+
 ## [1.0.7] - 2025.07.25
 
-### Change
+### Changed
 
 - Supporting Unity 6+.
 
