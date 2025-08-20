@@ -36,10 +36,10 @@ namespace Yontalane.Demos.Aseprite
         /// Handles the player's movement based on the Aseprite motion input. This is used to move the player based on the Aseprite motion input.
         /// </summary>
         /// <param name="value">The movement direction and speed.</param>
-        public void OnAsepriteMotion(Vector2 value)
+        public void OnAsepriteMotion(AnimationMotionEvent motionEvent)
         {
             // Move the player based on the Aseprite motion input (x-axis only)
-            transform.Translate(value.x, 0f, 0f);
+            transform.Translate(motionEvent.motion.x, 0f, 0f);
         }
 
         /// <summary>

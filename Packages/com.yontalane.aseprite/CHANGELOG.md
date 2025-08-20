@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.11] - 2025.08.20
+
+### Changed
+
+- Switched root motion event to using an event data struct rather than directly passing a vector.
+
 ## [1.0.10] - 2025.08.18
 
 ### Added

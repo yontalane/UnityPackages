@@ -21,6 +21,18 @@ namespace Yontalane.Aseprite
     }
 
     /// <summary>
+    /// A struct containing information about an animation motion event.
+    /// </summary>
+    [System.Serializable]
+    public struct AnimationMotionEvent
+    {
+        /// <summary>
+        /// The root motion value.
+        /// </summary>
+        public Vector2 motion;
+    }
+
+    /// <summary>
     /// A bridge between Aseprite animations and Unity Animator.
     /// Facilitates interaction between Aseprite animations and Unity's Animator by handling root motion events, animation lifecycle events, and providing utility methods for animation control and querying.
     /// </summary>
@@ -35,7 +47,7 @@ namespace Yontalane.Aseprite
         /// UnityEvent that is invoked with a Vector2 representing root motion data from an Aseprite animation.
         /// </summary>
         [System.Serializable]
-        public class OnMotionHandler : UnityEvent<Vector2> { }
+        public class OnMotionHandler : UnityEvent<AnimationMotionEvent> { }
 
         /// <summary>
         /// UnityEvent that is invoked upon animation lifecycle events.
@@ -192,7 +204,10 @@ namespace Yontalane.Aseprite
             float y = float.TryParse(pos[1].Trim(), out float outY) ? outY : 0f;
 
             // Invoke the OnMotion event with the parsed motion vector
-            OnMotion?.Invoke(new Vector2(x, y));
+            OnMotion?.Invoke(new()
+            {
+                motion = new Vector2(x, y),
+            });
         }
 
         /// <summary>
