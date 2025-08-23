@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.core",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "displayName": "Core",
   "description": "A small library for Unity projects.",
   "unity": "6000.0",

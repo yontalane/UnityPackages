@@ -20,6 +20,9 @@ namespace Yontalane
 
         [Tooltip("Should the track loop when finished?")]
         public bool loop;
+
+        [Tooltip("The AudioSource to play this track. If unnassigned, a new AudioSource will be created with default settings.")]
+        public AudioSource audioSource;
     }
 
     /// <summary>
@@ -30,9 +33,14 @@ namespace Yontalane
     public class RemoteMusicPlayer : MonoBehaviour
     {
         /// <summary>
-        /// A list of audio sources used to play the music.
+        /// A list of runtime-created AudioSources used to play the music.
         /// </summary>
-        private readonly List<AudioSource> m_audioSources = new();
+        private readonly List<AudioSource> m_tempAudioSources = new();
+
+        /// <summary>
+        /// A list of pre-existing AudioSources used to play the music.
+        /// </summary>
+        private readonly List<AudioSource> m_preExistingAudioSources = new();
 
 
         [Tooltip("The list of tracks to be played by the RemoteMusicPlayer.")]
@@ -75,13 +83,22 @@ namespace Yontalane
         /// </summary>
         public void Stop()
         {
-            for (int i = m_audioSources.Count - 1; i >= 0; i--)
+            // Stop and destroy all temporary AudioSources created at runtime.
+            for (int i = m_tempAudioSources.Count - 1; i >= 0; i--)
             {
-                m_audioSources[i].Stop();
-                Destroy(m_audioSources[i].gameObject);
+                m_tempAudioSources[i].Stop();
+                Destroy(m_tempAudioSources[i].gameObject);
             }
 
-            m_audioSources.Clear();
+            // Stop all pre-existing AudioSources used for music playback.
+            for (int i = m_preExistingAudioSources.Count - 1; i >= 0; i--)
+            {
+                m_preExistingAudioSources[i].Stop();
+            }
+
+            // Clear the lists of AudioSources.
+            m_tempAudioSources.Clear();
+            m_preExistingAudioSources.Clear();
         }
 
         /// <summary>
@@ -89,13 +106,16 @@ namespace Yontalane
         /// </summary>
         public void Play()
         {
+            // Stop any currently playing music before starting new playback.
             Stop();
 
+            // If music is not enabled, exit early and do not play anything.
             if (!MusicOn)
             {
                 return;
             }
 
+            // Start playing each track asynchronously using coroutines.
             foreach (RemoteMusicPlayerTrack track in m_tracks)
             {
                 StartCoroutine(PlayMusic(track));
@@ -107,6 +127,7 @@ namespace Yontalane
         /// </summary>
         private IEnumerator PlayMusic(RemoteMusicPlayerTrack track)
         {
+            // If the track URL is null or empty, exit the coroutine early.
             if (string.IsNullOrEmpty(track.url))
             {
                 yield break;
@@ -119,11 +140,23 @@ namespace Yontalane
             child.transform.localEulerAngles = Vector3.zero;
             child.transform.localScale = Vector3.one;
 
-            // Add an AudioSource component to the GameObject.
-            AudioSource audioSource = child.AddComponent<AudioSource>();
+            AudioSource audioSource;
 
-            // Add the AudioSource to the list of audio sources.
-            m_audioSources.Add(audioSource);
+            // If the track already has an assigned AudioSource, use it and add it to the list of pre-existing audio sources.
+            if (track.audioSource != null)
+            {
+                audioSource = track.audioSource;
+                m_preExistingAudioSources.Add(audioSource);
+            }
+            // If the track does not have an assigned AudioSource, create a new one.
+            else
+            {
+                // Add an AudioSource component to the GameObject.
+                audioSource = child.AddComponent<AudioSource>();
+
+                // Add the AudioSource to the list of audio sources.
+                m_tempAudioSources.Add(audioSource);
+            }
 
             // Download the audio clip from the URL.
             using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(track.url, AudioType.MPEG);

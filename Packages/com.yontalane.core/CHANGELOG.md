@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.38] - 2025.08.23
+
+### Added
+
+- Added option to use existing AudioSource in RemoteMusicPlayer track.
+
 ## [1.0.37] - 2025.07.25
 
 ### Change
