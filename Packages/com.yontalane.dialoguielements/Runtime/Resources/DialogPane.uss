@@ -1,0 +1,89 @@
+.yontalane-dialog-pane
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-frame
+{
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    height: auto;
+    background-color: #222;
+    padding: 10px;
+    margin: 0;
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: #eee;
+
+    flex-direction: column;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-portrait-field
+{
+    position: absolute;
+    left: 10px;
+    top: -94px;
+    width: 92px;
+    height: 92px;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #000;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-text-field
+{
+    white-space: normal;
+    color: white;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-skip-button
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-close-button
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+    border-width: 0;
+    border-color: #888;
+}
+
+.yontalane-dialog-pane #yontalane-dialog-continue-button
+{
+    width: auto;
+    height: auto;
+    align-self: flex-end;
+    -unity-font-style: bold;
+    margin: 0;
+    border-width: 0;
+    border-color: #888;
+}

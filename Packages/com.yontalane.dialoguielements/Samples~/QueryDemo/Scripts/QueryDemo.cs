@@ -2,18 +2,18 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Yontalane.Query;
 
-namespace Yontalane.Demos.QueryUGUI
+namespace Yontalane.Demos.DialogUIElements
 {
     // The QueryDemo class is a Unity MonoBehaviour that demonstrates how to use the Query system with UI Toolkit.
     // It manages UI elements, handles button clicks to initiate queries, and updates the UI with results.
     [DisallowMultipleComponent]
     [RequireComponent(typeof(QueryProcessor))]
-    [RequireComponent(typeof(DialogUIElements.QueryUI))]
+    [RequireComponent(typeof(Yontalane.DialogUIElements.QueryUI))]
     [AddComponentMenu("Yontalane/Demos/Dialog UI Toolkit/Query Demo")]
     public sealed class QueryDemo : MonoBehaviour
     {
         #region Private Fields
-        private DialogUIElements.QueryUI m_queryUI;
+        private Yontalane.DialogUIElements.QueryUI m_queryUI;
         private Button m_button;
         private Label m_resultLabel;
         #endregion
@@ -51,7 +51,7 @@ namespace Yontalane.Demos.QueryUGUI
         private void Start()
         {
             // Get the QueryUI component attached to this GameObject.
-            m_queryUI = GetComponent<DialogUIElements.QueryUI>();
+            m_queryUI = GetComponent<Yontalane.DialogUIElements.QueryUI>();
 
             // Retrieve the UIDocument from the QueryUI component.
             UIDocument document = m_queryUI.Document;

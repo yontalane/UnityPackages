@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/DialogDemo/UI/DialogDemo.uss?fileID=7433441132597879392&amp;guid=eb8ec7c0e20244683b86f91f3ad16a40&amp;type=3#DialogDemo" />
+    <ui:VisualElement name="Inventory" style="flex-grow: 1;" />
+    <ui:VisualElement name="Settings" style="flex-grow: 1;">
+        <ui:TextField label="Player Name" name="PlayerName" value="Player" />
+        <ui:TextField label="Desired Item" name="DesiredItem" value="Apple" />
+    </ui:VisualElement>
+    <Yontalane.UIElements.SelectableButton name="TalkButton" text="Talk" />
+    <Yontalane.DialogUIElements.DialogPane speaker-is-capitalized="true" speaker-is-inline="false" name="DialogPane" style="display: none;" />
+    <ui:VisualElement name="QueryRoot" picking-mode="Ignore" focusable="true" />
+</ui:UXML>

@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.dialoguielements",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Dialog UI Toolkit",
   "description": "A dialog system.",
   "unity": "6000.0",
@@ -27,6 +27,11 @@
     "url": "https://yontalane.com/"
   },
   "samples": [
+    {
+      "displayName": "Dialog Demo",
+      "description": "Contains a sample implementation of the dialog UI.",
+      "path": "Samples~/DialogDemo"
+    },
     {
       "displayName": "Query Demo",
       "description": "Contains a sample implementation of the query UI.",
