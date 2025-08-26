@@ -6,6 +6,9 @@ using Yontalane.LayoutTilemap;
 
 namespace YontalaneEditor.LayoutTilemap
 {
+    /// <summary>
+    /// Provides a custom Project Settings panel for configuring Layout Tilemap settings in the Unity Editor.
+    /// </summary>
     public class LayoutTilemapSettingsProvider : SettingsProvider
     {
         private const string MAP_ENTITY_SETTINGS_PATH = "Yontalane/Layout Tilemap";

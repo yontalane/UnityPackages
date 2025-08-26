@@ -3,19 +3,23 @@ using UnityEngine.Tilemaps;
 
 namespace Yontalane.LayoutTilemap
 {
+    /// <summary>
+    /// Provides utility methods for working with maps and tilemaps in the LayoutTilemap system.
+    /// </summary>
     public static class MapUtilities
     {
         public static Vector3 MapLocalToGridLocal(this Tilemap tilemap, Vector3 localPosition, BoundsInt mapBounds, GridLayout.CellSwizzle swizzle)
         {
             Vector3Int cell = tilemap.LocalToCell(localPosition);
 
-            Vector3 a = new Vector3()
+            Vector3 a = new()
             {
                 x = tilemap.transform.localPosition.x + (cell.x - mapBounds.xMin) * tilemap.cellSize.x,
                 y = tilemap.transform.localPosition.z + (cell.y - mapBounds.yMin) * tilemap.cellSize.y,
                 z = tilemap.transform.localPosition.y + (cell.z - mapBounds.zMin) * tilemap.cellSize.z
             };
-            Vector3 b = new Vector3();
+            
+            Vector3 b = new();
 
             switch (swizzle)
             {

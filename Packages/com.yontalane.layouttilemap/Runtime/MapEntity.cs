@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Yontalane.LayoutTilemap
 {
+    /// <summary>
+    /// Contains visual and pointer configuration data for a map entity, such as scale, colors, pointer length/scale, and outline thickness.
+    /// </summary>
     [System.Serializable]
     public struct MapEntityData
     {
@@ -22,6 +25,9 @@ namespace Yontalane.LayoutTilemap
         public int thickness;
     }
 
+    /// <summary>
+    /// Associates a name with a specific set of MapEntityData, allowing for special-case entity appearance or behavior.
+    /// </summary>
     [System.Serializable]
     public struct NamedMapEntityData
     {
@@ -29,6 +35,11 @@ namespace Yontalane.LayoutTilemap
         public MapEntityData data;
     }
 
+    /// <summary>
+    /// MapEntity is a MonoBehaviour component that represents an entity within the LayoutTilemap system.
+    /// It provides access to the entity's map properties and, in the Unity Editor, draws visual gizmos
+    /// to represent the entity's appearance and orientation based on configurable MapEntityData.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Layout Tilemap/Map Entity")]
     [RequireComponent(typeof(MapProperties))]

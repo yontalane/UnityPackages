@@ -6,6 +6,9 @@ using UnityEngine.Tilemaps;
 namespace Yontalane.LayoutTilemap
 {
     #region Structs
+    /// <summary>
+    /// Represents data for a single tile in the map, including its existence, name, and world position.
+    /// </summary>
     public struct TileData
     {
         public bool exists;
@@ -13,6 +16,9 @@ namespace Yontalane.LayoutTilemap
         public Vector3 worldPosition;
     }
     
+    /// <summary>
+    /// Contains information about an entity placed on the map, such as its name, position, rotation, bounds, reference to the entity, properties, and associated GameObject.
+    /// </summary>
     public struct EntityData
     {
         public string name;
@@ -25,6 +31,9 @@ namespace Yontalane.LayoutTilemap
         public GameObject gameObject;
     }
 
+    /// <summary>
+    /// Holds all relevant data for a map, including its name, tile data collection, entities, properties, bounds, and parent transform.
+    /// </summary>
     public struct MapData
     {
         public string name;
@@ -37,6 +46,9 @@ namespace Yontalane.LayoutTilemap
     #endregion
 
     #region Extra Classes
+    /// <summary>
+    /// Manages a hierarchical collection of tile data, organized by tilemaps and rows, for use in map construction and manipulation.
+    /// </summary>
     public class TileDataCollection
     {
         #region Private Variables
@@ -181,6 +193,10 @@ namespace Yontalane.LayoutTilemap
     }
     #endregion
 
+    /// <summary>
+    /// MapBuilder is a MonoBehaviour component that loads and builds maps from Unity Tilemaps,
+    /// instantiating prefabs for tiles and entities, and managing their placement in the scene.
+    /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Yontalane/Layout Tilemap/Map Builder")]
     public sealed class MapBuilder : MonoBehaviour
@@ -401,7 +417,7 @@ namespace Yontalane.LayoutTilemap
 
             mapData.mapParent = m_mapParent;
 
-            Destroy(m_gridInstance.gameObject);
+            DestroyImmediate(m_gridInstance.gameObject);
 
             callback?.Invoke(mapData);
         }

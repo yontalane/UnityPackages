@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Yontalane.LayoutTilemap
 {
+    /// <summary>
+    /// Stores and manages settings for the LayoutTilemap system, including default and special case map entity data.
+    /// </summary>
     [FilePath("ProjectSettings/LayoutTilemapSettings.asset", FilePathAttribute.Location.ProjectFolder)]
     public class LayoutTilemapSettings : ScriptableSingleton<LayoutTilemapSettings>
     {

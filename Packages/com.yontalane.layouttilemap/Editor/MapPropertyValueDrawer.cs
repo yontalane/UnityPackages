@@ -4,6 +4,9 @@ using Yontalane.LayoutTilemap;
 
 namespace YontalaneEditor.LayoutTilemap
 {
+    /// <summary>
+    /// Custom property drawer for MapPropertyValue, allowing selection of value type and editing of the corresponding value in the Unity Inspector.
+    /// </summary>
     [CustomPropertyDrawer(typeof(MapPropertyValue))]
     internal class MapPropertyValueDrawer : PropertyDrawer
     {
@@ -13,11 +16,11 @@ namespace YontalaneEditor.LayoutTilemap
 
             float width = position.width * 0.5f;
 
-            Rect enumRect = new Rect(position.x, position.y, width, position.height);
+            Rect enumRect = new(position.x, position.y, width, position.height);
             SerializedProperty enumProp = property.FindPropertyRelative("type");
             EditorGUI.PropertyField(enumRect, enumProp, GUIContent.none);
 
-            Rect valueRect = new Rect(position.x + width, position.y, width, position.height);
+            Rect valueRect = new(position.x + width, position.y, width, position.height);
 
             switch(enumProp.enumNames[enumProp.enumValueIndex])
             {

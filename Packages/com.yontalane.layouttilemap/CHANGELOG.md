@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.22] - 2025.08.26
+
+### Fixed
+
+- Using DestroyImmediate instead of Destroy.
+
 ## [1.0.21] - 2025.08.03
 
 ### Fixed
