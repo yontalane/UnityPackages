@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.7] - 2025.08.26
+
+### Added
+
+- Set dialog count sample script.
+
 ## [1.0.6] - 2025.08.09
 
 ### Changed

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.76] - 2025.08.26
+
+### Added
+
+- Added ability to set dialog count value.
+
 ## [1.0.75] - 2025.08.07
 
 ### Fixed

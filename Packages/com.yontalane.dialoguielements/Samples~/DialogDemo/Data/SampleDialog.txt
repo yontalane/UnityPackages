@@ -2,6 +2,7 @@
 
   <<player>> [Sound = Positive]: Hello.
   
+  COUNT > 4 => Start Over
   COUNT > 1 => Short Exit
   
   <<self>>
@@ -11,6 +12,13 @@
     - My name is <<player>>. => Gift
     - You don't know? => Exit
     - I forgot. => Forgot
+
+
+
+# Start Over
+
+  <<self>> [Portrait = Portrait B]: . . .
+  SET COUNT = 0
 
 
 

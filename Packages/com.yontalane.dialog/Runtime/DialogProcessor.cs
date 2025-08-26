@@ -604,6 +604,28 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// Attempts to set the dialog count based on the setDialogCount property of the given line data.
+        /// </summary>
+        /// <param name="lineData">The line data containing the setDialogCount instruction.</param>
+        /// <returns>True if the dialog count was successfully set; otherwise, false.</returns>
+        private bool TrySetDialogCount(LineData lineData)
+        {
+            if (string.IsNullOrEmpty(lineData.setDialogCount))
+            {
+                return false;
+            }
+
+            if (!int.TryParse(lineData.setDialogCount, out int value))
+            {
+                return false;
+            }
+
+            SetDialogCount(DialogAgent.ID, value);
+
+            return true;
+        }
+
+        /// <summary>
         /// Advances to the next line if the current line is an if statement.
         /// </summary>
         private void PassOverIf()
@@ -682,6 +704,9 @@ namespace Yontalane.Dialog
 
             // Set the variable in the DataStorage based on the setVar field of the current line.
             SetVar(m_nodeData.lines[m_lineIndex].setVar);
+
+            // Set the dialog count based on the setDialogCount field of the current line.
+            _ = TrySetDialogCount(m_nodeData.lines[m_lineIndex]);
 
             // Call the function on the current line.
             CallFunction(m_nodeData.lines[m_lineIndex].callFunction);
@@ -808,6 +833,16 @@ namespace Yontalane.Dialog
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Assigns a new value to the number of times a dialog with the specified ID has been initiated.
+        /// </summary>
+        /// <param name="id">The unique identifier for the dialog.</param>
+        /// <param name="value">The new value for the dialog count.</param>
+        private static void SetDialogCount(string id, int value)
+        {
+            DataStorage.SetValue(id, value.ToString());
         }
 
         /// <summary>
