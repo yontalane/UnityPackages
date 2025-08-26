@@ -338,10 +338,25 @@ namespace Yontalane.LayoutTilemap
         /// This method loads a UnityEngine.Tilemap. It scrapes through all Tiles and Entities within the map, replaces them with instantiated prefabs, and then deletes the Tilemap. In other words, you can use this method to build a 3D level using a 2D Tilemap as your blueprint.
         /// </summary>
         /// <param name="callback">Invoke this action when the map has finished loading.</param>
-        /// <param name="mapToLoad">The name of the Tilemap to load from Resources. If this parameter is left blank, MapBuilder will fall back on <c>mapToLoad</c>.</param>
-        public void LoadMap(Action<MapData> callback, Grid mapToLoad)
+        /// <param name="grid">The map grid.</param>
+        public void LoadMap(Action<MapData> callback, Grid grid)
         {
-            m_gridInstance = mapToLoad;
+            if (grid == null)
+            {
+                Debug.LogError($"Trying to load null map.");
+                return;
+            }
+
+            // If the grid's GameObject has a null scene reference, that means it's a prefab. In that case, instantiate.
+            if (grid.gameObject.scene == null || string.IsNullOrEmpty(grid.gameObject.scene.name) || grid.gameObject.scene.name == grid.name)
+            {
+                m_gridInstance = Instantiate(grid);
+            }
+            // If the grid's GameObject has a non-null scene reference, that means it's an instance. In that case, use it as is.
+            else
+            {
+                m_gridInstance = grid;
+            }
 
             m_gridInstance.transform.position = Vector3.zero;
             m_gridInstance.transform.localEulerAngles = Vector3.zero;
@@ -482,7 +497,7 @@ namespace Yontalane.LayoutTilemap
 
             mapData.mapParent = m_mapParent;
 
-            DestroyImmediate(m_gridInstance.gameObject);
+            Destroy(m_gridInstance.gameObject);
 
             callback?.Invoke(mapData);
         }

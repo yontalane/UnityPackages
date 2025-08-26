@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.24] - 2025.08.26
+
+### Fixed
+
+- MapBuilder tried to destroy prefab asset and not instance.
+
 ## [1.0.23] - 2025.08.26
 
 ### Added
