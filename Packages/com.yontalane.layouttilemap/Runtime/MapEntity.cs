@@ -8,19 +8,25 @@ namespace Yontalane.LayoutTilemap
     [System.Serializable]
     public struct MapEntityData
     {
+        [Tooltip("The overall scale of the map entity's visual representation.")]
         [Min(0.01f)]
         public float scale;
 
+        [Tooltip("The color used for the outer part of the entity's visual representation.")]
         public Color outerColor;
 
+        [Tooltip("The color used for the inner part of the entity's visual representation.")]
         public Color innerColor;
 
+        [Tooltip("The length of the pointer (direction indicator) for the map entity.")]
         [Min(0.01f)]
         public float pointerLength;
 
+        [Tooltip("The scale of the pointer (direction indicator) for the map entity.")]
         [Min(0.01f)]
         public float pointerScale;
 
+        [Tooltip("The thickness of the outline for the map entity's visual representation.")]
         [Range(1, 5)]
         public int thickness;
     }
@@ -31,7 +37,10 @@ namespace Yontalane.LayoutTilemap
     [System.Serializable]
     public struct NamedMapEntityData
     {
+        [Tooltip("The name associated with this set of MapEntityData.")]
         public string name;
+
+        [Tooltip("The visual and pointer configuration data for this named map entity.")]
         public MapEntityData data;
     }
 
@@ -46,6 +55,10 @@ namespace Yontalane.LayoutTilemap
     public class MapEntity : MonoBehaviour
     {
         private MapProperties m_mapProperties = null;
+        
+        /// <summary>
+        /// Gets the MapProperties component associated with this MapEntity.
+        /// </summary>
         public MapProperties MapProperties
         {
             get

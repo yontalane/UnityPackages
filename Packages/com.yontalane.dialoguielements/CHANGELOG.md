@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.3] - 2025.08.26
+
+### Changed
+
+- Updated required package versions.
+
 ## [1.0.2] - 2025.08.26
 
 ### Added

@@ -8,10 +8,25 @@ namespace Yontalane.LayoutTilemap
     [System.Serializable]
     public enum MapPropertyValueType
     {
+        /// <summary>
+        /// A string value.
+        /// </summary>
         String,
+        /// <summary>
+        /// A floating-point numeric value.
+        /// </summary>
         Float,
+        /// <summary>
+        /// An integer numeric value.
+        /// </summary>
         Int,
+        /// <summary>
+        /// A boolean value (true or false).
+        /// </summary>
         Bool,
+        /// <summary>
+        /// A Unity Object reference.
+        /// </summary>
         Object
     }
 
@@ -21,11 +36,22 @@ namespace Yontalane.LayoutTilemap
     [System.Serializable]
     public struct MapPropertyValue
     {
+        [Tooltip("The type of value stored in this property (String, Float, Int, Bool, or Object).")]
         public MapPropertyValueType type;
+
+        [Tooltip("The string value of the property (used if type is String).")]
         public string stringValue;
+
+        [Tooltip("The float value of the property (used if type is Float).")]
         public float floatValue;
+
+        [Tooltip("The integer value of the property (used if type is Int).")]
         public int intValue;
+
+        [Tooltip("The boolean value of the property (used if type is Bool).")]
         public bool boolValue;
+
+        [Tooltip("The Unity Object reference value of the property (used if type is Object).")]
         public Object objectReference;
     }
 
@@ -43,9 +69,13 @@ namespace Yontalane.LayoutTilemap
     [AddComponentMenu("Yontalane/Layout Tilemap/Properties")]
     public class MapProperties : MonoBehaviour
     {
+        [Tooltip("A collection of key-value property pairs for this map element.")]
         [SerializeField]
-        private MapPropertyDictionary m_properties = new MapPropertyDictionary();
+        private MapPropertyDictionary m_properties = new();
 
+        /// <summary>
+        /// Gets the collection of key-value property pairs for this map element.
+        /// </summary>
         public MapPropertyDictionary Properties => m_properties;
     }
 }

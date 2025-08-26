@@ -150,6 +150,16 @@ namespace Yontalane.Dialog
                     LineToSetCount(line[8..]);
                     continue;
                 }
+                else if (lineUp.IndexOf("ADD COUNT") == 0)
+                {
+                    LineToAddCount(line[9..]);
+                    continue;
+                }
+                else if (lineUp.IndexOf("ADDCOUNT") == 0)
+                {
+                    LineToAddCount(line[8..]);
+                    continue;
+                }
                 else if (lineUp.IndexOf("SET:") == 0)
                 {
                     LineToSet(line[4..]);
@@ -402,6 +412,21 @@ namespace Yontalane.Dialog
             line = line.Trim();
 
             s_lineData.Add(new() { setDialogCount = line, });
+            s_responseData.Clear();
+        }
+
+        /// <summary>
+        /// Parses a line to extract and add to the dialog count value.
+        /// Adds a addDialogCount marker to s_lineData and clears any existing response data.
+        /// </summary>
+        /// <param name="line">The line of text to parse for adding to dialog count.</param>
+        private static void LineToAddCount(string line)
+        {
+            line = line.Replace("=", "");
+            line = line.Replace(":", "");
+            line = line.Trim();
+
+            s_lineData.Add(new() { addDialogCount = line, });
             s_responseData.Clear();
         }
 

@@ -11,8 +11,19 @@ namespace Yontalane.LayoutTilemap
     /// </summary>
     public struct TileData
     {
+        /// <summary>
+        /// Indicates whether a tile exists at the specified location.
+        /// </summary>
         public bool exists;
+
+        /// <summary>
+        /// The name or identifier of the tile.
+        /// </summary>
         public string name;
+
+        /// <summary>
+        /// The world position of the tile in 3D space.
+        /// </summary>
         public Vector3 worldPosition;
     }
     
@@ -21,13 +32,44 @@ namespace Yontalane.LayoutTilemap
     /// </summary>
     public struct EntityData
     {
+        /// <summary>
+        /// The name or identifier of the entity.
+        /// </summary>
         public string name;
+
+        /// <summary>
+        /// The world position of the entity in 3D space.
+        /// </summary>
         public Vector3 position;
+
+        /// <summary>
+        /// The rotation of the entity, expressed in Euler angles.
+        /// </summary>
         public Vector3 eulerAngles;
+
+        /// <summary>
+        /// Indicates whether the entity has valid bounds information.
+        /// </summary>
         public bool hasBounds;
+
+        /// <summary>
+        /// The bounding box of the entity, if available.
+        /// </summary>
         public Bounds bounds;
+
+        /// <summary>
+        /// Reference to the MapEntity component associated with this entity.
+        /// </summary>
         public MapEntity entity;
+
+        /// <summary>
+        /// A dictionary of custom properties associated with the entity.
+        /// </summary>
         public MapPropertyDictionary properties;
+
+        /// <summary>
+        /// The GameObject instance representing the entity in the scene.
+        /// </summary>
         public GameObject gameObject;
     }
 
@@ -36,11 +78,34 @@ namespace Yontalane.LayoutTilemap
     /// </summary>
     public struct MapData
     {
+        /// <summary>
+        /// The name or identifier of the map.
+        /// </summary>
         public string name;
+
+        /// <summary>
+        /// The collection of tile data for all tilemaps in the map.
+        /// </summary>
         public TileDataCollection tileDataCollection;
+
+        /// <summary>
+        /// The list of entities placed within the map.
+        /// </summary>
         public List<EntityData> entities;
+
+        /// <summary>
+        /// A dictionary of custom properties associated with the map.
+        /// </summary>
         public MapPropertyDictionary properties;
+
+        /// <summary>
+        /// The bounding box that encapsulates the map area.
+        /// </summary>
         public Bounds bounds;
+
+        /// <summary>
+        /// The parent transform under which the map is organized in the scene hierarchy.
+        /// </summary>
         public Transform mapParent;
     }
     #endregion
@@ -357,7 +422,7 @@ namespace Yontalane.LayoutTilemap
                 m_entities = m_tilemaps[i].GetComponentsInChildren<MapEntity>();
                 foreach (MapEntity entity in m_entities)
                 {
-                    EntityData entityData = new EntityData
+                    EntityData entityData = new()
                     {
                         name = entity.name,
                         position = m_tilemaps[i].MapLocalToGridLocal(entity.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle),

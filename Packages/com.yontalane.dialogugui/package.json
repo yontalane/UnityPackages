@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.dialogugui",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "displayName": "Dialog UGUI",
   "description": "A dialog system.",
   "unity": "6000.0",
@@ -8,8 +8,8 @@
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.dialog/Documentation~/index.md",
     "dependencies": {
         "com.unity.ugui": "2.0.0",
-        "com.yontalane.core": "1.0.37",
-        "com.yontalane.dialog": "1.0.75",
+        "com.yontalane.core": "1.0.38",
+        "com.yontalane.dialog": "1.0.77",
         "com.yontalane.queryugui": "1.0.1"
     },
   "keywords": [

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.23] - 2025.08.26
+
+### Added
+
+- Tooltips and summaries.
+
 ## [1.0.22] - 2025.08.26
 
 ### Fixed

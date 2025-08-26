@@ -626,6 +626,30 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// Attempts to add to the dialog count based on the addDialogCount property of the given line data.
+        /// </summary>
+        /// <param name="lineData">The line data containing the addDialogCount instruction.</param>
+        /// <returns>True if the dialog count was successfully added; otherwise, false.</returns>
+        private bool TryAddDialogCount(LineData lineData)
+        {
+            if (string.IsNullOrEmpty(lineData.addDialogCount))
+            {
+                return false;
+            }
+
+            if (!int.TryParse(lineData.addDialogCount, out int value))
+            {
+                return false;
+            }
+
+            int currentCount = GetDialogCount(DialogAgent.ID);
+
+            SetDialogCount(DialogAgent.ID, currentCount + value);
+
+            return true;
+        }
+
+        /// <summary>
         /// Advances to the next line if the current line is an if statement.
         /// </summary>
         private void PassOverIf()
@@ -707,6 +731,9 @@ namespace Yontalane.Dialog
 
             // Set the dialog count based on the setDialogCount field of the current line.
             _ = TrySetDialogCount(m_nodeData.lines[m_lineIndex]);
+
+            // Add to the dialog count based on the addDialogCount field of the current line.
+            _ = TryAddDialogCount(m_nodeData.lines[m_lineIndex]);
 
             // Call the function on the current line.
             CallFunction(m_nodeData.lines[m_lineIndex].callFunction);

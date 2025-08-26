@@ -160,8 +160,8 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ugui": "2.0.0",
-        "com.yontalane.core": "1.0.37",
-        "com.yontalane.dialog": "1.0.75",
+        "com.yontalane.core": "1.0.38",
+        "com.yontalane.dialog": "1.0.77",
         "com.yontalane.queryugui": "1.0.1"
       }
     },
@@ -171,8 +171,8 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ugui": "2.0.0",
-        "com.yontalane.core": "1.0.37",
-        "com.yontalane.dialog": "1.0.75",
+        "com.yontalane.core": "1.0.38",
+        "com.yontalane.dialog": "1.0.77",
         "com.yontalane.query": "1.0.18",
         "com.yontalane.uielements": "1.0.33"
       }

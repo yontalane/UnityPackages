@@ -152,6 +152,12 @@ namespace Yontalane.Dialog
         public string setDialogCount = "";
 
         /// <summary>
+        /// Adds a value to the dialog count.
+        /// </summary>
+        [Tooltip("Adds a value to the dialog count.")]
+        public string addDialogCount = "";
+
+        /// <summary>
         /// The name of a function that must return true for this line to be shown. Leave empty to ignore.
         /// </summary>
         [Tooltip("The name of a function that must return true for this line to be shown. Leave empty to ignore.")]
