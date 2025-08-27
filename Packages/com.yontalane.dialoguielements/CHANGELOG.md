@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2025.08.27
+
+### Added
+
+- Option to set DialogPane visibility using style class.
+
 ## [1.0.3] - 2025.08.26
 
 ### Changed

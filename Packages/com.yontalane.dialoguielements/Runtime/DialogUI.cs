@@ -425,7 +425,7 @@ namespace Yontalane.DialogUIElements
             }
 
             // Show the dialog pane.
-            m_dialogPane.style.display = DisplayStyle.Flex;
+            m_dialogPane.IsVisible = true;
 
             // Set focus to the first response button if any, otherwise to the skip button.
             if (m_dialogPane.ResponseButtonCount > 0)
@@ -455,7 +455,7 @@ namespace Yontalane.DialogUIElements
         /// <summary>
         /// Hides the dialog pane by setting its display style to None.
         /// </summary>
-        public void Close() => m_dialogPane.style.display = DisplayStyle.None;
+        public void Close() => m_dialogPane.IsVisible = false;
         #endregion
 
         #region Internal Methods

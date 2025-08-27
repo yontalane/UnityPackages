@@ -166,6 +166,7 @@ namespace Yontalane.DialogUIElements
         private bool m_speakerIsBold = true;
         private bool m_speakerIsCapitalized = false;
         private Color m_speakerColor = Color.yellow;
+        private string m_visibilityStyleClass = string.Empty;
 
         #endregion
 
@@ -349,9 +350,57 @@ namespace Yontalane.DialogUIElements
             set => m_continueButton.SetEnabled(value);
         }
 
+        /// <summary>
+        /// The style class that, when applied to the <see cref="DialogPane"/>, causes it to be visible. If left blank, visibility will be controlled by <see cref="DisplayStyle"/>.
+        /// </summary>
+        [Tooltip("The style class that, when applied to the DialogPane, causes it to be visible. If left blank, visibility will be controlled by DisplayStyle.")]
+        [UxmlAttribute]
+        public string VisibilityStyleClass
+        {
+            get => m_visibilityStyleClass;
+            set => m_visibilityStyleClass = value;
+        }
+
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Whether the <see cref="DialogPane"/> is visible.
+        /// </summary>
+        public bool IsVisible
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(VisibilityStyleClass))
+                {
+                    return ClassListContains(VisibilityStyleClass);
+                }
+                else
+                {
+                    return style.display == DisplayStyle.Flex;
+                }
+            }
+
+            set
+            {
+                if (!string.IsNullOrEmpty(VisibilityStyleClass))
+                {
+                    if (value && !ClassListContains(VisibilityStyleClass))
+                    {
+                        AddToClassList(VisibilityStyleClass);
+                    }
+                    else if (!value && ClassListContains(VisibilityStyleClass))
+                    {
+                        RemoveFromClassList(VisibilityStyleClass);
+                    }
+                }
+                else
+                {
+                    style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the number of response buttons currently displayed in the dialog pane.
