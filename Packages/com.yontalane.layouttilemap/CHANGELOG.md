@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.26] - 2025.08.27
+
+### Added
+
+- Option to not load resources from tile names.
+
 ## [1.0.25] - 2025.08.26
 
 ### Added

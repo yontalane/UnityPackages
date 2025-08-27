@@ -280,7 +280,11 @@ namespace Yontalane.LayoutTilemap
         private Transform m_mapParent = null;
 
         [SerializeField]
-        [Tooltip("Should the MapBuilder attempt to load entities from Resources? Note that tiles are always loaded from Resources.")]
+        [Tooltip("Should the MapBuilder attempt to load tiles from Resources?")]
+        private bool m_loadTileResources = true;
+
+        [SerializeField]
+        [Tooltip("Should the MapBuilder attempt to load entities from Resources?")]
         private bool m_loadEntityResources = true;
         #endregion
 
@@ -418,7 +422,11 @@ namespace Yontalane.LayoutTilemap
                         }
                         m_tilePosition = m_tilemaps[i].CellToWorld(new Vector3Int(x, y, 0));
                         m_tileBounds = new Bounds(m_tilePosition, m_tilemaps[i].cellSize);
-                        CreateObject(m_tile.name, m_tilemapContainer, m_tilePosition, Vector3.zero, true);
+
+                        if (m_loadTileResources)
+                        {
+                            CreateObject(m_tile.name, m_tilemapContainer, m_tilePosition, Vector3.zero, true);
+                        }
 
                         mapData.tileDataCollection.AddTileData(new TileData()
                         {
@@ -526,7 +534,12 @@ namespace Yontalane.LayoutTilemap
             else
             {
                 m_prefab = Resources.Load<GameObject>(name);
-                if (m_prefab == null) return null;
+
+                if (m_prefab == null)
+                {
+                    return null;
+                }
+
                 m_loadedPrefabs.Add(name, m_prefab);
             }
 
