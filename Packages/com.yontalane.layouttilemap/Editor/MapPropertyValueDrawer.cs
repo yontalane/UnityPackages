@@ -22,7 +22,7 @@ namespace YontalaneEditor.LayoutTilemap
 
             Rect valueRect = new(position.x + width, position.y, width, position.height);
 
-            switch(enumProp.enumNames[enumProp.enumValueIndex])
+            switch (enumProp.enumNames[enumProp.enumValueIndex])
             {
                 case "String":
                     EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("stringValue"), GUIContent.none);

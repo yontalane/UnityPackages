@@ -26,7 +26,7 @@ namespace Yontalane.LayoutTilemap
         /// </summary>
         public Vector3 worldPosition;
     }
-    
+
     /// <summary>
     /// Contains information about an entity placed on the map, such as its name, position, rotation, bounds, reference to the entity, properties, and associated GameObject.
     /// </summary>
@@ -41,6 +41,11 @@ namespace Yontalane.LayoutTilemap
         /// The world position of the entity in 3D space.
         /// </summary>
         public Vector3 position;
+
+        /// <summary>
+        /// The local position of the entity in 3D space.
+        /// </summary>
+        public Vector3 localPosition;
 
         /// <summary>
         /// The rotation of the entity, expressed in Euler angles.
@@ -117,7 +122,7 @@ namespace Yontalane.LayoutTilemap
     public class TileDataCollection
     {
         #region Private Variables
-        private readonly List<List<List<TileData>>> m_list = new List<List<List<TileData>>>();
+        private readonly List<List<List<TileData>>> m_list = new();
         #endregion
 
         #region Constructor
@@ -133,7 +138,7 @@ namespace Yontalane.LayoutTilemap
                 AddTilemap();
             }
 
-            List<List<TileData>> tilemap = m_list[m_list.Count - 1];
+            List<List<TileData>> tilemap = m_list[^1];
             tilemap.Add(new List<TileData>());
         }
 
@@ -144,14 +149,14 @@ namespace Yontalane.LayoutTilemap
                 AddTilemap();
             }
 
-            List<List<TileData>> tilemap = m_list[m_list.Count - 1];
+            List<List<TileData>> tilemap = m_list[^1];
 
             if (tilemap.Count == 0)
             {
                 AddRow();
             }
 
-            List<TileData> row = tilemap[tilemap.Count - 1];
+            List<TileData> row = tilemap[^1];
 
             row.Add(tileData);
         }
@@ -219,7 +224,7 @@ namespace Yontalane.LayoutTilemap
             List<List<TileData>> tilemap = m_list[tilemapIndex];
 
             int longestRow = 0;
-            foreach(List<TileData> row in tilemap)
+            foreach (List<TileData> row in tilemap)
             {
                 longestRow = Mathf.Max(row.Count, longestRow);
             }
@@ -228,7 +233,6 @@ namespace Yontalane.LayoutTilemap
 
             for (int y = 0; y < array.GetLength(1); y++)
             {
-                List<TileData> row = tilemap[y];
                 for (int x = 0; x < array.GetLength(0); x++)
                 {
                     array[x, y] = getItem(new Vector2Int(x, y));
@@ -240,7 +244,7 @@ namespace Yontalane.LayoutTilemap
 
         public string[,] GetNamesArray(int tilemapIndex)
         {
-            return GetArray<string>(tilemapIndex, (Vector2Int mapPosition) =>
+            return GetArray(tilemapIndex, (Vector2Int mapPosition) =>
             {
                 List<TileData> row = m_list[tilemapIndex][mapPosition.y];
                 return mapPosition.x < row.Count ? row[mapPosition.x].name : string.Empty;
@@ -249,10 +253,10 @@ namespace Yontalane.LayoutTilemap
 
         public bool[,] GetExistArray(int tilemapIndex)
         {
-            return GetArray<bool>(tilemapIndex, (Vector2Int mapPosition) =>
+            return GetArray(tilemapIndex, (Vector2Int mapPosition) =>
             {
                 List<TileData> row = m_list[tilemapIndex][mapPosition.y];
-                return mapPosition.x < row.Count ? row[mapPosition.x].exists : false;
+                return mapPosition.x < row.Count && row[mapPosition.x].exists;
             });
         }
     }
@@ -281,7 +285,7 @@ namespace Yontalane.LayoutTilemap
         #endregion
 
         #region Private Fields
-        private readonly Dictionary<string, GameObject> m_loadedPrefabs = new Dictionary<string, GameObject>();
+        private readonly Dictionary<string, GameObject> m_loadedPrefabs = new();
 
         private Grid m_gridPrefab;
         private Grid m_gridInstance;
@@ -362,7 +366,7 @@ namespace Yontalane.LayoutTilemap
             m_gridInstance.transform.localEulerAngles = Vector3.zero;
             m_gridInstance.transform.localScale = Vector3.one;
 
-            MapData mapData = new MapData
+            MapData mapData = new()
             {
                 name = m_gridInstance.name,
                 entities = new List<EntityData>()
@@ -440,6 +444,7 @@ namespace Yontalane.LayoutTilemap
                     EntityData entityData = new()
                     {
                         name = entity.name,
+                        localPosition = entity.transform.localPosition,
                         position = m_tilemaps[i].MapLocalToGridLocal(entity.transform.localPosition, m_gridBounds, m_gridInstance.cellSwizzle),
                         eulerAngles = entity.transform.localEulerAngles,
                         entity = entity,

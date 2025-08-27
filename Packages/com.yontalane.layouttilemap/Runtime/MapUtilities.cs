@@ -28,7 +28,7 @@ namespace Yontalane.LayoutTilemap
                 y = tilemap.transform.localPosition.z + (cell.y - mapBounds.yMin) * tilemap.cellSize.y,
                 z = tilemap.transform.localPosition.y + (cell.z - mapBounds.zMin) * tilemap.cellSize.z
             };
-            
+
             Vector3 b = new();
 
             // Apply the specified cell swizzle order to rearrange the coordinates as needed for the grid layout.

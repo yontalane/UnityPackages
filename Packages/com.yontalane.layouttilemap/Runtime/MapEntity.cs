@@ -55,7 +55,7 @@ namespace Yontalane.LayoutTilemap
     public class MapEntity : MonoBehaviour
     {
         private MapProperties m_mapProperties = null;
-        
+
         /// <summary>
         /// Gets the MapProperties component associated with this MapEntity.
         /// </summary>
@@ -105,12 +105,12 @@ namespace Yontalane.LayoutTilemap
 
             for (int i = 0; i < 2 * thickness; i++)
             {
-                Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.8f - i * 0.02f));
+                Gizmos.DrawWireSphere(transform.position + pointerLength * scale * transform.forward, pointerScale * scale * (0.8f - i * 0.02f));
             }
             Gizmos.color = outerColor;
             for (int i = 0; i < 2 * thickness; i++)
             {
-                Gizmos.DrawWireSphere(transform.position + transform.forward * pointerLength * scale, pointerScale * scale * (0.82f + i * 0.02f));
+                Gizmos.DrawWireSphere(transform.position + pointerLength * scale * transform.forward, pointerScale * scale * (0.82f + i * 0.02f));
             }
 
             if (TryGetComponent(out Collider collider))

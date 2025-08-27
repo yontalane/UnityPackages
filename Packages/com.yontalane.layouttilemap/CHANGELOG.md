@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.25] - 2025.08.26
+
+### Added
+
+- EntityData has localPosition.
+
 ## [1.0.24] - 2025.08.26
 
 ### Fixed
