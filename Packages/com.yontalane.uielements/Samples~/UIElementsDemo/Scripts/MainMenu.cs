@@ -54,13 +54,13 @@ namespace YontalaneDemos.UIElements
         /// </summary>
         /// <param name="menu">The name of the menu where the click occurred.</param>
         /// <param name="item">The name of the clicked item.</param>
-        protected override void OnClick(string menu, string item)
+        protected override void OnClick(ClickData clickData)
         {
-            switch(menu)
+            switch(clickData.menu)
             {
                 case "Main":
                     // Handle clicks in the "Main" menu.
-                    switch (item)
+                    switch (clickData.item)
                     {
                         case "PopupButton":
                             // Show the sample query popup and focus it.
@@ -71,13 +71,13 @@ namespace YontalaneDemos.UIElements
                     break;
                 case "Inventory":
                     // Handle clicks in the "Inventory" menu.
-                    switch (item)
+                    switch (clickData.item)
                     {
                         case "Add":
                             // Add a random fruit to the inventory.
                             string text = FRUIT[Mathf.FloorToInt(FRUIT.Length * Random.value)];
                             string id = $"{text}{m_inventoryID}";
-                            Add(menu, new()
+                            Add(clickData.menu, new()
                             {
                                 text = text,
                                 name = id
@@ -85,8 +85,8 @@ namespace YontalaneDemos.UIElements
                             m_inventoryID++;
                             m_inventory.Add(id);
                             // Enable/disable buttons based on inventory count.
-                            SetEnabled(menu, "Add", m_inventory.Count < MAX_INVENTORY);
-                            SetEnabled(menu, "Drop", true);
+                            SetEnabled(clickData.menu, "Add", m_inventory.Count < MAX_INVENTORY);
+                            SetEnabled(clickData.menu, "Drop", true);
                             // If inventory is full, focus the "Drop" button.
                             if (m_inventory.Count >= MAX_INVENTORY)
                             {
@@ -95,22 +95,28 @@ namespace YontalaneDemos.UIElements
                             break;
                         case "Drop":
                             // Clear the inventory and reset buttons/focus.
-                            Clear(menu);
+                            Clear(clickData.menu);
                             m_inventory.Clear();
-                            SetEnabled(menu, "Add", true);
-                            SetEnabled(menu, "Drop", false);
+                            SetEnabled(clickData.menu, "Add", true);
+                            SetEnabled(clickData.menu, "Drop", false);
                             SetFocus("Add");
                             break;
                         default:
+                            // Skip processing if the item is set up for use in the inspector
+                            if (clickData.inUse)
+                            {
+                                break;
+                            }
+
                             // Remove a specific inventory item and update state.
-                            _ = TryGetContainer(menu, out VisualElement container);
-                            TextElement inventoryItem = container.Q<TextElement>(item);
+                            _ = TryGetContainer(clickData.menu, out VisualElement container);
+                            TextElement inventoryItem = container.Q<TextElement>(clickData.item);
                             int index = container.IndexOf(inventoryItem);
 
-                            Remove(menu, item);
-                            m_inventory.Remove(item);
-                            SetEnabled(menu, "Add", m_inventory.Count < MAX_INVENTORY);
-                            SetEnabled(menu, "Drop", m_inventory.Count > 0);
+                            Remove(clickData.menu, clickData.item);
+                            m_inventory.Remove(clickData.item);
+                            SetEnabled(clickData.menu, "Add", m_inventory.Count < MAX_INVENTORY);
+                            SetEnabled(clickData.menu, "Drop", m_inventory.Count > 0);
 
                             // Set focus to the appropriate item or button after removal.
                             if (container.childCount == 0)

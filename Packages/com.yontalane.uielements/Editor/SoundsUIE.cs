@@ -1,0 +1,31 @@
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+using Yontalane.UIElements;
+
+namespace YontalaneEditor.UIElements
+{
+    [CustomPropertyDrawer(typeof(MenuManager.Sounds))]
+    public class SoundsUIE : MenuPropertyDrawerUIE
+    {
+        protected override string HeaderText => "Sounds";
+
+        protected override void MenuGUI(SerializedProperty property, VisualElement container)
+        {
+            SerializedProperty click = property.FindPropertyRelative("click");
+            SerializedProperty navigation = property.FindPropertyRelative("navigation");
+            SerializedProperty tab = property.FindPropertyRelative("tab");
+            SerializedProperty cancel = property.FindPropertyRelative("cancel");
+
+            PropertyField clickField = new(click) { name = "Click" };
+            PropertyField navigationField = new(navigation) { name = "Navigation" };
+            PropertyField tabField = new(tab) { name = "Tab" };
+            PropertyField cancelField = new(cancel) { name = "Cancel" };
+
+            container.Add(clickField);
+            container.Add(navigationField);
+            container.Add(tabField);
+            container.Add(cancelField);
+        }
+    }
+}

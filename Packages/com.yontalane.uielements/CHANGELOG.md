@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.35] - 2025.08.28
+
+### Added
+
+- Menu event broadcasters and optional audio clips.
+
 ## [1.0.34] - 2025.08.16
 
 ### Fixed

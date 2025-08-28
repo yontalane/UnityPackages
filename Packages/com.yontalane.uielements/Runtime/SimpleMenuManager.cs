@@ -44,10 +44,21 @@ namespace Yontalane.UIElements
             OnButton = null;
         }
 
-        protected override void OnClick(string menu, string item)
+        /// <summary>
+        /// Handles menu item click events by invoking UnityEvents.
+        /// Invokes <see cref="OnMenuItem"/> with the menu and item names,
+        /// and <see cref="OnButton"/> with the item name, unless the item is marked as "in use".
+        /// </summary>
+        /// <param name="clickData">Information about the clicked menu item.</param>
+        protected override void OnClick(ClickData clickData)
         {
-            OnMenuItem?.Invoke(menu, item);
-            OnButton?.Invoke(item);
+            if (clickData.inUse)
+            {
+                return;
+            }
+
+            OnMenuItem?.Invoke(clickData.menu, clickData.item);
+            OnButton?.Invoke(clickData.item);
         }
     }
 }

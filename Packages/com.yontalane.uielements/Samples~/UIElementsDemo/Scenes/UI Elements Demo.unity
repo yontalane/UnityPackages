@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311924, g: 0.38073963, b: 0.3587269, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -146,6 +142,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110051338}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -154,7 +151,6 @@ Transform:
   - {fileID: 351497677}
   - {fileID: 321883182}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &191979900
 GameObject:
@@ -204,6 +200,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!114 &191979902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,13 +223,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 191979900}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &321883181
 GameObject:
@@ -258,13 +255,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321883181}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 110051339}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &321883183
 MonoBehaviour:
@@ -305,6 +302,7 @@ MonoBehaviour:
         type: 0
         targetMenu: 
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 0
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -323,6 +321,7 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -335,6 +334,7 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -347,6 +347,7 @@ MonoBehaviour:
         type: 2
         targetMenu: Main
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -356,6 +357,27 @@ MonoBehaviour:
     actions: {fileID: -944628639613478452, guid: a550d5bad40824c33b69d909b451e28c, type: 3}
     tabLeft: Player/TabLeft
     tabRight: Player/TabRight
+    buttons: []
+  m_listeners:
+    editorExpanded: 0
+    onClick:
+      m_PersistentCalls:
+        m_Calls: []
+    onNavigation:
+      m_PersistentCalls:
+        m_Calls: []
+    onTabNavigation:
+      m_PersistentCalls:
+        m_Calls: []
+    onCancel:
+      m_PersistentCalls:
+        m_Calls: []
+  m_sounds:
+    editorExpanded: 1
+    click: {fileID: 8300000, guid: f0a9487b8095846dbb1245848d828115, type: 3}
+    navigation: {fileID: 8300000, guid: 02b929fa62cf444bcabc3ffd6a70c15b, type: 3}
+    tab: {fileID: 8300000, guid: 02b929fa62cf444bcabc3ffd6a70c15b, type: 3}
+    cancel: {fileID: 8300000, guid: d0fe6f89c7800442eaecd2594a73d9f0, type: 3}
 --- !u!1 &351497676
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,13 +402,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351497676}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 110051339}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &351497678
 MonoBehaviour:
@@ -411,6 +433,7 @@ MonoBehaviour:
         type: 0
         targetMenu: 
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 0
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -442,6 +465,7 @@ MonoBehaviour:
         type: 0
         targetMenu: 
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -458,6 +482,7 @@ MonoBehaviour:
         type: 0
         targetMenu: Main
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: 
       defaultAddableItemTemplate: {fileID: 0}
@@ -474,6 +499,7 @@ MonoBehaviour:
         type: 0
         targetMenu: Main
         targetSubordinate: 0
+      blockSideNavigation: 0
       hasGlobalMenu: 1
       addableContainer: Container
       defaultAddableItemTemplate: {fileID: 9197481963319205126, guid: f4e0d104e78a74ca29716351456067dc, type: 3}
@@ -483,6 +509,27 @@ MonoBehaviour:
     actions: {fileID: 0}
     tabLeft: 
     tabRight: 
+    buttons: []
+  m_listeners:
+    editorExpanded: 1
+    onClick:
+      m_PersistentCalls:
+        m_Calls: []
+    onNavigation:
+      m_PersistentCalls:
+        m_Calls: []
+    onTabNavigation:
+      m_PersistentCalls:
+        m_Calls: []
+    onCancel:
+      m_PersistentCalls:
+        m_Calls: []
+  m_sounds:
+    editorExpanded: 1
+    click: {fileID: 8300000, guid: f0a9487b8095846dbb1245848d828115, type: 3}
+    navigation: {fileID: 8300000, guid: 02b929fa62cf444bcabc3ffd6a70c15b, type: 3}
+    tab: {fileID: 8300000, guid: 02b929fa62cf444bcabc3ffd6a70c15b, type: 3}
+    cancel: {fileID: 8300000, guid: d0fe6f89c7800442eaecd2594a73d9f0, type: 3}
 --- !u!1 &1641640682
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,13 +614,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641640682}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1996680968
 GameObject:
@@ -608,6 +655,9 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 980aa5222189f43bdabbcb8c45383ada, type: 3}
   m_SortingOrder: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
 --- !u!4 &1996680970
 Transform:
   m_ObjectHideFlags: 0
@@ -615,11 +665,19 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996680968}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1641640685}
+  - {fileID: 1996680970}
+  - {fileID: 191979903}
+  - {fileID: 110051339}

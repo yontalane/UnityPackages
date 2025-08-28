@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -15,6 +16,20 @@ namespace Yontalane.UIElements
     public abstract class MenuManager : MonoBehaviour
     {
         #region Structs
+        /// <summary>
+        /// A navigation event handler.
+        /// </summary>
+        [System.Serializable]
+        public class NavigationEvent : UnityEvent
+        { }
+
+        /// <summary>
+        /// A click event handler.
+        /// </summary>
+        [System.Serializable]
+        public class ClickEvent : UnityEvent<ClickData>
+        { }
+
         [System.Serializable]
         /// <summary>
         /// Represents the input configuration for menu controls, including input actions and button mappings.
@@ -29,25 +44,93 @@ namespace Yontalane.UIElements
             public bool editorExpanded;
 #pragma warning restore IDE0079
 #endif
-            /// <summary>
-            /// The InputActionAsset containing all input actions for menu navigation.
-            /// </summary>
+
+            [Tooltip("The InputActionAsset containing all input actions for menu navigation.")]
             public InputActionAsset actions;
 
-            /// <summary>
-            /// The action name or path for navigating to the previous tab.
-            /// </summary>
+            [Tooltip("The action name or path for navigating to the previous tab.")]
             public string tabLeft;
 
-            /// <summary>
-            /// The action name or path for navigating to the next tab.
-            /// </summary>
+            [Tooltip("The action name or path for navigating to the next tab.")]
             public string tabRight;
 
-            /// <summary>
-            /// An array of action names or paths for menu button actions (e.g., submit, cancel).
-            /// </summary>
+            [Tooltip("An array of action names or paths for menu button actions (e.g., submit, cancel).")]
             public string[] buttons;
+        }
+
+        /// <summary>
+        /// Contains UnityEvents for menu interactions such as clicking, navigation, tab changes, and cancel actions.
+        /// </summary>
+        [System.Serializable]
+        public struct Listeners
+        {
+#if UNITY_EDITOR
+#pragma warning disable IDE0079
+            /// <summary>
+            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
+            /// </summary>
+            public bool editorExpanded;
+#pragma warning restore IDE0079
+#endif
+            [Tooltip("An event that is broadcast on menu item clicking.")]
+            public ClickEvent onClick;
+
+            [Tooltip("An event that is broadcast on menu item navigation.")]
+            public NavigationEvent onNavigation;
+
+            [Tooltip("An event that is broadcast on menu tab navigation.")]
+            public NavigationEvent onTabNavigation;
+
+            [Tooltip("An event that is broadcast when the user presses the cancel key to back out of a menu.")]
+            public NavigationEvent onCancel;
+        }
+
+        /// <summary>
+        /// Contains optional AudioClips for menu sound effects, such as clicking, navigation, tab changes, and cancel actions.
+        /// </summary>
+        [System.Serializable]
+        public struct Sounds
+        {
+#if UNITY_EDITOR
+#pragma warning disable IDE0079
+            /// <summary>
+            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
+            /// </summary>
+            public bool editorExpanded;
+#pragma warning restore IDE0079
+#endif
+            [Tooltip("An optional sound effect for menu item clicking.")]
+            public AudioClip click;
+
+            [Tooltip("An optional sound effect for menu item navigation.")]
+            public AudioClip navigation;
+
+            [Tooltip("An optional sound effect for menu tab navigation.")]
+            public AudioClip tab;
+
+            [Tooltip("An optional sound effect for when the user presses the cancel key to back out of a menu.")]
+            public AudioClip cancel;
+        }
+
+        /// <summary>
+        /// Represents data about a menu click event, including the menu name, item name, and whether the item is set up for use in the inspector.
+        /// </summary>
+        public struct ClickData
+        {
+            /// <summary>
+            /// The name of the menu where the click event occurred.
+            /// </summary>
+            public string menu;
+
+            /// <summary>
+            /// The name of the item that was clicked within the menu.
+            /// </summary>
+            public string item;
+
+            /// <summary>
+            /// Indicates whether the clicked item is set up for use in the inspector.
+            /// </summary>
+            public bool inUse;
         }
         #endregion
 
@@ -75,6 +158,14 @@ namespace Yontalane.UIElements
         [Tooltip("The input configuration for menu navigation and button actions.")]
         [SerializeField]
         private ControlInput m_input;
+
+        [Tooltip("The collection of event listeners for menu actions and interactions.")]
+        [SerializeField]
+        private Listeners m_listeners;
+
+        [Tooltip("The sound configuration for menu actions and feedback.")]
+        [SerializeField]
+        private Sounds m_sounds;
         #endregion
 
         #region Accessors
@@ -158,6 +249,7 @@ namespace Yontalane.UIElements
             foreach (Menu menu in m_menus.menus)
             {
                 RegisterClick(menu);
+                RegisterNavigation(menu);
             }
         }
 
@@ -226,6 +318,32 @@ namespace Yontalane.UIElements
                 }
             }
         }
+
+        #region Navigation
+        private void RegisterNavigation(Menu menu)
+        {
+            if (string.IsNullOrEmpty(menu.name))
+            {
+                return;
+            }
+
+            VisualElement root = Root.Q<VisualElement>(menu.name);
+            if (root == null)
+            {
+                Logger.LogWarning($"Could not find menu \"{menu.name}.\"");
+                return;
+            }
+
+            root.RegisterCallback<NavigationMoveEvent>((focusEvent) =>
+            {
+                if (focusEvent.target is VisualElement target)
+                {
+                    SoundPlayer.Play(m_sounds.navigation);
+                    m_listeners.onNavigation?.Invoke();
+                }
+            });
+        }
+        #endregion
 
         #region Clicks
         private void RegisterClick(Menu menu)
@@ -328,39 +446,51 @@ namespace Yontalane.UIElements
 
         private void OnClickInternal(Menu menu, string item)
         {
+            bool inUse = false;
+
             foreach (MenuItem keyValue in menu.items)
             {
                 if (keyValue.name == item)
                 {
-                    switch(keyValue.type)
+                    switch (keyValue.type)
                     {
                         case MenuItemType.Normal:
                             SetMenu(keyValue.targetMenu);
+                            inUse = true;
                             break;
                         case MenuItemType.Subordinate:
                             HideAllMenus();
                             m_menus.subordinates[keyValue.targetSubordinate].SetMenu(keyValue.targetMenu);
+                            inUse = true;
                             break;
                         case MenuItemType.Dominant:
                             HideAllMenus();
                             m_dominant.m_sourceIsSubordinate = true;
                             m_dominant.SetMenu(keyValue.targetMenu);
+                            inUse = true;
                             break;
                     }
-                    return;
                 }
             }
 
-            OnClick(menu.name, item);
+            ClickData data = new()
+            {
+                menu = menu.name,
+                item = item,
+                inUse = inUse,
+            };
+
+            SoundPlayer.Play(m_sounds.click);
+            OnClick(data);
+            m_listeners.onClick?.Invoke(data);
         }
 
         /// <summary>
         /// Called when a menu item is clicked.
         /// Implement this method in a derived class to define custom behavior when a user selects a menu item.
         /// </summary>
-        /// <param name="menu">The name of the menu containing the clicked item.</param>
-        /// <param name="item">The name of the item that was clicked.</param>
-        protected abstract void OnClick(string menu, string item);
+        /// <param name="clickData">Info about the click event, including the menu and menu item.</param>
+        protected abstract void OnClick(ClickData clickData);
 
         private void OnCancelInternal(Menu menu, string item, out bool blockEvent)
         {
@@ -382,6 +512,9 @@ namespace Yontalane.UIElements
                         break;
                 }
                 blockEvent = true;
+
+                m_listeners.onCancel?.Invoke();
+                SoundPlayer.Play(m_sounds.cancel);
             }
             else
             {
@@ -1220,7 +1353,7 @@ namespace Yontalane.UIElements
             m_sourceIsGlobal = true;
             if (m_globalMenu.menu.items[index].type == MenuItemType.Normal)
             {
-                foreach(MenuManager subordinate in m_menus.subordinates)
+                foreach (MenuManager subordinate in m_menus.subordinates)
                 {
                     subordinate.HideAllMenus();
                 }
@@ -1232,6 +1365,9 @@ namespace Yontalane.UIElements
                 m_menus.subordinates[m_globalMenu.menu.items[index].targetSubordinate].SetMenu(m_globalMenu.menu.items[index].targetMenu);
                 UpdateGlobalMenuHighlight(m_globalMenu.menu.items[index].targetMenu, m_globalMenu.menu.items[index].type, m_globalMenu.menu.items[index].targetSubordinate);
             }
+
+            SoundPlayer.Play(m_sounds.tab);
+            m_listeners.onTabNavigation?.Invoke();
         }
 
         private void OnButton(InputAction.CallbackContext context)
