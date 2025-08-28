@@ -341,18 +341,16 @@ namespace Yontalane.Dialog
         /// Invokes the line builder event to construct or modify a LineData object for a given dialog line.
         /// </summary>
         /// <param name="call">The text of the dialog line to process.</param>
-        /// <param name="lineData">The resulting LineData object after processing.</param>
+        /// <param name="lineData">The original <see cref="LineData"/> that can be modified.</param>
         /// <returns>True if the line builder was invoked; otherwise, false.</returns>
-        public bool GetLineDataBuilderResult(string call, out LineData lineData)
+        public bool GetLineDataBuilderResult(string call, LineData lineData)
         {
-            // Create a new LineData object to hold the result.
-            lineData = null;
-
             // If a line builder event is assigned, invoke it to process the line.
             if (m_lineBuilder != null)
             {
-                m_lineBuilder?.Invoke(call, lineData);
-                return lineData != null;
+                bool result = false;
+                m_lineBuilder?.Invoke(call, lineData, (callback) => { result = callback; });
+                return result;
             }
             else
             {

@@ -170,9 +170,9 @@ namespace Yontalane.Dialog
     }
 
     /// <summary>
-    /// UnityEvent that is invoked to build a dialog line, providing the line's text and a LineData to modify.
+    /// UnityEvent that is invoked to build a dialog line, providing the line's text, the original LineData that can be modified, and a callback to indicate whether or not any modifications took place.
     /// </summary>
     [Serializable]
-    public class LineBuilder : UnityEvent<string, LineData>
+    public class LineBuilder : UnityEvent<string, LineData, Action<bool>>
     { }
 }

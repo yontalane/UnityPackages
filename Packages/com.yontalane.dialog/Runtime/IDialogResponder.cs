@@ -37,8 +37,8 @@ namespace Yontalane.Dialog
         /// Returns a custom <see cref="LineData"/> depending on <paramref name="call"/>.
         /// </summary>
         /// <param name="call">A text parameter to inform how to build the line.</param>
-        /// <param name="lineData">The resulting LineData object after processing.</param>
-        /// <returns>True if <see cref="LineData"/> was created.</returns>
-        public bool GetLineDataBuilderResult(string call, out LineData lineData);
+        /// <param name="lineData">The original <see cref="LineData"/> that can be modified.</param>
+        /// <returns>True if the <see cref="LineData"/> was modified.</returns>
+        public bool GetLineDataBuilderResult(string call, LineData lineData);
     }
 }

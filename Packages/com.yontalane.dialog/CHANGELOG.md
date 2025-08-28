@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.79] - 2025.08.28
+
+### Changed
+
+- IDialogResponder starts with existing LineData rather than creating it new from scratch.
+
 ## [1.0.78] - 2025.08.28
 
 ### Added

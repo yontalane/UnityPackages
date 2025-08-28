@@ -210,6 +210,32 @@ namespace Yontalane.Dialog
         /// </summary>
         [Tooltip("The name of a function to call when this line is reached. The function builds the following line, including speaker, text, and responses.")]
         public string lineBuilderFunction = "";
+
+        public LineData GetClone() => new()
+        {
+            speaker = speaker,
+            text = text,
+            portrait = portrait,
+            typing = typing,
+            typingLoop = typingLoop,
+            sound = sound,
+            voice = voice,
+            link = link,
+            responses = responses,
+            data = data,
+            ifDialogCount = ifDialogCount,
+            setDialogCount = setDialogCount,
+            addDialogCount = addDialogCount,
+            ifFunction = ifFunction,
+            ifVar = ifVar,
+            elseIf = elseIf,
+            endIf = endIf,
+            exit = exit,
+            setVar = setVar,
+            query = query,
+            callFunction = callFunction,
+            lineBuilderFunction = lineBuilderFunction,
+        };
     }
 
     /// <summary>

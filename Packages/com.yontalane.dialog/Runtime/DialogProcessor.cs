@@ -392,23 +392,22 @@ namespace Yontalane.Dialog
         /// <param name="lineBuilderFunction">The name of the line builder function to check.</param>
         /// <param name="lineData">The resulting LineData if the function is found and executed.</param>
         /// <returns>True if a line builder function was found and executed; otherwise, false.</returns>
-        private bool CheckLineBuilderFunction(string lineBuilderFunction, out LineData lineData)
+        private bool CheckLineBuilderFunction(string lineBuilderFunction, LineData lineData)
         {
-            // Check if the lineBuilderFunction string is null or empty; if so, set lineData to null and return false.
+            // Check if the lineBuilderFunction string is null or empty; if so, return false.
             if (string.IsNullOrEmpty(lineBuilderFunction))
             {
-                lineData = null;
                 return false;
             }
 
             // Attempt to get the LineData from this DialogProcessor instance.
-            if (GetLineDataBuilderResult(lineBuilderFunction, out lineData))
+            if (GetLineDataBuilderResult(lineBuilderFunction, lineData))
             {
                 return true;
             }
 
             // Attempt to get the LineData from the DialogAgent.
-            if (DialogAgent.GetLineDataBuilderResult(lineBuilderFunction, out lineData))
+            if (DialogAgent.GetLineDataBuilderResult(lineBuilderFunction, lineData))
             {
                 return true;
             }
@@ -422,14 +421,13 @@ namespace Yontalane.Dialog
                 }
 
                 // Attempt to get the LineData from the current responder.
-                if (dialogResponder.GetLineDataBuilderResult(lineBuilderFunction, out lineData))
+                if (dialogResponder.GetLineDataBuilderResult(lineBuilderFunction, lineData))
                 {
                     return true;
                 }
             }
 
-            // If no matching line builder function was found, set lineData to null and return false.
-            lineData = null;
+            // If no matching line builder function was found, return false.
             return false;
         }
 
@@ -809,14 +807,17 @@ namespace Yontalane.Dialog
             CallFunction(m_nodeData.lines[m_lineIndex].callFunction);
 
             // Check if the current line is a line-builder function.
-            if (CheckLineBuilderFunction(m_nodeData.lines[m_lineIndex].lineBuilderFunction, out LineData lineData))
+            m_tempLineData = m_nodeData.lines[m_lineIndex].GetClone();
+            m_tempLineData.lineBuilderFunction = string.Empty;
+            if (CheckLineBuilderFunction(m_nodeData.lines[m_lineIndex].lineBuilderFunction, m_tempLineData))
             {
-                m_tempLineData = lineData;
                 AdvanceLine(null);
                 return;
             }
+            m_tempLineData = null;
+
             // Check if the current line is an if statement that evaluates a variable.
-            else if (CheckVar(m_nodeData.lines[m_lineIndex], out bool varResult))
+            if (CheckVar(m_nodeData.lines[m_lineIndex], out bool varResult))
             {
                 if (varResult)
                 {
@@ -974,11 +975,7 @@ namespace Yontalane.Dialog
         /// <param name="call">The text of the dialog line to process.</param>
         /// <param name="lineData">The resulting LineData object after processing.</param>
         /// <returns>True if the line builder was invoked; otherwise, false.</returns>
-        public bool GetLineDataBuilderResult(string call, out LineData lineData)
-        {
-            lineData = null;
-            return false;
-        }
+        public bool GetLineDataBuilderResult(string _, LineData _1) => false;
         #endregion
     }
 }
