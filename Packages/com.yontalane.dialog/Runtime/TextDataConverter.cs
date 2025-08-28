@@ -190,6 +190,16 @@ namespace Yontalane.Dialog
                     LineToDo(line[3..]);
                     continue;
                 }
+                else if (lineUp.IndexOf("!:") == 0)
+                {
+                    LineToDo(line[2..]);
+                    continue;
+                }
+                else if (lineUp.IndexOf("LINE:") == 0)
+                {
+                    LineToBuild(line[5..]);
+                    continue;
+                }
                 else if (lineUp.IndexOf("?:") == 0)
                 {
                     LineToQuery(line["?:".Length..]);
@@ -662,6 +672,17 @@ namespace Yontalane.Dialog
 
             // Add the callFunction marker to s_lineData and clear any existing response data
             s_lineData.Add(new() { callFunction = $"{functionName}::{parameter}", });
+            s_responseData.Clear();
+        }
+
+        /// <summary>
+        /// Converts a line to a lineBuilderFunction marker.
+        /// Adds a lineBuilderFunction marker to s_lineData and clears any existing response data.
+        /// </summary>
+        /// <param name="line">The line of text to parse as a line builder function.</param>
+        private static void LineToBuild(string line)
+        {
+            s_lineData.Add(new() { lineBuilderFunction = line.Trim(), });
             s_responseData.Clear();
         }
 

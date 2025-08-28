@@ -52,5 +52,17 @@ namespace Yontalane.Demos.Dialog
             info.AddRange(m_replacementInfo);
             return m_replacementInfo.Length > 0;
         }
+
+        /// <summary>
+        /// Attempts to construct or modify a LineData object for a given dialog line specific to the inventory system.
+        /// </summary>
+        /// <param name="call">The text of the dialog line to process.</param>
+        /// <param name="lineData">The resulting LineData object after processing, if any.</param>
+        /// <returns>True if the line builder was invoked and lineData was set; otherwise, false.</returns>
+        public bool GetLineDataBuilderResult(string call, out LineData lineData)
+        {
+            lineData = null;
+            return false;
+        }
     }
 }

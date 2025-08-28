@@ -8,6 +8,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Yontalane.Dialog
@@ -167,4 +168,11 @@ namespace Yontalane.Dialog
         /// </summary>
         public Image image;
     }
+
+    /// <summary>
+    /// UnityEvent that is invoked to build a dialog line, providing the line's text and a LineData to modify.
+    /// </summary>
+    [Serializable]
+    public class LineBuilder : UnityEvent<string, LineData>
+    { }
 }

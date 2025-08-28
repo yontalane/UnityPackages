@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.9] - 2025.08.28
+
+### Added
+
+- IDialogResponder can generate new LineData at runtime.
+
 ## [1.0.8] - 2025.08.26
 
 ### Changed

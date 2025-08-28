@@ -32,5 +32,13 @@ namespace Yontalane.Dialog
         /// <param name="info">A list to which inline image replacement info should be added or updated.</param>
         /// <returns>True if any inline image info was added or modified; otherwise, false.</returns>
         public bool GetInlineImageInfo(List<InlineImageReplacementInfo> info);
+
+        /// <summary>
+        /// Returns a custom <see cref="LineData"/> depending on <paramref name="call"/>.
+        /// </summary>
+        /// <param name="call">A text parameter to inform how to build the line.</param>
+        /// <param name="lineData">The resulting LineData object after processing.</param>
+        /// <returns>True if <see cref="LineData"/> was created.</returns>
+        public bool GetLineDataBuilderResult(string call, out LineData lineData);
     }
 }

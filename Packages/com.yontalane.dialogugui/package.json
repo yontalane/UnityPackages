@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.dialogugui",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "displayName": "Dialog UGUI",
   "description": "A dialog system.",
   "unity": "6000.0",
@@ -9,7 +9,7 @@
     "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.38",
-        "com.yontalane.dialog": "1.0.77",
+        "com.yontalane.dialog": "1.0.78",
         "com.yontalane.queryugui": "1.0.1"
     },
   "keywords": [

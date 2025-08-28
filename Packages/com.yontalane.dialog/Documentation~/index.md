@@ -81,6 +81,7 @@ public bool DialogFunction(string call, string parameter, out string result)
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
 * QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
+* string **lineBuilderFunction**: Calls a function in your IDialogResponder objects. The IDialogResponder can build and return new LineData, thus changing the script on the fly.
 
 The demo scene embedded in this package includes dialog data that shows all of this functionality in action.
 

@@ -204,6 +204,12 @@ namespace Yontalane.Dialog
         /// </summary>
         [Tooltip("The name of a function to call when this line is reached.")]
         public string callFunction = "";
+
+        /// <summary>
+        /// The name of a function to call when this line is reached. The function builds the following line, including speaker, text, and responses.
+        /// </summary>
+        [Tooltip("The name of a function to call when this line is reached. The function builds the following line, including speaker, text, and responses.")]
+        public string lineBuilderFunction = "";
     }
 
     /// <summary>

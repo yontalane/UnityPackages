@@ -1013,6 +1013,9 @@ MonoBehaviour:
   m_staticText: 
   m_keywords: []
   m_inlineImageReplacementInfo: []
+  m_lineBuilder:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4189515986730750026
 GameObject:
   m_ObjectHideFlags: 0

@@ -65,6 +65,12 @@ namespace Yontalane.Dialog
         [SerializeField]
         private InlineImageReplacementInfo[] m_inlineImageReplacementInfo = new InlineImageReplacementInfo[0];
 
+        [Header("Line Builder")]
+
+        [Tooltip("Event for building a line.")]
+        [SerializeField]
+        private LineBuilder m_lineBuilder = null;
+
         /// <summary>
         /// Stores the callback action to be invoked when the dialog session ends.
         /// </summary>
@@ -341,6 +347,30 @@ namespace Yontalane.Dialog
 
             info.AddRange(m_inlineImageReplacementInfo);
             return true;
+        }
+
+        /// <summary>
+        /// Invokes the line builder event to construct or modify a LineData object for a given dialog line.
+        /// </summary>
+        /// <param name="call">The text of the dialog line to process.</param>
+        /// <param name="lineData">The resulting LineData object after processing.</param>
+        /// <returns>True if the line builder was invoked; otherwise, false.</returns>
+        public bool GetLineDataBuilderResult(string call, out LineData lineData)
+        {
+            // Create a new LineData object to hold the result.
+            lineData = null;
+
+            // If a line builder event is assigned, invoke it to process the line.
+            if (m_lineBuilder != null)
+            {
+                m_lineBuilder?.Invoke(call, lineData);
+                return lineData != null;
+            }
+            else
+            {
+                // If no line builder is assigned, return false.
+                return false;
+            }
         }
     }
 }
