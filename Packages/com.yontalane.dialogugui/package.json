@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.dialogugui",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "displayName": "Dialog UGUI",
   "description": "A dialog system.",
   "unity": "6000.0",

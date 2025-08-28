@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.10] - 2025.08.28
+
+### Added
+
+- Option to control continue button's interactable state using the Button.interactable property or the GameObject.activeSelf property.
+
 ## [1.0.9] - 2025.08.28
 
 ### Added

@@ -2724,6 +2724,7 @@ MonoBehaviour:
   m_speakerField: {fileID: 0}
   m_skipButton: {fileID: 1093816015}
   m_continueButton: {fileID: 706755092955883104}
+  m_continueButtonActiveMethod: 10
   m_responseContainer: {fileID: 1205166789}
   m_portraitContainer: {fileID: 737250794}
   m_portrait: {fileID: 749057180}
@@ -4043,6 +4044,9 @@ MonoBehaviour:
   m_staticText: 
   m_keywords: []
   m_inlineImageReplacementInfo: []
+  m_lineBuilder:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4189515986730750026
 GameObject:
   m_ObjectHideFlags: 0

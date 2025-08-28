@@ -149,6 +149,10 @@ namespace Yontalane.DialogUGUI
         [SerializeField]
         private Button m_continueButton = null;
 
+        [Tooltip("The method to use when setting the continue button's interactable state.")]
+        [SerializeField]
+        private ButtonActiveMethod m_continueButtonActiveMethod = ButtonActiveMethod.Interactable;
+
         [Tooltip("The object within which dialog response button prefabs will be instantiated.")]
         [SerializeField]
         private RectTransform m_responseContainer = null;
@@ -285,7 +289,7 @@ namespace Yontalane.DialogUGUI
             // Add listeners to skip and continue buttons, and hide the continue button initially
             m_skipButton.onClick.AddListener(delegate { SkipWriteOut(); });
             m_continueButton.onClick.AddListener(delegate { OnClickResponse(null); });
-            m_continueButton.gameObject.SetActive(false);
+            m_continueButton.SetActive(false, m_continueButtonActiveMethod);
 
             // Hide the response container at start, if it exists
             if (m_responseContainer != null)
@@ -305,7 +309,7 @@ namespace Yontalane.DialogUGUI
         {
             s_inlineImageReplacementPostProcessingInfo.Clear();
 
-            m_continueButton.gameObject.SetActive(false);
+            m_continueButton.SetActive(false, m_continueButtonActiveMethod);
 
             m_canUseContinueHandler = true;
             string speaker = string.Empty;
@@ -571,7 +575,7 @@ namespace Yontalane.DialogUGUI
             }
 
             // If the continue button is active, do nothing
-            if (m_continueButton.gameObject.activeSelf)
+            if (m_continueButton.GetActive(m_continueButtonActiveMethod))
             {
                 return;
             }
@@ -604,13 +608,13 @@ namespace Yontalane.DialogUGUI
                 return;
             }
 
-            if (!m_continueButton.gameObject.activeInHierarchy)
+            if (!m_continueButton.GetActive(m_continueButtonActiveMethod))
             {
                 return;
             }
 
             // Hide the continue button and trigger the response handler when continue is pressed
-            m_continueButton.gameObject.SetActive(false);
+            m_continueButton.SetActive(false, m_continueButtonActiveMethod);
             OnClickResponse(null);
         }
         #endregion
@@ -903,7 +907,7 @@ namespace Yontalane.DialogUGUI
             else
             {
                 // If there are no responses, activate and highlight the continue button
-                m_continueButton.gameObject.SetActive(true);
+                m_continueButton.SetActive(true, m_continueButtonActiveMethod);
                 m_continueButton.Highlight();
             }
 
