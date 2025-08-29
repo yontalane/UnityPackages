@@ -87,6 +87,9 @@ namespace Yontalane.UIElements
         public bool editorExpanded;
 #pragma warning restore IDE0079
 #endif
+        [Tooltip("Toggles whether sounds should play.")]
+        public bool mute;
+
         [Tooltip("An optional sound effect for menu item clicking.")]
         public AudioClip click;
 

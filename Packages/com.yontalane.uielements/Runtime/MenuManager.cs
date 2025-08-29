@@ -66,6 +66,11 @@ namespace Yontalane.UIElements
         public InputActionAsset InputActions => m_input.actions;
 
         /// <summary>
+        /// The collection of event listeners for menu actions and interactions.
+        /// </summary>
+        public Listeners Listeners => m_listeners;
+
+        /// <summary>
         /// The sound configuration for menu actions and feedback.
         /// </summary>
         protected Sounds Sounds => m_sounds;
@@ -294,7 +299,11 @@ namespace Yontalane.UIElements
                     // If focus events are not being ignored, play the navigation sound and invoke the navigation listener.
                     if (!m_ignoreFocus)
                     {
-                        SoundPlayer.Play(m_sounds.navigation);
+                        if (!m_sounds.mute)
+                        {
+                            SoundPlayer.Play(m_sounds.navigation);
+                        }
+
                         m_listeners.onNavigation?.Invoke();
                     }
                     // If focus events are being ignored, reset the ignore flag.
@@ -456,7 +465,11 @@ namespace Yontalane.UIElements
                 inUse = inUse,
             };
 
-            SoundPlayer.Play(m_sounds.click);
+            if (!m_sounds.mute)
+            {
+                SoundPlayer.Play(m_sounds.click);
+            }
+
             OnClick(data);
             m_listeners.onClick?.Invoke(data);
         }
@@ -489,8 +502,12 @@ namespace Yontalane.UIElements
                 }
                 blockEvent = true;
 
+                if (!m_sounds.mute)
+                {
+                    SoundPlayer.Play(m_sounds.cancel);
+                }
+
                 m_listeners.onCancel?.Invoke();
-                SoundPlayer.Play(m_sounds.cancel);
             }
             else
             {
@@ -1345,7 +1362,11 @@ namespace Yontalane.UIElements
                 UpdateGlobalMenuHighlight(m_globalMenu.menu.items[index].targetMenu, m_globalMenu.menu.items[index].type, m_globalMenu.menu.items[index].targetSubordinate);
             }
 
-            SoundPlayer.Play(m_sounds.tab);
+            if (!m_sounds.mute)
+            {
+                SoundPlayer.Play(m_sounds.tab);
+            }
+
             m_listeners.onTabNavigation?.Invoke();
         }
 

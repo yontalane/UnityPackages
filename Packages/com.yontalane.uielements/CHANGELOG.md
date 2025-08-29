@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.38] - 2025.08.29
+
+### Added
+
+- Sounds can be muted.
+
 ## [1.0.37] - 2025.08.29
 
 ### Added
