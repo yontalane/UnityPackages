@@ -144,6 +144,7 @@ namespace Yontalane.UIElements
         private MenuManager m_dominant = null;
         private bool m_sourceIsGlobal = false;
         private bool m_sourceIsSubordinate = false;
+        private bool m_ignoreFocus = false;
         #endregion
 
         #region Serialized Fields
@@ -334,13 +335,52 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            root.RegisterCallback<NavigationMoveEvent>((focusEvent) =>
+            RegisterNavigationEvent<ScrollView>(root);
+
+            RegisterNavigationEvent<Button>(root);
+            RegisterNavigationEvent<Toggle>(root);
+            RegisterNavigationEvent<Scroller>(root);
+            RegisterNavigationEvent<TextField>(root);
+            RegisterNavigationEvent<Foldout>(root);
+            RegisterNavigationEvent<Slider>(root);
+            RegisterNavigationEvent<SliderInt>(root);
+            RegisterNavigationEvent<MinMaxSlider>(root);
+            RegisterNavigationEvent<DropdownField>(root);
+            RegisterNavigationEvent<EnumField>(root);
+            RegisterNavigationEvent<RadioButton>(root);
+
+            RegisterNavigationEvent<IntegerField>(root);
+            RegisterNavigationEvent<FloatField>(root);
+            RegisterNavigationEvent<LongField>(root);
+            RegisterNavigationEvent<DoubleField>(root);
+            RegisterNavigationEvent<Hash128Field>(root);
+            RegisterNavigationEvent<Vector2Field>(root);
+            RegisterNavigationEvent<Vector3Field>(root);
+            RegisterNavigationEvent<Vector4Field>(root);
+            RegisterNavigationEvent<RectField>(root);
+            RegisterNavigationEvent<BoundsField>(root);
+            RegisterNavigationEvent<Vector2IntField>(root);
+            RegisterNavigationEvent<Vector3IntField>(root);
+            RegisterNavigationEvent<RectIntField>(root);
+            RegisterNavigationEvent<BoundsIntField>(root);
+        }
+
+        private void RegisterNavigationEvent<T>(VisualElement root) where T : VisualElement
+        {
+            root.Query<T>().ForEach((element) =>
             {
-                if (focusEvent.target is VisualElement target)
+                element.RegisterCallback((FocusInEvent _) =>
                 {
-                    SoundPlayer.Play(m_sounds.navigation);
-                    m_listeners.onNavigation?.Invoke();
-                }
+                    if (!m_ignoreFocus)
+                    {
+                        SoundPlayer.Play(m_sounds.navigation);
+                        m_listeners.onNavigation?.Invoke();
+                    }
+                    else
+                    {
+                        m_ignoreFocus = false;
+                    }
+                }, TrickleDown.TrickleDown);
             });
         }
         #endregion
@@ -728,6 +768,7 @@ namespace Yontalane.UIElements
                 VisualElement focusItem = root.Q<VisualElement>(menu.focusItem);
                 if (focusItem != null)
                 {
+                    m_ignoreFocus = true;
                     focusItem.Focus();
                     yield break;
                 }
@@ -738,6 +779,7 @@ namespace Yontalane.UIElements
             {
                 if (children[i].focusable && children[i].canGrabFocus)
                 {
+                    m_ignoreFocus = true;
                     children[i].Focus();
                     yield break;
                 }
@@ -1045,6 +1087,7 @@ namespace Yontalane.UIElements
                 EventSystem.current.SetSelectedGameObject(m_document.gameObject);
             }
 
+            m_ignoreFocus = true;
             element.Focus();
         }
         #endregion

@@ -63,7 +63,7 @@ namespace Yontalane.UIElements
             audioSource.Play();
 
             // Start a coroutine to destroy this GameObject after the clip finishes playing
-            StartCoroutine(DestroyAfterPlaying(clip.length));
+            StartCoroutine(DestroyAfterPlaying(clip.length + 2f));
         }
 
         /// <summary>
