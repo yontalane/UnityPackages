@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace YontalaneEditor.UIElements
 {
-    [CustomPropertyDrawer(typeof(MenuManager.ControlInput))]
+    [CustomPropertyDrawer(typeof(ControlInput))]
     public class ControlInputUIE : MenuPropertyDrawerUIE
     {
         private const string NONE = "None";

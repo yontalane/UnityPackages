@@ -5,7 +5,7 @@ using Yontalane.UIElements;
 
 namespace YontalaneEditor.UIElements
 {
-    [CustomPropertyDrawer(typeof(MenuManager.Sounds))]
+    [CustomPropertyDrawer(typeof(Sounds))]
     public class SoundsUIE : MenuPropertyDrawerUIE
     {
         protected override string HeaderText => "Sounds";

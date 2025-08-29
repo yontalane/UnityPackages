@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -15,125 +14,6 @@ namespace Yontalane.UIElements
     [DisallowMultipleComponent]
     public abstract class MenuManager : MonoBehaviour
     {
-        #region Structs
-        /// <summary>
-        /// A navigation event handler.
-        /// </summary>
-        [System.Serializable]
-        public class NavigationEvent : UnityEvent
-        { }
-
-        /// <summary>
-        /// A click event handler.
-        /// </summary>
-        [System.Serializable]
-        public class ClickEvent : UnityEvent<ClickData>
-        { }
-
-        [System.Serializable]
-        /// <summary>
-        /// Represents the input configuration for menu controls, including input actions and button mappings.
-        /// </summary>
-        public struct ControlInput
-        {
-#if UNITY_EDITOR
-#pragma warning disable IDE0079
-            /// <summary>
-            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
-            /// </summary>
-            public bool editorExpanded;
-#pragma warning restore IDE0079
-#endif
-
-            [Tooltip("The InputActionAsset containing all input actions for menu navigation.")]
-            public InputActionAsset actions;
-
-            [Tooltip("The action name or path for navigating to the previous tab.")]
-            public string tabLeft;
-
-            [Tooltip("The action name or path for navigating to the next tab.")]
-            public string tabRight;
-
-            [Tooltip("An array of action names or paths for menu button actions (e.g., submit, cancel).")]
-            public string[] buttons;
-        }
-
-        /// <summary>
-        /// Contains UnityEvents for menu interactions such as clicking, navigation, tab changes, and cancel actions.
-        /// </summary>
-        [System.Serializable]
-        public struct Listeners
-        {
-#if UNITY_EDITOR
-#pragma warning disable IDE0079
-            /// <summary>
-            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
-            /// </summary>
-            public bool editorExpanded;
-#pragma warning restore IDE0079
-#endif
-            [Tooltip("An event that is broadcast on menu item clicking.")]
-            public ClickEvent onClick;
-
-            [Tooltip("An event that is broadcast on menu item navigation.")]
-            public NavigationEvent onNavigation;
-
-            [Tooltip("An event that is broadcast on menu tab navigation.")]
-            public NavigationEvent onTabNavigation;
-
-            [Tooltip("An event that is broadcast when the user presses the cancel key to back out of a menu.")]
-            public NavigationEvent onCancel;
-        }
-
-        /// <summary>
-        /// Contains optional AudioClips for menu sound effects, such as clicking, navigation, tab changes, and cancel actions.
-        /// </summary>
-        [System.Serializable]
-        public struct Sounds
-        {
-#if UNITY_EDITOR
-#pragma warning disable IDE0079
-            /// <summary>
-            /// Used in the Unity Editor to track whether the struct is expanded in the inspector.
-            /// </summary>
-            public bool editorExpanded;
-#pragma warning restore IDE0079
-#endif
-            [Tooltip("An optional sound effect for menu item clicking.")]
-            public AudioClip click;
-
-            [Tooltip("An optional sound effect for menu item navigation.")]
-            public AudioClip navigation;
-
-            [Tooltip("An optional sound effect for menu tab navigation.")]
-            public AudioClip tab;
-
-            [Tooltip("An optional sound effect for when the user presses the cancel key to back out of a menu.")]
-            public AudioClip cancel;
-        }
-
-        /// <summary>
-        /// Represents data about a menu click event, including the menu name, item name, and whether the item is set up for use in the inspector.
-        /// </summary>
-        public struct ClickData
-        {
-            /// <summary>
-            /// The name of the menu where the click event occurred.
-            /// </summary>
-            public string menu;
-
-            /// <summary>
-            /// The name of the item that was clicked within the menu.
-            /// </summary>
-            public string item;
-
-            /// <summary>
-            /// Indicates whether the clicked item is set up for use in the inspector.
-            /// </summary>
-            public bool inUse;
-        }
-        #endregion
-
         #region Constants
         protected const string GLOBAL_MENU = "GLOBAL";
         protected const string CANCEL_EVENT = "CANCEL";
@@ -184,6 +64,16 @@ namespace Yontalane.UIElements
         /// Gets the InputActionAsset used for menu navigation and actions.
         /// </summary>
         public InputActionAsset InputActions => m_input.actions;
+
+        /// <summary>
+        /// The sound configuration for menu actions and feedback.
+        /// </summary>
+        protected Sounds Sounds => m_sounds;
+
+        /// <summary>
+        /// Whether this implementation of <see cref="MenuManager"/> should activate on start. Can be overridden.
+        /// </summary>
+        protected virtual bool ActivateOnStart => true;
         #endregion
 
         private void Reset()
@@ -256,10 +146,25 @@ namespace Yontalane.UIElements
 
         protected virtual void Start()
         {
-            for(int i = 0; i < m_menus.subordinates.Length; i++)
+            // Activate the menu manager at start if the flag is set.
+            if (ActivateOnStart)
+            {
+                Activate();
+            }
+        }
+
+        /// <summary>
+        /// Activates this MenuManager by hiding all subordinate menus and displaying the first menu.
+        /// </summary>
+        public void Activate()
+        {
+            // Hide all menus in each subordinate MenuManager
+            for (int i = 0; i < m_menus.subordinates.Length; i++)
             {
                 m_menus.subordinates[i].HideAllMenus();
             }
+
+            // Set and display the first menu managed by this MenuManager
             SetMenu(m_menus.firstMenu);
         }
 
@@ -323,20 +228,25 @@ namespace Yontalane.UIElements
         #region Navigation
         private void RegisterNavigation(Menu menu)
         {
+            // Check if the menu name is null or empty, and return early if so.
             if (string.IsNullOrEmpty(menu.name))
             {
                 return;
             }
 
+            // Attempt to find the root VisualElement for the menu by name.
             VisualElement root = Root.Q<VisualElement>(menu.name);
             if (root == null)
             {
+                // Log a warning if the menu root cannot be found.
                 Logger.LogWarning($"Could not find menu \"{menu.name}.\"");
                 return;
             }
 
+            // Register navigation events for ScrollView elements in the menu.
             RegisterNavigationEvent<ScrollView>(root);
 
+            // Register navigation events for common UI controls.
             RegisterNavigationEvent<Button>(root);
             RegisterNavigationEvent<Toggle>(root);
             RegisterNavigationEvent<Scroller>(root);
@@ -349,6 +259,7 @@ namespace Yontalane.UIElements
             RegisterNavigationEvent<EnumField>(root);
             RegisterNavigationEvent<RadioButton>(root);
 
+            // Register navigation events for various field types.
             RegisterNavigationEvent<IntegerField>(root);
             RegisterNavigationEvent<FloatField>(root);
             RegisterNavigationEvent<LongField>(root);
@@ -365,17 +276,28 @@ namespace Yontalane.UIElements
             RegisterNavigationEvent<BoundsIntField>(root);
         }
 
+        /// <summary>
+        /// Registers navigation event callbacks for all elements of type <typeparamref name="T"/> within the specified root VisualElement.
+        /// When an element of type <typeparamref name="T"/> receives focus, this method plays a navigation sound and invokes the navigation listener,
+        /// unless focus events are being ignored (in which case it resets the ignore flag).
+        /// </summary>
+        /// <typeparam name="T">The type of VisualElement to register navigation events for.</typeparam>
+        /// <param name="root">The root VisualElement to search for elements of type <typeparamref name="T"/>.</param>
         private void RegisterNavigationEvent<T>(VisualElement root) where T : VisualElement
         {
+            // Query all elements of type T within the root VisualElement and iterate over them.
             root.Query<T>().ForEach((element) =>
             {
+                // Register a callback for the FocusInEvent on each element.
                 element.RegisterCallback((FocusInEvent _) =>
                 {
+                    // If focus events are not being ignored, play the navigation sound and invoke the navigation listener.
                     if (!m_ignoreFocus)
                     {
                         SoundPlayer.Play(m_sounds.navigation);
                         m_listeners.onNavigation?.Invoke();
                     }
+                    // If focus events are being ignored, reset the ignore flag.
                     else
                     {
                         m_ignoreFocus = false;
@@ -388,11 +310,13 @@ namespace Yontalane.UIElements
         #region Clicks
         private void RegisterClick(Menu menu)
         {
+            // Check if the menu name is null or empty; if so, exit early.
             if (string.IsNullOrEmpty(menu.name))
             {
                 return;
             }
 
+            // Query the root VisualElement for the menu by name; if not found, log a warning and exit.
             VisualElement root = Root.Q<VisualElement>(menu.name);
             if (root == null)
             {
@@ -400,6 +324,7 @@ namespace Yontalane.UIElements
                 return;
             }
 
+            // Find all VisualElements in the menu and register click handlers for Buttons and Toggles.
             List<VisualElement> elements = root.Query<VisualElement>().ToList();
             foreach (VisualElement element in elements)
             {
@@ -409,13 +334,16 @@ namespace Yontalane.UIElements
                 }
             }
 
+            // Find all BindableElements in the menu and register navigation event callbacks, except for Buttons.
             List<BindableElement> bindables = root.Query<BindableElement>().ToList();
             foreach (BindableElement item in bindables)
             {
+                // Skip Buttons since they are already handled above.
                 if (item is Button)
                 {
                     continue;
                 }
+                // Register a callback for NavigationCancelEvent to handle cancel actions.
                 item.RegisterCallback((NavigationCancelEvent e) =>
                 {
                     OnCancelInternal(menu, item.name, out bool blockEvent);
@@ -425,6 +353,7 @@ namespace Yontalane.UIElements
                         item.focusController.IgnoreEvent(e);
                     }
                 });
+                // Register a callback for NavigationMoveEvent to handle left/right navigation.
                 item.RegisterCallback((NavigationMoveEvent e) =>
                 {
                     if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
@@ -442,10 +371,12 @@ namespace Yontalane.UIElements
 
         private void RegisterClick(Menu menu, VisualElement buttonOrToggle)
         {
+            // Register click event for Button elements
             if (buttonOrToggle is Button button)
             {
                 button.clicked += () => OnClickInternal(menu, buttonOrToggle.name);
             }
+            // Register value changed callback for Toggle elements
             else if (buttonOrToggle is Toggle toggle)
             {
                 toggle.RegisterValueChangedCallback((e) =>
@@ -456,6 +387,8 @@ namespace Yontalane.UIElements
                     }
                 });
             }
+
+            // Register callback for NavigationCancelEvent to handle cancel actions
             buttonOrToggle.RegisterCallback((NavigationCancelEvent e) =>
             {
                 OnCancelInternal(menu, buttonOrToggle.name, out bool blockEvent);
@@ -465,6 +398,8 @@ namespace Yontalane.UIElements
                     buttonOrToggle.focusController.IgnoreEvent(e);
                 }
             });
+
+            // Register callback for NavigationMoveEvent to handle left/right navigation
             buttonOrToggle.RegisterCallback((NavigationMoveEvent e) =>
             {
                 if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
@@ -478,6 +413,7 @@ namespace Yontalane.UIElements
                 }
             });
 
+            // Disable focus for elements in the global menu
             if (menu.name == m_globalMenu.menu.name)
             {
                 buttonOrToggle.focusable = false;

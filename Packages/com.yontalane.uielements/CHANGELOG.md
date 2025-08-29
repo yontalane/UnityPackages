@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.37] - 2025.08.29
+
+### Added
+
+- MenuManager can be activated after start.
+
 ## [1.0.36] - 2025.08.28
 
 ### Changed

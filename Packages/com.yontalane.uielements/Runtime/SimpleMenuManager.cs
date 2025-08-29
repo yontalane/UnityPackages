@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Yontalane.UIElements
 {
@@ -10,20 +9,6 @@ namespace Yontalane.UIElements
     [AddComponentMenu("Yontalane/UI Elements/Simple Menu Manager")]
     public class SimpleMenuManager : MenuManager
     {
-        /// <summary>
-        /// UnityEvent that is invoked when a menu item is interacted with.
-        /// The first parameter is the menu name, and the second is the item name.
-        /// </summary>
-        [System.Serializable]
-        public class MenuEvent : UnityEvent<string, string> { }
-
-        /// <summary>
-        /// UnityEvent that is invoked when a button is interacted with.
-        /// The parameter is the button or item name.
-        /// </summary>
-        [System.Serializable]
-        public class SimpleMenuEvent : UnityEvent<string> { }
-
         /// <summary>
         /// Event invoked when a menu item is interacted with.
         /// The first parameter is the menu name, and the second is the item name.

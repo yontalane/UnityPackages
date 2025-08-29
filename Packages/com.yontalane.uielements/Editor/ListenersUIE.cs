@@ -5,7 +5,7 @@ using Yontalane.UIElements;
 
 namespace YontalaneEditor.UIElements
 {
-    [CustomPropertyDrawer(typeof(MenuManager.Listeners))]
+    [CustomPropertyDrawer(typeof(Listeners))]
     public class ListenersUIE : MenuPropertyDrawerUIE
     {
         protected override string HeaderText => "Listeners";

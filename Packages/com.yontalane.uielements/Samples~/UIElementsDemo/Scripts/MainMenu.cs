@@ -32,7 +32,12 @@ namespace YontalaneDemos.UIElements
                 // If the query was cancelled, do nothing further.
                 if (e.chosenResponseText == Query.CANCEL)
                 {
+                    SoundPlayer.Play(Sounds.cancel);
                     return;
+                }
+                else
+                {
+                    SoundPlayer.Play(Sounds.click);
                 }
                 // Show a notification with the selected fruit.
                 Document.rootVisualElement.Add(new Notification(Document, "Sample Notification", $"{e.chosenResponseText} is best."));
@@ -40,6 +45,10 @@ namespace YontalaneDemos.UIElements
             {
                 CanCancel = true
             };
+            m_query.SetOnNavigate((_) =>
+            {
+                SoundPlayer.Play(Sounds.navigation);
+            });
 
             // Reset inventory state.
             m_inventoryID = 0;
