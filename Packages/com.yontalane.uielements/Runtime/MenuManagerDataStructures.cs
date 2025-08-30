@@ -36,6 +36,9 @@ namespace Yontalane.UIElements
         [Tooltip("The InputActionAsset containing all input actions for menu navigation.")]
         public InputActionAsset actions;
 
+        [Tooltip("The action name or path for basic navigation.")]
+        public string directionalInput;
+
         [Tooltip("The action name or path for navigating to the previous tab.")]
         public string tabLeft;
 
@@ -122,6 +125,17 @@ namespace Yontalane.UIElements
         /// Indicates whether the clicked item is set up for use in the inspector.
         /// </summary>
         public bool inUse;
+    }
+
+    /// <summary>
+    /// An enum represeting the cardinal directions.
+    /// </summary>
+    public enum Directions
+    {
+        Up = 0,
+        Right = 10,
+        Down = 20,
+        Left = 30,
     }
 
     #region Simple Menu Manager

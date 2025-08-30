@@ -88,10 +88,13 @@ namespace Yontalane.UIElements
             m_input = new()
             {
                 actions = null,
+                directionalInput = "UI/Navigation",
                 tabLeft = "UI/TabLeft",
                 tabRight = "UI/TabRight",
                 buttons = new string[0]
             };
+            m_listeners = default;
+            m_sounds = default;
         }
 
         protected virtual void Awake()
@@ -182,6 +185,12 @@ namespace Yontalane.UIElements
 
             m_input.actions.Enable();
 
+            if (!string.IsNullOrEmpty(m_input.directionalInput))
+            {
+                m_input.actions[m_input.directionalInput].Enable();
+                m_input.actions[m_input.directionalInput].performed += OnNavigation;
+            }
+
             if (!string.IsNullOrEmpty(m_input.tabLeft))
             {
                 m_input.actions[m_input.tabLeft].Enable();
@@ -209,6 +218,11 @@ namespace Yontalane.UIElements
             if (m_input.actions == null)
             {
                 return;
+            }
+
+            if (!string.IsNullOrEmpty(m_input.directionalInput))
+            {
+                m_input.actions[m_input.directionalInput].performed -= OnNavigation;
             }
 
             if (!string.IsNullOrEmpty(m_input.tabLeft))
@@ -435,7 +449,7 @@ namespace Yontalane.UIElements
 
             foreach (MenuItem keyValue in menu.items)
             {
-                if (keyValue.name == item)
+                if (keyValue.name == item && !string.IsNullOrEmpty(keyValue.targetMenu))
                 {
                     switch (keyValue.type)
                     {
@@ -1256,6 +1270,85 @@ namespace Yontalane.UIElements
                 }
             }
         }
+        #endregion
+
+        #region Navigation Override
+        private void OnNavigation(InputAction.CallbackContext callbackContext)
+        {
+            Vector2 input = callbackContext.ReadValue<Vector2>();
+
+            float deadzone = 0.1f;
+
+            if (input.y > deadzone)
+            {
+                Navigate(0, 1);
+            }
+            else if (input.y < -deadzone)
+            {
+                Navigate(0, -1);
+            }
+            else if (input.x > deadzone)
+            {
+                Navigate(1, 0);
+            }
+            else if (input.x < -deadzone)
+            {
+                Navigate(-1, 0);
+            }
+        }
+
+        private void Navigate(int x, int y)
+        {
+            if (!TryGetActiveMenu(out Menu menu, out VisualElement root))
+            {
+                return;
+            }
+
+            if (menu.items == null)
+            {
+                return;
+            }
+
+            Focusable focusedElement = root.panel.focusController.focusedElement;
+
+            if (focusedElement == null || focusedElement is not VisualElement focusedVisualElement)
+            {
+                return;
+            }
+
+            foreach (MenuItem item in menu.items)
+            {
+                if (item.name == focusedVisualElement.name && TryGetMatchingNavigationOverride(item.navigationOverrides, x, y, out NavigationOverride navigationOverride))
+                {
+                    root.Q<VisualElement>(navigationOverride.target)?.Focus();
+                    return;
+                }
+            }
+        }
+
+        private bool TryGetMatchingNavigationOverride(IReadOnlyList<NavigationOverride> list, int x, int y, out NavigationOverride navigationOverride)
+        {
+            foreach (NavigationOverride navOverride in list)
+            {
+                if (DirectionsMatch(x, y, navOverride.direction))
+                {
+                    navigationOverride = navOverride;
+                    return true;
+                }
+            }
+
+            navigationOverride = null;
+            return false;
+        }
+
+        private bool DirectionsMatch(int x, int y, Directions direction) => direction switch
+        {
+            Directions.Up when x == 0 && y == 1 => true,
+            Directions.Right when x == 1 && y == 0 => true,
+            Directions.Down when x == 0 && y == -1 => true,
+            Directions.Left when x == -1 && y == 0 => true,
+            _ => false,
+        };
         #endregion
 
         #region Tabs

@@ -13,9 +13,11 @@ namespace YontalaneEditor.UIElements
         private const string NONE = "None";
 
         private SerializedProperty m_actions;
+        private SerializedProperty m_directionalInput;
         private SerializedProperty m_tabLeft;
         private SerializedProperty m_tabRight;
         private SerializedProperty m_buttons;
+        private DropdownField m_directionalInputDropdown;
         private DropdownField m_tabLeftDropdown;
         private DropdownField m_tabRightDropdown;
         private readonly List<string> m_choices = new();
@@ -25,6 +27,7 @@ namespace YontalaneEditor.UIElements
         protected override void MenuGUI(SerializedProperty property, VisualElement container)
         {
             m_actions = property.FindPropertyRelative("actions");
+            m_directionalInput = property.FindPropertyRelative("directionalInput");
             m_tabLeft = property.FindPropertyRelative("tabLeft");
             m_tabRight = property.FindPropertyRelative("tabRight");
             m_buttons = property.FindPropertyRelative("buttons");
@@ -32,6 +35,18 @@ namespace YontalaneEditor.UIElements
             PropertyField actionsField = new(m_actions) { name = "Actions" };
             actionsField.RegisterValueChangeCallback((_) => BuildDropdowns());
             container.Add(actionsField);
+
+            m_directionalInputDropdown = new()
+            {
+                name = "Navigation",
+                label = m_directionalInput.displayName
+            };
+            m_directionalInputDropdown.AddToClassList("control");
+            m_directionalInputDropdown.RegisterValueChangedCallback((e) =>
+            {
+                m_directionalInput.stringValue = !string.IsNullOrWhiteSpace(e.newValue) && e.newValue != NONE ? e.newValue : string.Empty;
+                m_directionalInput.serializedObject.ApplyModifiedProperties();
+            });
 
             m_tabLeftDropdown = new()
             {
@@ -59,6 +74,7 @@ namespace YontalaneEditor.UIElements
 
             BuildDropdowns();
 
+            container.Add(m_directionalInputDropdown);
             container.Add(m_tabLeftDropdown);
             container.Add(m_tabRightDropdown);
 
@@ -70,6 +86,7 @@ namespace YontalaneEditor.UIElements
         {
             InputActionAsset inputActions = m_actions.objectReferenceValue as InputActionAsset;
             bool actionsExist = inputActions != null;
+            m_directionalInputDropdown.SetEnabled(actionsExist);
             m_tabLeftDropdown.SetEnabled(actionsExist);
             m_tabRightDropdown.SetEnabled(actionsExist);
             m_choices.Clear();
@@ -90,6 +107,8 @@ namespace YontalaneEditor.UIElements
                 m_choices.Add(string.Empty);
             }
 
+            m_directionalInputDropdown.choices = m_choices;
+            m_directionalInputDropdown.index = m_choices.IndexOf(!string.IsNullOrEmpty(m_directionalInput.stringValue) ? m_directionalInput.stringValue : NONE);
             m_tabLeftDropdown.choices = m_choices;
             m_tabLeftDropdown.index = m_choices.IndexOf(!string.IsNullOrEmpty(m_tabLeft.stringValue) ? m_tabLeft.stringValue : NONE);
             m_tabRightDropdown.choices = m_choices;

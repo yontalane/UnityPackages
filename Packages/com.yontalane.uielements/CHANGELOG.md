@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.39] - 2025.08.30
+
+### Added
+
+- Menu navigation can be manually overridden.
+
+### Changed
+
+- Clicking menu item that has been defined in the MenuManager inspector but has no target no longer hides the menu.
+
 ## [1.0.38] - 2025.08.29
 
 ### Added

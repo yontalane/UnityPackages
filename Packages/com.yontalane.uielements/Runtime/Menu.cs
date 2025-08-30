@@ -82,6 +82,12 @@ namespace Yontalane.UIElements
         [Tooltip("The index of the subordinate MenuManager to activate when this item is selected (used if type is Subordinate).")]
         [Min(0)]
         public int targetSubordinate;
+
+        /// <summary>
+        /// Optional navigation overrides for this menu item, allowing custom navigation behavior.
+        /// </summary>
+        [Tooltip("Optional navigation overrides for this menu item, allowing custom navigation behavior.")]
+        public NavigationOverride[] navigationOverrides;
     }
 
     /// <summary>

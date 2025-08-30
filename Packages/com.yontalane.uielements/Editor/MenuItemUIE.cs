@@ -29,11 +29,13 @@ namespace YontalaneEditor.UIElements
             m_type = property.FindPropertyRelative("type");
             SerializedProperty targetMenu = property.FindPropertyRelative("targetMenu");
             SerializedProperty targetSubordinate = property.FindPropertyRelative("targetSubordinate");
+            SerializedProperty navigationOverrides = property.FindPropertyRelative("navigationOverrides");
 
             PropertyField nameField = new(name) { name = "Name" };
             PropertyField typeField = new(m_type) { name = "Type" };
             PropertyField targetMenuField = new(targetMenu) { name = "TargetMenu", label = "Target" };
             PropertyField targetSubordinateField = new(targetSubordinate) { name = "TargetSubordinate", label = "Target" };
+            PropertyField navigationOverridesField = new(navigationOverrides) { name = "NavigationOverrides" };
 
             typeField.RegisterValueChangeCallback((e) => UpdateStyle());
 
@@ -43,6 +45,7 @@ namespace YontalaneEditor.UIElements
             m_container.Add(typeField);
             m_container.Add(targetSubordinateField);
             m_container.Add(targetMenuField);
+            m_container.Add(navigationOverridesField);
 
             return m_container;
         }
