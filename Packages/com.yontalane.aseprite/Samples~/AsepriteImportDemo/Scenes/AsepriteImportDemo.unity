@@ -317,6 +317,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fencer
       objectReference: {fileID: 0}
+    - target: {fileID: 6937180729610741867, guid: cada986fd2830408fb5e31293ced6d4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

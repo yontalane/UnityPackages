@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
@@ -10,6 +11,10 @@ namespace YontalaneEditor.Aseprite
     /// </summary>
     public static class FileDataBuilder
     {
+        private static readonly List<BoxCollider2D> s_colliders = new();
+        private static readonly List<BoxCollider2D> s_triggers = new();
+        private static readonly List<Transform> s_points = new();
+
         /// <summary>
         /// Prepares and populates the ImportFileData object with all relevant data extracted from the Aseprite import event arguments.
         /// This includes animation tags, layer information, frame rectangles, asset objects, colliders, points, and root motion data.
@@ -323,6 +328,9 @@ namespace YontalaneEditor.Aseprite
         /// <param name="fileData">The ImportFileData object to store the created colliders.</param>
         internal static void MakeColliders(this ImportFileData fileData)
         {
+            s_colliders.Clear();
+            s_triggers.Clear();
+
             // Iterate through each layer in the layers list
             foreach (LayerData layerData in fileData.layers)
             {
@@ -333,7 +341,7 @@ namespace YontalaneEditor.Aseprite
                 }
 
                 // If the main object is not a game object, skip it (this should never happen)
-                if (fileData.MainObject is not GameObject mainObject)
+                if (fileData.MainObject is not GameObject _)
                 {
                     return;
                 }
@@ -347,6 +355,15 @@ namespace YontalaneEditor.Aseprite
                 fileData.args.context.AddObjectToAsset(go.name, go);
                 // Set the new GameObject as a child of the main imported object
                 go.transform.SetParent(fileData.spriteObject.transform);
+
+                if (layerData.type == LayerType.Collision)
+                {
+                    s_colliders.Add(collider);
+                }
+                else
+                {
+                    s_triggers.Add(collider);
+                }
             }
         }
 
@@ -356,6 +373,8 @@ namespace YontalaneEditor.Aseprite
         /// <param name="fileData">The ImportFileData object to store the created points.</param>
         internal static void MakePoints(this ImportFileData fileData)
         {
+            s_points.Clear();
+
             // Iterate through each layer in the layers list
             foreach (LayerData layerData in fileData.layers)
             {
@@ -366,7 +385,7 @@ namespace YontalaneEditor.Aseprite
                 }
 
                 // If the main object is not a game object, skip it (this should never happen)
-                if (fileData.MainObject is not GameObject mainObject)
+                if (fileData.MainObject is not GameObject _)
                 {
                     return;
                 }
@@ -378,13 +397,15 @@ namespace YontalaneEditor.Aseprite
                 fileData.args.context.AddObjectToAsset(go.name, go);
                 // Set the new GameObject as a child of the main imported object
                 go.transform.SetParent(fileData.spriteObject.transform);
+
+                s_points.Add(go.transform);
             }
         }
 
         /// <summary>
-        /// Adds an AsepriteAnimationBridge component to the main object in the import context.
+        /// Adds an AsepriteAnimationBridge component to the main imported GameObject and populates it
+        /// with references to all colliders, triggers, and points created during the import process.
         /// </summary>
-        /// <param name="fileData">The ImportFileData object to store the created animation bridge.</param>
         internal static void AddAnimationBridge(this ImportFileData fileData)
         {
             // If the main object is not a game object, skip it (this should never happen)
@@ -394,7 +415,17 @@ namespace YontalaneEditor.Aseprite
             }
 
             // Add an AsepriteAnimationBridge component to the main object
-            _ = mainObject.AddComponent<AsepriteAnimationBridge>();
+            AsepriteAnimationBridge bridge = mainObject.AddComponent<AsepriteAnimationBridge>();
+
+            // Ensure the lists on the bridge are initialized if they are null
+            bridge.Colliders ??= new();
+            bridge.Triggers ??= new();
+            bridge.Points ??= new();
+
+            // Add all colliders, triggers, and points collected during import to the bridge
+            bridge.Colliders.AddRange(s_colliders);
+            bridge.Triggers.AddRange(s_triggers);
+            bridge.Points.AddRange(s_points);
         }
     }
 }

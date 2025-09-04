@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.14] - 2025.09.04
+
+### Changed
+
+- Reimplemented generating colliders from Aseprite layers.
+
+### Added
+
+- AsepriteAnimationBridge stores references to colliders and point objects.
+- Gizmo displays of colliders and point objects.
+
 ## [1.0.13] - 2025.08.20
 
 ### Changed

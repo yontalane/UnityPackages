@@ -1,5 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEditor.Progress;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Yontalane.Aseprite
 {
@@ -71,6 +76,8 @@ namespace Yontalane.Aseprite
 
         #region Serialized Fields
 
+        [Header("Events")]
+
         [Tooltip("Event invoked when root motion data is received from the Aseprite animation.")]
         [SerializeField]
         private OnMotionHandler m_onMotion = null;
@@ -82,6 +89,20 @@ namespace Yontalane.Aseprite
         [Tooltip("Event invoked when the animation completes.")]
         [SerializeField]
         private OnLifecycleHandler m_onComplete = null;
+
+        [Header("Colliders")]
+
+        [Tooltip("Colliders defined in Aseprite.")]
+        [SerializeField]
+        private List<BoxCollider2D> m_colliders = new();
+
+        [Tooltip("Trigger colliders defined in Aseprite.")]
+        [SerializeField]
+        private List<BoxCollider2D> m_triggers = new();
+
+        [Tooltip("Points defined in Aseprite.")]
+        [SerializeField]
+        private List<Transform> m_points = new();
 
         #endregion
 
@@ -191,6 +212,33 @@ namespace Yontalane.Aseprite
         /// Gets the name of the currently playing animation.
         /// </summary>
         public string CurrentAnimation { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Colliders defined in Aseprite.
+        /// </summary>
+        public List<BoxCollider2D> Colliders
+        {
+            get => m_colliders;
+            set => m_colliders = value;
+        }
+
+        /// <summary>
+        /// Trigger colliders defined in Aseprite.
+        /// </summary>
+        public List<BoxCollider2D> Triggers
+        {
+            get => m_triggers;
+            set => m_triggers = value;
+        }
+
+        /// <summary>
+        /// Points defined in Aseprite.
+        /// </summary>
+        public List<Transform> Points
+        {
+            get => m_points;
+            set => m_points = value;
+        }
 
         #endregion
 
@@ -339,5 +387,100 @@ namespace Yontalane.Aseprite
         }
 
         #endregion
+
+
+#if UNITY_EDITOR
+
+        #region Gizmos
+
+        /// <summary>
+        /// Draws gizmos in the editor to visualize colliders, triggers, and points associated with this object.
+        /// </summary>
+        private void OnDrawGizmos()
+        {
+            // Draw wireframe gizmos for each collider in m_colliders, if any exist.
+            if (m_colliders != null)
+            {
+                Gizmos.color = AsepriteSettings.instance.gizmoInfo.colliderColor;
+
+                foreach (BoxCollider2D item in m_colliders)
+                {
+                    DrawColliderGizmo(item);
+                }
+            }
+
+            // Draw wireframe gizmos for each trigger in m_triggers, if any exist.
+            if (m_triggers != null)
+            {
+                Gizmos.color = AsepriteSettings.instance.gizmoInfo.triggerColor;
+
+                foreach (BoxCollider2D item in m_triggers)
+                {
+                    DrawColliderGizmo(item);
+                }
+            }
+
+            // Draw wireframe sphere gizmos for each point in m_points, if any exist.
+            if (m_points != null)
+            {
+                Gizmos.color = AsepriteSettings.instance.gizmoInfo.pointColor;
+                float radius = AsepriteSettings.instance.gizmoInfo.pointRadius;
+
+                foreach (Transform item in m_points)
+                {
+                    DrawPointGizmo(item, radius);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Draws a wireframe gizmo for the specified BoxCollider2D in the Scene view.
+        /// </summary>
+        /// <param name="collider">The BoxCollider2D to visualize.</param>
+        private void DrawColliderGizmo(BoxCollider2D collider)
+        {
+            // Check if the collider is null or not active/enabled; if so, exit the method.
+            if (collider == null || !collider.isActiveAndEnabled)
+            {
+                return;
+            }
+
+            // Calculate the world position of the collider's origin using its offset and the transform.
+            Vector3 localOrigin = collider.offset;
+            Vector3 worldOrigin = collider.transform.TransformPoint(localOrigin);
+
+            // Get the local size of the collider and scale it by the transform's lossy scale to get the world size.
+            Vector3 localSize = collider.size;
+            Vector3 lossyScale = collider.transform.lossyScale;
+            Vector3 worldSize = new()
+            {
+                x = Mathf.Max(Mathf.Abs(localSize.x * lossyScale.x), 0.05f),
+                y = Mathf.Max(Mathf.Abs(localSize.y * lossyScale.y), 0.05f),
+                z = Mathf.Max(Mathf.Abs(localSize.z * lossyScale.z), 0.05f),
+            };
+
+            // Draw a wireframe cube gizmo at the collider's world position and size.
+            Gizmos.DrawWireCube(worldOrigin, worldSize);
+        }
+
+        /// <summary>
+        /// Draws a wireframe sphere gizmo at the position of the specified Transform in the Scene view.
+        /// </summary>
+        /// <param name="transform">The Transform whose position to visualize.</param>
+        private void DrawPointGizmo(Transform transform, float radius)
+        {
+            // Check if the transform is null or not active; if so, exit the method.
+            if (transform == null || !transform.gameObject.activeSelf)
+            {
+                return;
+            }
+
+            // Draw a wireframe sphere gizmo at the transform's world position.
+            Gizmos.DrawWireSphere(transform.position, radius);
+        }
+
+        #endregion
+
+#endif
     }
 }

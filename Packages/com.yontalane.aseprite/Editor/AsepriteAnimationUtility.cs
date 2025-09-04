@@ -168,6 +168,46 @@ namespace YontalaneEditor.Aseprite
         }
 
         /// <summary>
+        /// Attempts to retrieve the time value of the ObjectReferenceKeyframe at the specified index in the list.
+        /// </summary>
+        /// <param name="frames">The list of ObjectReferenceKeyframes.</param>
+        /// <param name="index">The index of the keyframe to retrieve the time from.</param>
+        /// <param name="time">Outputs the time value of the keyframe if found; otherwise, 0.</param>
+        /// <returns>True if the keyframe exists at the specified index; otherwise, false.</returns>
+        internal static bool TryGetFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, int index, out float time)
+        {
+            // Check if the frames list is null or empty; if so, set time to 0 and return false.
+            if (frames == null || frames.Count == 0)
+            {
+                time = 0f;
+                return false;
+            }
+
+            // Check if the index is out of bounds; if so, set time to 0 and return false.
+            if (index < 0 || index >= frames.Count)
+            {
+                time = 0f;
+                return false;
+            }
+
+            // Retrieve the time value from the keyframe at the specified index and return true.
+            time = frames[index].time;
+            return true;
+        }
+
+        /// <summary>
+        /// Retrieves the time value of the ObjectReferenceKeyframe at the specified index in the list.
+        /// </summary>
+        /// <param name="frames">The list of ObjectReferenceKeyframes.</param>
+        /// <param name="index">The index of the keyframe to retrieve the time from.</param>
+        /// <returns>The time value of the keyframe at the specified index, or 0 if not found.</returns>
+        internal static float GetFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, int index)
+        {
+            _ = frames.TryGetFrameTime(index, out float time);
+            return time;
+        }
+
+        /// <summary>
         /// Finds the keyframe in the given list whose time is closest to the specified time.
         /// </summary>
         /// <param name="frames">The list of ObjectReferenceKeyframes to search.</param>
@@ -177,14 +217,17 @@ namespace YontalaneEditor.Aseprite
         /// <returns>True if a nearest keyframe was found; otherwise, false.</returns>
         internal static bool TryGetNearestFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, float time, out float nearestTime, out int nearestIndex)
         {
+            // Initialize output variables for the nearest keyframe search
             nearestTime = time;
             nearestIndex = -1;
             float nearestDiff = Mathf.Infinity;
 
+            // Iterate through all keyframes to find the one closest to the specified time
             for (int i = 0; i < frames.Count; i++)
             {
                 float diff = Mathf.Abs(frames[i].time - time);
 
+                // Update nearest keyframe if this one is closer than any previously found
                 if (diff < nearestDiff)
                 {
                     nearestIndex = i;
@@ -193,6 +236,7 @@ namespace YontalaneEditor.Aseprite
                 }
             }
 
+            // Return true if a nearest keyframe was found, otherwise false
             return nearestIndex >= 0;
         }
 
@@ -219,14 +263,17 @@ namespace YontalaneEditor.Aseprite
         /// <returns>True if a next keyframe exists after the nearest one; otherwise, false.</returns>
         internal static bool TryGetNextNearestFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, float time, out float nearestTime, out int nearestIndex)
         {
+            // Initialize output variables and set up for finding the nearest keyframe
             nearestTime = time;
             nearestIndex = -1;
             float nearestDiff = Mathf.Infinity;
 
+            // Loop through all keyframes to find the one closest to the specified time
             for (int i = 0; i < frames.Count; i++)
             {
                 float diff = Mathf.Abs(frames[i].time - time);
 
+                // Update nearest keyframe if this one is closer
                 if (diff < nearestDiff)
                 {
                     nearestIndex = i;
@@ -235,19 +282,23 @@ namespace YontalaneEditor.Aseprite
                 }
             }
 
+            // If no keyframe was found, return false
             if (nearestIndex == -1)
             {
                 return false;
             }
 
-            if (nearestIndex == frames.Count - 1) // If the nearest keyframe is the last one, return false
+            // If the nearest keyframe is the last one, there is no "next" keyframe, so return false
+            if (nearestIndex == frames.Count - 1)
             {
                 return false;
             }
 
+            // Move to the next keyframe after the nearest one and update outputs
             nearestIndex++;
             nearestTime = frames[nearestIndex].time;
 
+            // Indicate that a next keyframe was found
             return true;
         }
 
@@ -261,6 +312,69 @@ namespace YontalaneEditor.Aseprite
         internal static float GetNextNearestFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, float time)
         {
             _ = TryGetNextNearestFrameTime(frames, time, out float nearestTime, out int _);
+            return nearestTime;
+        }
+
+        /// <summary>
+        /// Finds the time of the keyframe in the given list that is closest to the specified time,
+        /// then outputs the time of the previous keyframe (if any).
+        /// </summary>
+        /// <param name="frames">The list of ObjectReferenceKeyframes to search.</param>
+        /// <param name="time">The target time to find the nearest keyframe to.</param>
+        /// <param name="nearestTime">Outputs the time of the previous keyframe before the nearest one found.</param>
+        /// <param name="nearestIndex">Outputs the index of the previous keyframe before the nearest one found, or -1 if none found.</param>
+        /// <returns>True if a previous keyframe exists before the nearest one; otherwise, false.</returns>
+        internal static bool TryGetPreviousNearestFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, float time, out float nearestTime, out int nearestIndex)
+        {
+            // Initialize output variables and set up for finding the nearest keyframe
+            nearestTime = time;
+            nearestIndex = -1;
+            float nearestDiff = Mathf.Infinity;
+
+            // Loop through all keyframes to find the one closest to the specified time
+            for (int i = 0; i < frames.Count; i++)
+            {
+                float diff = Mathf.Abs(frames[i].time - time);
+
+                // Update nearest keyframe if this one is closer
+                if (diff < nearestDiff)
+                {
+                    nearestIndex = i;
+                    nearestDiff = diff;
+                    nearestTime = frames[i].time;
+                }
+            }
+
+            // If no keyframe was found, return false
+            if (nearestIndex == -1)
+            {
+                return false;
+            }
+
+            // If the nearest keyframe is the first one, there is no previous keyframe, so return false
+            if (nearestIndex == 0)
+            {
+                return false;
+            }
+
+            // Move to the previous keyframe and update output variables
+            nearestIndex--;
+            nearestTime = frames[nearestIndex].time;
+
+            // Indicate that a previous keyframe was found
+            return true;
+        }
+
+        /// <summary>
+        /// Finds the time of the keyframe in the given list that is closest to the specified time,
+        /// then returns the time of the previous keyframe (if any).
+        /// </summary>
+        /// <param name="frames">The list of ObjectReferenceKeyframes to search.</param>
+        /// <param name="time">The target time to find the nearest keyframe to.</param>
+        /// <returns>The time of the previous keyframe before the nearest one found.</returns>
+        internal static float GetPreviousNearestFrameTime(this IReadOnlyList<ObjectReferenceKeyframe> frames, float time)
+        {
+            _ = TryGetPreviousNearestFrameTime(frames, time, out float nearestTime, out int _);
             return nearestTime;
         }
 
@@ -408,6 +522,78 @@ namespace YontalaneEditor.Aseprite
         }
 
         /// <summary>
+        /// Determines whether a boolean key exists at the specified time for the given property on the specified path and type in the AnimationClip.
+        /// </summary>
+        /// <typeparam name="T">The type of the component containing the property.</typeparam>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the property.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <param name="time">The time to check for a key.</param>
+        /// <returns>True if a key exists at the specified time; otherwise, false.</returns>
+        private static bool HasBoolKey<T>(this AnimationClip clip, string path, string propertyName, float time)
+        {
+            // Create an EditorCurveBinding for the specified property on the given path and type
+            EditorCurveBinding binding = new()
+            {
+                path = path,
+                propertyName = propertyName,
+                type = typeof(T),
+            };
+
+            // Get the animation curve for the specified property on the given path and type
+            AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
+
+            // If the animation curve is null, create a new one
+            curve ??= new();
+
+            // Return the result: Is there a key at the given time?
+            return curve.HasKeyAtTime(time);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the boolean value of a key at the specified time for the given property on the specified path and type in the AnimationClip.
+        /// </summary>
+        /// <typeparam name="T">The type of the component containing the property.</typeparam>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the property.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <param name="time">The time to check for a key.</param>
+        /// <param name="value">Outputs the boolean value of the key if found; otherwise, the default value.</param>
+        /// <returns>True if a key exists at the specified time and its value was retrieved; otherwise, false.</returns>
+        private static bool TryGetBoolKey<T>(this AnimationClip clip, string path, string propertyName, float time, out bool value)
+        {
+            // Create an EditorCurveBinding for the specified property on the given path and type
+            EditorCurveBinding binding = new()
+            {
+                path = path,
+                propertyName = propertyName,
+                type = typeof(T),
+            };
+
+            // Get the animation curve for the specified property on the given path and type
+            AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
+
+            // If the animation curve is null, create a new one
+            curve ??= new();
+
+            // Scan through all keyframes in the curve
+            foreach (Keyframe keyframe in curve.keys)
+            {
+                // If there is a keyframe at the given time
+                if (Mathf.Approximately(keyframe.time, time))
+                {
+                    // Set the out var to the keyframe's value and return success
+                    value = keyframe.value > 0.5f;
+                    return true;
+                }
+            }
+
+            // No key was found at the given time, so return failure
+            value = default;
+            return false;
+        }
+
+        /// <summary>
         /// Sets the isActive property within the AnimationClip at the specified time.
         /// </summary>
         /// <param name="clip">The AnimationClip to modify.</param>
@@ -416,6 +602,31 @@ namespace YontalaneEditor.Aseprite
         internal static void SetIsActiveKey(this AnimationClip clip, string path, float time, bool value)
         {
             clip.SetBoolKey<GameObject>(path, "m_IsActive", time, value);
+        }
+
+        /// <summary>
+        /// Checks if the AnimationClip has an "isActive" key for a GameObject at the specified path and time.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the GameObject property.</param>
+        /// <param name="time">The time to check for the key.</param>
+        /// <returns>True if a key exists at the specified time; otherwise, false.</returns>
+        internal static bool HasActiveKey(this AnimationClip clip, string path, float time)
+        {
+            return clip.HasBoolKey<GameObject>(path, "m_IsActive", time);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the value of the "isActive" key for a GameObject at the specified path and time in the AnimationClip.
+        /// </summary>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the GameObject property.</param>
+        /// <param name="time">The time to check for the key.</param>
+        /// <param name="value">Outputs the boolean value of the key if found; otherwise, the default value.</param>
+        /// <returns>True if a key exists at the specified time and its value was retrieved; otherwise, false.</returns>
+        internal static bool TryGetActiveKey(this AnimationClip clip, string path, float time, out bool value)
+        {
+            return clip.TryGetBoolKey<GameObject>(path, "m_IsActive", time, out value);
         }
 
         /// <summary>
@@ -429,6 +640,33 @@ namespace YontalaneEditor.Aseprite
         internal static void SetEnabledKey<T>(this AnimationClip clip, string path, float time, bool value) where T : Component
         {
             clip.SetBoolKey<T>(path, "m_Enabled", time, value);
+        }
+
+        /// <summary>
+        /// Checks if the AnimationClip has an "enabled" key for a component of type T at the specified path and time.
+        /// </summary>
+        /// <typeparam name="T">The type of the component to check the property on.</typeparam>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the component property.</param>
+        /// <param name="time">The time to check for the key.</param>
+        /// <returns>True if a key exists at the specified time; otherwise, false.</returns>
+        internal static bool HasEnabledKey<T>(this AnimationClip clip, string path, float time) where T : Component
+        {
+            return clip.HasBoolKey<T>(path, "m_Enabled", time);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the value of the "enabled" key for a component of type T at the specified path and time in the AnimationClip.
+        /// </summary>
+        /// <typeparam name="T">The type of the component to get the property from.</typeparam>
+        /// <param name="clip">The AnimationClip to search.</param>
+        /// <param name="path">The path to the component property.</param>
+        /// <param name="time">The time to check for the key.</param>
+        /// <param name="value">Outputs the boolean value of the key if found; otherwise, the default value.</param>
+        /// <returns>True if a key exists at the specified time and its value was retrieved; otherwise, false.</returns>
+        internal static bool TryGetEnabledKey<T>(this AnimationClip clip, string path, float time, out bool value) where T : Component
+        {
+            return clip.TryGetBoolKey<T>(path, "m_Enabled", time, out value);
         }
 
         /// <summary>

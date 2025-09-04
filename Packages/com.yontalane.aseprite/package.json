@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.aseprite",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "displayName": "Aseprite",
   "description": "Extras for the Aseprite-to-Unity pipeline.",
   "unity": "6000.0",

@@ -50,11 +50,13 @@ namespace YontalaneEditor.Aseprite
             // Check if the layer is a collision layer.
             bool isCustomLayer = layers[layerIndex].type != LayerType.Normal;
 
+            // Check if the desired layer type matches the actual layer type (custom or normal).
             if (desireCustomLayer != isCustomLayer)
             {
                 return false;
             }
 
+            // If the layer type matches, assign the casted CellChunk and return true.
             cellChunk = c;
             return true;
         }
@@ -67,30 +69,37 @@ namespace YontalaneEditor.Aseprite
         /// <param name="rect">The resulting rectangle if successful, otherwise null.</param>
         internal static bool TryGetRect(this CellChunk cellChunk, bool useAlpha, out RectInt rect)
         {
+            // Initialize the output rectangle with zero width and height.
             rect = new()
             {
                 width = 0,
                 height = 0,
             };
 
+            // Copy the image pixels from the cell chunk into the static pixel list.
             s_pixels.Clear();
             s_pixels.AddRange(cellChunk.image);
 
+            // Attempt to find the minimum (top-left) point of the non-transparent area.
             bool minExists = TryGetMin(s_pixels, cellChunk.posX, cellChunk.posY, cellChunk.width, cellChunk.height, useAlpha, out Vector2Int min);
 
+            // If no minimum point is found, return false to indicate failure.
             if (!minExists)
             {
                 return false;
             }
 
+            // Attempt to find the maximum (bottom-right) point of the non-transparent area.
             _ = TryGetMax(s_pixels, cellChunk.posX, cellChunk.posY, cellChunk.width, cellChunk.height, useAlpha, out Vector2Int max);
 
+            // Set the output rectangle using the found min and max points.
             rect = new()
             {
                 min = min,
                 max = max,
             };
 
+            // Return true to indicate the rectangle was successfully extracted.
             return true;
         }
 
@@ -106,19 +115,24 @@ namespace YontalaneEditor.Aseprite
         /// <param name="value">The resulting minimum point if successful, otherwise null.</param>
         private static bool TryGetMin(IReadOnlyList<Color32> colors, int posX, int posY, int width, int height, bool useAlpha, out Vector2Int value)
         {
+            // Initialize variables to store the found points and the output value.
             Vector2Int a = default;
             Vector2Int b = default;
             value = default;
 
+            // Flag to indicate when to break out of the loop after finding the first matching pixel in the first pass.
             bool shouldBreak = false;
 
+            // First pass: Find the top-most (minimum Y) pixel that meets the color threshold.
             for (int y = 0; y < height; y++)
             {
+                // Loop through each column in the current row to find the first pixel that meets the color threshold.
                 for (int x = 0; x < width; x++)
                 {
                     int i = (y * width) + x;
                     Color color = colors[i];
 
+                    // Check if the pixel meets the threshold based on alpha or red channel.
                     if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
                     {
                         a = new(x, y);
@@ -126,26 +140,32 @@ namespace YontalaneEditor.Aseprite
                         break;
                     }
                 }
+                // If a matching pixel was found in this row, break out of the outer loop.
                 if (shouldBreak)
                 {
                     break;
                 }
             }
 
+            // If no pixel was found in the first pass, return false.
             if (!shouldBreak)
             {
                 return false;
             }
 
+            // Reset the flag for the second pass.
             shouldBreak = false;
 
+            // Second pass: Find the left-most (minimum X) pixel that meets the color threshold.
             for (int x = 0; x < width; x++)
             {
+                // Loop through each row from top to bottom for the current column to find the first pixel that meets the color threshold.
                 for (int y = 0; y < height; y++)
                 {
                     int i = (y * width) + x;
                     Color color = colors[i];
 
+                    // Check if the pixel meets the threshold based on alpha or red channel.
                     if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
                     {
                         b = new(x, y);
@@ -153,18 +173,21 @@ namespace YontalaneEditor.Aseprite
                         break;
                     }
                 }
+                // If a matching pixel was found in this column, break out of the outer loop.
                 if (shouldBreak)
                 {
                     break;
                 }
             }
 
+            // Set the output value using the found minimum X and Y, offset by the provided position.
             value = new()
             {
                 x = posX + b.x,
                 y = posY + a.y,
             };
 
+            // Indicate that a valid minimum point was found.
             return true;
         }
 
@@ -180,19 +203,24 @@ namespace YontalaneEditor.Aseprite
         /// <param name="value">The resulting maximum point if successful, otherwise null.</param>
         private static bool TryGetMax(IReadOnlyList<Color32> colors, int posX, int posY, int width, int height, bool useAlpha, out Vector2Int value)
         {
+            // Initialize variables to store the found points and the output value.
             Vector2Int a = default;
             Vector2Int b = default;
             value = default;
 
+            // Flag to indicate when to break out of the loop after finding the first matching pixel.
             bool shouldBreak = false;
 
+            // Search for the maximum Y (bottom-most) and X (right-most) pixel that meets the color threshold.
             for (int y = height - 1; y >= 0; y--)
             {
+                // Loop through each column from right to left to find the first pixel in the current row that meets the color threshold.
                 for (int x = width - 1; x >= 0; x--)
                 {
                     int i = (y * width) + x;
                     Color color = colors[i];
 
+                    // Check if the pixel meets the threshold based on alpha or red channel.
                     if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
                     {
                         a = new(x, y);
@@ -200,26 +228,32 @@ namespace YontalaneEditor.Aseprite
                         break;
                     }
                 }
+                // If a matching pixel was found, break out of the outer loop as well.
                 if (shouldBreak)
                 {
                     break;
                 }
             }
 
+            // If no pixel was found, return false.
             if (!shouldBreak)
             {
                 return false;
             }
 
+            // Reset the break flag for the next search.
             shouldBreak = false;
 
+            // Search for the maximum X (right-most) and Y (bottom-most) pixel that meets the color threshold.
             for (int x = width - 1; x >= 0; x--)
             {
+                // Loop through each row from bottom to top to find the first pixel in the current column that meets the color threshold.
                 for (int y = height - 1; y >= 0; y--)
                 {
                     int i = (y * width) + x;
                     Color color = colors[i];
 
+                    // Check if the pixel meets the threshold based on alpha or red channel.
                     if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
                     {
                         b = new(x, y);
@@ -227,18 +261,21 @@ namespace YontalaneEditor.Aseprite
                         break;
                     }
                 }
+                // If a matching pixel was found, break out of the outer loop as well.
                 if (shouldBreak)
                 {
                     break;
                 }
             }
 
+            // Calculate the resulting maximum point, offset by the input position and incremented by 1.
             value = new()
             {
                 x = posX + b.x + 1,
                 y = posY + a.y + 1,
             };
 
+            // Indicate that a valid maximum point was found.
             return true;
         }
 

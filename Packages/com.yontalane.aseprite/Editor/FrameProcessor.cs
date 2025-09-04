@@ -15,7 +15,14 @@ namespace YontalaneEditor.Aseprite
         /// </summary>
         private struct RootData
         {
+            /// <summary>
+            /// The position of the root motion for this frame.
+            /// </summary>
             public Vector2 position;
+
+            /// <summary>
+            /// The name of the animation associated with this root motion data.
+            /// </summary>
             public string animation;
         }
 
@@ -36,10 +43,23 @@ namespace YontalaneEditor.Aseprite
                 return false;
             }
 
+            // Extract current and next frame indices and their corresponding times for animation keying.
+            int currIndex = frameData.frameIndex;
+            int nextIndex = frameData.nextFrameIndex;
+            float currTime = frameData.time;
+            float nextTime = frameData.nextTime;
+
             // Set the enabled state of the BoxCollider2D to on for the current frame only
             {
+                // Get the binding path for the current layer and enable the BoxCollider2D at the current frame time
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetEnabledKey<BoxCollider2D>(path, frameData.time, true);
+                frameData.clip.SetEnabledKey<BoxCollider2D>(path, currTime, true);
+
+                // If there is a next frame and it doesn't already have a key, set the BoxCollider2D to disabled at the next frame time
+                if (nextIndex > currIndex && !frameData.clip.HasEnabledKey<BoxCollider2D>(path, nextTime))
+                {
+                    frameData.clip.SetEnabledKey<BoxCollider2D>(path, nextTime, false);
+                }
             }
 
             // Set the center of the BoxCollider2D
@@ -54,7 +74,7 @@ namespace YontalaneEditor.Aseprite
                 offset.y /= frameData.pixelsPerUnit;
 
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetOffsetKey(path, frameData.time, offset, true);
+                frameData.clip.SetOffsetKey(path, currTime, offset, true);
             }
 
             // Set the size of the BoxCollider2D
@@ -63,7 +83,7 @@ namespace YontalaneEditor.Aseprite
                 size /= frameData.pixelsPerUnit;
 
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetSizeKey(path, frameData.time, size, true);
+                frameData.clip.SetSizeKey(path, currTime, size, true);
             }
 
             return true;
@@ -83,10 +103,23 @@ namespace YontalaneEditor.Aseprite
                 return false;
             }
 
+            // Extract current and next frame indices and their corresponding times for animation keying.
+            int currIndex = frameData.frameIndex;
+            int nextIndex = frameData.nextFrameIndex;
+            float currTime = frameData.time;
+            float nextTime = frameData.nextTime;
+
             // Set the active state of the GameObject to on for the current frame only
             {
+                // Get the binding path for the current layer and activate the point object at the current frame time
                 string path = fileData.GetBindingPath(frameData.layerData.name);
-                frameData.clip.SetIsActiveKey(path, frameData.time, true);
+                frameData.clip.SetIsActiveKey(path, currTime, true);
+
+                // If there is a next frame and it doesn't already have a key, deactivate the point object at the next frame time
+                if (nextIndex > currIndex && !frameData.clip.HasActiveKey(path, nextTime))
+                {
+                    frameData.clip.SetIsActiveKey(path, nextTime, false);
+                }
             }
 
             // Set the position of the GameObject

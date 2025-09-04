@@ -25,7 +25,7 @@ namespace YontalaneEditor.Aseprite
         internal static void ProcessAsepriteAsset(this ImportFileData fileData)
         {
             // Iterate through the frames to process collision boxes and points before root motion
-            for (int frameDataIndex = 0; frameDataIndex < fileData.FrameData.Count; frameDataIndex++)
+            for (int frameDataIndex = fileData.FrameData.Count - 1; frameDataIndex >= 0; frameDataIndex--)
             {
                 // Clear the list of layers and add all layers from the file data
                 s_remainingLayers.Clear();
@@ -36,7 +36,7 @@ namespace YontalaneEditor.Aseprite
                 fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, out float time); // Collision Boxes and Points
 
                 // Set the 'off' key for the remaining layers
-                fileData.HideEmptyLayerObjects(frameDataIndex, time, s_remainingLayers);
+                //fileData.HideEmptyLayerObjects(frameDataIndex, time, s_remainingLayers);
             }
 
             // Iterate through the frames to process root motion
@@ -98,9 +98,20 @@ namespace YontalaneEditor.Aseprite
                 // Get the object reference curve for the current animation clip
                 ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(clip, AsepriteAnimationUtility.SpriteBinding);
 
+                // Get the start and end frame indices for the current animation
+                int fromFrame = animationData.fromFrame;
+                int toFrame = animationData.toFrame;
+
                 // Calculate the time in and time out for the current frame/layer/animation
-                time = (frameDataIndex - animationData.fromFrame) / (float)(animationData.toFrame - animationData.fromFrame) * clip.length - clip.length / (animationData.toFrame - animationData.fromFrame) * 0.5f;
-                time = frames.GetNearestFrameTime(time);
+                time = frames.GetFrameTime(frameDataIndex - fromFrame);
+
+                // Calculate the previous frame index and its corresponding time within the animation
+                int previousFrameIndex = Mathf.Max(frameDataIndex - 1, fromFrame);
+                float previousTime = frames.GetFrameTime(previousFrameIndex - fromFrame);
+
+                // Calculate the next frame index and its corresponding time within the animation
+                int nextFrameIndex = Mathf.Min(frameDataIndex + 1, toFrame);
+                float nextTime = frames.GetFrameTime(nextFrameIndex - fromFrame);
 
                 // Create ImportFrameData for this frame/layer/animation
                 ImportFrameData frameData = new()
@@ -109,9 +120,13 @@ namespace YontalaneEditor.Aseprite
                     layerData = layerData,
                     clip = clip,
                     time = time,
+                    previousTime = previousTime,
+                    nextTime = nextTime,
                     fileDimensions = fileData.Size,
                     filePivot = fileData.args.GetPivot(),
                     frameIndex = frameDataIndex,
+                    previousFrameIndex = previousFrameIndex,
+                    nextFrameIndex = nextFrameIndex,
                     animationData = animationData,
                     cellRect = rect,
                     frameRect = fileData.frameRects[frameDataIndex],
