@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.Progress;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Yontalane.Aseprite
 {
@@ -90,7 +86,7 @@ namespace Yontalane.Aseprite
         [SerializeField]
         private OnLifecycleHandler m_onComplete = null;
 
-        [Header("Colliders")]
+        [Header("Colliders and Points")]
 
         [Tooltip("Colliders defined in Aseprite.")]
         [SerializeField]
