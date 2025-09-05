@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.15] - 2025.09.05
+
+### Added
+
+- AsepriteAnimationExtras and MotionTrees.
+
 ## [1.0.14] - 2025.09.04
 
 ### Changed

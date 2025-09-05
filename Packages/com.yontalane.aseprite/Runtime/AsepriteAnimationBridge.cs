@@ -67,6 +67,8 @@ namespace Yontalane.Aseprite
 
         private Animator m_animator = null;
         private SpriteRenderer m_spriteRenderer = null;
+        private bool m_playingMotionTree = false;
+        private MotionTree m_currentMotionTree = default;
 
         #endregion
 
@@ -99,6 +101,12 @@ namespace Yontalane.Aseprite
         [Tooltip("Points defined in Aseprite.")]
         [SerializeField]
         private List<Transform> m_points = new();
+
+        [Header("Extras")]
+
+        [Tooltip("Optional extra data for more complex animations.")]
+        [SerializeField]
+        private AsepriteAnimationExtras[] m_extras = new AsepriteAnimationExtras[0];
 
         #endregion
 
@@ -239,6 +247,28 @@ namespace Yontalane.Aseprite
         #endregion
 
 
+        /// <summary>
+        /// Updates the animation state each frame after all Update functions have been called.
+        /// Handles playing the correct animation clip from the motion tree if applicable.
+        /// </summary>
+        private void LateUpdate()
+        {
+            // Check if the motion tree is currently playing; if not, exit the method.
+            if (!m_playingMotionTree)
+            {
+                return;
+            }
+
+            // Attempt to retrieve the current motion tree and its associated animation clip; if unsuccessful, exit the method.
+            if (!TryGetMotionTree(m_currentMotionTree.id, out MotionTree motionTree, out AnimationClip clip))
+            {
+                return;
+            }
+
+            // Play the animation clip using the Animator, setting the normalized time from the motion tree value.
+            Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
+        }
+
         #region Aseprite Animation Events
 
         /// <summary>
@@ -297,9 +327,18 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="animationName">The name of the animation to get.</param>
         /// <param name="animationClip">The animation clip if found, otherwise null.</param>
+        /// <param name="includeMotionTrees">Whether to include motion trees in the search.</param>
         /// <returns>True if the animation clip was found, false otherwise.</returns>
-        public bool TryGetAnimationClip(string animationName, out AnimationClip animationClip)
+        public bool TryGetAnimationClip(string animationName, bool includeMotionTrees, out AnimationClip animationClip)
         {
+            // Check if the extras contain a motion tree for the given animation name.
+            if (includeMotionTrees && m_extras.TryGetMotionTree(animationName, out MotionTree motionTree))
+            {
+                // If found, get the corresponding animation clip name from the motion tree and try to get the animation clip.
+                string clipName = m_extras.GetAnimation(motionTree);
+                return TryGetAnimationClip(clipName, out animationClip);
+            }
+
             // Get the RuntimeAnimatorController from the Animator
             RuntimeAnimatorController controller = Animator.runtimeAnimatorController;
 
@@ -330,14 +369,78 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
+        /// Tries to get an animation clip or motion tree with the specified name.
+        /// </summary>
+        /// <param name="animationName">The name of the animation to get.</param>
+        /// <param name="animationClip">The animation clip if found, otherwise null.</param>
+        /// <returns>True if the animation clip was found, false otherwise.</returns>
+        public bool TryGetAnimationClip(string animationName, out AnimationClip animationClip)
+        {
+            return TryGetAnimationClip(animationName, true, out animationClip);
+        }
+
+        /// <summary>
+        /// Tries to get an animation clip with the specified name from within the motion trees.
+        /// </summary>
+        /// <param name="motionTreeName">The name of the animation to get.</param>
+        /// <param name="motionTree">The motion tree if found.</param>
+        /// <param name="animationClip">The animation clip if found, otherwise null.</param>
+        /// <returns>True if the animation clip was found, false otherwise.</returns>
+        public bool TryGetMotionTree(string motionTreeName, out MotionTree motionTree, out AnimationClip animationClip)
+        {
+            // Check if the extras contain a motion tree for the given animation name.
+            if (m_extras.TryGetMotionTree(motionTreeName, out motionTree))
+            {
+                // If found, get the corresponding animation clip name from the motion tree and try to get the animation clip.
+                string clipName = m_extras.GetAnimation(motionTree);
+                return TryGetAnimationClip(clipName, out animationClip);
+            }
+
+            // If no animation clip's name is the same as the specified animation name, return false
+            animationClip = null;
+            return false;
+        }
+
+        /// <summary>
         /// Checks if the Animator has an animation with the specified name.
         /// </summary>
         /// <param name="animationName">The name of the animation to check for.</param>
+        /// <param name="includeMotionTrees">Whether to include motion trees in the search.</param>
         /// <returns>True if the Animator has an animation with the specified name, false otherwise.</returns>
-        public bool HasAnimation(string animationName)
+        public bool HasAnimation(string animationName, bool includeMotionTrees)
         {
-            // Try to get the animation clip with the specified name
+            // Check if the extras contain a motion tree for the given animation name and if it has any animations defined
+            if (includeMotionTrees && m_extras.TryGetMotionTree(animationName, out MotionTree motionTree) && motionTree.animations != null && motionTree.animations.Length > 0)
+            {
+                return true;
+            }
+
+            // If not found in motion trees, try to get the animation clip with the specified name
             return TryGetAnimationClip(animationName, out _);
+        }
+
+        /// <summary>
+        /// Checks if the Animator has an animation with the specified name, or if there is a motion tree by that name.
+        /// </summary>
+        /// <param name="animationName">The name of the animation to check for.</param>
+        /// <returns>True if the Animator has an animation with the specified name, false otherwise.</returns>
+        public bool HasAnimation(string animationName) => HasAnimation(animationName, true);
+
+        /// <summary>
+        /// Checks if the <see cref="AsepriteAnimationBridge"/> has an <see cref="AsepriteAnimationExtras"/> asset with a <see cref="MotionTree"/> with the specified name.
+        /// </summary>
+        /// <param name="motionTreeName">The name of the motion tree to check for.</param>
+        /// <returns>True if the motion tree with the specified name exists, false otherwise.</returns>
+        public bool HasMotionTree(string motionTreeName)
+        {
+            // Check if the extras contain a motion tree for the given name and if it has any animations defined
+            if (m_extras.TryGetMotionTree(motionTreeName, out MotionTree motionTree) && motionTree.animations != null && motionTree.animations.Length > 0)
+            {
+                return true;
+            }
+
+            // If not found, return false
+            return false;
         }
 
         #endregion
@@ -345,16 +448,34 @@ namespace Yontalane.Aseprite
         #region Animation Playback
 
         /// <summary>
+        /// Stops the current animation playback and resets the playback state.
+        /// </summary>
+        public void Stop()
+        {
+            m_playingMotionTree = false;
+            Animator.StopPlayback();
+        }
+
+        /// <summary>
         /// Tries to play an animation with the specified name.
         /// </summary>
         /// <param name="animationName">The name of the animation to play.</param>
         /// <param name="startTime">The start time offset between zero and one.</param>
         /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
+        /// <param name="includeMotionTrees">Whether to try playing motion trees.</param>
         /// <returns>True if the animation was played, false otherwise.</returns>
-        public bool TryPlay(string animationName, float startTime = 0f, bool restartLoop = false)
+        public bool TryPlay(string animationName, float startTime = 0f, bool restartLoop = false, bool includeMotionTrees = true)
         {
+            if (includeMotionTrees && TryGetMotionTree(animationName, out MotionTree motionTree, out AnimationClip clip))
+            {
+                m_playingMotionTree = true;
+                m_currentMotionTree = motionTree;
+                Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
+                return true;
+            }
+
             // Try to get the animation clip with the specified name
-            if (!TryGetAnimationClip(animationName, out AnimationClip clip))
+            if (!TryGetAnimationClip(animationName, includeMotionTrees, out clip))
             {
                 return false;
             }
@@ -366,7 +487,41 @@ namespace Yontalane.Aseprite
             }
 
             // Play the animation
+            m_playingMotionTree = false;
             Animator.Play(clip.name, -1, startTime);
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to play an animation with the specified name.
+        /// </summary>
+        /// <param name="animationName">The name of the animation to play.</param>
+        /// <param name="startTime">The start time offset between zero and one.</param>
+        /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
+        /// <returns>True if the animation was played, false otherwise.</returns>
+        public bool TryPlay(string animationName, float startTime = 0f, bool restartLoop = false) => TryPlay(animationName, startTime, restartLoop, true);
+
+        /// <summary>
+        /// Tries to play a motion tree with the specified name.
+        /// </summary>
+        /// <param name="motionTreeName">The name of the motion tree to play.</param>
+        /// <returns>True if the motion tree was played, false otherwise.</returns>
+        public bool TryPlayMotionTree(string motionTreeName)
+        {
+            // Try to get the animation clip with the specified name
+            if (!TryGetMotionTree(motionTreeName, out MotionTree motionTree, out AnimationClip clip))
+            {
+                return false;
+            }
+
+            // If the animation is looping and the current animation is the same as the specified animation name, return false
+            if (clip.isLooping && (CurrentAnimation == clip.name || CurrentAnimation == motionTree.id))
+            {
+                return false;
+            }
+
+            // Play the animation
+            Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
             return true;
         }
 
@@ -376,11 +531,13 @@ namespace Yontalane.Aseprite
         /// <param name="animationName">The name of the animation to play.</param>
         /// <param name="startTime">The start time offset between zero and one.</param>
         /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
-        public void Play(string animationName, float startTime = 0f, bool restartLoop = false)
-        {
-            // Play the animation
-            TryPlay(animationName, startTime, restartLoop);
-        }
+        public void Play(string animationName, float startTime = 0f, bool restartLoop = false) => _ = TryPlay(animationName, startTime, restartLoop);
+
+        /// <summary>
+        /// Plays a motion tree with the specified name.
+        /// </summary>
+        /// <param name="motionTreeName">The name of the motion tree to play.</param>
+        public void PlayMotionTree(string motionTreeName) => _ = TryPlayMotionTree(motionTreeName);
 
         #endregion
 
