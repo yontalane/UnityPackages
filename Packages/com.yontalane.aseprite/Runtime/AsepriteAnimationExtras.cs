@@ -104,7 +104,7 @@ namespace Yontalane.Aseprite
             }
 
             // Assign the animation name at the calculated index and return true
-            animation = motionTree.animations[ind];
+            animation = motionTree.animations[ind] != null ? motionTree.animations[ind].name : string.Empty;
             return true;
         }
 

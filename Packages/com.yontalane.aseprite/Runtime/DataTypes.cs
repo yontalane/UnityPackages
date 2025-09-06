@@ -8,23 +8,14 @@ namespace Yontalane.Aseprite
     [System.Serializable]
     public struct MotionTree
     {
-        /// <summary>
-        /// The identifier for this motion tree.
-        /// </summary>
         [Tooltip("The identifier for this motion tree.")]
         public string id;
 
-        /// <summary>
-        /// The animation curve associated with this motion tree.
-        /// </summary>
         [Tooltip("The animation curve associated with this motion tree.")]
         public AnimationCurve curve;
 
-        /// <summary>
-        /// The list of animation names associated with this motion tree.
-        /// </summary>
-        [Tooltip("The list of animation names associated with this motion tree.")]
-        public string[] animations;
+        [Tooltip("The list of animations associated with this motion tree.")]
+        public AnimationClip[] animations;
     }
 
     /// <summary>

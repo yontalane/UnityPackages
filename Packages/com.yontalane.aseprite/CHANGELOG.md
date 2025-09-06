@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.17] - 2025.09.06
+
+### Added
+
+- More debug logs.
+
 ## [1.0.16] - 2025.09.06
 
 ### Added
