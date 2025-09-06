@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using static Yontalane.Aseprite.AsepriteAnimationExtras;
 
 namespace Yontalane.Aseprite
 {
@@ -89,6 +90,10 @@ namespace Yontalane.Aseprite
         [SerializeField]
         private OnLifecycleHandler m_onComplete = null;
 
+        [Tooltip("Event invoked to request a motion tree value.")]
+        [SerializeField]
+        private KeyFloatHandler m_onRequestMotionTreeValue = null;
+
         [Header("Colliders and Points")]
 
         [Tooltip("Colliders defined in Aseprite.")]
@@ -127,6 +132,11 @@ namespace Yontalane.Aseprite
         /// Event invoked when the animation completes.
         /// </summary>
         public OnLifecycleHandler OnComplete => m_onComplete;
+
+        /// <summary>
+        /// Event invoked to request a motion tree value.
+        /// </summary>
+        public KeyFloatHandler OnRequestMotionTreeValue => m_onRequestMotionTreeValue;
 
         #endregion
 
@@ -252,6 +262,21 @@ namespace Yontalane.Aseprite
 
         #endregion
 
+        private void OnEnable()
+        {
+            foreach(AsepriteAnimationExtras extra in m_extras)
+            {
+                extra.OnRequestMotionTreeValue.AddListener(ProcessMotionTreeValue);
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (AsepriteAnimationExtras extra in m_extras)
+            {
+                extra.OnRequestMotionTreeValue.RemoveListener(ProcessMotionTreeValue);
+            }
+        }
 
         /// <summary>
         /// Updates the animation state each frame after all Update functions have been called.
@@ -331,6 +356,11 @@ namespace Yontalane.Aseprite
                 animationName = animationEvent.stringParameter,
                 isLooping = animationEvent.intParameter > 0,
             });
+        }
+
+        private void ProcessMotionTreeValue(KeyFloatPair keyFloatPair)
+        {
+            m_onRequestMotionTreeValue?.Invoke(keyFloatPair);
         }
 
         #endregion

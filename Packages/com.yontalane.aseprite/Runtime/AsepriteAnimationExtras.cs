@@ -42,6 +42,12 @@ namespace Yontalane.Aseprite
         #endregion
 
 
+        /// <summary>
+        /// Event invoked to request a motion tree value.
+        /// </summary>
+        public KeyFloatHandler OnRequestMotionTreeValue => m_onRequestMotionTreeValue;
+
+
         #region Motion Tree Value Methods
 
         /// <summary>

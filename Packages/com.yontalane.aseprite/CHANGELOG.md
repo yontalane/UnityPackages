@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.20] - 2025.09.06
+
+### Added
+
+- Bridge invokes MotionTreeValue events.
+
 ## [1.0.19] - 2025.09.06
 
 ### Changed
