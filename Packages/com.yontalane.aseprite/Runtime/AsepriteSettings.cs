@@ -8,7 +8,7 @@ namespace Yontalane.Aseprite
     /// Contains color and size settings for drawing gizmos related to Aseprite objects in the Unity Editor.
     /// </summary>
     [System.Serializable]
-    public struct AsepriteGizmoInfo
+    public struct GizmoInfo
     {
         [Tooltip("Color used to draw collider gizmos.")]
         public Color colliderColor;
@@ -24,22 +24,39 @@ namespace Yontalane.Aseprite
     }
 
     /// <summary>
+    /// Enable or disable debug logging for the Yontalane Aseprite integration.
+    /// </summary>
+    [System.Serializable]
+    public struct DebugSettings
+    {
+        [Tooltip("Enable or disable debug logging.")]
+        public bool log;
+
+        [Tooltip("Only log debug messages that contain this filter.")]
+        public string filter;
+    }
+
+    /// <summary>
     /// Stores project-wide settings for the Yontalane Aseprite integration, including debug logging and gizmo appearance.
     /// </summary>
     [FilePath("ProjectSettings/YontalaneAsepriteSettings.asset", FilePathAttribute.Location.ProjectFolder)]
     public class AsepriteSettings : ScriptableSingleton<AsepriteSettings>
     {
         [Tooltip("Enable or disable debug logging for the Yontalane Aseprite integration.")]
-        public bool debugLog;
+        public DebugSettings debugSettings;
 
         [Tooltip("Settings for gizmo colors and sizes used in the Unity Editor for Aseprite objects.")]
-        public AsepriteGizmoInfo gizmoInfo;
+        public GizmoInfo gizmoInfo;
 
         public AsepriteSettings()
         {
-            debugLog = false;
+            debugSettings = new()
+            {
+                log = false,
+                filter = string.Empty,
+            };
 
-            gizmoInfo = new AsepriteGizmoInfo()
+            gizmoInfo = new()
             {
                 colliderColor = Color.green,
                 triggerColor = Color.cyan,

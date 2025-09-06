@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.18] - 2025.09.06
+
+### Added
+
+- Can filter debug logs.
+
 ## [1.0.17] - 2025.09.06
 
 ### Added

@@ -12,9 +12,14 @@ namespace Yontalane.Aseprite
         /// Logs a message to the Unity Console if debug logging is enabled in <see cref="AsepriteSettings"/>.
         /// </summary>
         /// <param name="message">The message to log.</param>
-        public static void Log(object message)
+        public static void Log(string message)
         {
-            if (!AsepriteSettings.instance.debugLog)
+            if (!AsepriteSettings.instance.debugSettings.log)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(AsepriteSettings.instance.debugSettings.filter) && !message.Contains(AsepriteSettings.instance.debugSettings.filter))
             {
                 return;
             }
@@ -26,9 +31,14 @@ namespace Yontalane.Aseprite
         /// Logs a warning message to the Unity Console if debug logging is enabled in <see cref="AsepriteSettings"/>.
         /// </summary>
         /// <param name="message">The warning message to log.</param>
-        public static void LogWarning(object message)
+        public static void LogWarning(string message)
         {
-            if (!AsepriteSettings.instance.debugLog)
+            if (!AsepriteSettings.instance.debugSettings.log)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(AsepriteSettings.instance.debugSettings.filter) && !message.Contains(AsepriteSettings.instance.debugSettings.filter))
             {
                 return;
             }
@@ -40,9 +50,14 @@ namespace Yontalane.Aseprite
         /// Logs an error message to the Unity Console if debug logging is enabled in <see cref="AsepriteSettings"/>.
         /// </summary>
         /// <param name="message">The error message to log.</param>
-        public static void LogError(object message)
+        public static void LogError(string message)
         {
-            if (!AsepriteSettings.instance.debugLog)
+            if (!AsepriteSettings.instance.debugSettings.log)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(AsepriteSettings.instance.debugSettings.filter) && !message.Contains(AsepriteSettings.instance.debugSettings.filter))
             {
                 return;
             }
