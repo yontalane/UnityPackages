@@ -26,8 +26,6 @@ namespace YontalaneEditor.Aseprite
         public override void OnGUI(string searchContext)
         {
             EditorGUILayout.Space();
-            GUILayout.Label("Gizmos", EditorStyles.boldLabel);
-            EditorGUILayout.Space();
             EditorGUI.BeginChangeCheck();
             m_editor.OnInspectorGUI();
             if (EditorGUI.EndChangeCheck())

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.16] - 2025.09.06
+
+### Added
+
+- Debug logs in Bridge.
+
 ## [1.0.15] - 2025.09.05
 
 ### Added

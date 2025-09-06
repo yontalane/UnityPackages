@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 namespace Yontalane.Aseprite
 {
@@ -262,8 +263,11 @@ namespace Yontalane.Aseprite
             // Attempt to retrieve the current motion tree and its associated animation clip; if unsuccessful, exit the method.
             if (!TryGetMotionTree(m_currentMotionTree.id, out MotionTree motionTree, out AnimationClip clip))
             {
+                DebugUtility.LogWarning($"<b>LateUpdate()</b> Failing to play MotionTree.");
                 return;
             }
+
+            DebugUtility.Log($"<b>LateUpdate()</b> Playing clip {clip.name} from MotionTree {motionTree}");
 
             // Play the animation clip using the Animator, setting the normalized time from the motion tree value.
             Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
@@ -283,6 +287,8 @@ namespace Yontalane.Aseprite
             float x = float.TryParse(pos[1].Trim(), out float outX) ? outX : 0f;
             float y = float.TryParse(pos[2].Trim(), out float outY) ? outY : 0f;
 
+            DebugUtility.Log($"<b>OnAsepriteRootMotion({position})</b> Root motion: frame={frameIndex} motion={x},{y}");
+
             // Invoke the OnMotion event with the parsed motion vector
             OnMotion?.Invoke(new()
             {
@@ -297,6 +303,8 @@ namespace Yontalane.Aseprite
         /// <param name="animationEvent">The AnimationEvent that triggered the start.</param>
         public void OnAsepriteAnimationStart(AnimationEvent animationEvent)
         {
+            DebugUtility.Log($"<b>OnAsepriteAnimationStart({animationEvent})</b>");
+
             CurrentAnimation = animationEvent.stringParameter;
             OnStart?.Invoke(new()
             {
@@ -311,6 +319,8 @@ namespace Yontalane.Aseprite
         /// <param name="animationEvent">The AnimationEvent that triggered the completion.</param>
         public void OnAsepriteAnimationComplete(AnimationEvent animationEvent)
         {
+            DebugUtility.Log($"<b>OnAsepriteAnimationComplete({animationEvent})</b>");
+
             OnComplete?.Invoke(new()
             {
                 animationName = animationEvent.stringParameter,
@@ -452,6 +462,7 @@ namespace Yontalane.Aseprite
         /// </summary>
         public void Stop()
         {
+            DebugUtility.Log($"<b>Stop()</b>");
             m_playingMotionTree = false;
             Animator.StopPlayback();
         }
@@ -468,6 +479,7 @@ namespace Yontalane.Aseprite
         {
             if (includeMotionTrees && TryGetMotionTree(animationName, out MotionTree motionTree, out AnimationClip clip))
             {
+                DebugUtility.Log($"<b>TryPlay({animationName})</b> Playing clip {clip.name} within MotionTree.");
                 m_playingMotionTree = true;
                 m_currentMotionTree = motionTree;
                 Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
@@ -477,6 +489,7 @@ namespace Yontalane.Aseprite
             // Try to get the animation clip with the specified name
             if (!TryGetAnimationClip(animationName, includeMotionTrees, out clip))
             {
+                DebugUtility.LogWarning($"<b>TryPlay({animationName})</b> Can't get clip with specified name.");
                 return false;
             }
 
@@ -486,6 +499,7 @@ namespace Yontalane.Aseprite
                 return false;
             }
 
+            DebugUtility.Log($"<b>TryPlay({animationName})</b> Playing clip {clip.name}.");
             // Play the animation
             m_playingMotionTree = false;
             Animator.Play(clip.name, -1, startTime);
@@ -511,6 +525,7 @@ namespace Yontalane.Aseprite
             // Try to get the animation clip with the specified name
             if (!TryGetMotionTree(motionTreeName, out MotionTree motionTree, out AnimationClip clip))
             {
+                DebugUtility.LogWarning($"<b>TryPlayMotionTree({motionTreeName})</b> Can't get MotionTree or clip with specified name.");
                 return false;
             }
 
@@ -519,6 +534,8 @@ namespace Yontalane.Aseprite
             {
                 return false;
             }
+
+            DebugUtility.Log($"<b>TryPlayMotionTree({motionTreeName})</b> Playing clip {clip.name}.");
 
             // Play the animation
             Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
