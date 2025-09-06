@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.19] - 2025.09.06
+
+### Changed
+
+- Clamping MotionTree animation index appropriately.
+
 ## [1.0.18] - 2025.09.06
 
 ### Added

@@ -94,7 +94,7 @@ namespace Yontalane.Aseprite
             val = motionTree.curve.GetNormalizedValue(val);
 
             // Convert the normalized value to the nearest animation index
-            int ind = Mathf.FloorToInt(val * motionTree.animations.Length);
+            int ind = Mathf.Clamp(Mathf.FloorToInt(val * motionTree.animations.Length), 0, motionTree.animations.Length - 1);
 
             // Check if the calculated index is within the valid range of animations
             if (ind < 0 || ind >= motionTree.animations.Length)
