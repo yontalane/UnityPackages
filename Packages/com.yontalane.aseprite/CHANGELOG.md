@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.21] - 2025.09.06
+
+### Changed
+
+- KeyFloatPair is a class instead of a struct so that it is passed by ref.
+
 ## [1.0.20] - 2025.09.06
 
 ### Added

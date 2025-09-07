@@ -21,7 +21,7 @@ namespace Yontalane.Aseprite
     /// <summary>
     /// Represents a key-value pair where the key is a string and the value is a float.
     /// </summary>
-    public struct KeyFloatPair
+    public class KeyFloatPair
     {
         /// <summary>
         /// The key of the pair.
