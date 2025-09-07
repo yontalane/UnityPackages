@@ -81,12 +81,13 @@ namespace Yontalane.Aseprite
         /// <param name="motionTree">The motion tree to evaluate.</param>
         /// <param name="animation">The resulting animation name, if found.</param>
         /// <returns>True if a valid animation was found; otherwise, false.</returns>
-        public bool TryGetAnimation(MotionTree motionTree, out string animation)
+        public bool TryGetAnimation(MotionTree motionTree, out string animation, out float time)
         {
             // Check if the motion tree has any animations defined
             if (motionTree.animations == null || motionTree.animations.Length == 0)
             {
                 animation = default;
+                time = default;
                 return false;
             }
 
@@ -106,11 +107,16 @@ namespace Yontalane.Aseprite
             if (ind < 0 || ind >= motionTree.animations.Length)
             {
                 animation = default;
+                time = default;
                 return false;
             }
 
+            float steppedValue = ind / (float)motionTree.animations.Length;
+            float remainder = val - steppedValue;
+
             // Assign the animation name at the calculated index and return true
             animation = motionTree.animations[ind] != null ? motionTree.animations[ind].name : string.Empty;
+            time = Mathf.Clamp01(remainder);
             return true;
         }
 
@@ -120,15 +126,16 @@ namespace Yontalane.Aseprite
         /// <param name="id">The identifier of the motion tree.</param>
         /// <param name="animation">The resulting animation name, if found.</param>
         /// <returns>True if a valid animation was found; otherwise, false.</returns>
-        public bool TryGetAnimation(string id, out string animation)
+        public bool TryGetAnimation(string id, out string animation, out float time)
         {
             if (!TryGetMotionTree(id, out MotionTree motionTree))
             {
                 animation = default;
+                time = default;
                 return false;
             }
 
-            return TryGetAnimation(motionTree, out animation);
+            return TryGetAnimation(motionTree, out animation, out time);
         }
 
         /// <summary>
@@ -136,10 +143,15 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="motionTree">The motion tree to evaluate.</param>
         /// <returns>The animation name, or default if not found.</returns>
+        public string GetAnimation(MotionTree motionTree, out float time)
+        {
+            _ = TryGetAnimation(motionTree, out string animation, out time);
+            return animation;
+        }
+
         public string GetAnimation(MotionTree motionTree)
         {
-            _ = TryGetAnimation(motionTree, out string animation);
-            return animation;
+            return GetAnimation(motionTree, out _);
         }
 
         /// <summary>
@@ -147,10 +159,15 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="id">The identifier of the motion tree.</param>
         /// <returns>The animation name, or default if not found.</returns>
+        public string GetAnimation(string id, out float time)
+        {
+            _ = TryGetAnimation(id, out string animation, out time);
+            return animation;
+        }
+
         public string GetAnimation(string id)
         {
-            _ = TryGetAnimation(id, out string animation);
-            return animation;
+            return GetAnimation(id, out _);
         }
 
         #endregion
