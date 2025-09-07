@@ -122,25 +122,23 @@ namespace Yontalane.Aseprite
         /// <param name="motionTree">The motion tree to evaluate.</param>
         /// <param name="animation">The resulting animation name, if found.</param>
         /// <returns>True if a valid animation was found; otherwise, false.</returns>
-        public static bool TryGetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, MotionTree motionTree, out string animation, out float time)
+        public static bool TryGetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, MotionTree motionTree, out string animation)
         {
             if (extras == null)
             {
                 animation = default;
-                time = default;
                 return false;
             }
 
             foreach(AsepriteAnimationExtras extra in extras)
             {
-                if (extra.TryGetAnimation(motionTree, out animation, out time))
+                if (extra.TryGetAnimation(motionTree, out animation))
                 {
                     return true;
                 }
             }
 
             animation = default;
-            time = default;
             return false;
         }
 
@@ -151,25 +149,23 @@ namespace Yontalane.Aseprite
         /// <param name="id">The identifier of the motion tree.</param>
         /// <param name="animation">The resulting animation name, if found.</param>
         /// <returns>True if a valid animation was found; otherwise, false.</returns>
-        public static bool TryGetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, string id, out string animation, out float time)
+        public static bool TryGetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, string id, out string animation)
         {
             if (extras == null)
             {
                 animation = default;
-                time = default;
                 return false;
             }
 
             foreach (AsepriteAnimationExtras extra in extras)
             {
-                if (extra.TryGetAnimation(id, out animation, out time))
+                if (extra.TryGetAnimation(id, out animation))
                 {
                     return true;
                 }
             }
 
             animation = default;
-            time = default;
             return false;
         }
 
@@ -179,21 +175,15 @@ namespace Yontalane.Aseprite
         /// <param name="extras">A list of AsepriteAnimationExtras to search.</param>
         /// <param name="motionTree">The motion tree to evaluate.</param>
         /// <returns>The animation name, or default if not found.</returns>
-        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, MotionTree motionTree, out float time)
+        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, MotionTree motionTree)
         {
             if (extras == null)
             {
-                time = default;
                 return default;
             }
 
-            _ = extras.TryGetAnimation(motionTree, out string animation, out time);
+            _ = extras.TryGetAnimation(motionTree, out string animation);
             return animation;
-        }
-
-        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, MotionTree motionTree)
-        {
-            return extras.GetAnimation(motionTree, out _);
         }
 
         /// <summary>
@@ -202,21 +192,15 @@ namespace Yontalane.Aseprite
         /// <param name="extras">A list of AsepriteAnimationExtras to search.</param>
         /// <param name="id">The identifier of the motion tree.</param>
         /// <returns>The animation name, or default if not found.</returns>
-        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, string id, out float time)
+        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, string id)
         {
             if (extras == null)
             {
-                time = default;
                 return default;
             }
 
-            _ = extras.TryGetAnimation(id, out string animation, out time);
+            _ = extras.TryGetAnimation(id, out string animation);
             return animation;
-        }
-
-        public static string GetAnimation(this IReadOnlyList<AsepriteAnimationExtras> extras, string id)
-        {
-            return extras.GetAnimation(id, out _);
         }
 
         #endregion
