@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.24] - 2025.09.07
+
+### Changed
+
+- Refactored MotionTree code.
+
 ## [1.0.23] - 2025.09.06
 
 ### Fixed
