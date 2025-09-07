@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.23] - 2025.09.06
+
+### Fixed
+
+- Undid previous change because it caused a crash.
+- Not setting time when playing MotionTree clip in Bridge LateUpdate().
+
+## [1.0.22] - 2025.09.06
+
+### Added
+
+- Extras.TryGetAnimation() and Bridge.TryGetAnimationClip() now export startTime for playing clips from motion trees.
+
 ## [1.0.21] - 2025.09.06
 
 ### Changed

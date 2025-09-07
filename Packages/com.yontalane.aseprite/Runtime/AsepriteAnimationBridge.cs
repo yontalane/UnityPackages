@@ -299,8 +299,8 @@ namespace Yontalane.Aseprite
 
             DebugUtility.Log($"<b>{name} LateUpdate()</b> Playing clip {clip.name} from MotionTree {motionTree}");
 
-            // Play the animation clip using the Animator, setting the normalized time from the motion tree value.
-            Animator.Play(clip.name, -1, m_extras.GetMotionTreeValue(motionTree));
+            // Play the animation clip using the Animator.
+            Animator.Play(clip.name, -1);
         }
 
         #region Aseprite Animation Events
