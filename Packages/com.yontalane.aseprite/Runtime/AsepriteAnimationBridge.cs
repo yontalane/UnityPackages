@@ -252,13 +252,18 @@ namespace Yontalane.Aseprite
             float steppedValue = index / (float)m_currentMotionTree.animations.Length;
 
             // Calculate the remainder to determine the precise time within the selected animation.
-            float remainder = Mathf.Clamp01(pair.value - steppedValue);
+            float remainder = pair.value - steppedValue;
+            // Calculate the normalized duration that each animation clip occupies within the motion tree.
+            float durationOfSingleClipWithinNormalizedTime = 1f / m_currentMotionTree.animations.Length;
+
+            // Determine the normalized time within the selected animation clip based on the remainder.
+            float animationTime = Mathf.Clamp01(remainder / durationOfSingleClipWithinNormalizedTime);
 
             // Log which animation clip is being played and at what time, for debugging purposes.
-            DebugUtility.Log($"<b>{name} LateUpdate()</b> Playing clip {clip.name} at time {remainder} from MotionTree {m_currentMotionTree.id}");
+            DebugUtility.Log($"<b>{name} LateUpdate()</b> Playing clip {clip.name} at time {animationTime} from MotionTree {m_currentMotionTree.id}");
 
             // Play the animation clip using the Animator at the calculated normalized time.
-            Animator.Play(clip.name, -1, remainder);
+            Animator.Play(clip.name, -1, animationTime);
         }
 
         #region Aseprite Animation Events

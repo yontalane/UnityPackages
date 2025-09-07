@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.25] - 2025.09.07
+
+### Fixed
+
+- Properly time MotionTree animation.
+
 ## [1.0.24] - 2025.09.07
 
 ### Changed
