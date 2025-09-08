@@ -421,7 +421,7 @@ namespace Yontalane.Aseprite
         /// <returns>Whether the <see cref="MotionTree"/> contains any <see cref="AnimationClip"/>.</returns>
         private bool MotionTreeHasAnyAnimation(MotionTree motionTree)
         {
-            return motionTree.animations != null && motionTree.animations.Length > 0;
+            return motionTree.animations != null && motionTree.animations.Length > 0 && motionTree.animations[0] != null;
         }
 
         /// <summary>
