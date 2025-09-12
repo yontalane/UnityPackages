@@ -525,15 +525,6 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
-        /// Tries to play an animation with the specified name.
-        /// </summary>
-        /// <param name="animationName">The name of the animation to play.</param>
-        /// <param name="startTime">The start time offset between zero and one.</param>
-        /// <param name="restartLoop">Whether to restart the animation loop if the animation is looping and the current animation is the same as the specified animation name.</param>
-        /// <returns>True if the animation was played, false otherwise.</returns>
-        public bool TryPlay(string animationName, float startTime = 0f, bool restartLoop = false) => TryPlay(animationName, startTime, restartLoop, true);
-
-        /// <summary>
         /// Tries to play a motion tree with the specified name.
         /// </summary>
         /// <param name="motionTreeName">The name of the motion tree to play.</param>

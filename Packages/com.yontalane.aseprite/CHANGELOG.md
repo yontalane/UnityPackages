@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.26] - 2025.09.11
+
+### Fixed
+
+- Removed duplicate Bridge.TryPlay() method.
+
 ## [1.0.25] - 2025.09.07
 
 ### Fixed
