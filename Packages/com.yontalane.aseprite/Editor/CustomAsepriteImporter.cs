@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.U2D.Aseprite;
+using Yontalane.Aseprite;
 
 namespace YontalaneEditor.Aseprite
 {
@@ -11,6 +13,7 @@ namespace YontalaneEditor.Aseprite
     public class CustomAsepriteImporter : AssetPostprocessor
     {
         private ImportFileData m_fileData;
+        private List<SpriteObjectInfo> m_spriteObjectInfo;
 
         /// <summary>
         /// Registers the OnPostAsepriteImport event handler when an Aseprite file is imported.
@@ -29,8 +32,12 @@ namespace YontalaneEditor.Aseprite
         /// <param name="args">The import event arguments containing the Aseprite file and import context.</param>
         private void OnPostAsepriteImport(AsepriteImporter.ImportEventArgs args)
         {
+            m_spriteObjectInfo ??= new();
+            m_spriteObjectInfo.Clear();
+
             args.PrepareFileData(ref m_fileData);
-            m_fileData.ProcessAsepriteAsset();
+            m_fileData.ProcessAsepriteAsset(ref m_spriteObjectInfo);
+            FileDataBuilder.AddSpriteObjectInfo(ref m_fileData, m_spriteObjectInfo);
         }
     }
 }

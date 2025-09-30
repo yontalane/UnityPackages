@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.27] - 2025.09.30
+
+### Added
+
+- Bridge stores list of frames where attached objects, such as colliders, are activated.
+
 ## [1.0.26] - 2025.09.11
 
 ### Fixed

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
-using static Yontalane.Aseprite.AsepriteAnimationExtra;
 
 namespace Yontalane.Aseprite
 {
@@ -21,6 +18,10 @@ namespace Yontalane.Aseprite
         private SpriteRenderer m_spriteRenderer = null;
         private bool m_playingMotionTree = false;
         private MotionTree m_currentMotionTree = default;
+
+        [SerializeField]
+        [HideInInspector]
+        private List<SpriteObjectInfo> m_spriteObjectInfo = null;
 
         #endregion
 
@@ -203,6 +204,16 @@ namespace Yontalane.Aseprite
         {
             get => m_points;
             set => m_points = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the list of sprite object information, which contains metadata about colliders, triggers, and points
+        /// defined in Aseprite and their associated animation data.
+        /// </summary>
+        public List<SpriteObjectInfo> SpriteObjectInfo
+        {
+            get => m_spriteObjectInfo;
+            set => m_spriteObjectInfo = value;
         }
 
         /// <summary>

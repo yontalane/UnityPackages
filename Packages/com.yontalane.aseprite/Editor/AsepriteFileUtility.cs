@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
+using Yontalane.Aseprite;
 
 namespace YontalaneEditor.Aseprite
 {
@@ -299,6 +300,78 @@ namespace YontalaneEditor.Aseprite
                 SpriteAlignment.TopRight => new(1f, 1f),
                 _ => args.importer.customPivotPosition,
             };
+        }
+
+        /// <summary>
+        /// Adds or updates information about a sprite object and its associated animation, including the frame and time when the object is active.
+        /// If the object or animation does not exist in the list, they are created.
+        /// </summary>
+        /// <param name="spriteObjectInfo">The list of sprite object info to update.</param>
+        /// <param name="name">The name of the sprite object.</param>
+        /// <param name="type">The type of the sprite object.</param>
+        /// <param name="animation">The name of the animation.</param>
+        /// <param name="length">The length of the animation.</param>
+        /// <param name="frameOn">The frame index when the object is active.</param>
+        /// <param name="timeOn">The time (in seconds) when the object is active.</param>
+        internal static void AddInfo(this List<SpriteObjectInfo> spriteObjectInfo, string name, SpriteObjectType type, string animation, int length, int frameOn, float timeOn)
+        {
+            // Find the data index of the sprite object with the given name.
+            int objectIndex = -1;
+            for (int i = 0; i < spriteObjectInfo.Count; i++)
+            {
+                if (spriteObjectInfo[i].name == name)
+                {
+                    objectIndex = i;
+                    break;
+                }
+            }
+
+            // If the data does not exist, add a new entry.
+            if (objectIndex == -1)
+            {
+                spriteObjectInfo.Add(new()
+                {
+                    name = name,
+                    type = type,
+                });
+
+                objectIndex = spriteObjectInfo.Count - 1;
+            }
+
+            // Ensure the animationInfo list is initialized for the sprite object.
+            spriteObjectInfo[objectIndex].animationInfo ??= new();
+
+            // Find the index of the animation info with the given animation name.
+            int animationIndex = -1;
+            for (int i = 0; i < spriteObjectInfo[objectIndex].animationInfo.Count; i++)
+            {
+                SpriteObjectAnimationInfo info = spriteObjectInfo[objectIndex].animationInfo[i];
+                if (info.animation == animation)
+                {
+                    animationIndex = i;
+                    break;
+                }
+            }
+
+            // If the animation info does not exist, add a new one.
+            if (animationIndex == -1)
+            {
+                spriteObjectInfo[objectIndex].animationInfo.Add(new()
+                {
+                    animation = animation,
+                    length = length,
+                });
+
+                animationIndex = spriteObjectInfo[objectIndex].animationInfo.Count - 1;
+            }
+
+            // Ensure the framesOn list is initialized and add the frame index.
+            spriteObjectInfo[objectIndex].animationInfo[animationIndex].framesOn ??= new();
+            spriteObjectInfo[objectIndex].animationInfo[animationIndex].framesOn.Insert(0, frameOn);
+
+            // Ensure the timesOn list is initialized and add the time value.
+            spriteObjectInfo[objectIndex].animationInfo[animationIndex].timesOn ??= new();
+            spriteObjectInfo[objectIndex].animationInfo[animationIndex].timesOn.Insert(0, timeOn);
         }
     }
 }

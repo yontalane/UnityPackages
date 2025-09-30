@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Yontalane.Aseprite;
@@ -34,8 +35,9 @@ namespace YontalaneEditor.Aseprite
         /// and curves are generated.
         /// </summary>
         /// <param name="frameData">The data describing the layer and frame.</param>
+        /// <param name="spriteObjectInfo">The list of <see cref="SpriteObjectInfo"/> to be populated with information about sprite-attached objects (such as points) during processing.</param>
         /// <returns>True if the layer is of type Collision or Trigger and curves are generated; otherwise, false.</returns>
-        internal static bool TryGenerateCollisionBoxes(this ImportFileData fileData, ImportFrameData frameData)
+        internal static bool TryGenerateCollisionBoxes(this ImportFileData fileData, ImportFrameData frameData, ref List<SpriteObjectInfo> spriteObjectInfo)
         {
             // Only process if the layer is of type Collision or Trigger
             if (frameData.layerData.type != LayerType.Collision && frameData.layerData.type != LayerType.Trigger)
@@ -54,6 +56,9 @@ namespace YontalaneEditor.Aseprite
                 // Get the binding path for the current layer and enable the BoxCollider2D at the current frame time
                 string path = fileData.GetBindingPath(frameData.layerData.name);
                 frameData.clip.SetEnabledKey<BoxCollider2D>(path, currTime, true);
+
+                // Add information about this collider or trigger to the spriteObjectInfo list for animation export
+                spriteObjectInfo.AddInfo(frameData.layerData.name, frameData.layerData.type == LayerType.Collision ? SpriteObjectType.Collider : SpriteObjectType.Trigger, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, currIndex - frameData.animationData.fromFrame + 1, currTime);
 
                 // If there is a next frame and it doesn't already have a key, set the BoxCollider2D to disabled at the next frame time
                 if (nextIndex > currIndex && !frameData.clip.HasEnabledKey<BoxCollider2D>(path, nextTime))
@@ -94,8 +99,9 @@ namespace YontalaneEditor.Aseprite
         /// for the specified animation frame range. Returns true if the layer is of type Point and curves are generated.
         /// </summary>
         /// <param name="frameData">The data describing the layer and frame.</param>
+        /// <param name="spriteObjectInfo">The list of <see cref="SpriteObjectInfo"/> to be populated with information about sprite-attached objects (such as points) during processing.</param>
         /// <returns>True if the layer is of type Point and curves are generated; otherwise, false.</returns>
-        internal static bool TryGeneratePoint(this ImportFileData fileData, ImportFrameData frameData)
+        internal static bool TryGeneratePoint(this ImportFileData fileData, ImportFrameData frameData, ref List<SpriteObjectInfo> spriteObjectInfo)
         {
             // Only process if the layer is of type Point
             if (frameData.layerData.type != LayerType.Point)
@@ -114,6 +120,9 @@ namespace YontalaneEditor.Aseprite
                 // Get the binding path for the current layer and activate the point object at the current frame time
                 string path = fileData.GetBindingPath(frameData.layerData.name);
                 frameData.clip.SetIsActiveKey(path, currTime, true);
+
+                // Add point object info for this frame to the spriteObjectInfo list
+                spriteObjectInfo.AddInfo(frameData.layerData.name, SpriteObjectType.Point, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, currIndex - frameData.animationData.fromFrame + 1, currTime);
 
                 // If there is a next frame and it doesn't already have a key, deactivate the point object at the next frame time
                 if (nextIndex > currIndex && !frameData.clip.HasActiveKey(path, nextTime))

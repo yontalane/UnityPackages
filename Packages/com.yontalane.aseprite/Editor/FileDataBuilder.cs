@@ -427,5 +427,35 @@ namespace YontalaneEditor.Aseprite
             bridge.Triggers.AddRange(s_triggers);
             bridge.Points.AddRange(s_points);
         }
+
+        /// <summary>
+        /// Adds or updates the SpriteObjectInfo list on the AsepriteAnimationBridge component attached to the main imported GameObject.
+        /// This method ensures the bridge's SpriteObjectInfo list is initialized, cleared, and populated with the provided info.
+        /// </summary>
+        /// <param name="fileData">The import file data containing the main GameObject.</param>
+        /// <param name="info">The list of SpriteObjectInfo to assign to the bridge.</param>
+        internal static void AddSpriteObjectInfo(ref ImportFileData fileData, IReadOnlyList<SpriteObjectInfo> info)
+        {
+            // Attempt to cast the main object to a GameObject; if not possible, exit early.
+            if (fileData.MainObject is not GameObject mainObject)
+            {
+                return;
+            }
+
+            // Try to get the AsepriteAnimationBridge component from the main GameObject; if not found, exit early.
+            if (!mainObject.TryGetComponent(out AsepriteAnimationBridge bridge))
+            {
+                return;
+            }
+
+            // Ensure the SpriteObjectInfo list is initialized.
+            bridge.SpriteObjectInfo ??= new();
+
+            // Clear any existing data in the SpriteObjectInfo list.
+            bridge.SpriteObjectInfo.Clear();
+
+            // Add the provided info to the SpriteObjectInfo list.
+            bridge.SpriteObjectInfo.AddRange(info);
+        }
     }
 }

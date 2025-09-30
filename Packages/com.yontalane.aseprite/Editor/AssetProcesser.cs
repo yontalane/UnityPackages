@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
+using Yontalane.Aseprite;
 
 namespace YontalaneEditor.Aseprite
 {
@@ -22,7 +23,8 @@ namespace YontalaneEditor.Aseprite
         /// generating collision data, points, and root motion based on the file's layers and animation clips.
         /// </summary>
         /// <param name="fileData">The ImportFileData containing all extracted data from the Aseprite import.</param>
-        internal static void ProcessAsepriteAsset(this ImportFileData fileData)
+        /// <param name="spriteObjectInfo">The list of SpriteObjectInfo to be populated with information about sprite-attached objects (such as colliders, triggers, and points) during processing.</param>
+        internal static void ProcessAsepriteAsset(this ImportFileData fileData, ref List<SpriteObjectInfo> spriteObjectInfo)
         {
             // Iterate through the frames to process collision boxes and points before root motion
             for (int frameDataIndex = fileData.FrameData.Count - 1; frameDataIndex >= 0; frameDataIndex--)
@@ -33,7 +35,7 @@ namespace YontalaneEditor.Aseprite
 
                 // Process the frame for collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, out float time); // Collision Boxes and Points
+                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, ref spriteObjectInfo, out _); // Collision Boxes and Points
 
                 // Set the 'off' key for the remaining layers
                 //fileData.HideEmptyLayerObjects(frameDataIndex, time, s_remainingLayers);
@@ -44,7 +46,7 @@ namespace YontalaneEditor.Aseprite
             {
                 // Process the frame for root motion and collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, true, out _); // Root Motion
+                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, true, ref spriteObjectInfo, out _); // Root Motion
             }
 
             // Ensure all AnimationClips have their boolean properties initialized to 'off' and add an on start and on complete event
@@ -71,7 +73,7 @@ namespace YontalaneEditor.Aseprite
         /// <param name="layers">The list of all layers. As we process each layer, we remove it from the list. The remaining layers will need a 'off' key set for the current frame.</param>
         /// <param name="rootMotion">If true, generates root motion; otherwise, generates collision boxes and points.</param>
         /// <param name="time">The time at which to process the chunk.</param>
-        private static void InterateThroughChunks(this ImportFileData fileData, FrameData data, int frameDataIndex, List<LayerData> layers, bool rootMotion, out float time)
+        private static void InterateThroughChunks(this ImportFileData fileData, FrameData data, int frameDataIndex, List<LayerData> layers, bool rootMotion, ref List<SpriteObjectInfo> spriteObjectInfo, out float time)
         {
             time = 0f;
 
@@ -140,8 +142,8 @@ namespace YontalaneEditor.Aseprite
                 }
                 else
                 {
-                    _ = fileData.TryGenerateCollisionBoxes(frameData);
-                    _ = fileData.TryGeneratePoint(frameData);
+                    _ = fileData.TryGenerateCollisionBoxes(frameData, ref spriteObjectInfo);
+                    _ = fileData.TryGeneratePoint(frameData, ref spriteObjectInfo);
                 }
             }
         }

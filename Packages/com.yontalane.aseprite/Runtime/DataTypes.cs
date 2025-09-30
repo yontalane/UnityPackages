@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -86,4 +87,79 @@ namespace Yontalane.Aseprite
     [System.Serializable]
     public class KeyFloatHandler : UnityEvent<KeyFloatPair>
     { }
+
+    /// <summary>
+    /// Contains information about a sprite object's animation, including the animation name, its length, and the frames/times when an attached object, such as a collider, is active.
+    /// </summary>
+    [System.Serializable]
+    public class SpriteObjectAnimationInfo
+    {
+        /// <summary>
+        /// The animation's name.
+        /// </summary>
+        public string animation;
+
+        /// <summary>
+        /// The total number of frames.
+        /// </summary>
+        public int length;
+
+        /// <summary>
+        /// The list of frame indices where the attached object, such as a collider, is active.
+        /// </summary>
+        public List<int> framesOn;
+
+        /// <summary>
+        /// The list of times (in seconds) corresponding to when the attached object, such as a collider, is active.
+        /// </summary>
+        public List<float> timesOn;
+    }
+
+    /// <summary>
+    /// Enumerates the possible types of objects that can be attached to sprites.
+    /// </summary>
+    public enum SpriteObjectType
+    {
+        /// <summary>
+        /// No specific type assigned.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// A collider object.
+        /// </summary>
+        Collider = 10,
+
+        /// <summary>
+        /// A trigger object.
+        /// </summary>
+        Trigger = 20,
+
+        /// <summary>
+        /// A point object (an empty transform).
+        /// </summary>
+        Point = 30,
+    }
+
+    /// <summary>
+    /// Holds information about an object attached to a sprite. This includes the object's name, type, and associated animation data.
+    /// </summary>
+    [System.Serializable]
+    public class SpriteObjectInfo
+    {
+        /// <summary>
+        /// The name of the object.
+        /// </summary>
+        public string name;
+
+        /// <summary>
+        /// The type of the attached object (e.g., Collider, Trigger, Point).
+        /// </summary>
+        public SpriteObjectType type;
+
+        /// <summary>
+        /// The list of animation information associated with this object.
+        /// </summary>
+        public List<SpriteObjectAnimationInfo> animationInfo;
+    }
 }

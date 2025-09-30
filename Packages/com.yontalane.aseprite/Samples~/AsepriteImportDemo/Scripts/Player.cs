@@ -43,6 +43,35 @@ namespace Yontalane.Demos.Aseprite
         }
 
         /// <summary>
+        /// Called when an animation starts playing. Logs trigger collider activation frames for the current animation.
+        /// </summary>
+        public void OnAnimationStart(AnimationLifecycleEvent lifecycleEvent)
+        {
+            // Create a log message indicating which animation is starting
+            string log = $"Starting animation \"{lifecycleEvent.animationName}\"";
+
+            // Iterate through all trigger colliders associated with the animation bridge
+            foreach (Collider2D trigger in AnimationBridge.Triggers)
+            {
+                // Check if there is animation info for this trigger and the current animation
+                if (AnimationBridge.SpriteObjectInfo.TryGetAnimationInfo(trigger.name, lifecycleEvent.animationName, out SpriteObjectAnimationInfo info))
+                {
+                    // Append animation and object name to the log, and prepare to list frames
+                    log += $"\n Trigger: {trigger.name} Frames:";
+
+                    // List all frames where this object is active in the animation
+                    foreach (int frameOn in info.framesOn)
+                    {
+                        log += $" {frameOn}";
+                    }
+                }
+            }
+
+            // Output the constructed log message to the Unity console
+            Debug.Log(log);
+        }
+
+        /// <summary>
         /// Called when the current animation completes. This is used to set the player to ready and play the idle animation.
         /// </summary>
         public void OnAnimationComplete(AnimationLifecycleEvent lifecycleEvent)
