@@ -14,6 +14,7 @@ namespace Yontalane.Aseprite
         /// <param name="message">The message to log.</param>
         public static void Log(string message)
         {
+#if UNITY_EDITOR
             if (!AsepriteSettings.instance.debugSettings.log)
             {
                 return;
@@ -25,6 +26,7 @@ namespace Yontalane.Aseprite
             }
 
             Debug.Log(message);
+#endif
         }
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace Yontalane.Aseprite
         /// <param name="message">The warning message to log.</param>
         public static void LogWarning(string message)
         {
+#if UNITY_EDITOR
             if (!AsepriteSettings.instance.debugSettings.log)
             {
                 return;
@@ -44,6 +47,7 @@ namespace Yontalane.Aseprite
             }
 
             Debug.LogWarning(message);
+#endif
         }
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace Yontalane.Aseprite
         /// <param name="message">The error message to log.</param>
         public static void LogError(string message)
         {
+#if UNITY_EDITOR
             if (!AsepriteSettings.instance.debugSettings.log)
             {
                 return;
@@ -63,6 +68,7 @@ namespace Yontalane.Aseprite
             }
 
             Debug.LogError(message);
+#endif
         }
     }
 }

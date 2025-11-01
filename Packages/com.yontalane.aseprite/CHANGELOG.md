@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.28] - 2025.11.01
+
+### Fixed
+
+- Removed editor package build requirement
+
 ## [1.0.27] - 2025.09.30
 
 ### Added
