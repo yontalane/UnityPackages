@@ -235,6 +235,14 @@ namespace Yontalane.Dialog
                 else if (colonIndex != -1)
                 {
                     (string speaker, string portrait, string sound, string voice, string typing, string typingLoop) = GetSpeakerAndDisplayData(line[..colonIndex]);
+
+                    // If the text is empty, make it be a single space.
+                    string text = ProcessLineBreaks(line[(colonIndex + 1)..].Trim());
+                    if (string.IsNullOrEmpty(text))
+                    {
+                        text = " ";
+                    }
+
                     s_lineData.Add(new()
                     {
                         speaker = speaker,
@@ -243,7 +251,7 @@ namespace Yontalane.Dialog
                         voice = voice,
                         typing = typing,
                         typingLoop = typingLoop,
-                        text = ProcessLineBreaks(line[(colonIndex + 1)..].Trim()),
+                        text = text,
                     });
                     s_responseData.Clear();
                 }

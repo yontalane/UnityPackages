@@ -628,7 +628,8 @@ namespace Yontalane.DialogUIElements
                 m_onType?.Invoke();
 
                 // Play the typing sound if enough time has passed since the last sound
-                if (typing != null && Time.time - lastTypedTime >= typingSoundLength * m_typeSoundDelay)
+                bool isSingleSpace = currentIndex == 0 && parsedTextLength == 1 && string.IsNullOrEmpty(m_dialogPane.Text.Trim());
+                if (typing != null && Time.time - lastTypedTime >= typingSoundLength * m_typeSoundDelay && !isSingleSpace)
                 {
                     ClickAudioSource.PlayOneShot(typing);
                 }

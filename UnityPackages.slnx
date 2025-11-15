@@ -1,0 +1,21 @@
+﻿<Solution>
+  <Project Path="Yontalane.Core.Runtime.csproj" />
+  <Project Path="Yontalane.UIElements.Runtime.csproj" />
+  <Project Path="Yontalane.Shaders.Editor.csproj" />
+  <Project Path="Yontalane.Menus.Runtime.csproj" />
+  <Project Path="Yontalane.Dialog.Runtime.csproj" />
+  <Project Path="Yontalane.Interaction.Runtime.csproj" />
+  <Project Path="Yontalane.LayoutTilemap.Runtime.csproj" />
+  <Project Path="Yontalane.LayoutTilemap.Editor.csproj" />
+  <Project Path="Yontalane.DialogUGUI.Runtime.csproj" />
+  <Project Path="Yontalane.Aseprite.Editor.csproj" />
+  <Project Path="Yontalane.Query.Runtime.csproj" />
+  <Project Path="Yontalane.UIElements.Editor.csproj" />
+  <Project Path="Yontalane.Shaders.Runtime.csproj" />
+  <Project Path="Yontalane.DialogUIElements.Runtime.csproj" />
+  <Project Path="Yontalane.Dialog.Editor.csproj" />
+  <Project Path="Yontalane.Aseprite.Runtime.csproj" />
+  <Project Path="Yontalane.Core.Editor.csproj" />
+  <Project Path="Yontalane.QueryUGUI.Runtime.csproj" />
+  <Project Path="Yontalane.GridNav.Runtime.csproj" />
+</Solution>

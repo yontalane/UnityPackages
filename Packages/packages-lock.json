@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.2d.aseprite": {
-      "version": "2.0.1",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -67,11 +67,11 @@
       "dependencies": {}
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.23",
+      "version": "2.0.25",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.9"
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },
@@ -151,8 +151,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.37",
-        "com.yontalane.query": "1.0.17"
+        "com.yontalane.core": "1.0.38",
+        "com.yontalane.query": "1.0.18"
       }
     },
     "com.yontalane.dialogugui": {
@@ -162,7 +162,7 @@
       "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.38",
-        "com.yontalane.dialog": "1.0.79",
+        "com.yontalane.dialog": "1.0.80",
         "com.yontalane.queryugui": "1.0.1"
       }
     },
@@ -173,9 +173,9 @@
       "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.38",
-        "com.yontalane.dialog": "1.0.79",
+        "com.yontalane.dialog": "1.0.80",
         "com.yontalane.query": "1.0.18",
-        "com.yontalane.uielements": "1.0.33"
+        "com.yontalane.uielements": "1.0.39"
       }
     },
     "com.yontalane.gridnav": {

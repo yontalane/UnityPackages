@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.12] - 2025.11.14
+
+### Added
+
+- Supports blank dialog text node.
+
 ## [1.0.11] - 2025.08.28
 
 ### Changed

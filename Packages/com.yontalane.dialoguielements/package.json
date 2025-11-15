@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.dialoguielements",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "displayName": "Dialog UI Toolkit",
   "description": "A dialog system.",
   "unity": "6000.0",
@@ -9,9 +9,9 @@
   "dependencies": {
     "com.unity.ugui": "2.0.0",
     "com.yontalane.core": "1.0.38",
-    "com.yontalane.dialog": "1.0.79",
+    "com.yontalane.dialog": "1.0.80",
     "com.yontalane.query": "1.0.18",
-    "com.yontalane.uielements": "1.0.33"
+    "com.yontalane.uielements": "1.0.39"
   },
   "keywords": [
     "dialog",
