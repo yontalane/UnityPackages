@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.81] - 2025.11.22
+
+### Added
+
+- Arithmatic functions in DialogProcessor
+
 ## [1.0.80] - 2025.11.14
 
 ### Added

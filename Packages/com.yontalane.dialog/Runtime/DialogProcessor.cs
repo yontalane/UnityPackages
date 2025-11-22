@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -103,7 +102,7 @@ namespace Yontalane.Dialog
         /// Gets the current dialog agent associated with this dialog processor.
         /// </summary>
         public IDialogAgent DialogAgent { get; private set; } = null;
-        
+
         /// <summary>
         /// Gets or sets the player's name for use in dialog.
         /// </summary>
@@ -121,10 +120,10 @@ namespace Yontalane.Dialog
             Component[] components;
 
             // Add all responders to the m_responders list
-            foreach(GameObject gameObject in m_dialogResponders)
+            foreach (GameObject gameObject in m_dialogResponders)
             {
                 components = gameObject.GetComponents<Component>();
-                foreach(Component component in components)
+                foreach (Component component in components)
                 {
                     if (component is IDialogResponder dialogResponder)
                     {
@@ -179,6 +178,36 @@ namespace Yontalane.Dialog
                     DialogAgent.enabled = false;
                     result = null;
                     return true;
+
+                case "Math":
+                case "MathFloat":
+                case "MathF":
+                case "Mathf":
+                    bool mathFloatSuccess = parameter.TryExecuteMathF(out float mathFloatResult);
+                    result = mathFloatResult.ToString();
+                    return mathFloatSuccess;
+
+                case "MathInt":
+                case "MathI":
+                case "Mathi":
+                    bool mathIntSuccess = parameter.TryExecuteMathI(out int mathIntResult);
+                    result = mathIntResult.ToString();
+                    return mathIntSuccess;
+
+                case "Compare":
+                case "CompareFloat":
+                case "CompareF":
+                case "Comparef":
+                    bool compareFloatSuccess = parameter.TryCompareMathF(out bool compareFloatResult);
+                    result = compareFloatResult.ToString();
+                    return compareFloatSuccess;
+
+                case "CompareInt":
+                case "CompareI":
+                case "Comparei":
+                    bool compareIntSuccess = parameter.TryCompareMathI(out bool compareIntResult);
+                    result = compareIntResult.ToString();
+                    return compareIntSuccess;
             }
 
             result = null;

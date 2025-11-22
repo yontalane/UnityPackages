@@ -56,7 +56,9 @@ LineData is sometimes purely functional, almost acting as lines of code. Functio
 
 * string **ifDialogCount**: If you have spoken to this DialogAgent *x* times. The value of this string takes the format [operator][number], e.g. `>2`.
 * string **ifFunction**: Send a query to all your IDialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
+  * `ifFunction` also supports basic mathematical comparisons. For example, you can say: `Compare::AppleCount>3=true`. Either operand (in this case `AppleCount` and `3`) can be a defined variable or a literal value. Accepted operators are `==`, `!=`, `<=`, `>=`, `<`. and `>`. You can call `Compare` for float values and `CompareInt` for integer values.
   * When creating the code for `ifFunction` in a DialogResponder, note that `DialogFunction()` returns true if it can process the request and false if it cannot. If `DialogFunction()` is able to process a request and determines that the result is false, then `result` will be set to false, but the function will return true. See the example below.
+  
 
 
 ```c#
@@ -81,6 +83,9 @@ public bool DialogFunction(string call, string parameter, out string result)
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
 * QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
+  * `callFunction` also supports basic arithmetic. For example, you can say: `Math::AppleCount=AppleCount+3`. The item on the left side of the equal sign (`AppleCount`) is a variable. The two operands on the right side of the equal sign (`AppleCount` and `3`) can be defined variables or literal values. Accepted operators are `=`, `+`, `-`, `*`, `/`. `^`. and `%`. You can call `Math` for float values and `MathInt` for integer values.
+  * The example above also supports the notation `Math::AppleCount+=3`. All operators are accepted.
+
 * string **lineBuilderFunction**: Calls a function in your IDialogResponder objects. The IDialogResponder can build and return new LineData, thus changing the script on the fly.
 
 The demo scene embedded in this package includes dialog data that shows all of this functionality in action.

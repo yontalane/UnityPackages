@@ -2,8 +2,8 @@
   <Project Path="Yontalane.Core.Runtime.csproj" />
   <Project Path="Yontalane.UIElements.Runtime.csproj" />
   <Project Path="Yontalane.Shaders.Editor.csproj" />
-  <Project Path="Yontalane.Menus.Runtime.csproj" />
   <Project Path="Yontalane.Dialog.Runtime.csproj" />
+  <Project Path="Yontalane.Menus.Runtime.csproj" />
   <Project Path="Yontalane.Interaction.Runtime.csproj" />
   <Project Path="Yontalane.LayoutTilemap.Runtime.csproj" />
   <Project Path="Yontalane.LayoutTilemap.Editor.csproj" />
