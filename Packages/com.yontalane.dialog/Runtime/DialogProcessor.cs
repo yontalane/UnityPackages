@@ -158,6 +158,10 @@ namespace Yontalane.Dialog
                 result = DialogAgent.DisplayName;
                 return true;
             }
+            else if (DataStorage.TryGetValue(key, out result))
+            {
+                return true;
+            }
 
             result = null;
             return false;

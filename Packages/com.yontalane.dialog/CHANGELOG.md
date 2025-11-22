@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.84] - 2025.11.22
+
+### Added
+
+- DialogPorcessor supports inline variables
+
 ## [1.0.83] - 2025.11.22
 
 ### Fixed
