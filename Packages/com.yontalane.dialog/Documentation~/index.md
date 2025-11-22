@@ -83,7 +83,7 @@ public bool DialogFunction(string call, string parameter, out string result)
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
 * QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
-  * `callFunction` also supports basic arithmetic. For example, you can say: `Math::AppleCount=AppleCount+3`. The item on the left side of the equal sign (`AppleCount`) is a variable. The two operands on the right side of the equal sign (`AppleCount` and `3`) can be defined variables or literal values. Accepted operators are `=`, `+`, `-`, `*`, `/`. `^`. and `%`. You can call `Math` for float values and `MathInt` for integer values.
+  * `callFunction` also supports basic arithmetic. For example, you can say: `Math::AppleCount=AppleCount+3`. The item on the left side of the equal sign (`AppleCount`) is a variable. The two operands on the right side of the equal sign (`AppleCount` and `3`) can be defined variables or literal values. Accepted operators are `+`, `-`, `*`, `/`. `^`. and `%`. You can call `Math` for float values and `MathInt` for integer values.
   * The example above also supports the notation `Math::AppleCount+=3`. All operators are accepted.
 
 * string **lineBuilderFunction**: Calls a function in your IDialogResponder objects. The IDialogResponder can build and return new LineData, thus changing the script on the fly.

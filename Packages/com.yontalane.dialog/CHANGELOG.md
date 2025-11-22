@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.82] - 2025.11.22
+
+### Fixed
+
+- Fixed notation in text-based dialog to allow for equal sign in parameter
+
 ## [1.0.81] - 2025.11.22
 
 ### Added

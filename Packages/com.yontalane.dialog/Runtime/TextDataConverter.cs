@@ -610,16 +610,19 @@ namespace Yontalane.Dialog
             }
 
             // Split the condition part into the function/parameter and the value using "="
-            string[] checking = setting[0].Split('=');
-            if (checking.Length != 2)
+            int index = setting[0].LastIndexOf('=');
+            if (index <= 0 || index >= setting[0].Length - 1)
             {
                 return;
             }
+            string[] checking = new string[2];
+            checking[0] = setting[0][..index];
+            checking[1] = setting[0][(index + 1)..];
 
             // Further split the function/parameter part by "," to separate function and parameter
             string func, param;
             string[] init = checking[0].Split(',');
-            
+
             // Determine the function and parameter from the split; if there is more than one part, assign both, otherwise assign only the function and leave parameter empty.
             if (init.Length > 1)
             {
