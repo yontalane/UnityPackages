@@ -528,7 +528,7 @@ namespace Yontalane.Dialog
             }
 
             int colonsIndex = lineData.ifFunction.IndexOf("::");
-            int equalsIndex = lineData.ifFunction.IndexOf("=");
+            int equalsIndex = lineData.ifFunction.LastIndexOf("=");
 
             string functionName = null;
             string parameter = null;
