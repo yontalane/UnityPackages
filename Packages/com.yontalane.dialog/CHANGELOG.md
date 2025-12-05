@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.85] - 2025.12.04
+
+### Added
+
+- Signed package
+
 ## [1.0.84] - 2025.11.22
 
 ### Added

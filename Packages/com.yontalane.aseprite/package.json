@@ -1,13 +1,13 @@
 {
   "name": "com.yontalane.aseprite",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "displayName": "Aseprite",
   "description": "Extras for the Aseprite-to-Unity pipeline.",
   "unity": "6000.0",
   "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.aseprite/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.37",
+    "com.yontalane.core": "1.0.40",
     "com.unity.2d.aseprite": "1.1.9",
     "com.unity.inputsystem": "1.14.1"
   },

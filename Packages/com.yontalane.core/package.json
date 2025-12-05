@@ -20,10 +20,5 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
-  "type": "library",
-  "repository": {
-    "url": "https://github.com/yontalane/UnityPackages.git",
-    "type": "git",
-    "revision": "9d681826b86ff20b446c3440e405ff1216c5ff5b"
-  }
+  "type": "library"
 }

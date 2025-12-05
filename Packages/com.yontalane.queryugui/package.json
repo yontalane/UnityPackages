@@ -1,14 +1,14 @@
 {
   "name": "com.yontalane.queryugui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Query UGUI",
   "description": "A dialog input box.",
   "unity": "6000.0",
   "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.query/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.37",
-    "com.yontalane.query": "1.0.18",
+    "com.yontalane.core": "1.0.40",
+    "com.yontalane.query": "1.0.19",
     "com.unity.inputsystem": "1.14.1"
   },
   "keywords": [
