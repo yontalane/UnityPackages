@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.core",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "displayName": "Core",
   "description": "A small library for Unity projects.",
   "unity": "6000.0",
@@ -20,5 +20,10 @@
     "email": "unitypackages@yontalane.com",
     "url": "https://yontalane.com/"
   },
-  "type": "library"
+  "type": "library",
+  "repository": {
+    "url": "https://github.com/yontalane/UnityPackages.git",
+    "type": "git",
+    "revision": "c0a322a5ba0669f60b674f08cf4950dd0474fd73"
+  }
 }
