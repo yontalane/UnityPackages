@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.30] - 2025.12.15
+
+### Changed
+
+- Breaking change: MotionTree uses a new data type that allows clip lookup by name
+
 ## [1.0.29] - 2025.12.04
 
 ### Added

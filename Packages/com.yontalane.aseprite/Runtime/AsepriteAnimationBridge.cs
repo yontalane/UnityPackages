@@ -251,21 +251,21 @@ namespace Yontalane.Aseprite
             pair.value = Mathf.Clamp01(pair.value);
 
             // Calculate the animation index based on the value and the number of animations in the motion tree.
-            int index = Mathf.FloorToInt(pair.value * m_currentMotionTree.animations.Length);
+            int index = Mathf.FloorToInt(pair.value * m_currentMotionTree.Count);
 
             // Clamp the index to ensure it is within the valid range of animation indices.
-            index = Mathf.Clamp(index, 0, m_currentMotionTree.animations.Length - 1);
+            index = Mathf.Clamp(index, 0, m_currentMotionTree.Count - 1);
 
             // Get the animation clip at the calculated index.
-            AnimationClip clip = m_currentMotionTree.animations[index];
+            AnimationClip clip = m_currentMotionTree.Get(index, Animator);
 
             // Calculate the normalized start time for the selected animation clip.
-            float steppedValue = index / (float)m_currentMotionTree.animations.Length;
+            float steppedValue = index / (float)m_currentMotionTree.Count;
 
             // Calculate the remainder to determine the precise time within the selected animation.
             float remainder = pair.value - steppedValue;
             // Calculate the normalized duration that each animation clip occupies within the motion tree.
-            float durationOfSingleClipWithinNormalizedTime = 1f / m_currentMotionTree.animations.Length;
+            float durationOfSingleClipWithinNormalizedTime = 1f / m_currentMotionTree.Count;
 
             // Determine the normalized time within the selected animation clip based on the remainder.
             float animationTime = Mathf.Clamp01(remainder / durationOfSingleClipWithinNormalizedTime);
@@ -349,7 +349,7 @@ namespace Yontalane.Aseprite
             if (includeMotionTrees && TryGetMotionTree(animationName, out MotionTree motionTree) && MotionTreeHasAnyAnimation(motionTree))
             {
                 // If found, get the corresponding animation clip name from the motion tree and try to get the animation clip.
-                animationClip = motionTree.animations[0];
+                animationClip = motionTree.Get(0, Animator);
                 string clipName = animationClip.name;
                 DebugUtility.Log($"<b>{name} TryGetAnimationClip(animationName={animationName}, includeMotionTrees={includeMotionTrees})</b> Found motionTree={motionTree} and animationClip={animationClip}");
                 return true;
@@ -407,9 +407,9 @@ namespace Yontalane.Aseprite
         /// <returns>True if the animation clip was found, false otherwise.</returns>
         public bool TryGetMotionTree(string id, out MotionTree motionTree)
         {
-            foreach(AsepriteAnimationExtra extra in m_extras)
+            foreach (AsepriteAnimationExtra extra in m_extras)
             {
-                foreach(MotionTree tree in extra.motionTrees)
+                foreach (MotionTree tree in extra.motionTrees)
                 {
                     if (tree.id == id)
                     {
@@ -432,7 +432,7 @@ namespace Yontalane.Aseprite
         /// <returns>Whether the <see cref="MotionTree"/> contains any <see cref="AnimationClip"/>.</returns>
         private bool MotionTreeHasAnyAnimation(MotionTree motionTree)
         {
-            return motionTree.animations != null && motionTree.animations.Length > 0 && motionTree.animations[0] != null;
+            return motionTree.Count > 0 && motionTree.TryGet(0, Animator, out _);
         }
 
         /// <summary>
