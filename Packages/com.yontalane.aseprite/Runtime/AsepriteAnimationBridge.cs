@@ -63,7 +63,7 @@ namespace Yontalane.Aseprite
 
         [Tooltip("Optional extra data for more complex animations.")]
         [SerializeField]
-        private AsepriteAnimationExtra[] m_extras = new AsepriteAnimationExtra[0];
+        private List<AsepriteAnimationExtra> m_extras = new();
 
         #endregion
 
@@ -219,7 +219,7 @@ namespace Yontalane.Aseprite
         /// <summary>
         /// Optional extra data for more complex animations.
         /// </summary>
-        public AsepriteAnimationExtra[] Extras => m_extras;
+        public List<AsepriteAnimationExtra> Extras => m_extras;
 
         #endregion
 

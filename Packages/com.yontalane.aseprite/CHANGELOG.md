@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.31] - 2025.12.15
+
+### Changed
+
+- Bridge stores extras data as a list, not an array
+
 ## [1.0.30] - 2025.12.15
 
 ### Changed
