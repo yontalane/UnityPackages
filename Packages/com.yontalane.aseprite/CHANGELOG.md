@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.32] - 2025.12.21
+
+### Added
+
+- Bridge can play multiple animators in sync
+
 ## [1.0.31] - 2025.12.15
 
 ### Changed

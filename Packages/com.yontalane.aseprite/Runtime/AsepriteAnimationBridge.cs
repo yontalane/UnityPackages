@@ -65,6 +65,10 @@ namespace Yontalane.Aseprite
         [SerializeField]
         private List<AsepriteAnimationExtra> m_extras = new();
 
+        [Tooltip("Optional animators to play in sync.")]
+        [SerializeField]
+        private List<Animator> m_synchronizedAnimators = new();
+
         #endregion
 
         #region Events
@@ -221,6 +225,11 @@ namespace Yontalane.Aseprite
         /// </summary>
         public List<AsepriteAnimationExtra> Extras => m_extras;
 
+        /// <summary>
+        /// Optional animators to play in sync.
+        /// </summary>
+        public List<Animator> SynchronizedAnimators => m_synchronizedAnimators;
+
         #endregion
 
         /// <summary>
@@ -275,6 +284,11 @@ namespace Yontalane.Aseprite
 
             // Play the animation clip using the Animator at the calculated normalized time.
             Animator.Play(clip.name, -1, animationTime);
+
+            foreach (Animator synchronizedAnimator in SynchronizedAnimators)
+            {
+                synchronizedAnimator.Play(clip.name, -1, animationTime);
+            }
         }
 
         #region Aseprite Animation Events
@@ -532,6 +546,12 @@ namespace Yontalane.Aseprite
             // Play the animation
             m_playingMotionTree = false;
             Animator.Play(clip.name, -1, startTime);
+
+            foreach (Animator synchronizedAnimator in SynchronizedAnimators)
+            {
+                synchronizedAnimator.Play(clip.name, -1, startTime);
+            }
+
             return true;
         }
 
