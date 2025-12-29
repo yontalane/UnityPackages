@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.41] - 2025.12.29
+
+### Fixed
+
+- ScrollViewAuto confirms scrolled-to element is child
+
 ## [1.0.40] - 2025.12.04
 
 ### Added

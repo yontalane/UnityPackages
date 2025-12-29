@@ -60,6 +60,12 @@ namespace Yontalane.UIElements
             int count = ChildCount;
             VisualElement target = null;
 
+            // Check if the element is a child of the container; if not, exit early.
+            if (index == -1)
+            {
+                return;
+            }
+
             // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
             if (e.direction == NavigationMoveEvent.Direction.Up)
             {
