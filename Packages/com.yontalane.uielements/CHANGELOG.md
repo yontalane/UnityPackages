@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.42] - 2025.12.29
+
+### Fixed
+
+- ScrollViewAuto was working inconsistently
+
 ## [1.0.41] - 2025.12.29
 
 ### Fixed

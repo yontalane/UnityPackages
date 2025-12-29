@@ -55,15 +55,20 @@ namespace Yontalane.UIElements
             }
 
             // Get all children of the container, the index of the current element, and the total child count.
-            IEnumerable<VisualElement> children = m_container.Children();
-            int index = m_container.IndexOf(element);
+            int index = m_registeredChildren.IndexOf(element);
             int count = ChildCount;
             VisualElement target = null;
 
             // Check if the element is a child of the container; if not, exit early.
             if (index == -1)
             {
-                return;
+                // Attempt to find the nearest ancestor of 'element' that is a direct child of the scroll view.
+                // If not found, log a warning and exit early.
+                if (!TryGetParentThatIsChildOfScrollView(ref element, out index))
+                {
+                    Debug.LogWarning($"Trying to select a {element.GetType().Name} that is not a child of the scroll view.");
+                    return;
+                }
             }
 
             // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
@@ -71,11 +76,11 @@ namespace Yontalane.UIElements
             {
                 if (index == 0)
                 {
-                    target = children.Last();
+                    target = m_registeredChildren.Last();
                 }
                 else
                 {
-                    target = children.ElementAt(index - 1);
+                    target = m_registeredChildren.ElementAt(index - 1);
                 }
             }
             // Handle navigation in the Down direction: wrap to first if at the bottom, otherwise move to next.
@@ -83,11 +88,11 @@ namespace Yontalane.UIElements
             {
                 if (index == count - 1)
                 {
-                    target = children.First();
+                    target = m_registeredChildren.First();
                 }
                 else
                 {
-                    target = children.ElementAt(index + 1);
+                    target = m_registeredChildren.ElementAt(index + 1);
                 }
             }
 
@@ -100,6 +105,41 @@ namespace Yontalane.UIElements
             // Move focus to the target element and scroll it into view.
             target.Focus();
             ScrollToChild(target);
+        }
+
+        /// <summary>
+        /// Attempts to find an ancestor of the given element that is a direct child of the scroll view.
+        /// If found, updates <paramref name="element"/> to the first ancestor under the scroll view's container,
+        /// returns its index in the registered children list, and returns true; otherwise returns false.
+        /// </summary>
+        /// <param name="element">The visual element from which to start. If found, this is set to the deepest matching ancestor.</param>
+        /// <param name="index">Outputs the index of the parent in the scroll view's registered children, or -1 if not found.</param>
+        /// <returns>True if a parent that is a direct child of the scroll view is found, otherwise false.</returns>
+        private bool TryGetParentThatIsChildOfScrollView(ref VisualElement element, out int index)
+        {
+            // Start from the given element and walk up the parent chain.
+            VisualElement test = element;
+
+            while (test.parent != null)
+            {
+                // Check if the parent of current node is a registered child of the scroll view.
+                index = m_registeredChildren.IndexOf(test.parent);
+                if (index != -1)
+                {
+                    // If found, update element to the matched ancestor and return true.
+                    element = test;
+                    return true;
+                }
+                else
+                {
+                    // Otherwise, continue traversing up the tree.
+                    test = test.parent;
+                }
+            }
+
+            // If no matching ancestor is found, set index to -1 and return false.
+            index = -1;
+            return false;
         }
 
         /// <summary>
