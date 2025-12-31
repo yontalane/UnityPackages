@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.41] - 2025.12.31
+
+### Changed
+
+- RemoteMusicPlayer: Waiting for music to load before creating AudioSource
+
 ## [1.0.40] - 2025.12.04
 
 ### Added

@@ -133,31 +133,6 @@ namespace Yontalane
                 yield break;
             }
 
-            // Create a new GameObject to play the music.
-            GameObject child = new() { name = "Music Player" };
-            child.transform.SetParent(transform);
-            child.transform.localPosition = Vector3.zero;
-            child.transform.localEulerAngles = Vector3.zero;
-            child.transform.localScale = Vector3.one;
-
-            AudioSource audioSource;
-
-            // If the track already has an assigned AudioSource, use it and add it to the list of pre-existing audio sources.
-            if (track.audioSource != null)
-            {
-                audioSource = track.audioSource;
-                m_preExistingAudioSources.Add(audioSource);
-            }
-            // If the track does not have an assigned AudioSource, create a new one.
-            else
-            {
-                // Add an AudioSource component to the GameObject.
-                audioSource = child.AddComponent<AudioSource>();
-
-                // Add the AudioSource to the list of audio sources.
-                m_tempAudioSources.Add(audioSource);
-            }
-
             // Download the audio clip from the URL.
             using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(track.url, AudioType.MPEG);
 
@@ -171,6 +146,31 @@ namespace Yontalane
             }
             else
             {
+                // Create a new GameObject to play the music.
+                GameObject child = new() { name = "Music Player" };
+                child.transform.SetParent(transform);
+                child.transform.localPosition = Vector3.zero;
+                child.transform.localEulerAngles = Vector3.zero;
+                child.transform.localScale = Vector3.one;
+
+                AudioSource audioSource;
+
+                // If the track already has an assigned AudioSource, use it and add it to the list of pre-existing audio sources.
+                if (track.audioSource != null)
+                {
+                    audioSource = track.audioSource;
+                    m_preExistingAudioSources.Add(audioSource);
+                }
+                // If the track does not have an assigned AudioSource, create a new one.
+                else
+                {
+                    // Add an AudioSource component to the GameObject.
+                    audioSource = child.AddComponent<AudioSource>();
+
+                    // Add the AudioSource to the list of audio sources.
+                    m_tempAudioSources.Add(audioSource);
+                }
+
                 // Get the audio clip from the download.
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
 
