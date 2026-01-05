@@ -77,16 +77,25 @@
     },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.25",
+    "com.unity.ide.rider": {
+      "version": "3.0.38",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.31"
+        "com.unity.ext.nunit": "1.0.6"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.ide.visualstudio": {
+      "version": "2.0.26",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.33"
       },
       "url": "https://packages.unity.com"
     },
@@ -142,7 +151,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.9",
+      "version": "1.8.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -167,7 +176,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.40",
+        "com.yontalane.core": "1.0.41",
         "com.unity.2d.aseprite": "1.1.9",
         "com.unity.inputsystem": "1.14.1"
       }

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.33] - 2026.01.04
+
+### Changed
+
+- When trying to play an animation that's already playing, Bridge will instead only change the playback time
+
 ## [1.0.32] - 2025.12.21
 
 ### Added
