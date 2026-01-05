@@ -545,14 +545,7 @@ namespace Yontalane.Aseprite
             DebugUtility.Log($"<b>{name} TryPlay(animationName={animationName}, startTime={startTime}, restartLoop={restartLoop}, includeMotionTrees={includeMotionTrees})</b> Playing clip {clip.name}.");
             // Play the animation
             m_playingMotionTree = false;
-            if (CurrentAnimation == animationName)
-            {
-                Animator.playbackTime = startTime;
-            }
-            else
-            {
-                Animator.Play(clip.name, -1, startTime);
-            }
+            Animator.Play(clip.name, -1, startTime);
 
             foreach (Animator synchronizedAnimator in SynchronizedAnimators)
             {
