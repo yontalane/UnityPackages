@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.34] - 2026.01.04
+
+### Changed
+
+- Reverted previous change
+
 ## [1.0.33] - 2026.01.04
 
 ### Changed
