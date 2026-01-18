@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.36] - 2026.01.18
+
+### Fixed
+
+- Bug calculating single-frame duration
+
 ## [1.0.35] - 2026.01.18
 
 ### Added

@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FrameProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FrameProcessor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" afterDir="false" />
     </list>
@@ -102,6 +98,7 @@
       <workItem from="1768760375921" duration="141000" />
       <workItem from="1768762076139" duration="1475000" />
       <workItem from="1768763591636" duration="3542000" />
+      <workItem from="1768775247584" duration="326000" />
     </task>
     <servers />
   </component>

@@ -292,7 +292,7 @@ namespace Yontalane.Aseprite
         /// <summary>
         /// The length in seconds of a single frame.
         /// </summary>
-        public float FrameDuration => length / duration;
+        public float FrameDuration => duration / length;
 
         /// <summary>
         /// 
