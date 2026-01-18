@@ -295,11 +295,12 @@ namespace Yontalane.Aseprite
         public float FrameDuration => duration / length;
 
         /// <summary>
-        /// 
+        /// Returns a list of time periods during which this sprite object is activated.
         /// </summary>
-        /// <param name="periods"></param>
-        /// <returns></returns>
-        public int GetKeyframePeriods(ref List<ActivationPeriod> periods)
+        /// <param name="periods">A list to populate with the time periods.</param>
+        /// <param name="clearList">Whether to clear <paramref name="periods"/> before adding to it.</param>
+        /// <returns>The number of time periods added to the list.</returns>
+        public int GetKeyframePeriods(ref List<ActivationPeriod> periods, bool clearList = true)
         {
             // Exit early if the output list or the keyframe lists are null.
             if (periods == null || framesOn == null || timesOn == null)
@@ -315,10 +316,16 @@ namespace Yontalane.Aseprite
             }
 
             // Clear the output list.
-            periods.Clear();
-            
+            if (clearList)
+            {
+                periods.Clear();
+            }
+
             // Get the frame duration period once to save calculation time.
             float frameDuration = FrameDuration;
+
+            // Track the number of periods added to the list.
+            int count = 0;
 
             // For each frame in which the component gets activated...
             for (int i = 0; i < framesOn.Count; i++)
@@ -343,11 +350,12 @@ namespace Yontalane.Aseprite
                         frameCount = 1,
                         length = frameDuration,
                     });
+                    count++;
                 }
             }
             
             // Return the number of periods.
-            return periods.Count;
+            return count;
         }
     }
 

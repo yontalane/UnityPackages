@@ -17,6 +17,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FrameProcessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -99,6 +107,7 @@
       <workItem from="1768762076139" duration="1475000" />
       <workItem from="1768763591636" duration="3542000" />
       <workItem from="1768775247584" duration="326000" />
+      <workItem from="1768776728354" duration="191000" />
     </task>
     <servers />
   </component>

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.37] - 2026.01.18
+
+### Added
+
+- Option to not clear output list when getting activation periods
+
 ## [1.0.36] - 2026.01.18
 
 ### Fixed
