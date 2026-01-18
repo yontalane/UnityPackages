@@ -222,6 +222,43 @@ namespace Yontalane.Aseprite
     { }
 
     /// <summary>
+    /// A start time and duration, counted both in seconds and frames.
+    /// </summary>
+    [System.Serializable]
+    public struct ActivationPeriod
+    {
+        /// <summary>
+        /// Start time in seconds.
+        /// </summary>
+        public float startTime;
+        
+        /// <summary>
+        /// Duration in seconds.
+        /// </summary>
+        public float length;
+        
+        /// <summary>
+        /// Start time in frames.
+        /// </summary>
+        public int startFrame;
+        
+        /// <summary>
+        /// Duration in frames.
+        /// </summary>
+        public int frameCount;
+        
+        /// <summary>
+        /// End time in seconds.
+        /// </summary>
+        public readonly float EndTime => startTime + length;
+        
+        /// <summary>
+        /// End time in frames.
+        /// </summary>
+        public readonly int EndFrame => startFrame + frameCount;
+    }
+
+    /// <summary>
     /// Contains information about a sprite object's animation, including the animation name, its length, and the frames/times when an attached object, such as a collider, is active.
     /// </summary>
     [System.Serializable]
@@ -233,9 +270,14 @@ namespace Yontalane.Aseprite
         public string animation;
 
         /// <summary>
-        /// The total number of frames.
+        /// The total frame count of the animation.
         /// </summary>
         public int length;
+
+        /// <summary>
+        /// The length in seconds of the animation.
+        /// </summary>
+        public float duration;
 
         /// <summary>
         /// The list of frame indices where the attached object, such as a collider, is active.
@@ -246,6 +288,67 @@ namespace Yontalane.Aseprite
         /// The list of times (in seconds) corresponding to when the attached object, such as a collider, is active.
         /// </summary>
         public List<float> timesOn;
+        
+        /// <summary>
+        /// The length in seconds of a single frame.
+        /// </summary>
+        public float FrameDuration => length / duration;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="periods"></param>
+        /// <returns></returns>
+        public int GetKeyframePeriods(ref List<ActivationPeriod> periods)
+        {
+            // Exit early if the output list or the keyframe lists are null.
+            if (periods == null || framesOn == null || timesOn == null)
+            {
+                return 0;
+            }
+            
+            // Exit early if the keyframe lists are improperly set up (this shouldn't happen).
+            // Also exit early if the keyframe lists are empty.
+            if (framesOn.Count == 0 || framesOn.Count != timesOn.Count)
+            {
+                return 0;
+            }
+
+            // Clear the output list.
+            periods.Clear();
+            
+            // Get the frame duration period once to save calculation time.
+            float frameDuration = FrameDuration;
+
+            // For each frame in which the component gets activated...
+            for (int i = 0; i < framesOn.Count; i++)
+            {
+                // If we're looking at the very next frame after the previous activation,
+                // then increase that period's duration by one frame. 
+                if (periods.Count > 0 && framesOn[i] == periods[^1].startFrame + 1)
+                {
+                    ActivationPeriod  period = periods[^1];
+                    period.frameCount++;
+                    period.length += frameDuration;
+                    periods[^1] = period;
+                }
+                // If we haven't recorded any activation yet, or we're more than one
+                // frame past the previous, start a new activation period.
+                else
+                {
+                    periods.Add(new ActivationPeriod()
+                    {
+                        startFrame = framesOn[i],
+                        startTime = timesOn[i],
+                        frameCount = 1,
+                        length = frameDuration,
+                    });
+                }
+            }
+            
+            // Return the number of periods.
+            return periods.Count;
+        }
     }
 
     /// <summary>

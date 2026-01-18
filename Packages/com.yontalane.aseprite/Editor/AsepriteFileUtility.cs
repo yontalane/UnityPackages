@@ -310,10 +310,11 @@ namespace YontalaneEditor.Aseprite
         /// <param name="name">The name of the sprite object.</param>
         /// <param name="type">The type of the sprite object.</param>
         /// <param name="animation">The name of the animation.</param>
-        /// <param name="length">The length of the animation.</param>
+        /// <param name="lengthInFrames">The frame count of the animation.</param>
+        /// <param name="lengthInSeconds">The length in seconds of the animation.</param>
         /// <param name="frameOn">The frame index when the object is active.</param>
         /// <param name="timeOn">The time (in seconds) when the object is active.</param>
-        internal static void AddInfo(this List<SpriteObjectInfo> spriteObjectInfo, string name, SpriteObjectType type, string animation, int length, int frameOn, float timeOn)
+        internal static void AddInfo(this List<SpriteObjectInfo> spriteObjectInfo, string name, SpriteObjectType type, string animation, int lengthInFrames, float lengthInSeconds, int frameOn, float timeOn)
         {
             // Find the data index of the sprite object with the given name.
             int objectIndex = -1;
@@ -359,7 +360,8 @@ namespace YontalaneEditor.Aseprite
                 spriteObjectInfo[objectIndex].animationInfo.Add(new()
                 {
                     animation = animation,
-                    length = length,
+                    length = lengthInFrames,
+                    duration = lengthInSeconds,
                 });
 
                 animationIndex = spriteObjectInfo[objectIndex].animationInfo.Count - 1;

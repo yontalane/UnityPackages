@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.35] - 2026.01.18
+
+### Added
+
+- SpriteObjectAnimationInfo has animation length in seconds
+
 ## [1.0.34] - 2026.01.04
 
 ### Changed

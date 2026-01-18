@@ -35,7 +35,7 @@ namespace YontalaneEditor.Aseprite
 
                 // Process the frame for collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, ref spriteObjectInfo, out _); // Collision Boxes and Points
+                fileData.IterateThroughChunks(data, frameDataIndex, s_remainingLayers, false, ref spriteObjectInfo, out _); // Collision Boxes and Points
 
                 // Set the 'off' key for the remaining layers
                 //fileData.HideEmptyLayerObjects(frameDataIndex, time, s_remainingLayers);
@@ -46,7 +46,7 @@ namespace YontalaneEditor.Aseprite
             {
                 // Process the frame for root motion and collision boxes and points
                 FrameData data = fileData.FrameData[frameDataIndex];
-                fileData.InterateThroughChunks(data, frameDataIndex, s_remainingLayers, true, ref spriteObjectInfo, out _); // Root Motion
+                fileData.IterateThroughChunks(data, frameDataIndex, s_remainingLayers, true, ref spriteObjectInfo, out _); // Root Motion
             }
 
             // Ensure all AnimationClips have their boolean properties initialized to 'off' and add an on start and on complete event
@@ -73,7 +73,7 @@ namespace YontalaneEditor.Aseprite
         /// <param name="layers">The list of all layers. As we process each layer, we remove it from the list. The remaining layers will need a 'off' key set for the current frame.</param>
         /// <param name="rootMotion">If true, generates root motion; otherwise, generates collision boxes and points.</param>
         /// <param name="time">The time at which to process the chunk.</param>
-        private static void InterateThroughChunks(this ImportFileData fileData, FrameData data, int frameDataIndex, List<LayerData> layers, bool rootMotion, ref List<SpriteObjectInfo> spriteObjectInfo, out float time)
+        private static void IterateThroughChunks(this ImportFileData fileData, FrameData data, int frameDataIndex, List<LayerData> layers, bool rootMotion, ref List<SpriteObjectInfo> spriteObjectInfo, out float time)
         {
             time = 0f;
 

@@ -58,7 +58,7 @@ namespace YontalaneEditor.Aseprite
                 frameData.clip.SetEnabledKey<BoxCollider2D>(path, currTime, true);
 
                 // Add information about this collider or trigger to the spriteObjectInfo list for animation export
-                spriteObjectInfo.AddInfo(frameData.layerData.name, frameData.layerData.type == LayerType.Collision ? SpriteObjectType.Collider : SpriteObjectType.Trigger, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, currIndex - frameData.animationData.fromFrame + 1, currTime);
+                spriteObjectInfo.AddInfo(frameData.layerData.name, frameData.layerData.type == LayerType.Collision ? SpriteObjectType.Collider : SpriteObjectType.Trigger, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, frameData.clip.length, currIndex - frameData.animationData.fromFrame + 1, currTime);
 
                 // If there is a next frame and it doesn't already have a key, set the BoxCollider2D to disabled at the next frame time
                 if (nextIndex > currIndex && !frameData.clip.HasEnabledKey<BoxCollider2D>(path, nextTime))
@@ -122,9 +122,9 @@ namespace YontalaneEditor.Aseprite
                 frameData.clip.SetIsActiveKey(path, currTime, true);
 
                 // Add point object info for this frame to the spriteObjectInfo list
-                spriteObjectInfo.AddInfo(frameData.layerData.name, SpriteObjectType.Point, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, currIndex - frameData.animationData.fromFrame + 1, currTime);
+                spriteObjectInfo.AddInfo(frameData.layerData.name, SpriteObjectType.Point, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, frameData.clip.length, currIndex - frameData.animationData.fromFrame + 1, currTime);
 
-                // If there is a next frame and it doesn't already have a key, deactivate the point object at the next frame time
+                // If there is a next frame, and it doesn't already have a key, deactivate the point object at the next frame time
                 if (nextIndex > currIndex && !frameData.clip.HasActiveKey(path, nextTime))
                 {
                     frameData.clip.SetIsActiveKey(path, nextTime, false);
