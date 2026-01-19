@@ -44,6 +44,30 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
+        /// Gets the length of the animation with the given name, assuming the animation exists.
+        /// </summary>
+        /// <param name="animationLengths">A list containing the lengths of all the animations.</param>
+        /// <param name="name">The name of the animation whose length we want.</param>
+        /// <param name="length">The length of the animation.</param>
+        /// <returns>Whether the animation exists.</returns>
+        public static bool TryGetLength(this IReadOnlyList<AnimationLengthInfo> animationLengths, string name, out AnimationLengthInfo length)
+        {
+            foreach (AnimationLengthInfo info in animationLengths)
+            {
+                if (info.name != name)
+                {
+                    continue;
+                }
+
+                length = info;
+                return true;
+            }
+            
+            length = default;
+            return false;
+        }
+
+        /// <summary>
         /// Attempts to find a SpriteObjectAnimationInfo for a specific object and animation name.
         /// </summary>
         /// <param name="spriteObjectInfo">The list of SpriteObjectInfo to search.</param>

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.42] - 2026.01.18
+
+### Changed
+
+- Animation length is stored as seconds instead of milliseconds
+
 ## [1.0.41] - 2026.01.18
 
 ### Fixed

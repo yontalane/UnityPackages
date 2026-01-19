@@ -419,7 +419,7 @@ namespace Yontalane.Aseprite
         public string name;
         
         /// <summary>
-        /// The length of the animation.
+        /// The length of the animation in seconds.
         /// </summary>
         public float length;
     }

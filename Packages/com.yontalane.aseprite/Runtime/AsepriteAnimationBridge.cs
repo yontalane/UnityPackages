@@ -138,7 +138,7 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
-        /// A list containing the length of every animation.
+        /// A list containing the length of every animation in seconds.
         /// </summary>
         public List<AnimationLengthInfo> AnimationLengths
         {
@@ -265,7 +265,7 @@ namespace Yontalane.Aseprite
                 key = m_currentMotionTree.id,
                 value = 0f,
             };
-
+            
             // Invoke the event to allow external code to set the value for the motion tree.
             OnRequestMotionTreeValue?.Invoke(pair);
 

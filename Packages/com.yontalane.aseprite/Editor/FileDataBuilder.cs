@@ -491,13 +491,13 @@ namespace YontalaneEditor.Aseprite
             // Clear any existing data in the dictionary.
             bridge.AnimationLengths.Clear();
 
-            // Add the provided info to the dictionary.
+            // Add the provided info to the dictionary. Convert from milliseconds to seconds.
             foreach (KeyValuePair<string, float> length in lengths)
             {
                 bridge.AnimationLengths.Add(new()
                 {
                     name = length.Key,
-                    length = length.Value,
+                    length = length.Value * 0.001f,
                 });
             }
         }

@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FileDataBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FileDataBuilder.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteExtensions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" afterDir="false" />
     </list>
@@ -116,6 +117,7 @@
       <workItem from="1768791318835" duration="328000" />
       <workItem from="1768791928222" duration="79000" />
       <workItem from="1768792425563" duration="217000" />
+      <workItem from="1768794179987" duration="325000" />
     </task>
     <servers />
   </component>
