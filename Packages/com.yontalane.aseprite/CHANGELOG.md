@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.41] - 2026.01.18
+
+### Fixed
+
+- Storing animation lengths in serialized list
+
 ## [1.0.40] - 2026.01.18
 
 ### Fixed

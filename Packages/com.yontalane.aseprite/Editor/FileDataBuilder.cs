@@ -494,7 +494,11 @@ namespace YontalaneEditor.Aseprite
             // Add the provided info to the dictionary.
             foreach (KeyValuePair<string, float> length in lengths)
             {
-                bridge.AnimationLengths.Add(length.Key, length.Value);
+                bridge.AnimationLengths.Add(new()
+                {
+                    name = length.Key,
+                    length = length.Value,
+                });
             }
         }
     }

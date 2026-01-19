@@ -406,4 +406,21 @@ namespace Yontalane.Aseprite
         /// </summary>
         public List<SpriteObjectAnimationInfo> animationInfo;
     }
+
+    /// <summary>
+    /// Holds information about the length of an animation.
+    /// </summary>
+    [System.Serializable]
+    public struct AnimationLengthInfo
+    {
+        /// <summary>
+        /// The name of the animation.
+        /// </summary>
+        public string name;
+        
+        /// <summary>
+        /// The length of the animation.
+        /// </summary>
+        public float length;
+    }
 }

@@ -25,7 +25,7 @@ namespace Yontalane.Aseprite
 
         [SerializeField]
         [HideInInspector]
-        private Dictionary<string, float> m_animationLengths = null;
+        private List<AnimationLengthInfo> m_animationLengths = null;
 
         #endregion
 
@@ -138,9 +138,9 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
-        /// A dictionary containing the length of every animation.
+        /// A list containing the length of every animation.
         /// </summary>
-        public Dictionary<string, float> AnimationLengths
+        public List<AnimationLengthInfo> AnimationLengths
         {
             get => m_animationLengths;
             set => m_animationLengths = value;
