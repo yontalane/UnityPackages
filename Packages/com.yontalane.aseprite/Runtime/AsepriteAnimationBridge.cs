@@ -23,6 +23,10 @@ namespace Yontalane.Aseprite
         [HideInInspector]
         private List<SpriteObjectInfo> m_spriteObjectInfo = null;
 
+        [SerializeField]
+        [HideInInspector]
+        private Dictionary<string, float> m_animationLengths = null;
+
         #endregion
 
         #region Serialized Fields
@@ -132,11 +136,15 @@ namespace Yontalane.Aseprite
                 return m_spriteRenderer;
             }
         }
-        
+
         /// <summary>
         /// A dictionary containing the length of every animation.
         /// </summary>
-        public Dictionary<string, float> AnimationLengths { get; set; } = new Dictionary<string, float>();
+        public Dictionary<string, float> AnimationLengths
+        {
+            get => m_animationLengths;
+            set => m_animationLengths = value;
+        }
 
         #endregion
 

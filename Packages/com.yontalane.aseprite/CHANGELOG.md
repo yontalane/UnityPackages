@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.40] - 2026.01.18
+
+### Fixed
+
+- Serialized animation lengths
+
 ## [1.0.39] - 2026.01.18
 
 ### Fixed
