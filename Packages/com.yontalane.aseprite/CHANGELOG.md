@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.43] - 2026.01.18
+
+### Fixed
+
+- TryGetLength() returns a number
+
 ## [1.0.42] - 2026.01.18
 
 ### Changed

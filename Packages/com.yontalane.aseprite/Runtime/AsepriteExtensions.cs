@@ -48,9 +48,9 @@ namespace Yontalane.Aseprite
         /// </summary>
         /// <param name="animationLengths">A list containing the lengths of all the animations.</param>
         /// <param name="name">The name of the animation whose length we want.</param>
-        /// <param name="length">The length of the animation.</param>
+        /// <param name="length">The length of the animation, or zero if the animation doesn't exist.</param>
         /// <returns>Whether the animation exists.</returns>
-        public static bool TryGetLength(this IReadOnlyList<AnimationLengthInfo> animationLengths, string name, out AnimationLengthInfo length)
+        public static bool TryGetLength(this IReadOnlyList<AnimationLengthInfo> animationLengths, string name, out float length)
         {
             foreach (AnimationLengthInfo info in animationLengths)
             {
@@ -59,11 +59,11 @@ namespace Yontalane.Aseprite
                     continue;
                 }
 
-                length = info;
+                length = info.length;
                 return true;
             }
             
-            length = default;
+            length = 0f;
             return false;
         }
 
