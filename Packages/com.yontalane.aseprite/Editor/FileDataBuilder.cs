@@ -21,7 +21,8 @@ namespace YontalaneEditor.Aseprite
         /// </summary>
         /// <param name="args">The import event arguments containing the Aseprite file and import context.</param>
         /// <param name="fileData">The ImportFileData object to be initialized and filled with extracted data.</param>
-        internal static void PrepareFileData(this AsepriteImporter.ImportEventArgs args, ref ImportFileData fileData)
+        /// <param name="animationLengths">A dictionary containing the length of every animation by name.</param>
+        internal static void PrepareFileData(this AsepriteImporter.ImportEventArgs args, ref ImportFileData fileData, ref Dictionary<string, float> animationLengths)
         {
             AsepriteFile file = args.importer.asepriteFile;
 
@@ -37,7 +38,7 @@ namespace YontalaneEditor.Aseprite
 
             // Populate the ImportFileData object with all necessary data and assets extracted from the Aseprite import.
             fileData.GetMainObject();
-            fileData.GetAnimations();
+            fileData.GetAnimations(ref animationLengths);
             fileData.GetLayerData();
             fileData.GetFrameRects();
             fileData.GetAssetObjects();
@@ -101,9 +102,13 @@ namespace YontalaneEditor.Aseprite
         /// Each animation is defined by its name and the range of frames it covers.
         /// </summary>
         /// <param name="fileData">The ImportFileData object to store the extracted animation data.</param>
-        internal static void GetAnimations(this ImportFileData fileData)
+        /// <param name="animationLengths">A dictionary containing the length of every animation by name.</param>
+        internal static void GetAnimations(this ImportFileData fileData, ref Dictionary<string, float> animationLengths)
         {
             fileData.animations.Clear();
+
+            animationLengths ??= new();
+            animationLengths.Clear();
 
             // Iterate through each frame in the Aseprite file
             for (int frameDataIndex = 0; frameDataIndex < fileData.FrameData.Count; frameDataIndex++)
@@ -137,6 +142,14 @@ namespace YontalaneEditor.Aseprite
                             fromFrame = tagData.fromFrame,
                             toFrame = tagData.toFrame,
                         };
+
+                        // Record the duration of the animation.
+                        ushort duration = 0;
+                        for (int i = animationData.fromFrame; i <= animationData.toFrame; i++)
+                        {
+                            duration += fileData.FrameData[i].frameDuration;
+                        }
+                        animationLengths[tagData.name] = duration;
 
                         fileData.animations.Add(animationData);
                     }
@@ -451,11 +464,38 @@ namespace YontalaneEditor.Aseprite
             // Ensure the SpriteObjectInfo list is initialized.
             bridge.SpriteObjectInfo ??= new();
 
-            // Clear any existing data in the SpriteObjectInfo list.
+            // Clear any existing data in the list.
             bridge.SpriteObjectInfo.Clear();
 
-            // Add the provided info to the SpriteObjectInfo list.
+            // Add the provided info to the list.
             bridge.SpriteObjectInfo.AddRange(info);
+        }
+
+        internal static void AddAnimationLengthInfo(ref ImportFileData fileData, IReadOnlyDictionary<string, float> lengths)
+        {
+            // Attempt to cast the main object to a GameObject; if not possible, exit early.
+            if (fileData.MainObject is not GameObject mainObject)
+            {
+                return;
+            }
+
+            // Try to get the AsepriteAnimationBridge component from the main GameObject; if not found, exit early.
+            if (!mainObject.TryGetComponent(out AsepriteAnimationBridge bridge))
+            {
+                return;
+            }
+            
+            // Ensure the AnimationLengths dictionary is initialized.
+            bridge.AnimationLengths ??= new();
+
+            // Clear any existing data in the dictionary.
+            bridge.AnimationLengths.Clear();
+
+            // Add the provided info to the dictionary.
+            foreach (KeyValuePair<string, float> length in lengths)
+            {
+                bridge.AnimationLengths.Add(length.Key, length.Value);
+            }
         }
     }
 }

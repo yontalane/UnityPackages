@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.38] - 2026.01.18
+
+### Added
+
+- Bridge provides the length of each animation
+
 ## [1.0.37] - 2026.01.18
 
 ### Added

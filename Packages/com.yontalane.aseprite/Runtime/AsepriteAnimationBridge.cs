@@ -132,6 +132,11 @@ namespace Yontalane.Aseprite
                 return m_spriteRenderer;
             }
         }
+        
+        /// <summary>
+        /// A dictionary containing the length of every animation.
+        /// </summary>
+        public Dictionary<string, float> AnimationLengths { get; set; } = new Dictionary<string, float>();
 
         #endregion
 

@@ -14,6 +14,7 @@ namespace YontalaneEditor.Aseprite
     {
         private ImportFileData m_fileData;
         private List<SpriteObjectInfo> m_spriteObjectInfo;
+        private Dictionary<string, float> m_animationLengths;
 
         /// <summary>
         /// Registers the OnPostAsepriteImport event handler when an Aseprite file is imported.
@@ -34,10 +35,14 @@ namespace YontalaneEditor.Aseprite
         {
             m_spriteObjectInfo ??= new();
             m_spriteObjectInfo.Clear();
+            
+            m_animationLengths ??= new();
+            m_animationLengths.Clear();
 
-            args.PrepareFileData(ref m_fileData);
+            args.PrepareFileData(ref m_fileData, ref m_animationLengths);
             m_fileData.ProcessAsepriteAsset(ref m_spriteObjectInfo);
             FileDataBuilder.AddSpriteObjectInfo(ref m_fileData, m_spriteObjectInfo);
+            FileDataBuilder.AddAnimationLengthInfo(ref m_fileData,m_animationLengths);
         }
     }
 }
