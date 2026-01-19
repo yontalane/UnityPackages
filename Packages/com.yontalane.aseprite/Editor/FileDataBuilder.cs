@@ -149,7 +149,7 @@ namespace YontalaneEditor.Aseprite
                         {
                             duration += fileData.FrameData[i].frameDuration;
                         }
-                        animationLengths[tagData.name] = duration;
+                        animationLengths.Add(tagData.name, duration);
 
                         fileData.animations.Add(animationData);
                     }

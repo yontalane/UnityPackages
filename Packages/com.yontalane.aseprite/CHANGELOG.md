@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.39] - 2026.01.18
+
+### Fixed
+
+- Animation lengths weren't properly added to list 
+
 ## [1.0.38] - 2026.01.18
 
 ### Added

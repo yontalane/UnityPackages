@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/CustomAsepriteImporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/CustomAsepriteImporter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FileDataBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FileDataBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +20,8 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/CustomAsepriteImporter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FileDataBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/FrameProcessor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,6 +111,7 @@
       <workItem from="1768775247584" duration="326000" />
       <workItem from="1768776728354" duration="191000" />
       <workItem from="1768777454739" duration="2875000" />
+      <workItem from="1768791318835" duration="328000" />
     </task>
     <servers />
   </component>
