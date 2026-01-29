@@ -1324,6 +1324,40 @@ namespace Yontalane.UIElements
                     return;
                 }
             }
+
+            if (menu.items.Length <= 1)
+            {
+                return;
+            }
+
+            int index = -1;
+
+            for (int i = 0; i < menu.items.Length; i++)
+            {
+                if (menu.items[i].name == focusedVisualElement.name)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index == -1)
+            {
+                return;
+            }
+
+            index += y;
+
+            while (index >= menu.items.Length)
+            {
+                index -= menu.items.Length;
+            }
+            while (index < 0)
+            {
+                index += menu.items.Length;
+            }
+            
+            root.Q<VisualElement>(menu.items[index].name)?.Focus();
         }
 
         private bool TryGetMatchingNavigationOverride(IReadOnlyList<NavigationOverride> list, int x, int y, out NavigationOverride navigationOverride)

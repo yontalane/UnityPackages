@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.43] - 2026.01.29
+
+### Changed
+
+- MenuManager navigation is based on order of menu items 
+
 ## [1.0.42] - 2025.12.29
 
 ### Fixed
