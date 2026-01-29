@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.44] - 2026.01.29
+
+### Changed
+
+- Undid previous update
+
 ## [1.0.43] - 2026.01.29
 
 ### Changed

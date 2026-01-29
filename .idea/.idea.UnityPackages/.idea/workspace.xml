@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,6 +118,7 @@
       <workItem from="1768794637794" duration="82000" />
       <workItem from="1769663604562" duration="17000" />
       <workItem from="1769663642245" duration="1140000" />
+      <workItem from="1769665343970" duration="26000" />
     </task>
     <servers />
   </component>
