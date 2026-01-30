@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,51 +6,11 @@ using UnityEngine.UIElements;
 namespace Yontalane.UIElements
 {
     /// <summary>
-    /// Contains information about a navigation move event within a <see cref="ScrollViewAuto"/>.
-    /// </summary>
-    public struct NavigationMoveEventInfo
-    {
-        /// <summary>
-        /// The <see cref="ScrollViewAuto"/> where the navigation event occurred.
-        /// </summary>
-        public ScrollViewAuto scrollView;
-
-        /// <summary>
-        /// The direction of the navigation movement.
-        /// </summary>
-        public NavigationMoveEvent.Direction direction;
-
-        /// <summary>
-        /// The element where navigation started.
-        /// </summary>
-        public VisualElement startElement;
-
-        /// <summary>
-        /// The element where navigation ended.
-        /// </summary>
-        public VisualElement endElement;
-    }
-    
-    /// <summary>
     /// A custom ScrollView that automatically registers its child elements for navigation and interaction.
     /// </summary>
     [UxmlElement]
     public partial class ScrollViewAuto : ScrollView
     {
-        /// <summary>
-        /// Delegate type for handling navigation move events in <see cref="ScrollViewAuto"/>.
-        /// Accepts a <see cref="NavigationMoveEventInfo"/> describing the event details.
-        /// </summary>
-        /// <param name="info">Information about the navigation move event.</param>
-        public delegate void NavigationMoveEventHandler(NavigationMoveEventInfo info);
-
-        /// <summary>
-        /// Static event invoked whenever a navigation move occurs within any <see cref="ScrollViewAuto"/>.
-        /// Should be assigned by anyone wishing to listen for navigation move events.
-        /// </summary>
-        public static NavigationMoveEventHandler OnNavigationMove = null;
-        
-        private UIDocument m_document;
         private readonly VisualElement m_container;
         private readonly List<VisualElement> m_registeredChildren;
 
@@ -64,24 +23,21 @@ namespace Yontalane.UIElements
             // Initialize the container by querying for the "unity-content-container" VisualElement.
             m_container = this.Q<VisualElement>("unity-content-container");
             // Initialize the list to keep track of registered child elements.
-            m_registeredChildren = new List<VisualElement>();
+            m_registeredChildren = new();
 
             // Register a callback to handle the AttachToPanelEvent, which occurs when the element is added to the UI panel.
-            RegisterCallback<AttachToPanelEvent>(_ =>
+            RegisterCallback<AttachToPanelEvent>((e) =>
             {
                 // Only perform registration if the application is running (play mode).
-                if (!Application.isPlaying)
+                if (Application.isPlaying)
                 {
-                    return;
-                }
-
-                // Get all direct children of this ScrollView.
-                IEnumerable<VisualElement> children = Children();
-                
-                // Register each child element for navigation and interaction.
-                foreach (VisualElement child in children)
-                {
-                    RegisterElement(child);
+                    // Get all direct children of this ScrollView.
+                    IEnumerable<VisualElement> children = Children();
+                    // Register each child element for navigation and interaction.
+                    foreach (VisualElement child in children)
+                    {
+                        RegisterElement(child);
+                    }
                 }
             });
         }
@@ -115,80 +71,40 @@ namespace Yontalane.UIElements
                 }
             }
 
-            // Create move event info.
-            NavigationMoveEventInfo info = new()
+            // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
+            if (e.direction == NavigationMoveEvent.Direction.Up)
             {
-                scrollView = this,
-                direction = e.direction,
-                startElement = element,
-                endElement = null,
-            };
-
-            switch (e.direction)
-            {
-                // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
-                case NavigationMoveEvent.Direction.Up when index == 0:
+                if (index == 0)
                 {
                     target = m_registeredChildren.Last();
-                    break;
                 }
-                case NavigationMoveEvent.Direction.Up:
+                else
+                {
                     target = m_registeredChildren.ElementAt(index - 1);
-                    break;
-                // Handle navigation in the Down direction: wrap to first if at the bottom, otherwise move to next.
-                case NavigationMoveEvent.Direction.Down when index == count - 1:
+                }
+            }
+            // Handle navigation in the Down direction: wrap to first if at the bottom, otherwise move to next.
+            else if (e.direction == NavigationMoveEvent.Direction.Down)
+            {
+                if (index == count - 1)
                 {
                     target = m_registeredChildren.First();
-                    break;
                 }
-                case NavigationMoveEvent.Direction.Down:
+                else
+                {
                     target = m_registeredChildren.ElementAt(index + 1);
-                    info.endElement = target;
-                    break;
+                }
             }
 
             // If no valid target was found, exit early.
             if (target == null)
             {
-                e.StopPropagation();
                 return;
             }
 
-            // Stop the propagation of the event to other targets.
-            e.StopPropagation();
-            
-            // Focus on the target after a delay.
-            if (m_document == null)
-            {
-                m_document = Object.FindAnyObjectByType<UIDocument>();
-            }
-            m_document.StartCoroutine(DelayedSetFocus(target, info));
-        }
-        
-        /// <summary>
-        /// Coroutine that sets focus to the given <paramref name="target"/> VisualElement after a frame delay,
-        /// scrolls it into view, and then invokes the navigation move event.
-        /// </summary>
-        /// <param name="target">The VisualElement to receive focus.</param>
-        /// <param name="info">NavigationMoveEventInfo containing context about the navigation action; will have <c>endElement</c> updated to <paramref name="target"/>.</param>
-        private IEnumerator DelayedSetFocus(VisualElement target, NavigationMoveEventInfo info)
-        {
-            // Exit early if the target is null.
-            if (target == null)
-            {
-                yield break;
-            }
-            
-            // Wait for UI Toolkit's built-in processes to resolve.
-            yield return new WaitForEndOfFrame();
-            
             // Move focus to the target element and scroll it into view.
             target.Focus();
             ScrollToChild(target);
-            
-            // Broadcast an OnMove event.
-            info.endElement = target;
-            OnNavigationMove?.Invoke(info);
         }
 
         /// <summary>
@@ -270,7 +186,7 @@ namespace Yontalane.UIElements
                 return;
             }
             m_registeredChildren.Add(element);
-            element.RegisterCallback<NavigationMoveEvent>(NavigationMoveListener, TrickleDown.TrickleDown);
+            element.RegisterCallback<NavigationMoveEvent>(NavigationMoveListener);
         }
 
         private void UnregisterElement(VisualElement element)
@@ -280,7 +196,7 @@ namespace Yontalane.UIElements
                 return;
             }
             m_registeredChildren.Remove(element);
-            element.UnregisterCallback<NavigationMoveEvent>(NavigationMoveListener, TrickleDown.TrickleDown);
+            element.UnregisterCallback<NavigationMoveEvent>(NavigationMoveListener);
         }
 
         #region Add & Remove
