@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/ScrollViewAuto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/ScrollViewAuto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.uielements/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.uielements/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +23,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Horm.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/CustomAsepriteImporter.cs" root0="FORCE_HIGHLIGHTING" />
@@ -26,6 +32,10 @@
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/IconButton.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/ScrollViewAuto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/package.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -61,7 +71,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/6000.3.0f1/Unity.app/Contents/MacOS/Unity" />
+      <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/6000.3.5f1/Unity.app/Contents/MacOS/Unity" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath $PROJECT_DIR$ -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -71,7 +81,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/6000.3.0f1/Unity.app/Contents/MacOS/Unity" />
+      <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/6000.3.5f1/Unity.app/Contents/MacOS/Unity" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath $PROJECT_DIR$ -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -119,6 +129,9 @@
       <workItem from="1769663604562" duration="17000" />
       <workItem from="1769663642245" duration="1140000" />
       <workItem from="1769665343970" duration="26000" />
+      <workItem from="1769736238265" duration="668000" />
+      <workItem from="1769739303469" duration="2725000" />
+      <workItem from="1769742749391" duration="1585000" />
     </task>
     <servers />
   </component>

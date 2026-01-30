@@ -1,13 +1,13 @@
 {
   "name": "com.yontalane.uielements",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "displayName": "UI Elements",
   "description": "A small library for Unity projects.",
   "unity": "6000.0",
   "unityRelease": "54f1",
   "documentationUrl": "https://github.com/yontalane/UnityPackages/blob/main/Packages/com.yontalane.uielements/Documentation~/index.md",
   "dependencies": {
-    "com.yontalane.core": "1.0.40",
+    "com.yontalane.core": "1.0.41",
     "com.unity.ugui": "2.0.0",
     "com.unity.modules.uielements": "1.0.0",
     "com.unity.inputsystem": "1.14.1",

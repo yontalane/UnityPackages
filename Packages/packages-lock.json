@@ -53,7 +53,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.25",
+      "version": "1.8.27",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -100,7 +100,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.16.0",
+      "version": "1.17.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -284,7 +284,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.40",
+        "com.yontalane.core": "1.0.41",
         "com.unity.ugui": "2.0.0",
         "com.unity.modules.uielements": "1.0.0",
         "com.unity.inputsystem": "1.14.1",

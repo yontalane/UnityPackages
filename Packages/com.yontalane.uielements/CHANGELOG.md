@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.45] - 2026.01.29
+
+### Changed
+
+- ScrollViewAuto updates focus after a delay
+
 ## [1.0.44] - 2026.01.29
 
 ### Changed
