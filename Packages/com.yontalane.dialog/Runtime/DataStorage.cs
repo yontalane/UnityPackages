@@ -51,6 +51,9 @@ namespace Yontalane.Dialog
 
             keys.Clear();
 
+            // Ensure Vars exists.
+            Vars ??= new();
+            
             foreach (DataStorageVar var in Vars)
             {
                 keys.Add(var.key);
@@ -71,6 +74,9 @@ namespace Yontalane.Dialog
 
             pairs.Clear();
 
+            // Ensure Vars exists.
+            Vars ??= new();
+            
             foreach (DataStorageVar var in Vars)
             {
                 pairs.Add(var.key, var.value);
@@ -101,6 +107,9 @@ namespace Yontalane.Dialog
         /// <returns>True if the key exists; otherwise, false.</returns>
         public static bool ContainsKey(string key)
         {
+            // Ensure Vars exists.
+            Vars ??= new();
+            
             foreach (DataStorageVar var in Vars)
             {
                 if (var.key == key)
@@ -120,6 +129,9 @@ namespace Yontalane.Dialog
         /// <returns>True if the key exists; otherwise, false.</returns>
         public static bool TryGetValue(string key, out string value)
         {
+            // Ensure Vars exists.
+            Vars ??= new();
+            
             foreach (DataStorageVar var in Vars)
             {
                 if (var.key == key)

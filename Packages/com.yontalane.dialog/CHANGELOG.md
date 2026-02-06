@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.86] - 2026.02.06
+
+### Fixed
+
+- Null checking DataStorage.Vars 
+
 ## [1.0.85] - 2025.12.04
 
 ### Added
