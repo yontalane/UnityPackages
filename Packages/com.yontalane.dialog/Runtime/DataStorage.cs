@@ -122,6 +122,68 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// Attempts to get the key-value pair at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <param name="dataStorageVar">The key-value pair at the index, if found.</param>
+        /// <returns>True if the key-value pair exists; otherwise, false.</returns>
+        public static bool TryGetKeyValuePair(int index, out DataStorageVar dataStorageVar)
+        {
+            // Ensure Vars exists.
+            Vars ??= new();
+
+            if (index < 0 || index >= Vars.Count)
+            {
+                dataStorageVar = default;
+                return false;
+            }
+            
+            dataStorageVar = Vars[index];
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the key-value pair at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <returns>The key-value pair.</returns>
+        public static DataStorageVar GetKeyValuePair(int index)
+        {
+            return !TryGetKeyValuePair(index, out DataStorageVar dataStorageVar) ? default : dataStorageVar;
+        }
+
+        /// <summary>
+        /// Attempts to get the key at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <param name="key">The key at the index, if found.</param>
+        /// <returns>True if the key-value pair exists; otherwise, false.</returns>
+        public static bool TryGetKey(int index, out string key)
+        {
+            // Ensure Vars exists.
+            Vars ??= new();
+
+            if (index < 0 || index >= Vars.Count)
+            {
+                key = default;
+                return false;
+            }
+            
+            key = Vars[index].key;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the key at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <returns>The key at the index.</returns>
+        public static string GetKey(int index)
+        {
+            return !TryGetKey(index, out string key) ? default : key;
+        }
+
+        /// <summary>
         /// Attempts to get the value associated with the specified key.
         /// </summary>
         /// <param name="key">The key to search for.</param>
@@ -146,6 +208,27 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
+        /// Attempts to get the value at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <param name="value">The value at the index, if found.</param>
+        /// <returns>True if the key-value pair exists; otherwise, false.</returns>
+        public static bool TryGetValue(int index, out string value)
+        {
+            // Ensure Vars exists.
+            Vars ??= new();
+
+            if (index < 0 || index >= Vars.Count)
+            {
+                value = default;
+                return false;
+            }
+            
+            value = Vars[index].value;
+            return false;
+        }
+
+        /// <summary>
         /// Gets the value associated with the specified key, or returns a default value if the key does not exist.
         /// </summary>
         /// <param name="key">The key to search for.</param>
@@ -153,12 +236,18 @@ namespace Yontalane.Dialog
         /// <returns>The value associated with the key, or the default value.</returns>
         public static string GetValue(string key, string defaultValue = "")
         {
-            if (TryGetValue(key, out string result))
-            {
-                return result;
-            }
+            return TryGetValue(key, out string result) ? result : defaultValue;
+        }
 
-            return defaultValue;
+        /// <summary>
+        /// Gets the value at the specified index, or returns a default value if the key does not exist.
+        /// </summary>
+        /// <param name="index">The index of the key-value pair.</param>
+        /// <param name="defaultValue">The value to return if the key does not exist.</param>
+        /// <returns>The value at the index.</returns>
+        public static string GetValue(int index, string defaultValue = "")
+        {
+            return TryGetValue(index, out string result) ? result : defaultValue;
         }
 
         /// <summary>

@@ -18,7 +18,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Horm.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AsepriteFileUtility.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/AssetProcesser.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Editor/CustomAsepriteImporter.cs" root0="FORCE_HIGHLIGHTING" />
@@ -27,6 +26,8 @@
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/AsepriteAnimationBridge.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/IconButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/ScrollViewAuto.cs" root0="FORCE_HIGHLIGHTING" />
@@ -129,6 +130,7 @@
       <workItem from="1769742749391" duration="1585000" />
       <workItem from="1770401520329" duration="184000" />
       <workItem from="1770406146007" duration="418000" />
+      <workItem from="1770418905811" duration="691000" />
     </task>
     <servers />
   </component>

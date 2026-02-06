@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.88] - 2026.02.06
+
+### Added
+
+- More access to dialog data storage
+
 ## [1.0.87] - 2026.02.06
 
 ### Added
