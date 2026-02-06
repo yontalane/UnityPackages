@@ -6,6 +6,7 @@ namespace Yontalane.Dialog
     /// <summary>
     /// Provides a static storage for dialog-related variables used by the DialogProcessor.
     /// </summary>
+    [System.Serializable]
     public static class DataStorage
     {
         /// <summary>

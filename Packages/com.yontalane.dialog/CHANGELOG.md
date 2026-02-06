@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.89] - 2026.02.06
+
+### Fixed
+
+- Made DataStorage serializable
+
 ## [1.0.88] - 2026.02.06
 
 ### Added

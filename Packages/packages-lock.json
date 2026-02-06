@@ -192,7 +192,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.yontalane.core": "1.0.40",
+        "com.yontalane.core": "1.0.41",
         "com.yontalane.query": "1.0.19"
       }
     },
