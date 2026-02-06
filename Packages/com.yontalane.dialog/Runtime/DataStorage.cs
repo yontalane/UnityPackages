@@ -216,6 +216,54 @@ namespace Yontalane.Dialog
             Vars = JsonUtility.FromJson<List<DataStorageVar>>(json);
         }
 
+        /// <summary>
+        /// Exports the current storage variables to a text string.
+        /// </summary>
+        /// <param name="delimiterA">Delimiter separating key and value.</param>
+        /// <param name="delimiterB">Delimiter separating multiple key/value pairs.</param>
+        /// <returns>A text string representing the storage variables.</returns>
+        public static string ExportToText(string delimiterA = "=",  string delimiterB = ",")
+        {
+            string output = string.Empty;
+
+            for (int i = 0; i < Vars.Count; i++)
+            {
+                if (i > 0)
+                {
+                    output += delimiterB;
+                }
+                
+                output += $"{Vars[i].key}={Vars[i].value}";
+            }
+            
+            return output;
+        }
+
+        /// <summary>
+        /// Imports storage variables from a text string, replacing the current storage.
+        /// </summary>
+        /// <param name="text">A text string representing the storage variables.</param>
+        /// <param name="delimiterA">Delimiter separating key and value.</param>
+        /// <param name="delimiterB">Delimiter separating multiple key/value pairs.</param>
+        public static void ImportFromText(string text, string delimiterA = "=",  string delimiterB = ",")
+        {
+            Clear();
+            
+            string[] pairs = text.Split(delimiterB);
+
+            foreach (string pair in pairs)
+            {
+                string[] keyValue = pair.Split(delimiterA);
+                
+                if (keyValue.Length != 2)
+                {
+                    continue;
+                }
+                
+                Add(keyValue[0], keyValue[1]);
+            }
+        }
+
         #endregion
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.87] - 2026.02.06
+
+### Added
+
+- Can export dialog vars to custom text format
+
 ## [1.0.86] - 2026.02.06
 
 ### Fixed

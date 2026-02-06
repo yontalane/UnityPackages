@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +128,7 @@
       <workItem from="1769739303469" duration="2725000" />
       <workItem from="1769742749391" duration="1585000" />
       <workItem from="1770401520329" duration="184000" />
+      <workItem from="1770406146007" duration="418000" />
     </task>
     <servers />
   </component>
