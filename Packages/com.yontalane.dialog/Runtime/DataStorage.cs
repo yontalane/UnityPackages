@@ -4,30 +4,30 @@ using UnityEngine;
 namespace Yontalane.Dialog
 {
     /// <summary>
+    /// The serializable key-value pair used for data storage by the DialogProcessor.
+    /// </summary>
+    [System.Serializable]
+    public struct DataStorageVar
+    {
+        /// <summary>
+        /// The keyword for the data item.
+        /// </summary>
+        [Tooltip("The keyword for the data item.")]
+        public string key;
+
+        /// <summary>
+        /// The value of the data item.
+        /// </summary>
+        [Tooltip("The value of the data item.")]
+        public string value;
+    }
+
+    /// <summary>
     /// Provides a static storage for dialog-related variables used by the DialogProcessor.
     /// </summary>
     [System.Serializable]
     public static class DataStorage
     {
-        /// <summary>
-        /// The serializable key-value pair used for data storage by the DialogProcessor.
-        /// </summary>
-        [System.Serializable]
-        public struct DataStorageVar
-        {
-            /// <summary>
-            /// The keyword for the data item.
-            /// </summary>
-            [Tooltip("The keyword for the data item")]
-            public string key;
-
-            /// <summary>
-            /// The value of the data item.
-            /// </summary>
-            [Tooltip("The value of the data item.")]
-            public string value;
-        }
-
         private static DataStorageContainer s_storageContainer;
         
         /// <summary>

@@ -7,10 +7,9 @@ namespace Yontalane.Dialog
     [AddComponentMenu("Yontalane/Dialog/Data Storage Container")]
     internal class DataStorageContainer : MonoBehaviour
     {
-        [HideInInspector]
         [SerializeField]
-        private List<DataStorage.DataStorageVar> m_vars = new();
+        private List<DataStorageVar> m_vars = new();
 
-        internal List<DataStorage.DataStorageVar> Vars => m_vars;
+        internal List<DataStorageVar> Vars => m_vars;
     }
 }
