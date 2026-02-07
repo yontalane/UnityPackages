@@ -27,14 +27,9 @@ namespace Yontalane.Dialog
             [Tooltip("The value of the data item.")]
             public string value;
         }
-        
-        /// <summary>
-        /// A static dictionary that the DialogProcessor can use to keep track of the dialog state.
-        /// </summary>
-        [HideInInspector]
-        [SerializeField]
-        private static readonly List<DataStorageVar> s_vars = new();
 
+        private static DataStorageContainer s_storageContainer;
+        
         /// <summary>
         /// Gets the number of elements contained in the storage list.
         /// </summary>
@@ -43,7 +38,29 @@ namespace Yontalane.Dialog
         /// <summary>
         /// A static dictionary that the DialogProcessor can use to keep track of the dialog state.
         /// </summary>
-        private static List<DataStorageVar> Vars => s_vars;
+        private static List<DataStorageVar> Vars
+        {
+            get
+            {
+                if (s_storageContainer == null)
+                {
+                    s_storageContainer = Object.FindAnyObjectByType<DataStorageContainer>();
+
+                    if (s_storageContainer == null)
+                    {
+                        s_storageContainer = new  GameObject().AddComponent<DataStorageContainer>();
+                        s_storageContainer.name = nameof(DataStorageContainer);
+                        s_storageContainer.transform.position =  Vector3.zero;
+                        s_storageContainer.transform.localEulerAngles = Vector3.zero;
+                        s_storageContainer.transform.localScale = Vector3.one;
+                        s_storageContainer.gameObject.isStatic = true;
+                        Object.DontDestroyOnLoad(s_storageContainer);
+                    }
+                }
+
+                return s_storageContainer.Vars;
+            }
+        }
 
         /// <summary>
         /// Get all keys as a list of strings.

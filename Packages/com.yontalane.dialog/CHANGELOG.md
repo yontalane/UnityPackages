@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.91] - 2026.02.07
+
+### Changed
+
+- Changed how DataStorageVars are serialized
+
 ## [1.0.90] - 2026.02.07
 
 ### Changed
