@@ -9,6 +9,8 @@ namespace Yontalane.Dialog
     [System.Serializable]
     public struct DataStorageVar
     {
+        #region Fields
+
         /// <summary>
         /// The keyword for the data item.
         /// </summary>
@@ -20,6 +22,8 @@ namespace Yontalane.Dialog
         /// </summary>
         [Tooltip("The value of the data item.")]
         public string value;
+
+        #endregion
     }
 
     /// <summary>
@@ -28,8 +32,14 @@ namespace Yontalane.Dialog
     [System.Serializable]
     public static class DataStorage
     {
+        #region Fields
+
         private static DataStorageContainer s_storageContainer;
-        
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets the number of elements contained in the storage list.
         /// </summary>
@@ -69,6 +79,10 @@ namespace Yontalane.Dialog
                 return s_storageContainer.Vars;
             }
         }
+
+        #endregion
+
+        #region Data Retrieval
 
         /// <summary>
         /// Get all keys as a list of strings.
@@ -111,23 +125,6 @@ namespace Yontalane.Dialog
         }
 
         /// <summary>
-        /// Adds a DataStorageVar to the storage list.
-        /// </summary>
-        /// <param name="var">The variable to add.</param>
-        public static void Add(DataStorageVar var) => Vars.Add(var);
-
-        /// <summary>
-        /// Adds a key-value pair to the storage list.
-        /// </summary>
-        /// <param name="key">The key of the variable.</param>
-        /// <param name="value">The value of the variable.</param>
-        public static void Add(string key, string value) => Add(new()
-        {
-            key = key,
-            value = value,
-        });
-
-        /// <summary>
         /// Checks if the storage contains a variable with the specified key.
         /// </summary>
         /// <param name="key">The key to search for.</param>
@@ -145,6 +142,65 @@ namespace Yontalane.Dialog
             return false;
         }
 
+        #endregion
+
+        #region Add/Set/Clear
+
+        /// <summary>
+        /// Adds a DataStorageVar to the storage list.
+        /// </summary>
+        /// <param name="var">The variable to add.</param>
+        public static void Add(DataStorageVar var) => Vars.Add(var);
+
+        /// <summary>
+        /// Adds a key-value pair to the storage list.
+        /// </summary>
+        /// <param name="key">The key of the variable.</param>
+        /// <param name="value">The value of the variable.</param>
+        public static void Add(string key, string value) => Add(new()
+        {
+            key = key,
+            value = value,
+        });
+
+        /// <summary>
+        /// Sets the value of a variable in the storage. If the key exists, updates its value; otherwise, adds it.
+        /// </summary>
+        /// <param name="var">The variable to set or add.</param>
+        public static void SetValue(DataStorageVar var)
+        {
+            for (int i = 0; i < Vars.Count; i++)
+            {
+                if (Vars[i].key == var.key)
+                {
+                    Vars[i] = var;
+                    return;
+                }
+            }
+
+            Add(var);
+        }
+
+        /// <summary>
+        /// Sets the value for a given key in the storage. If the key exists, updates its value; otherwise, adds it.
+        /// </summary>
+        /// <param name="key">The key of the variable.</param>
+        /// <param name="value">The value to set.</param>
+        public static void SetValue(string key, string value) => SetValue(new()
+        {
+            key = key,
+            value = value,
+        });
+
+        /// <summary>
+        /// Removes all elements from the storage list.
+        /// </summary>
+        public static void Clear() => Vars.Clear();
+
+        #endregion
+
+        #region Get/Find by Index/Key
+
         /// <summary>
         /// Attempts to get the key-value pair at the specified index.
         /// </summary>
@@ -158,7 +214,7 @@ namespace Yontalane.Dialog
                 dataStorageVar = default;
                 return false;
             }
-            
+
             dataStorageVar = Vars[index];
             return true;
         }
@@ -186,7 +242,7 @@ namespace Yontalane.Dialog
                 key = default;
                 return false;
             }
-            
+
             key = Vars[index].key;
             return true;
         }
@@ -235,7 +291,7 @@ namespace Yontalane.Dialog
                 value = default;
                 return false;
             }
-            
+
             value = Vars[index].value;
             return true;
         }
@@ -262,39 +318,7 @@ namespace Yontalane.Dialog
             return TryGetValue(index, out string result) ? result : defaultValue;
         }
 
-        /// <summary>
-        /// Sets the value of a variable in the storage. If the key exists, updates its value; otherwise, adds it.
-        /// </summary>
-        /// <param name="var">The variable to set or add.</param>
-        public static void SetValue(DataStorageVar var)
-        {
-            for (int i = 0; i < Vars.Count; i++)
-            {
-                if (Vars[i].key == var.key)
-                {
-                    Vars[i] = var;
-                    return;
-                }
-            }
-
-            Add(var);
-        }
-
-        /// <summary>
-        /// Sets the value for a given key in the storage. If the key exists, updates its value; otherwise, adds it.
-        /// </summary>
-        /// <param name="key">The key of the variable.</param>
-        /// <param name="value">The value to set.</param>
-        public static void SetValue(string key, string value) => SetValue(new()
-        {
-            key = key,
-            value = value,
-        });
-
-        /// <summary>
-        /// Removes all elements from the storage list.
-        /// </summary>
-        public static void Clear() => Vars.Clear();
+        #endregion
 
         #region Import/Export
 
@@ -324,7 +348,7 @@ namespace Yontalane.Dialog
         /// <param name="delimiterA">Delimiter separating key and value.</param>
         /// <param name="delimiterB">Delimiter separating multiple key/value pairs.</param>
         /// <returns>A text string representing the storage variables.</returns>
-        public static string ExportToText(string delimiterA = "=",  string delimiterB = ",")
+        public static string ExportToText(string delimiterA = "=", string delimiterB = ",")
         {
             string output = string.Empty;
 
@@ -334,10 +358,10 @@ namespace Yontalane.Dialog
                 {
                     output += delimiterB;
                 }
-                
+
                 output += $"{Vars[i].key}={Vars[i].value}";
             }
-            
+
             return output;
         }
 
@@ -347,21 +371,21 @@ namespace Yontalane.Dialog
         /// <param name="text">A text string representing the storage variables.</param>
         /// <param name="delimiterA">Delimiter separating key and value.</param>
         /// <param name="delimiterB">Delimiter separating multiple key/value pairs.</param>
-        public static void ImportFromText(string text, string delimiterA = "=",  string delimiterB = ",")
+        public static void ImportFromText(string text, string delimiterA = "=", string delimiterB = ",")
         {
             Clear();
-            
+
             string[] pairs = text.Split(delimiterB);
 
             foreach (string pair in pairs)
             {
                 string[] keyValue = pair.Split(delimiterA);
-                
+
                 if (keyValue.Length != 2)
                 {
                     continue;
                 }
-                
+
                 Add(keyValue[0], keyValue[1]);
             }
         }
