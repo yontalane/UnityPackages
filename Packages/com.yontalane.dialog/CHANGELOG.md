@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.93] - 2026.02.07
+
+### Fixed
+
+- Returned false when trying to get valid dialog data var
+
 ## [1.0.92] - 2026.02.07
 
 ### Changed

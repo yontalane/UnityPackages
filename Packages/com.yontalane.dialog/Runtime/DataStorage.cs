@@ -42,22 +42,30 @@ namespace Yontalane.Dialog
         {
             get
             {
+                // Check if the static storage container is null; if so, try to find it in the scene.
                 if (s_storageContainer == null)
                 {
+                    // Attempt to find an existing DataStorageContainer instance in the scene.
                     s_storageContainer = Object.FindAnyObjectByType<DataStorageContainer>();
 
+                    // If not found, create a new GameObject with a DataStorageContainer component.
                     if (s_storageContainer == null)
                     {
-                        s_storageContainer = new  GameObject().AddComponent<DataStorageContainer>();
+                        s_storageContainer = new GameObject().AddComponent<DataStorageContainer>();
+                        // Set the name for the new container GameObject.
                         s_storageContainer.name = nameof(DataStorageContainer);
-                        s_storageContainer.transform.position =  Vector3.zero;
+                        // Initialize the GameObject's transform properties.
+                        s_storageContainer.transform.position = Vector3.zero;
                         s_storageContainer.transform.localEulerAngles = Vector3.zero;
                         s_storageContainer.transform.localScale = Vector3.one;
+                        // Set the GameObject to be static.
                         s_storageContainer.gameObject.isStatic = true;
+                        // Prevent the container from being destroyed between scenes.
                         Object.DontDestroyOnLoad(s_storageContainer);
                     }
                 }
 
+                // Return the list of variables managed by the storage container.
                 return s_storageContainer.Vars;
             }
         }
@@ -152,7 +160,7 @@ namespace Yontalane.Dialog
             }
             
             dataStorageVar = Vars[index];
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -180,7 +188,7 @@ namespace Yontalane.Dialog
             }
             
             key = Vars[index].key;
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -229,7 +237,7 @@ namespace Yontalane.Dialog
             }
             
             value = Vars[index].value;
-            return false;
+            return true;
         }
 
         /// <summary>
