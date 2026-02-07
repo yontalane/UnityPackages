@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.94] - 2026.02.07
+
+### Fixed
+
+- Wrapping dialog data list in struct for export to JSON
+
 ## [1.0.93] - 2026.02.07
 
 ### Fixed

@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="" />
+    <list default="true" id="16ee2f04-fcf3-4d1d-a2e3-74ffde327b66" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnityPackages/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorageContainer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorageContainer.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +30,7 @@
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/Runtime/DataTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.aseprite/package.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.dialog/Runtime/DataStorageContainer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.dialog/package.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/IconButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.yontalane.uielements/Runtime/MenuManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -129,6 +137,7 @@
       <workItem from="1770418905811" duration="691000" />
       <workItem from="1770421273104" duration="56000" />
       <workItem from="1770442059743" duration="3402000" />
+      <workItem from="1770475484531" duration="680000" />
     </task>
     <servers />
   </component>

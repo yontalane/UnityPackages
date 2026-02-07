@@ -9,8 +9,6 @@ namespace Yontalane.Dialog
     [System.Serializable]
     public struct DataStorageVar
     {
-        #region Fields
-
         /// <summary>
         /// The keyword for the data item.
         /// </summary>
@@ -22,8 +20,18 @@ namespace Yontalane.Dialog
         /// </summary>
         [Tooltip("The value of the data item.")]
         public string value;
+    }
 
-        #endregion
+    /// <summary>
+    /// A serializable wrapper for a list of <see cref="DataStorageVar"/> entries.
+    /// </summary>
+    [System.Serializable]
+    public struct DataStorageWrapper
+    {
+        /// <summary>
+        /// A serializable list of key-value pairs used for data storage by the DialogProcessor.
+        /// </summary>
+        public List<DataStorageVar> vars;
     }
 
     /// <summary>
@@ -32,53 +40,21 @@ namespace Yontalane.Dialog
     [System.Serializable]
     public static class DataStorage
     {
-        #region Fields
-
-        private static DataStorageContainer s_storageContainer;
+        #region Private Variables
+        
+        /// <summary>
+        /// A static dictionary that the DialogProcessor can use to keep track of the dialog state.
+        /// </summary>
+        private static DataStorageWrapper Data { get; set; } = new();
 
         #endregion
-
+        
         #region Properties
 
         /// <summary>
         /// Gets the number of elements contained in the storage list.
         /// </summary>
-        public static int Count => Vars.Count;
-
-        /// <summary>
-        /// A static dictionary that the DialogProcessor can use to keep track of the dialog state.
-        /// </summary>
-        private static List<DataStorageVar> Vars
-        {
-            get
-            {
-                // Check if the static storage container is null; if so, try to find it in the scene.
-                if (s_storageContainer == null)
-                {
-                    // Attempt to find an existing DataStorageContainer instance in the scene.
-                    s_storageContainer = Object.FindAnyObjectByType<DataStorageContainer>();
-
-                    // If not found, create a new GameObject with a DataStorageContainer component.
-                    if (s_storageContainer == null)
-                    {
-                        s_storageContainer = new GameObject().AddComponent<DataStorageContainer>();
-                        // Set the name for the new container GameObject.
-                        s_storageContainer.name = nameof(DataStorageContainer);
-                        // Initialize the GameObject's transform properties.
-                        s_storageContainer.transform.position = Vector3.zero;
-                        s_storageContainer.transform.localEulerAngles = Vector3.zero;
-                        s_storageContainer.transform.localScale = Vector3.one;
-                        // Set the GameObject to be static.
-                        s_storageContainer.gameObject.isStatic = true;
-                        // Prevent the container from being destroyed between scenes.
-                        Object.DontDestroyOnLoad(s_storageContainer);
-                    }
-                }
-
-                // Return the list of variables managed by the storage container.
-                return s_storageContainer.Vars;
-            }
-        }
+        public static int Count => Data.vars.Count;
 
         #endregion
 
@@ -98,7 +74,7 @@ namespace Yontalane.Dialog
 
             keys.Clear();
 
-            foreach (DataStorageVar var in Vars)
+            foreach (DataStorageVar var in Data.vars)
             {
                 keys.Add(var.key);
             }
@@ -118,7 +94,7 @@ namespace Yontalane.Dialog
 
             pairs.Clear();
 
-            foreach (DataStorageVar var in Vars)
+            foreach (DataStorageVar var in Data.vars)
             {
                 pairs.Add(var.key, var.value);
             }
@@ -131,7 +107,7 @@ namespace Yontalane.Dialog
         /// <returns>True if the key exists; otherwise, false.</returns>
         public static bool ContainsKey(string key)
         {
-            foreach (DataStorageVar var in Vars)
+            foreach (DataStorageVar var in Data.vars)
             {
                 if (var.key == key)
                 {
@@ -150,7 +126,7 @@ namespace Yontalane.Dialog
         /// Adds a DataStorageVar to the storage list.
         /// </summary>
         /// <param name="var">The variable to add.</param>
-        public static void Add(DataStorageVar var) => Vars.Add(var);
+        public static void Add(DataStorageVar var) => Data.vars.Add(var);
 
         /// <summary>
         /// Adds a key-value pair to the storage list.
@@ -169,11 +145,11 @@ namespace Yontalane.Dialog
         /// <param name="var">The variable to set or add.</param>
         public static void SetValue(DataStorageVar var)
         {
-            for (int i = 0; i < Vars.Count; i++)
+            for (int i = 0; i < Data.vars.Count; i++)
             {
-                if (Vars[i].key == var.key)
+                if (Data.vars[i].key == var.key)
                 {
-                    Vars[i] = var;
+                    Data.vars[i] = var;
                     return;
                 }
             }
@@ -195,7 +171,7 @@ namespace Yontalane.Dialog
         /// <summary>
         /// Removes all elements from the storage list.
         /// </summary>
-        public static void Clear() => Vars.Clear();
+        public static void Clear() => Data.vars.Clear();
 
         #endregion
 
@@ -209,13 +185,13 @@ namespace Yontalane.Dialog
         /// <returns>True if the key-value pair exists; otherwise, false.</returns>
         public static bool TryGetKeyValuePair(int index, out DataStorageVar dataStorageVar)
         {
-            if (index < 0 || index >= Vars.Count)
+            if (index < 0 || index >= Data.vars.Count)
             {
                 dataStorageVar = default;
                 return false;
             }
 
-            dataStorageVar = Vars[index];
+            dataStorageVar = Data.vars[index];
             return true;
         }
 
@@ -237,13 +213,13 @@ namespace Yontalane.Dialog
         /// <returns>True if the key-value pair exists; otherwise, false.</returns>
         public static bool TryGetKey(int index, out string key)
         {
-            if (index < 0 || index >= Vars.Count)
+            if (index < 0 || index >= Data.vars.Count)
             {
                 key = default;
                 return false;
             }
 
-            key = Vars[index].key;
+            key = Data.vars[index].key;
             return true;
         }
 
@@ -265,7 +241,7 @@ namespace Yontalane.Dialog
         /// <returns>True if the key exists; otherwise, false.</returns>
         public static bool TryGetValue(string key, out string value)
         {
-            foreach (DataStorageVar var in Vars)
+            foreach (DataStorageVar var in Data.vars)
             {
                 if (var.key == key)
                 {
@@ -286,13 +262,13 @@ namespace Yontalane.Dialog
         /// <returns>True if the key-value pair exists; otherwise, false.</returns>
         public static bool TryGetValue(int index, out string value)
         {
-            if (index < 0 || index >= Vars.Count)
+            if (index < 0 || index >= Data.vars.Count)
             {
                 value = default;
                 return false;
             }
 
-            value = Vars[index].value;
+            value = Data.vars[index].value;
             return true;
         }
 
@@ -326,21 +302,13 @@ namespace Yontalane.Dialog
         /// Exports the current storage variables to a JSON string.
         /// </summary>
         /// <returns>A JSON string representing the storage variables.</returns>
-        public static string ExportToJson()
-        {
-            string json = JsonUtility.ToJson(Vars);
-            return json;
-        }
+        public static string ExportToJson() => JsonUtility.ToJson(Data);
 
         /// <summary>
         /// Imports storage variables from a JSON string, replacing the current storage.
         /// </summary>
         /// <param name="json">A JSON string representing the storage variables.</param>
-        public static void ImportFromJson(string json)
-        {
-            Vars.Clear();
-            Vars.AddRange(JsonUtility.FromJson<List<DataStorageVar>>(json));
-        }
+        public static void ImportFromJson(string json) => Data = JsonUtility.FromJson<DataStorageWrapper>(json);
 
         /// <summary>
         /// Exports the current storage variables to a text string.
@@ -352,14 +320,14 @@ namespace Yontalane.Dialog
         {
             string output = string.Empty;
 
-            for (int i = 0; i < Vars.Count; i++)
+            for (int i = 0; i < Data.vars.Count; i++)
             {
                 if (i > 0)
                 {
                     output += delimiterB;
                 }
 
-                output += $"{Vars[i].key}={Vars[i].value}";
+                output += $"{Data.vars[i].key}={Data.vars[i].value}";
             }
 
             return output;

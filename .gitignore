@@ -115,3 +115,4 @@ InitTestScene*.unity*
 
 # OS
 .DS_Store
+.idea/.idea.UnityPackages/.idea/workspace.xml
