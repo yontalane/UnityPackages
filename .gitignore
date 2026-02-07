@@ -117,4 +117,4 @@ InitTestScene*.unity*
 .DS_Store
 
 # Jetbrains
-.idea/.idea.UnityPackages/.idea/workspace.xml
+.idea/**/workspace.xml
