@@ -17,6 +17,16 @@ namespace Yontalane.DialogUGUI
     [AddComponentMenu("Yontalane/Dialog UGUI/Dialog UI")]
     public sealed class DialogUI : Singleton<DialogUI>, IDialogUI
     {
+        #region Data Types
+
+        /// <summary>
+        /// Delegate handler for clicking response buttons.
+        /// </summary>
+        [Serializable]
+        public class ResponseClickHandler : UnityEvent<int, ResponseData> { }
+        
+        #endregion
+        
         #region Delegates
         /// <summary>
         /// Represents an action that gets invoked when an audio clip is requested.
@@ -219,6 +229,10 @@ namespace Yontalane.DialogUGUI
         [SerializeField]
         private UnityEvent m_onDisplayLine = new();
 
+        [Tooltip("An action that gets invoked when a response button is clicked.")]
+        [SerializeField]
+        private ResponseClickHandler m_onClickedResponseButton = new();
+        
         #endregion
 
         #region Private Properties
@@ -280,6 +294,19 @@ namespace Yontalane.DialogUGUI
         }
         #endregion
 
+        #region  Public Properties
+
+        /// <summary>
+        /// How long to wait between characters when writing out text.
+        /// </summary>
+        public float TypeCharacterInterval
+        {
+            get => m_typeCharacterInterval;
+            set => m_typeCharacterInterval = value;
+        }
+        
+        #endregion
+        
         #region Unity Lifecycle
         /// <summary>
         /// Unity Start method. Initializes button listeners and sets initial UI state for dialog controls.
@@ -1115,7 +1142,17 @@ namespace Yontalane.DialogUGUI
             }
 
             // Invoke the line complete callback
-            m_lineCompleteCallback?.Invoke(response == null ? null : m_line.responses[response.GetComponent<RectTransform>().GetSiblingIndex()].link);
+            if (response == null)
+            {
+                m_lineCompleteCallback?.Invoke(null);
+            }
+            else
+            {
+                int index = response.GetComponent<RectTransform>().GetSiblingIndex();
+                ResponseData responseData = m_line.responses[index];
+                m_onClickedResponseButton?.Invoke(index, responseData);
+                m_lineCompleteCallback?.Invoke(responseData.link);
+            }
         }
 
         /// <summary>

@@ -15,7 +15,6 @@ namespace Yontalane.Dialog
     public sealed class DialogProcessor : MonoBehaviour, IDialogResponder
     {
         #region Data Structures
-        [Serializable]
         /// <summary>
         /// UnityEvent callback for when a new line of dialog begins.
         /// Parameters:
@@ -23,6 +22,7 @@ namespace Yontalane.Dialog
         ///   Action&lt;string&gt;: A callback to continue the dialog, accepting a string parameter.
         ///   Func&lt;string, string&gt;: A function to process or modify a string value.
         /// </summary>
+        [Serializable]
         class LineCallback : UnityEvent<LineData, Action<string>, Func<string, string>> { }
         #endregion
 

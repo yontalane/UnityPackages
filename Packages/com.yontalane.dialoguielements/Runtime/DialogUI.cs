@@ -53,6 +53,12 @@ namespace Yontalane.DialogUIElements
         /// </summary>
         [Serializable]
         public class GetSpriteAction : UnityEvent<IDialogAgent, LineData, Action<Sprite>> { }
+
+        /// <summary>
+        /// Delegate handler for clicking response buttons.
+        /// </summary>
+        [Serializable]
+        public class ResponseClickHandler : UnityEvent<int, ResponseData> { }
         #endregion
 
         #region Constants
@@ -180,6 +186,10 @@ namespace Yontalane.DialogUIElements
         [SerializeField]
         private UnityEvent m_onDisplayLine = new();
 
+        [Tooltip("An action that gets invoked when a response button is clicked.")]
+        [SerializeField]
+        private ResponseClickHandler m_onClickedResponseButton = new();
+
         #endregion
 
         #region Private Properties
@@ -241,6 +251,19 @@ namespace Yontalane.DialogUIElements
         }
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// How long to wait between characters when writing out text.
+        /// </summary>
+        public float TypeCharacterInterval
+        {
+            get => m_typeCharacterInterval;
+            set => m_typeCharacterInterval = value;
+        }
+        
+        #endregion
+        
         #region Unity Lifecycle
         private void OnEnable()
         {
@@ -769,7 +792,10 @@ namespace Yontalane.DialogUIElements
             }
             else
             {
-                m_lineCompleteCallback?.Invoke(m_line.responses[dialogEvent.responseIndex].link);
+                int index = dialogEvent.responseIndex;
+                ResponseData responseData = m_line.responses[index];
+                m_onClickedResponseButton?.Invoke(index, responseData);
+                m_lineCompleteCallback?.Invoke(responseData.link);
             }
         }
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9] - 2026.02.07
+
+### Added
+
+- Public property for typing speed
+- Delegate event for response button click
+
 ## [1.0.8] - 2025.12.04
 
 ### Added
