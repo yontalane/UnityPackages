@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.95] - 2026.02.07
+
+### Fixed
+
+- Confirming DataStorage exists before doing anything with it
+
 ## [1.0.94] - 2026.02.07
 
 ### Fixed
