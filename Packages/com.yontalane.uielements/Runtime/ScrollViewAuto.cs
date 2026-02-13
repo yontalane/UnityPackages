@@ -146,7 +146,7 @@ namespace Yontalane.UIElements
         /// Scrolls the view to bring the specified child <see cref="VisualElement"/> into view, centering it vertically if possible.
         /// </summary>
         /// <param name="child">The child element to scroll to.</param>
-        private void ScrollToChild(VisualElement child)
+        public void ScrollToChild(VisualElement child)
         {
             if (m_container.worldBound.height <= worldBound.height)
             {

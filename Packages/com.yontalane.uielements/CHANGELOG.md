@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.49] - 2026.02.13
+
+### Changed
+
+- ScrollViewAuto.ScrollToChild() is now public
+
 ## [1.0.48] - 2026.02.12
 
 ### Fixed
