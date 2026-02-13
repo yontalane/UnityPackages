@@ -12,16 +12,23 @@ namespace Yontalane.UIElements
     { }
 
     /// <summary>
+    /// A navigation input event handler.
+    /// </summary>
+    [System.Serializable]
+    public class NavigationInputEvent : UnityEvent<Vector2Int>
+    { }
+
+    /// <summary>
     /// A click event handler.
     /// </summary>
     [System.Serializable]
     public class ClickEvent : UnityEvent<ClickData>
     { }
 
-    [System.Serializable]
     /// <summary>
     /// Represents the input configuration for menu controls, including input actions and button mappings.
     /// </summary>
+    [System.Serializable]
     public struct ControlInput
     {
 #if UNITY_EDITOR
@@ -65,6 +72,9 @@ namespace Yontalane.UIElements
 #endif
         [Tooltip("An event that is broadcast on menu item clicking.")]
         public ClickEvent onClick;
+
+        [Tooltip("An event that is broadcast on navigation input.")]
+        public NavigationInputEvent onNavigationInput;
 
         [Tooltip("An event that is broadcast on menu item navigation.")]
         public NavigationEvent onNavigation;

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.47] - 2026.02.12
+
+### Added
+
+- MenuManager broadcasts OnNavInput event
+
 ## [1.0.46] - 2026.01.29
 
 ### Changed

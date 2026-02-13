@@ -1308,6 +1308,12 @@ namespace Yontalane.UIElements
             {
                 return;
             }
+            
+            m_listeners.onNavigationInput?.Invoke(new()
+            {
+                x = x,
+                y = y,
+            });
 
             Focusable focusedElement = root.panel.focusController.focusedElement;
 
