@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.48] - 2026.02.12
+
+### Fixed
+
+- Updated Editor with new OnNavInput
+
 ## [1.0.47] - 2026.02.12
 
 ### Added
