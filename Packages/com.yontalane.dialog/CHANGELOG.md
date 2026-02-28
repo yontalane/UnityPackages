@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.96] - 2026.02.28
+
+### Changed
+
+- Changed the name of the obsolete Dialog UI
+
 ## [1.0.95] - 2026.02.07
 
 ### Fixed

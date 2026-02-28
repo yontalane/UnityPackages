@@ -13,7 +13,7 @@ namespace Yontalane.Dialog
     /// </summary>
     [Obsolete("DialogUI has been moved to a separate package and will be removed from the Dialog package in a future update. Please replace this component in your project with the DialogUI component found in the DialogUGUI package.")]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Yontalane/Dialog/Dialog UI")]
+    [AddComponentMenu("Yontalane/Dialog/Dialog UI (Deprecated)")]
     public sealed class DialogUI : Singleton<DialogUI>, IDialogUI
     {
         #region Delegates
