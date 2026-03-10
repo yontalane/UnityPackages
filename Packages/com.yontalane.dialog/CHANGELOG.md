@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.97] - 2026.03.09
+
+### Added
+
+- Can retrieve information about current dialog state.
+
 ## [1.0.96] - 2026.02.28
 
 ### Changed

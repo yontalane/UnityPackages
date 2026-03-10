@@ -23,7 +23,39 @@ namespace Yontalane.Dialog
         ///   Func&lt;string, string&gt;: A function to process or modify a string value.
         /// </summary>
         [Serializable]
-        class LineCallback : UnityEvent<LineData, Action<string>, Func<string, string>> { }
+        private class LineCallback : UnityEvent<LineData, Action<string>, Func<string, string>> { }
+        
+        /// <summary>
+        /// The current state of the active dialog.
+        /// </summary>
+        public struct DialogState
+        {
+            /// <summary>
+            /// The name of the current node.
+            /// </summary>
+            public string nodeName;
+            
+            /// <summary>
+            /// The current NodeData.
+            /// </summary>
+            public NodeData nodeData;
+            
+            /// <summary>
+            /// The line index within the current node.
+            /// </summary>
+            public int lineIndex;
+            
+            /// <summary>
+            /// The name of the current active DialogAgent.
+            /// </summary>
+            public string speakerName;
+            
+            /// <summary>
+            /// The total number of nodes within this dialog.
+            /// </summary>
+            public int nodeCount;
+        }
+
         #endregion
 
         #region Delegates
@@ -246,13 +278,53 @@ namespace Yontalane.Dialog
             {
                 return SpeakerType.Player;
             }
-            else if (speaker.Contains("self"))
+
+            if (speaker.Contains("self"))
             {
                 return SpeakerType.Self;
             }
 
             return SpeakerType.Other;
         }
+
+        /// <summary>
+        /// Get the current state of the active dialog.
+        /// </summary>
+        /// <param name="state">The current state of the active dialog.</param>
+        /// <returns>Whether the current dialog state could be retrieved.</returns>
+        public static bool TryGetDialogState(out DialogState state)
+        {
+            if (Instance == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} could not be found.");
+                state = default;
+                return false;
+            }
+            
+            if (!Instance.isActiveAndEnabled ||
+                !Instance.m_isActive ||
+                Instance.m_nodeData == null ||
+                Instance.DialogAgent == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} is inactive or not initialized.");
+                state = default;
+                return false;
+            }
+
+            state = new()
+            {
+                nodeName = Instance.m_nodeData.name,
+                nodeData = Instance.m_nodeData,
+                lineIndex = Instance.m_lineIndex,
+                nodeCount = Instance.DialogAgent.Data.nodes.Length,
+                speakerName = !string.IsNullOrEmpty(Instance.DialogAgent.DisplayName)
+                    ? Instance.DialogAgent.DisplayName
+                    : Instance.DialogAgent.name,
+            };
+
+            return true;
+        }
+
         #endregion
 
         #region Internal Methods
