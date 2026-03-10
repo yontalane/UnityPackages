@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.99] - 2026.03.10
+
+### Added
+
+- Option to get the current dialog state with the most recent text line.
+
 ## [1.0.98] - 2026.03.09
 
 ### Added

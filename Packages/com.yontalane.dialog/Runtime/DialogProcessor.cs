@@ -291,8 +291,9 @@ namespace Yontalane.Dialog
         /// Get the current state of the active dialog.
         /// </summary>
         /// <param name="state">The current state of the active dialog.</param>
+        /// <param name="textLineOnly">If true, get the current or most recent line with text. If false, get the current line, even if it's purely functional.</param>
         /// <returns>Whether the current dialog state could be retrieved.</returns>
-        public static bool TryGetDialogState(out DialogState state)
+        public static bool TryGetDialogState(out DialogState state, bool textLineOnly = true)
         {
             if (Instance == null)
             {
@@ -311,18 +312,49 @@ namespace Yontalane.Dialog
                 return false;
             }
 
+            int lineIndex = textLineOnly
+                ? GetTextLineIndex(Instance.m_nodeData, Instance.m_lineIndex)
+                : Instance.m_lineIndex;
+
             state = new()
             {
                 nodeName = Instance.m_nodeData.name,
                 nodeData = Instance.m_nodeData,
-                lineIndex = Instance.m_lineIndex,
+                lineIndex = lineIndex,
                 nodeCount = Instance.DialogAgent.Data.nodes.Length,
                 speakerName = !string.IsNullOrEmpty(Instance.DialogAgent.DisplayName)
                     ? Instance.DialogAgent.DisplayName
                     : Instance.DialogAgent.name,
             };
 
-            return true;
+            return lineIndex > -1;
+        }
+
+        /// <summary>
+        /// Returns the most recent <see cref="LineData"/> with text starting with the given index and working back.
+        /// (May include the initial index value.)
+        /// </summary>
+        /// <param name="nodeData">The <see cref="NodeData"/> whose lines we want to search.</param>
+        /// <param name="lineIndex">The starting line index.</param>
+        /// <returns>The most recent <see cref="LineData"/> with text.</returns>
+        private static int GetTextLineIndex(NodeData nodeData, int lineIndex)
+        {
+            if (nodeData?.lines == null || lineIndex >= nodeData.lines.Length)
+            {
+                return -1;
+            }
+
+            while (lineIndex >= 0)
+            {
+                if (!string.IsNullOrEmpty(nodeData.lines[lineIndex].text))
+                {
+                    return lineIndex;
+                }
+
+                lineIndex--;
+            }
+            
+            return lineIndex;
         }
 
         /// <summary>
