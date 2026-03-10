@@ -325,6 +325,111 @@ namespace Yontalane.Dialog
             return true;
         }
 
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="nodeName">The new node.</param>
+        /// <param name="lineIndex">The new line number.</param>
+        /// <returns>Whether the current dialog state can be set.</returns>
+        public static bool TrySetDialogState(string nodeName, int lineIndex)
+        {
+            if (Instance == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} could not be found.");
+                return false;
+            }
+            
+            if (!Instance.isActiveAndEnabled ||
+                !Instance.m_isActive ||
+                Instance.DialogAgent == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} is inactive or not initialized.");
+                return false;
+            }
+
+            if (!TryGetNode(Instance.DialogAgent.Data,
+                    nodeName,
+                    out NodeData nodeData) ||
+                nodeData.lines == null ||
+                nodeData.lines.Length == 0)
+            {
+                Debug.LogWarning($"No NodeData with the name \"{nodeName}\" exists.");
+                return false;
+            }
+            
+            Instance.m_nodeData = nodeData;
+            Instance.m_lineIndex = lineIndex < 0 ? 0 : lineIndex >= nodeData.lines.Length ? nodeData.lines.Length - 1 : lineIndex;
+            
+            Instance.RunLine();
+            return true;
+        }
+
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="lineIndex">The new line number within the currently active node.</param>
+        /// <returns>Whether the current dialog state can be set.</returns>
+        public static bool TrySetDialogState(int lineIndex)
+        {
+            if (Instance == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} could not be found.");
+                return false;
+            }
+            
+            if (!Instance.isActiveAndEnabled ||
+                !Instance.m_isActive ||
+                Instance.m_nodeData == null ||
+                Instance.DialogAgent == null)
+            {
+                Debug.LogWarning($"{nameof(DialogProcessor)} is inactive or not initialized.");
+                return false;
+            }
+            
+            return TrySetDialogState(Instance.m_nodeData.name, lineIndex);
+        }
+        
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="nodeData">The new node.</param>
+        /// <param name="lineIndex">The new line number.</param>
+        /// <returns>Whether the current dialog state can be set.</returns>
+        public static bool TrySetDialogState(NodeData nodeData, int lineIndex) => TrySetDialogState(nodeData.name, lineIndex);
+        
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="state">The new DialogState.</param>
+        /// <returns>Whether the current dialog state can be set.</returns>
+        public static bool TrySetDialogState(DialogState state) => TrySetDialogState(state.nodeName, state.lineIndex);
+
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="nodeName">The new node.</param>
+        /// <param name="lineIndex">The new line number.</param>
+        public static void SetDialogState(string nodeName, int lineIndex) => TrySetDialogState(nodeName, lineIndex);
+
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="lineIndex">The new line number within the currently active node.</param>
+        public static void SetDialogState(int lineIndex) => TrySetDialogState(lineIndex);
+
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="nodeData">The new node.</param>
+        /// <param name="lineIndex">The new line number.</param>
+        public static void SetDialogState(NodeData nodeData, int lineIndex) => TrySetDialogState(nodeData, lineIndex);
+
+        /// <summary>
+        /// Set the current state of the active dialog.
+        /// </summary>
+        /// <param name="state">The new DialogState.</param>
+        public static void SetDialogState(DialogState state) => TrySetDialogState(state);
+        
         #endregion
 
         #region Internal Methods

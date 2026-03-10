@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.98] - 2026.03.09
+
+### Added
+
+- Can set the current dialog state.
+
 ## [1.0.97] - 2026.03.09
 
 ### Added
