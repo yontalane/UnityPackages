@@ -166,7 +166,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Standalone: com.DefaultCompany.Core
+    Standalone: com.Yontalane-Studio.Unity-Packages
   buildNumber:
     Standalone: 0
     VisionOS: 0
