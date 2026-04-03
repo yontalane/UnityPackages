@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.42] - 2026.04.02
+
+### Added
+
+- Added MusicPlayer: Plays and crossfades looping AudioClips across scenes 
+
 ## [1.0.41] - 2025.12.31
 
 ### Changed
