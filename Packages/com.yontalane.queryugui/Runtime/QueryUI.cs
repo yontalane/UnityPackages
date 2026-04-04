@@ -74,6 +74,7 @@ namespace Yontalane.QueryUGUI
 
         #region Private Variables
         private static AudioSource s_clickAudioSource = null;
+        private static readonly int s_property = Animator.StringToHash(ANIMATION_PARAMETER);
 
         private Action<QueryEventData> m_callback = null;
         private Action<QueryEventData> m_selectCallback = null;
@@ -165,9 +166,9 @@ namespace Yontalane.QueryUGUI
             }
 
             // Highlight the initial selection and start a coroutine to ensure highlight is set.
-            if (responses.Length > 0)
+            if (responses.Length > 0 && initialSelection >= 0)
             {
-                initialSelection = initialSelection < 0 ? 0 : initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
+                initialSelection = initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
                 m_responses[initialSelection].GetComponent<Button>().Highlight();
                 StartCoroutine(DelayedHighlight(this, initialSelection));
             }
@@ -175,7 +176,7 @@ namespace Yontalane.QueryUGUI
             // Show the query UI using the appropriate method (Animator or SetActive).
             if (m_showType == ShowType.Animator && m_animator != null)
             {
-                m_animator.SetBool(ANIMATION_PARAMETER, true);
+                m_animator.SetBool(s_property, true);
             }
             else if (m_showType == ShowType.SetActive && m_rootObject != null)
             {

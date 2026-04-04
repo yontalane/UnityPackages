@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.50] - 2026.04.04
+
+### Added
+
+- Can create Query without giving focus
+
 ## [1.0.49] - 2026.02.13
 
 ### Changed

@@ -30,11 +30,11 @@ namespace Yontalane.UIElements
     }
     #endregion
 
-    [UxmlElement]
     /// <summary>
     /// A custom UIElements VisualElement that displays a query dialog with a header, text, and configurable response buttons.
     /// Supports callbacks for response selection and navigation.
     /// </summary>
+    [UxmlElement]
     public partial class Query : VisualElement
     {
         public delegate void ChangeSelectedButtonHandler(SelectableButton newSelectedButton);
@@ -190,14 +190,16 @@ namespace Yontalane.UIElements
         public bool CanCancel { get; set; } = false;
 
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Query"/> class with the specified header, body text, response options, and callback.
         /// </summary>
         /// <param name="header">The header text displayed at the top of the query dialog.</param>
         /// <param name="text">The main body text of the query dialog.</param>
+        /// <param name="initialSelection">The response that has focus when the query is created. If -1, the query does not gain focus.</param>
         /// <param name="responses">A list of response button labels to display as options.</param>
         /// <param name="callback">The callback action to invoke when a response is selected.</param>
-        public Query(string header, string text, IReadOnlyList<string> responses, Action<QueryEvent> callback)
+        public Query(string header, string text, int initialSelection, IReadOnlyList<string> responses, Action<QueryEvent> callback)
         {
             // Create the main frame container for the query dialog.
             m_frame = new VisualElement() { name = "yontalane-query-frame" };
@@ -238,7 +240,10 @@ namespace Yontalane.UIElements
             Add(m_frame);
 
             // Give the query focus.
-            Focus();
+            if (initialSelection >= 0)
+            {
+                Focus(initialSelection);
+            }
 
             // Listen for selectable button events.
             SelectableButton.OnButtonEvent += (SelectableButtonEventInfo eventInfo) =>
@@ -253,6 +258,16 @@ namespace Yontalane.UIElements
             // Add the stylesheet for styling the query dialog.
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Query"/> class with the specified header, body text, response options, and callback.
+        /// </summary>
+        /// <param name="header">The header text displayed at the top of the query dialog.</param>
+        /// <param name="text">The main body text of the query dialog.</param>
+        /// <param name="responses">A list of response button labels to display as options.</param>
+        /// <param name="callback">The callback action to invoke when a response is selected.</param>
+        public Query(string header, string text, IReadOnlyList<string> responses, Action<QueryEvent> callback)
+            : this(header, text, 0, responses, callback) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Query"/> class with a header, a list of responses, and a callback.
@@ -330,6 +345,24 @@ namespace Yontalane.UIElements
             if (m_responses.Count > 0)
             {
                 m_responses[0].Focus();
+            }
+        }
+
+        /// <summary>
+        /// Sets focus to the Query dialog, ensuring the first response button is focused for user interaction.
+        /// </summary>
+        /// <param name="chosenResponseIndex">The response that is given focus.</param>
+        public void Focus(int chosenResponseIndex)
+        {
+            UIDocument document = UnityEngine.Object.FindAnyObjectByType<UIDocument>();
+            if (EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(document.gameObject);
+            }
+
+            if (m_responses.Count > 0 && chosenResponseIndex >= 0 && chosenResponseIndex < m_responses.Count)
+            {
+                m_responses[chosenResponseIndex].Focus();
             }
         }
 
