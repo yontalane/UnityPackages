@@ -543,8 +543,6 @@ namespace Yontalane.Dialog
                 queryText = texts[0].Trim();
                 descriptionText = texts[1].Trim();
             }
-            
-            ProcessQuerySettings(ref queryText, out int initialSelection);
 
             // Gather all response options from the remaining line pieces.
             string[] queryResponses = new string[linePieces.Length - 1];
@@ -552,6 +550,8 @@ namespace Yontalane.Dialog
             {
                 queryResponses[i - 1] = linePieces[i];
             }
+            
+            ProcessQuerySettings(ref queryText, queryResponses.Length, out int initialSelection);
 
             // Prepare arrays to hold the response texts and their corresponding links.
             string[] queryResponseTexts = new string[queryResponses.Length];
@@ -604,7 +604,7 @@ namespace Yontalane.Dialog
             s_responseData.Clear();
         }
 
-        private static void ProcessQuerySettings(ref string text, out int initialSelection)
+        private static void ProcessQuerySettings(ref string text, int responseCount, out int initialSelection)
         {
             initialSelection = 0;
             
@@ -630,9 +630,17 @@ namespace Yontalane.Dialog
                     continue;
                 }
 
-                if (parts[0].ToLower().Contains("select") && int.TryParse(parts[1], out int selection))
+                if (parts[0].ToLower().Contains("select"))
                 {
-                    initialSelection = selection;
+                    string part2 = parts[1].Trim();
+                    if (part2 == "?")
+                    {
+                        initialSelection = Mathf.FloorToInt(responseCount * Random.value);
+                    }
+                    else if (int.TryParse(part2, out int selection))
+                    {
+                        initialSelection = selection;
+                    }
                 }
             }
         }

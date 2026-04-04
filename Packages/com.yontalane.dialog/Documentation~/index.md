@@ -136,6 +136,9 @@ It looks like this:
   // A modal query popup is ?: TEXT && RESPONSE => NODE && RESPONSE => NODE...
   
   ?: Just leave? && Yes => Done && No => Mind
+  
+  // The long form version of the query popup is ?: [SETTINGS] TITLE || DESCRIPTION && RESPONSE => NODE && RESPONSE => NODE...
+  // ?: [Initial Selection = 1] What to do... || Just leave? && Yes => Done && No => Mind
 
 #Mind
 
