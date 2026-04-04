@@ -16,6 +16,12 @@ namespace Yontalane
         /// </summary>
         public static void Highlight(this Selectable selectable)
         {
+            if (selectable == null && EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null, new BaseEventData(EventSystem.current));
+                return;
+            }
+            
             selectable.Select();
             selectable.OnSelect(null);
 

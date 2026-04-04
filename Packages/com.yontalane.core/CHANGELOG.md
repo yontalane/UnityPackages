@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.43] - 2026.04.04
+
+### Changed
+
+- Utility.Highlight() can now accept a null parameter
+
 ## [1.0.42] - 2026.04.02
 
 ### Added

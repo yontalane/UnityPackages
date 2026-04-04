@@ -166,10 +166,18 @@ namespace Yontalane.QueryUGUI
             }
 
             // Highlight the initial selection and start a coroutine to ensure highlight is set.
-            if (responses.Length > 0 && initialSelection >= 0)
+            if (responses.Length > 0)
             {
-                initialSelection = initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
-                m_responses[initialSelection].GetComponent<Button>().Highlight();
+                if (initialSelection < 0)
+                {
+                    Utility.Highlight(null);
+                }
+                else
+                {
+                    initialSelection = initialSelection >= responses.Length ? responses.Length - 1 : initialSelection;
+                    m_responses[initialSelection].GetComponent<Button>().Highlight();
+                }
+                
                 StartCoroutine(DelayedHighlight(this, initialSelection));
             }
 
@@ -208,7 +216,7 @@ namespace Yontalane.QueryUGUI
         {
             if (m_showType == ShowType.Animator && m_animator != null)
             {
-                m_animator.SetBool(ANIMATION_PARAMETER, false);
+                m_animator.SetBool(s_property, false);
             }
             else if (m_showType == ShowType.SetActive && m_rootObject != null)
             {
@@ -221,11 +229,15 @@ namespace Yontalane.QueryUGUI
         /// <summary>
         /// In case the animation involves deactivating the buttons...
         /// </summary>
-        private IEnumerator DelayedHighlight(QueryUI queryUI, int index)
+        private static IEnumerator DelayedHighlight(QueryUI queryUI, int index)
         {
             yield return new WaitForSeconds(BUTTON_HIGHLIGHT_DELAY);
 
-            if (queryUI.m_responses.Count > index)
+            if (index < 0)
+            {
+                Utility.Highlight(null);
+            }
+            else if (queryUI.m_responses.Count > index)
             {
                 queryUI.m_responses[index].GetComponent<Button>().Highlight();
             }

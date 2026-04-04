@@ -244,6 +244,11 @@ namespace Yontalane.UIElements
             {
                 Focus(initialSelection);
             }
+            // If initialSelection is set to -1, blur all.
+            else if (EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
 
             // Listen for selectable button events.
             SelectableButton.OnButtonEvent += (SelectableButtonEventInfo eventInfo) =>

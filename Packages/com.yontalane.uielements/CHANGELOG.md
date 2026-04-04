@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.51] - 2026.04.04
+
+### Changed
+
+- Initiating query with no response deselects all other objects
+
 ## [1.0.50] - 2026.04.04
 
 ### Added
