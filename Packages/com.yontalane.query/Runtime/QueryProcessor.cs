@@ -43,6 +43,7 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="initialSelection">The index of the initially selected response.</param>
@@ -56,6 +57,7 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="description">The query description text.</param>
         /// <param name="responses">The possible responses.</param>
@@ -85,6 +87,7 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
@@ -94,6 +97,19 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
+        /// <param name="text">The query message.</param>
+        /// <param name="description">The query description text.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="initialSelection">The initially selected response.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        /// <param name="selectCallback">The function to call when a response is selected but not yet chosen.</param>
+        public static void InitiateWithDescription(string id, string text, string description, string[] responses, int initialSelection, Action<QueryEventData> callback, Action<QueryEventData> selectCallback = null) => Initiate(id, text, description, responses, initialSelection, callback, selectCallback);
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="description">The query description text.</param>
         /// <param name="responses">The possible responses.</param>
@@ -123,6 +139,7 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="responses">The possible responses.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
@@ -135,6 +152,7 @@ namespace Yontalane.Query
         /// <summary>
         /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The query message.</param>
         /// <param name="description">The query description text.</param>
         /// <param name="responses">The possible responses.</param>
@@ -159,12 +177,31 @@ namespace Yontalane.Query
         /// <param name="text">The query message.</param>
         /// <param name="description">The query description text.</param>
         /// <param name="responses">The possible responses.</param>
+        /// <param name="initialSelection">The initially selected response.</param>
         /// <param name="callback">The function to call when a response is chosen.</param>
-        public static void InitiateWithDescription(string text, string description, string[] responses, Action<string> callback) => InitiateWithDescription(Instance != null ? Instance.Id : string.Empty, text, description, responses, callback);
+        public static void InitiateWithDescription(string text, string description, string[] responses, int initialSelection, Action<string> callback)
+        {
+            Instance.m_stringCallback = callback;
+            InitiateWithDescription(Instance != null ? Instance.Id : string.Empty, text, description, responses, initialSelection, CallbackConverter);
+        }
+
+        /// <summary>
+        /// Initiate a query. QueryUI sets up the query window using the parameters and relies on the Animator to open the window.
+        /// </summary>
+        /// <param name="text">The query message.</param>
+        /// <param name="description">The query description text.</param>
+        /// <param name="responses">The possible responses.</param>
+        /// <param name="callback">The function to call when a response is chosen.</param>
+        public static void InitiateWithDescription(string text, string description, string[] responses, Action<string> callback)
+        {
+            Instance.m_stringCallback = callback;
+            InitiateWithDescription(Instance != null ? Instance.Id : string.Empty, text, description, responses, 0, CallbackConverter);
+        }
 
         /// <summary>
         /// Display an alert with a confirm and cancel button.
         /// </summary>
+        /// <param name="id">A unique identifier for this query instance.</param>
         /// <param name="text">The alert text.</param>
         /// <param name="confirmText">The confirm button label.</param>
         /// <param name="cancelText">The cancel button label.</param>

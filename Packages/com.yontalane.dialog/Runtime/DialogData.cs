@@ -298,6 +298,12 @@ namespace Yontalane.Dialog
         /// The array of possible response options the user can select in response to this query.
         /// </summary>
         [Tooltip("The array of possible response options for this query.")]
-        public ResponseData[] responses = new ResponseData[0];
+        public ResponseData[] responses = Array.Empty<ResponseData>();
+
+        /// <summary>
+        /// The initially selected response.
+        /// </summary>
+        [Tooltip("The initially selected response.")]
+        public int initialSelection = 0;
     }
 }

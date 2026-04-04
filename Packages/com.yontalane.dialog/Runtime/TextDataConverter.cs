@@ -543,6 +543,8 @@ namespace Yontalane.Dialog
                 queryText = texts[0].Trim();
                 descriptionText = texts[1].Trim();
             }
+            
+            ProcessQuerySettings(ref queryText, out int initialSelection);
 
             // Gather all response options from the remaining line pieces.
             string[] queryResponses = new string[linePieces.Length - 1];
@@ -567,6 +569,12 @@ namespace Yontalane.Dialog
 
                 queryResponseTexts[i] = pieces[0].Trim();
                 queryResponseLinks[i] = pieces[1].Trim();
+
+                // Remove the # from the link if it's there.
+                if (queryResponseLinks[i][..1] == "#")
+                {
+                    queryResponseLinks[i] = queryResponseLinks[i][1..].Trim();
+                }
             }
 
             // Create a new LineData object to hold the query and its responses.
@@ -577,6 +585,7 @@ namespace Yontalane.Dialog
                     text = queryText,
                     description = descriptionText,
                     responses = new ResponseData[queryResponses.Length],
+                    initialSelection = initialSelection,
                 }
             };
 
@@ -593,6 +602,39 @@ namespace Yontalane.Dialog
             // Add the constructed LineData to the list and clear any existing response data.
             s_lineData.Add(lineData);
             s_responseData.Clear();
+        }
+
+        private static void ProcessQuerySettings(ref string text, out int initialSelection)
+        {
+            initialSelection = 0;
+            
+            int openBracketIndex = text.LastIndexOf("[");
+            int closeBracketIndex = text.LastIndexOf("]");
+
+            if (openBracketIndex == -1 || closeBracketIndex == -1 || openBracketIndex >= closeBracketIndex)
+            {
+                return;
+            }
+            
+            string settings = text.Substring(openBracketIndex + 1, closeBracketIndex - openBracketIndex - 1);
+            text = $"{text[..openBracketIndex]}{text[(closeBracketIndex + 1)..]}";
+            
+            string[] individualSettings = settings[..].Split(',');
+
+            foreach (string individualSetting in individualSettings)
+            {
+                string[] parts =  individualSetting.Split('=');
+                
+                if (parts.Length != 2)
+                {
+                    continue;
+                }
+
+                if (parts[0].ToLower().Contains("select") && int.TryParse(parts[1], out int selection))
+                {
+                    initialSelection = selection;
+                }
+            }
         }
 
         /// <summary>

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.20] - 2026.04.04
+
+### Added
+
+- More variations of the query initialization function
+
 ## [1.0.19] - 2025.12.04
 
 ### Added

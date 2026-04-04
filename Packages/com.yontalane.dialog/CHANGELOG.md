@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.100] - 2026.04.04
+
+### Added
+
+- Can set initially selected query response from dialog text script.
+
 ## [1.0.99] - 2026.03.10
 
 ### Added
