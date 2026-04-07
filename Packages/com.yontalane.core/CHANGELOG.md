@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.44] - 2026.04.07
+
+### Changed
+
+- Changing MusicManager.GlobalVolume while music is playing changes the current audio level
+
 ## [1.0.43] - 2026.04.04
 
 ### Changed

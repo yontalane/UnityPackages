@@ -25,36 +25,41 @@ namespace Yontalane
         #region Private Fields
         
         /// <summary>
-        /// The volume of all music played through the MusicManager is scaled by this value.
+        /// The volume of all music played through the <see cref="MusicManager"/> is scaled by this value.
         /// </summary>
         private static float s_globalVolume = 1f;
 
         /// <summary>
-        /// Only play music through the MusicManager if this field is <c>true</c>;
+        /// Only play music through the <see cref="MusicManager"/> if this field is <c>true</c>;
         /// </summary>
         private static bool s_isOn = true;
 
         /// <summary>
-        /// Array holding the audio sources used for playing and cross-fading music.
+        /// Array holding the <see cref="AudioSource"/>s used for playing and cross-fading music.
         /// </summary>
         private readonly AudioSource[] m_audioSources = new AudioSource[2];
 
         /// <summary>
-        /// Index of the currently active audio source.
+        /// Index of the currently active <see cref="AudioSource"/>s.
         /// </summary>
         private int m_currentActive = 0;
+        
+        /// <summary>
+        /// The volume of the currently playing <see cref="AudioClip"/>, before it is scaled by <see cref="GlobalVolume"/>.
+        /// </summary>
+        private float m_musicVolume = 1f;
 
         #endregion
 
         #region Private Properties
 
         /// <summary>
-        /// The currently active AudioSource for playback.
+        /// The currently active <see cref="AudioSource"/> for playback.
         /// </summary>
         private AudioSource CurrentAudioSource => m_audioSources[m_currentActive];
 
         /// <summary>
-        /// The inactive AudioSource, potentially used for cross-fading and fade-outs.
+        /// The inactive <see cref="AudioSource"/>, potentially used for cross-fading and fade-outs.
         /// </summary>
         private AudioSource OtherAudioSource => m_audioSources[1 - m_currentActive];
 
@@ -63,35 +68,63 @@ namespace Yontalane
         #region Public Properties
 
         /// <summary>
-        /// The volume of all music played through the MusicManager is scaled by this value.
+        /// The volume of all music played through the <see cref="MusicManager"/> is scaled by this value.
         /// </summary>
         public static float GlobalVolume
         {
             get => s_globalVolume;
-            set => s_globalVolume = Mathf.Clamp01(value);
+
+            set
+            {
+                s_globalVolume = Mathf.Clamp01(value);
+
+                if (IsPlaying && Instance.CurrentAudioSource != null)
+                {
+                    Instance.CurrentAudioSource.volume = CurrentVolume;
+                }
+            }
         }
 
         /// <summary>
-        /// Only play music through the MusicManager if this field is <c>true</c>;
+        /// The volume of the currently playing <see cref="AudioClip"/>, before it is scaled by <see cref="GlobalVolume"/>.
+        /// </summary>
+        public static float MusicVolume => Instance.m_musicVolume;
+        
+        /// <summary>
+        /// The volume of the currently playing <see cref="AudioClip"/> scaled by <see cref="GlobalVolume"/>.
+        /// </summary>
+        public static float CurrentVolume => MusicVolume * GlobalVolume;
+
+        /// <summary>
+        /// Only play music through the <see cref="MusicManager"/> if this field is <c>true</c>;
         /// </summary>
         public static bool IsOn
         {
             get => s_isOn;
-            set => s_isOn = value;
+            
+            set
+            {
+                s_isOn = value;
+
+                if (!s_isOn && IsPlaying)
+                {
+                    Stop();
+                }
+            }
         }
 
         /// <summary>
-        /// The MusicSource that initiated the current playback, if any.
+        /// The <see cref="MusicSource"/> that initiated the current playback, if any.
         /// </summary>
         public static MusicSource CurrentSource { get; private set; }
 
         /// <summary>
-        /// The currently playing AudioClip, or <c>null</c> if nothing is playing.
+        /// The currently playing <see cref="AudioClip"/>, or <c>null</c> if nothing is playing.
         /// </summary>
         public static AudioClip CurrentClip { get; private set; }
 
         /// <summary>
-        /// The name of the currently playing AudioClip, or an empty string.
+        /// The name of the currently playing <see cref="AudioClip"/>, or an empty string.
         /// </summary>
         public static string CurrentClipName => CurrentClip != null ? CurrentClip.name : string.Empty;
 
@@ -101,7 +134,7 @@ namespace Yontalane
         public static bool IsPlaying => CurrentClip != null;
 
         /// <summary>
-        /// Returns <c>true</c> if a fade-out is currently in progress (via inactive AudioSource).
+        /// Returns <c>true</c> if a fade-out is currently in progress (via inactive <see cref="AudioSource"/>).
         /// </summary>
         public static bool IsFadingOut => Instance != null && Instance.OtherAudioSource != null && Instance.OtherAudioSource.isPlaying;
 
@@ -144,9 +177,9 @@ namespace Yontalane
         #region AudioSource Management
 
         /// <summary>
-        /// Utility method to build and configure a new AudioSource as a child of manager.
+        /// Utility method to build and configure a new <see cref="AudioSource"/> as a child of manager.
         /// </summary>
-        /// <returns>A configured, stopped AudioSource.</returns>
+        /// <returns>A configured, stopped <see cref="AudioSource"/>.</returns>
         private static AudioSource BuildAudioSource()
         {
             // Create new GameObject for the audio source.
@@ -166,7 +199,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Gets an initialized persistent music manager instance.
+        /// Gets an initialized persistent <see cref="MusicManager"/> instance.
         /// Creates one if necessary.
         /// </summary>
         /// <returns>The MusicManager singleton instance.</returns>
@@ -204,10 +237,10 @@ namespace Yontalane
         #region Playback API
 
         /// <summary>
-        /// Plays a new AudioClip as music. Can cross-fade and assign source context.
+        /// Plays a new <see cref="AudioClip"/> as music. Can cross-fade and assign source context.
         /// </summary>
         /// <param name="clip">The music clip to play.</param>
-        /// <param name="source">The originating MusicSource, or null.</param>
+        /// <param name="source">The originating <see cref="MusicSource"/>, or null.</param>
         /// <param name="volumeScale">Volume multiplier for playback.</param>
         /// <param name="fadeIn">Should the clip fade in?</param>
         internal static void Play(AudioClip clip, MusicSource source, float volumeScale = 1f, bool fadeIn = false)
@@ -218,9 +251,11 @@ namespace Yontalane
                 return;
             }
 
-            // Skip if already playing this clip.
+            // If already playing this clip, update the volume and exit early.
             if (IsPlaying && CurrentClip == clip)
             {
+                Instance.m_musicVolume = volumeScale;
+                Instance.CurrentAudioSource.volume = CurrentVolume;
                 return;
             }
 
@@ -241,21 +276,24 @@ namespace Yontalane
             instance.CurrentAudioSource.clip = clip;
             CurrentClip = clip;
             CurrentSource = source;
+            
+            // Record the volume scale.
+            Instance.m_musicVolume = volumeScale;
 
             // Start fade-in coroutine if requested, else play instantly.
             if (fadeIn)
             {
-                instance.StartCoroutine(instance.FadeIn(instance.CurrentAudioSource, volumeScale * GlobalVolume));
+                instance.StartCoroutine(FadeIn(instance.CurrentAudioSource, CurrentVolume));
             }
             else
             {
-                instance.CurrentAudioSource.volume = volumeScale * GlobalVolume;
+                instance.CurrentAudioSource.volume = CurrentVolume;
                 instance.CurrentAudioSource.Play();
             }
         }
 
         /// <summary>
-        /// Plays a new AudioClip as music, with optional fade-in.
+        /// Plays a new <see cref="AudioClip"/> as music, with optional fade-in.
         /// </summary>
         /// <param name="audioPack">The <see cref="AudioPack"/> containing the music clip to play.</param>
         /// <param name="fadeIn">Should the clip fade in?</param>
@@ -275,7 +313,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Plays a new AudioClip as music, with optional fade-in.
+        /// Plays a new <see cref="AudioClip"/> as music, with optional fade-in.
         /// </summary>
         /// <param name="clip">The music clip to play.</param>
         /// <param name="volumeScale">Volume multiplier for playback.</param>
@@ -287,7 +325,7 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Plays a new AudioClip as music, with optional fade-in.
+        /// Plays a new <see cref="AudioClip"/> as music, with optional fade-in.
         /// </summary>
         /// <param name="clip">The music clip to play.</param>
         /// <param name="fadeIn">Should the clip fade in?</param>
@@ -325,7 +363,7 @@ namespace Yontalane
             // Fade out or stop current audio source accordingly.
             if (fadeOut)
             {
-                instance.StartCoroutine(instance.FadeOut(instance.CurrentAudioSource));
+                instance.StartCoroutine(FadeOut(instance.CurrentAudioSource));
             }
             else
             {
@@ -343,7 +381,7 @@ namespace Yontalane
         #region Helpers
 
         /// <summary>
-        /// Flips the active AudioSource index for next operation.
+        /// Flips the active <see cref="AudioSource"/> index for next operation.
         /// Used to alternate between sources for cross-fading.
         /// </summary>
         private void SwitchActiveAudioSource()
@@ -356,11 +394,11 @@ namespace Yontalane
         #region Fading Coroutines
 
         /// <summary>
-        /// Smoothly fades in an AudioSource to the specified volume.
+        /// Smoothly fades in an <see cref="AudioSource"/> to the specified volume.
         /// </summary>
-        /// <param name="audioSource">The AudioSource to fade in.</param>
+        /// <param name="audioSource">The <see cref="AudioSource"/> to fade in.</param>
         /// <param name="volumeScale">Target volume after fade.</param>
-        private IEnumerator FadeIn(AudioSource audioSource, float volumeScale)
+        private static IEnumerator FadeIn(AudioSource audioSource, float volumeScale)
         {
             // Abort if source is null.
             if (audioSource == null)
@@ -376,10 +414,10 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Smoothly fades out an AudioSource, then stops and cleans up.
+        /// Smoothly fades out an <see cref="AudioSource"/>, then stops and cleans up.
         /// </summary>
-        /// <param name="audioSource">The AudioSource to fade out.</param>
-        private IEnumerator FadeOut(AudioSource audioSource)
+        /// <param name="audioSource">The <see cref="AudioSource"/> to fade out.</param>
+        private static IEnumerator FadeOut(AudioSource audioSource)
         {
             // Abort if source is null.
             if (audioSource == null)
@@ -397,11 +435,11 @@ namespace Yontalane
         }
 
         /// <summary>
-        /// Smoothly fades an AudioSource volume to a target level over time.
+        /// Smoothly fades an <see cref="AudioSource"/> volume to a target level over time.
         /// </summary>
-        /// <param name="audioSource">The AudioSource to fade.</param>
+        /// <param name="audioSource">The <see cref="AudioSource"/> to fade.</param>
         /// <param name="targetVolume">The target volume to reach.</param>
-        private IEnumerator Fade(AudioSource audioSource, float targetVolume)
+        private static IEnumerator Fade(AudioSource audioSource, float targetVolume)
         {
             // Abort if source is null.
             if (audioSource == null)
