@@ -37,6 +37,63 @@ namespace Yontalane.UIElements
     [UxmlElement]
     public partial class Query : VisualElement
     {
+        #region Structs
+        
+        /// <summary>
+        /// Data used in custom adding of choice <see cref="SelectableButton"/>s.
+        /// </summary>
+        public struct ChoiceInstantiationData
+        {
+            /// <summary>
+            /// The index of the <see cref="SelectableButton"/> to be added.
+            /// </summary>
+            public int index;
+            
+            /// <summary>
+            /// The label text of the <see cref="SelectableButton"/> to be added.
+            /// </summary>
+            public string buttonText;
+            
+            /// <summary>
+            /// The title text of the query.
+            /// </summary>
+            public string queryText;
+            
+            /// <summary>
+            /// The description text of the query.
+            /// </summary>
+            public string queryDescription;
+            
+            /// <summary>
+            /// The location in which <see cref="SelectableButton"/>s are expected to be added.
+            /// </summary>
+            public VisualElement buttonContainer;
+            
+            /// <summary>
+            /// Whether the current choice is primary/default.
+            /// </summary>
+            public bool isPrimary;
+        }
+        
+        #endregion
+        
+        #region Delegates
+        
+        /// <summary>
+        /// An event that allows for custom adding of choice <see cref="SelectableButton"/>s.
+        /// </summary>
+        public delegate SelectableButton ChoiceInstantiator(ChoiceInstantiationData data);
+        
+        /// <summary>
+        /// An event that allows for custom adding of choice <see cref="SelectableButton"/>s.
+        /// Overriding is intended for customizing cosmetic elements of the <see cref="SelectableButton"/>
+        /// (adding additional style classes, using custom label text). <see cref="Query"/> will name the
+        /// <see cref="SelectableButton"/> object, handle navigation, and add its own click listener.
+        /// </summary>
+        public static ChoiceInstantiator OnOverrideChoiceInstantiation = null;
+        
+        #endregion
+        
         public delegate void ChangeSelectedButtonHandler(SelectableButton newSelectedButton);
         public ChangeSelectedButtonHandler OnChangeSelectedButton = null;
 
@@ -144,12 +201,32 @@ namespace Yontalane.UIElements
                 for (int i = 0; i < value.Length; i++)
                 {
                     int index = i;
-                    m_responses.Add(new SelectableButton());
-                    m_responses[^1].text = value[index];
+                    SelectableButton button = null;
+                    
+                    if (OnOverrideChoiceInstantiation != null && OnOverrideChoiceInstantiation.GetInvocationList().Length > 0)
+                    {
+                        button = OnOverrideChoiceInstantiation.Invoke(new()
+                        {
+                            index = i,
+                            buttonText = value[i],
+                            isPrimary = i == 0,
+                            buttonContainer = m_responseContainer,
+                            queryText = Header,
+                            queryDescription = Text,
+                        });
+                    }
+
+                    if (button == null)
+                    {
+                        button = new();
+                        button.text = value[index];
+                        m_responseContainer.Add(button);
+                    }
+                    
+                    m_responses.Add(button);
                     // Register the click event to call OnRespond with the button's index.
                     m_responses[^1].clicked += () => OnRespond(index);
                     m_responses[^1].focusable = true;
-                    m_responseContainer.Add(m_responses[^1]);
                 }
 
                 // Register navigation and cancel event handlers for each response button.

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Yontalane.Query;
 
@@ -16,60 +17,83 @@ namespace Yontalane.QueryUGUI
     [AddComponentMenu("Yontalane/Query UGUI/Query UI")]
     public sealed class QueryUI : Singleton<QueryUI>, IQueryUI
     {
+        #region Structs
+
+        /// <summary>
+        /// Data used in custom instantiation of choice <see cref="Button"/>s.
+        /// </summary>
+        public struct ChoiceInstantiationData
+        {
+            /// <summary>
+            /// The index of the <see cref="Button"/> to be instantiated.
+            /// </summary>
+            public int index;
+            
+            /// <summary>
+            /// The label text of the <see cref="Button"/> to be instantiated.
+            /// </summary>
+            public string buttonText;
+            
+            /// <summary>
+            /// The title text of the query.
+            /// </summary>
+            public string queryText;
+            
+            /// <summary>
+            /// The description text of the query.
+            /// </summary>
+            public string queryDescription;
+            
+            /// <summary>
+            /// The location in which <see cref="Button"/>s are expected to be instantiated.
+            /// </summary>
+            public RectTransform buttonContainer;
+            
+            /// <summary>
+            /// Whether the current choice is primary/default.
+            /// </summary>
+            public bool isPrimary;
+            
+            /// <summary>
+            /// The prefab for the primary/default choice <see cref="Button"/>.
+            /// </summary>
+            public Button primaryButtonPrefab;
+            
+            /// <summary>
+            /// The prefab for the standard choice <see cref="Button"/>.
+            /// </summary>
+            public Button buttonPrefab;
+        }
+
+        #endregion
+        
         #region Delegates
+        
         /// <summary>
         /// Event triggered when a QueryUI is loaded and ready.
         /// </summary>
         public static QueryUIHandler OnQueryUILoaded = null;
+        
+        /// <summary>
+        /// An event that allows for custom instantiation of choice <see cref="Button"/>s.
+        /// </summary>
+        public delegate Button ChoiceInstantiator(ChoiceInstantiationData data);
+        
+        /// <summary>
+        /// An event that allows for custom instantiation of choice <see cref="Button"/>s.
+        /// Overriding is intended for customizing cosmetic elements of the <see cref="Button"/>
+        /// (using a different prefab, adjusting its <see cref="RectTransform"/>, using
+        /// different label text or colors). <see cref="QueryUI"/> will name the
+        /// <see cref="Button"/> object, handle <see cref="Navigation"/>, and add its
+        /// own click listener.
+        /// </summary>
+        public static ChoiceInstantiator OnOverrideChoiceInstantiation = null;
+
         #endregion
 
         #region Constants
         private const string ANIMATION_PARAMETER = "Query Visible";
         private const float BUTTON_HIGHLIGHT_DELAY = 0.25f;
-        #endregion
-
-        #region Serialized Fields
-        [Header("Config")]
-
-        [SerializeField]
-        [Tooltip("How to show the dialog.")]
-        private ShowType m_showType = ShowType.Animator;
-
-        [Header("Scene UI")]
-
-        [SerializeField]
-        [Tooltip("The root object to show and hide. (Assuming showType is \"SetActive.\")")]
-        private GameObject m_rootObject = null;
-
-        [SerializeField]
-        [Tooltip("The Animator for controlling the dialog. Must have a \"Query Visible\" boolean parameter. (Assuming showType is \\\"Animator.\\\")\")")]
-        private Animator m_animator = null;
-
-        [SerializeField]
-        [Tooltip("The field for displaying the dialog's message text.")]
-        private TMP_Text m_text = null;
-
-        [SerializeField]
-        [Tooltip("An optional field for displaying the dialog's description text.")]
-        private TMP_Text m_description = null;
-
-        [SerializeField]
-        [Tooltip("The location to instantiate response buttons.")]
-        private RectTransform m_responseContainer = null;
-
-        [SerializeField]
-        [Tooltip("An optional audio clip to play when clicking buttons.")]
-        private AudioClip m_buttonClick = null;
-
-        [Header("Prefabs")]
-
-        [SerializeField]
-        [Tooltip("The prefab to use for the primary response button.")]
-        private Button m_primaryResponseButtonPrefab = null;
-
-        [SerializeField]
-        [Tooltip("The prefab to use for the response buttons.")]
-        private Button m_responseButtonPrefab = null;
         #endregion
 
         #region Private Variables
@@ -84,10 +108,50 @@ namespace Yontalane.QueryUGUI
         private bool m_isOn = false;
         #endregion
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+        #region Serialized Fields
+        [Header("Config")]
+
+        [Tooltip("How to show the dialog.")]
+        [SerializeField]
+        private ShowType m_showType = ShowType.Animator;
+
+        [Header("Scene UI")]
+
+        [Tooltip("The root object to show and hide. (Assuming showType is \"SetActive.\")")]
+        [SerializeField]
+        private GameObject m_rootObject = null;
+
+        [Tooltip("The Animator for controlling the dialog. Must have a \"Query Visible\" boolean parameter. (Assuming showType is \\\"Animator.\\\")\")")]
+        [SerializeField]
+        private Animator m_animator = null;
+
+        [Tooltip("The field for displaying the dialog's message text.")]
+        [SerializeField]
+        private TMP_Text m_text = null;
+
+        [Tooltip("An optional field for displaying the dialog's description text.")]
+        [SerializeField]
+        private TMP_Text m_description = null;
+
+        [Tooltip("The location to instantiate response buttons.")]
+        [SerializeField]
+        private RectTransform m_responseContainer = null;
+
+        [Tooltip("An optional audio clip to play when clicking buttons.")]
+        [SerializeField]
+        private AudioClip m_buttonClick = null;
+
+        [Header("Prefabs")]
+
+        [Tooltip("The prefab to use for the primary response button.")]
+        [SerializeField]
+        private Button m_primaryResponseButtonPrefab = null;
+
+        [Tooltip("The prefab to use for the response buttons.")]
+        [SerializeField]
+        private Button m_responseButtonPrefab = null;
+        
+        #endregion
 
         private void Start()
         {
@@ -129,17 +193,41 @@ namespace Yontalane.QueryUGUI
             // Create new response buttons for each response option.
             for (int i = 0; i < responses.Length; i++)
             {
-                // Use the primary response button prefab for the first response if available, otherwise use the default.
-                Button prefab = i == 0 && m_primaryResponseButtonPrefab != null ? m_primaryResponseButtonPrefab : m_responseButtonPrefab;
-                Button instance = Instantiate(prefab.gameObject).GetComponent<Button>();
-                instance.GetComponentInChildren<TMP_Text>().text = responses[i];
+                Button instance = null;
+
+                // If overriding button instantiation, get the button instance through the delegate.
+                if (OnOverrideChoiceInstantiation != null && OnOverrideChoiceInstantiation.GetInvocationList().Length > 0)
+                {
+                    instance = OnOverrideChoiceInstantiation.Invoke(new()
+                    {
+                        index = i,
+                        buttonText = responses[i],
+                        isPrimary = i == 0,
+                        buttonContainer = m_responseContainer,
+                        primaryButtonPrefab =  m_primaryResponseButtonPrefab,
+                        buttonPrefab = m_responseButtonPrefab,
+                        queryText = text,
+                        queryDescription = description,
+                    });
+                }
+
+                // If we did not override button instantiation, then instantiate a new button directly using the prefab.
+                if (instance == null)
+                {
+                    // Use the primary response button prefab for the first response if available, otherwise use the default.
+                    Button prefab = i == 0 && m_primaryResponseButtonPrefab != null ? m_primaryResponseButtonPrefab : m_responseButtonPrefab;
+                    instance = Instantiate(prefab.gameObject).GetComponent<Button>();
+                    instance.GetComponentInChildren<TMP_Text>().text = responses[i];
+                    instance.GetComponent<RectTransform>().SetParent(m_responseContainer);
+                    instance.transform.localPosition = Vector3.zero;
+                    instance.transform.localEulerAngles = Vector3.zero;
+                    instance.transform.localScale = Vector3.one;
+                }
+                
                 instance.name = i.ToString();
                 instance.onClick.AddListener(delegate { OnClickResponse(instance); });
-                instance.GetComponent<RectTransform>().SetParent(m_responseContainer);
                 instance.gameObject.AddComponent<SelectableListener>().OnChangeSelection += OnSelectResponse;
-                instance.transform.localPosition = Vector3.zero;
-                instance.transform.localEulerAngles = Vector3.zero;
-                instance.transform.localScale = Vector3.one;
+                
                 Navigation nav = Navigation.defaultNavigation;
                 nav.mode = Navigation.Mode.Explicit;
                 instance.navigation = nav;

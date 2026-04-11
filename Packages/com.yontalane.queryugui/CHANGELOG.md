@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.5] - 2026.04.11
+
+### Added
+
+* Allowed overriding of query choice button instantiation
+
 ## [1.0.4] - 2026.04.04
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "com.yontalane.queryugui",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "displayName": "Query UGUI",
   "description": "A dialog input box.",
   "unity": "6000.0",
