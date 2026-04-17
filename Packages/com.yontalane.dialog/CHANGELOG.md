@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.104] - 2026.04.16
+
+### Fixed
+
+- DialogProcessor trying to use Instance.Agent before initialized
+
 ## [1.0.103] - 2026.04.16
 
 ### Fixed

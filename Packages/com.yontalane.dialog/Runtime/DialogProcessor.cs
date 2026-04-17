@@ -537,7 +537,7 @@ namespace Yontalane.Dialog
                 return;
             }
 
-            if (TryGetNode(Instance.DialogAgent.Data, nodeName, out NodeData nodeData) && nodeData.lines is { Length: > 0 })
+            if (TryGetNode(dialogAgent.Data, nodeName, out NodeData nodeData) && nodeData.lines is { Length: > 0 })
             {
                 // Successfully loaded node and line.
             }
