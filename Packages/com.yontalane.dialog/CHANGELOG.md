@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.101] - 2026.04.16
+
+### Added
+
+- Can initiate dialog at non-starting node and line
+
 ## [1.0.100] - 2026.04.04
 
 ### Added

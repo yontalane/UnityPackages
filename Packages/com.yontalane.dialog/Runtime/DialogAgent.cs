@@ -284,6 +284,61 @@ namespace Yontalane.Dialog
         public void InitiateDialog() => InitiateDialog(string.Empty, null);
 
         /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback for when the dialog ends.
+        /// </summary>
+        /// <param name="speaker">The name of the speaker to use for the dialog.</param>
+        /// <param name="onExitDialog">Callback invoked when the dialog session ends.</param>
+        public void InitiateDialogAt(string speaker, string nodeName, int lineIndex, UnityAction onExitDialog)
+        {
+            // Check if dialog data is missing or empty, and initialize it based on the current input type.
+            if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
+            {
+                switch (m_inputType)
+                {
+                    case DialogAgentInputType.Data:
+                        // Initialize dialog data from the assigned DialogData asset.
+                        ID = name;
+                        Data = m_data.data;
+                        break;
+
+                    case DialogAgentInputType.Json:
+                        // Parse dialog data from the provided JSON TextAsset.
+                        ID = name;
+                        Data = JsonUtility.FromJson<DialogData>(m_json.text);
+                        break;
+
+                    case DialogAgentInputType.String:
+                        // Create a simple dialog node with static text and the provided speaker.
+                        ID = STATIC_ID;
+                        Data = new DialogData
+                        {
+                            nodes = new NodeData[1]
+                        };
+                        Data.nodes[0] = new NodeData
+                        {
+                            lines = new LineData[1]
+                        };
+                        Data.nodes[0].lines[0] = new LineData
+                        {
+                            speaker = speaker,
+                            text = m_staticText
+                        };
+                        break;
+
+                    case DialogAgentInputType.TextData:
+                        // Convert TextAsset dialog data using the specified start node.
+                        ID = name;
+                        Data = TextDataConverter.Convert(m_textData, m_textDataStart);
+                        break;
+                }
+            }
+
+            // Store the exit callback and start the dialog session.
+            m_onExitDialog = onExitDialog;
+            DialogProcessor.InitiateDialog(this, OnExitDialog);
+        }
+
+        /// <summary>
         /// Invokes the callback action when the dialog session ends.
         /// </summary>
         private void OnExitDialog() => m_onExitDialog?.Invoke();

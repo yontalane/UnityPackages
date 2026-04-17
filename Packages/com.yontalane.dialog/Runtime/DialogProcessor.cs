@@ -465,6 +465,7 @@ namespace Yontalane.Dialog
         #endregion
 
         #region Internal Methods
+        
         /// <summary>
         /// Initiates a dialog with the given DialogAgent and onExitDialog callback.
         /// </summary>
@@ -515,6 +516,70 @@ namespace Yontalane.Dialog
         /// </summary>
         /// <param name="dialogAgent">The DialogAgent to initiate the dialog with.</param>
         internal static void InitiateDialog(IDialogAgent dialogAgent) => InitiateDialog(dialogAgent, null);
+
+        /// <summary>
+        /// Initiates a dialog with the given DialogAgent and onExitDialog callback.
+        /// </summary>
+        /// <param name="dialogAgent">The DialogAgent to initiate the dialog with.</param>
+        /// <param name="nodeName">The node to start at.</param>
+        /// <param name="lineIndex">The line number to start at.</param>
+        /// <param name="onExitDialog">The callback to invoke when the dialog exits.</param>
+        internal static void InitiateDialogAt(IDialogAgent dialogAgent, string nodeName, int lineIndex, UnityAction onExitDialog)
+        {
+            if (dialogAgent == null)
+            {
+                return;
+            }
+
+            if (Instance == null)
+            {
+                Debug.LogError($"{nameof(DialogProcessor)} could not be found.");
+                return;
+            }
+
+            if (TryGetNode(Instance.DialogAgent.Data, nodeName, out NodeData nodeData) && nodeData.lines is { Length: > 0 })
+            {
+                // Successfully loaded node and line.
+            }
+            else if (TryGetNode(dialogAgent.Data, dialogAgent.Data.start, out NodeData startNodeData))
+            {
+                Debug.LogWarning($"No NodeData with the name \"{nodeName}\" exists.");
+                nodeData = startNodeData;
+            }
+            else if (dialogAgent.Data.nodes.Length > 0)
+            {
+                Debug.LogWarning($"No NodeData with the name \"{nodeName}\" exists.");
+                nodeData = dialogAgent.Data.nodes[0];
+            }
+            
+            Instance.m_nodeData = nodeData;
+            Instance.m_lineIndex = lineIndex < 0 ? 0 : lineIndex >= nodeData.lines.Length ? nodeData.lines.Length - 1 : lineIndex;
+            
+            Instance.m_nodeHistory.Clear();
+
+            if (nodeData != null)
+            {
+                AddDialogCount(dialogAgent.ID);
+                Instance.DialogAgent = dialogAgent;
+                Instance.m_nodeData = nodeData;
+                Instance.m_lineIndex = 0;
+                Instance.m_initiateDialog?.Invoke();
+                Instance.OnInitiateDialog?.Invoke();
+                Instance.m_isActive = true;
+                Instance.RunLine();
+            }
+
+            Instance.m_exitDialogCode = onExitDialog;
+        }
+
+        /// <summary>
+        /// Initiates a dialog with the given DialogAgent and no onExitDialog callback.
+        /// </summary>
+        /// <param name="dialogAgent">The DialogAgent to initiate the dialog with.</param>
+        /// <param name="nodeName">The node to start at.</param>
+        /// <param name="lineIndex">The line number to start at.</param>
+        internal static void InitiateDialogAt(IDialogAgent dialogAgent, string nodeName, int lineIndex) => InitiateDialogAt(dialogAgent, nodeName, lineIndex, null);
+        
         #endregion
 
         #region Private Methods
