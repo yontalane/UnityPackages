@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.107] - 2026.04.16
+
+### Added
+
+- Added overflow check on DialogProcessor query response
+
 ## [1.0.106] - 2026.04.16
 
 ### Added

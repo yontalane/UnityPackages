@@ -915,9 +915,9 @@ namespace Yontalane.Dialog
         /// <param name="response">The selected response text.</param>
         private void OnQueryResponse(string response)
         {
-            if (m_nodeData.lines == null || m_lineIndex < 0 || m_lineIndex >= m_nodeData.lines.Length)
+            if (m_nodeData == null || m_nodeData.lines == null || m_lineIndex < 0 || m_lineIndex >= m_nodeData.lines.Length)
             {
-                Debug.LogWarning($"Can't get line index {m_lineIndex} when nodeData.lines = {(m_nodeData.lines != null ? m_nodeData.lines.Length : "null")}.");
+                Debug.LogWarning($"Can't get line index {m_lineIndex} when nodeData.lines = {(m_nodeData is { lines: not null } ? m_nodeData.lines.Length : "null")}.");
                 return;
             }
             
