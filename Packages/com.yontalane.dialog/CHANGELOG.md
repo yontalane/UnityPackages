@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.102] - 2026.04.16
+
+### Added
+
+- Overloads for DialogAgent.InitiateDialogAt()
+
 ## [1.0.101] - 2026.04.16
 
 ### Added

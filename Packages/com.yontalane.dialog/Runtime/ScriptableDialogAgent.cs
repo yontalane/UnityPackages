@@ -296,6 +296,84 @@ namespace Yontalane.Dialog
         public void InitiateDialog() => InitiateDialog(string.Empty, null);
 
         /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback to invoke when the dialog ends.
+        /// If dialog data is not already set, it will be initialized from the JSON asset if available,
+        /// otherwise a simple dialog node will be created using the static text and provided speaker.
+        /// </summary>
+        /// <param name="speaker">The name of the speaker to use in the dialog.</param>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
+        /// <param name="onExitDialog">Callback to invoke when the dialog session ends.</param>
+        public void InitiateDialogAt(string speaker, string nodeName, int lineIndex, UnityAction onExitDialog)
+        {
+            // Check if dialog data is missing or empty, and initialize it from JSON or static text as appropriate.
+            if (Data == null || (string.IsNullOrEmpty(Data.start) && string.IsNullOrEmpty(Data.windowType) && string.IsNullOrEmpty(Data.data) && Data.nodes.Length == 0))
+            {
+                switch (m_inputType)
+                {
+                    case DialogAgentInputType.Data:
+                        // Initialize dialog data from the assigned DialogData asset.
+                        ID = name;
+                        Data = m_data.data;
+                        break;
+
+                    case DialogAgentInputType.Json:
+                        // Parse dialog data from the provided JSON TextAsset.
+                        ID = name;
+                        Data = JsonUtility.FromJson<DialogData>(m_json.text);
+                        break;
+
+                    case DialogAgentInputType.String:
+                        // Create a simple dialog node with static text and the provided speaker.
+                        ID = DialogAgent.STATIC_ID;
+                        Data = new DialogData
+                        {
+                            nodes = new NodeData[1]
+                        };
+                        Data.nodes[0] = new NodeData
+                        {
+                            lines = new LineData[1]
+                        };
+                        Data.nodes[0].lines[0] = new LineData
+                        {
+                            speaker = speaker,
+                            text = m_staticText
+                        };
+                        break;
+
+                    case DialogAgentInputType.TextData:
+                        // Convert TextAsset dialog data using the specified start node.
+                        ID = name;
+                        Data = TextDataConverter.Convert(m_textData, m_textDataStart);
+                        break;
+                }
+            }
+
+            // Store the exit callback and start the dialog session.
+            m_onExitDialog = onExitDialog;
+            DialogProcessor.InitiateDialogAt(this, nodeName, lineIndex, OnExitDialog);
+        }
+
+        /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback to invoke when the dialog ends.
+        /// If dialog data is not already set, it will be initialized from the JSON asset if available,
+        /// otherwise a simple dialog node will be created using the static text and provided speaker.
+        /// </summary>
+        /// <param name="speaker">The name of the speaker to use in the dialog.</param>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
+        public void InitiateDialogAt(string speaker, string nodeName, int lineIndex) => InitiateDialogAt(speaker, nodeName, lineIndex, null);
+
+        /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback to invoke when the dialog ends.
+        /// If dialog data is not already set, it will be initialized from the JSON asset if available,
+        /// otherwise a simple dialog node will be created using the static text and provided speaker.
+        /// </summary>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
+        public void InitiateDialogAt(string nodeName, int lineIndex) => InitiateDialogAt(string.Empty, nodeName, lineIndex, null);
+
+        /// <summary>
         /// Invokes the exit callback when the dialog session ends.
         /// </summary>
         private void OnExitDialog() => m_onExitDialog?.Invoke();

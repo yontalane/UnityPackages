@@ -287,6 +287,8 @@ namespace Yontalane.Dialog
         /// Initiates a dialog session with the specified speaker and an optional callback for when the dialog ends.
         /// </summary>
         /// <param name="speaker">The name of the speaker to use for the dialog.</param>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
         /// <param name="onExitDialog">Callback invoked when the dialog session ends.</param>
         public void InitiateDialogAt(string speaker, string nodeName, int lineIndex, UnityAction onExitDialog)
         {
@@ -337,6 +339,21 @@ namespace Yontalane.Dialog
             m_onExitDialog = onExitDialog;
             DialogProcessor.InitiateDialog(this, OnExitDialog);
         }
+
+        /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback for when the dialog ends.
+        /// </summary>
+        /// <param name="speaker">The name of the speaker to use for the dialog.</param>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
+        public void InitiateDialogAt(string speaker, string nodeName, int lineIndex) => InitiateDialogAt(speaker, nodeName, lineIndex, null);
+
+        /// <summary>
+        /// Initiates a dialog session with the specified speaker and an optional callback for when the dialog ends.
+        /// </summary>
+        /// <param name="nodeName">The non-starting node to initiate the dialog at.</param>
+        /// <param name="lineIndex">The non-starting line to initiate the dialog at.</param>
+        public void InitiateDialogAt(string nodeName, int lineIndex) => InitiateDialogAt(string.Empty, nodeName, lineIndex, null);
 
         /// <summary>
         /// Invokes the callback action when the dialog session ends.
