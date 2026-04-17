@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.21] - 2026.04.17
+
+### Added
+
+- Inspector-accessible QueryProcessor event delegates
+
 ## [1.0.20] - 2026.04.04
 
 ### Added

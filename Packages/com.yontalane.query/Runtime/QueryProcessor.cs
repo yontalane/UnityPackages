@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Yontalane.Query
 {
@@ -7,36 +8,67 @@ namespace Yontalane.Query
     [AddComponentMenu("Yontalane/Query/Query Processor")]
     public class QueryProcessor : Singleton<QueryProcessor>
     {
+        [Serializable]
+        public class QueryEventHandler : UnityEvent<QueryEventData> { }
+        
         private Action<QueryEventData> m_callback;
         private Action<QueryEventData> m_selectCallback;
         private Action<string> m_stringCallback;
 
+        [Header(("UI"))]
+        
         [Tooltip("A game object containing a Query UI.")]
         [SerializeField]
         private GameObject m_queryUI;
 
+        [Header("Callbacks")]
+
+        [Tooltip("An action that is invoked when a query is opened.")]
+        [SerializeField]
+        private QueryEventHandler m_onQueryStart;
+        
+        [Tooltip("An action that is invoked when the selected button changes in a query.")]
+        [SerializeField]
+        private QueryEventHandler m_onQueryChangeSelection;
+        
+        [Tooltip("An action that is invoked when a query is closed.")]
+        [SerializeField]
+        private QueryEventHandler m_onQueryEnd;
+        
         /// <summary>
         /// The active query's unique ID.
         /// </summary>
         public string Id { get; private set; } = string.Empty;
 
-        public void Callback(QueryEventData data) => m_callback?.Invoke(new()
+        public void Callback(QueryEventData data)
         {
-            queryId = Id,
-            prompt = data.prompt,
-            description = data.description,
-            responses = data.responses,
-            chosenResponse = data.chosenResponse,
-        });
+            QueryEventData output = new()
+            {
+                queryId = Id,
+                prompt = data.prompt,
+                description = data.description,
+                responses = data.responses,
+                chosenResponse = data.chosenResponse,
+            };
+            
+            m_callback?.Invoke(output);
+            m_onQueryEnd?.Invoke(output);
+        }
 
-        public void SelectCallback(QueryEventData data) => m_selectCallback?.Invoke(new()
+        public void SelectCallback(QueryEventData data)
         {
-            queryId = Id,
-            prompt = data.prompt,
-            description = data.description,
-            responses = data.responses,
-            chosenResponse = data.chosenResponse,
-        });
+            QueryEventData output = new()
+            {
+                queryId = Id,
+                prompt = data.prompt,
+                description = data.description,
+                responses = data.responses,
+                chosenResponse = data.chosenResponse,
+            };
+            
+            m_selectCallback?.Invoke(output);
+            m_onQueryChangeSelection?.Invoke(output);
+        }
 
         private static void CallbackConverter(QueryEventData eventData) => Instance.m_stringCallback?.Invoke(eventData.chosenResponse);
 
@@ -82,6 +114,15 @@ namespace Yontalane.Query
             Instance.m_callback = callback;
             Instance.m_selectCallback = selectCallback;
             ui.Initialize(text, description, responses, initialSelection, Instance.Callback, Instance.SelectCallback);
+            
+            Instance.m_onQueryStart?.Invoke(new()
+            {
+                queryId = id,
+                prompt = text,
+                description = description,
+                responses = responses,
+                chosenResponse = string.Empty,
+            });
         }
 
         /// <summary>
@@ -248,6 +289,6 @@ namespace Yontalane.Query
         /// </summary>
         /// <param name="text">The alert text.</param>
         /// <param name="confirmText">The confirm button label.</param>
-        public static void Alert(string text, string confirmText = "OK") => Alert(text, confirmText);
+        public static void Alert(string text, string confirmText = "OK") => Alert(text, confirmText, string.Empty);
     }
 }
