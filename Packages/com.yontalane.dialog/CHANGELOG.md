@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.103] - 2026.04.16
+
+### Fixed
+
+- DialogAgent was not InitiatingAt() in DialogProcessor 
+
 ## [1.0.102] - 2026.04.16
 
 ### Added

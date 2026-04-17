@@ -337,7 +337,7 @@ namespace Yontalane.Dialog
 
             // Store the exit callback and start the dialog session.
             m_onExitDialog = onExitDialog;
-            DialogProcessor.InitiateDialog(this, OnExitDialog);
+            DialogProcessor.InitiateDialogAt(this, nodeName, lineIndex, OnExitDialog);
         }
 
         /// <summary>
