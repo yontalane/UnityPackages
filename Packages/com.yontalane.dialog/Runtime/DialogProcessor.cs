@@ -562,7 +562,7 @@ namespace Yontalane.Dialog
                 AddDialogCount(dialogAgent.ID);
                 Instance.DialogAgent = dialogAgent;
                 Instance.m_nodeData = nodeData;
-                Instance.m_lineIndex = 0;
+                Instance.m_lineIndex = lineIndex;
                 Instance.m_initiateDialog?.Invoke();
                 Instance.OnInitiateDialog?.Invoke();
                 Instance.m_isActive = true;

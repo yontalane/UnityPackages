@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.105] - 2026.04.16
+
+### Fixed
+
+- DialogProcessor resetting line to 0 when InitiatingAt
+
 ## [1.0.104] - 2026.04.16
 
 ### Fixed
