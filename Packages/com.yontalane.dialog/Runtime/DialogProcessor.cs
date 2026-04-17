@@ -915,6 +915,12 @@ namespace Yontalane.Dialog
         /// <param name="response">The selected response text.</param>
         private void OnQueryResponse(string response)
         {
+            if (m_nodeData.lines == null || m_lineIndex < 0 || m_lineIndex >= m_nodeData.lines.Length)
+            {
+                Debug.LogWarning($"Can't get line index {m_lineIndex} when nodeData.lines = {(m_nodeData.lines != null ? m_nodeData.lines.Length : "null")}.");
+                return;
+            }
+            
             QueryData queryData = m_nodeData.lines[m_lineIndex].query;
             foreach (ResponseData possibleResponse in queryData.responses.Where(possibleResponse => ReplaceInlineText(possibleResponse.text).Equals(response)))
             {
