@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.45] - 2026.04.29
+
+### Added
+
+- AnimationEventBroadcaster broadcasts more event types
+
 ## [1.0.44] - 2026.04.07
 
 ### Changed
