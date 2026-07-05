@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.109] - 2026.07.05
+
+### Added
+
+- DialogUI clears any placeholder text and portrait on start
+
 ## [1.0.108] - 2026.07.05
 
 ### Added

@@ -323,6 +323,14 @@ namespace Yontalane.DialogUIElements
 
             // Clear any existing responses from the dialog pane.
             m_dialogPane.ClearResponses();
+
+            // Clear any placeholder text left over from editing in the UI Builder, so nothing is
+            // shown before the first line is initiated (e.g. if dialog is paused before it starts).
+            m_dialogPane.Text = string.Empty;
+            m_dialogPane.Speaker = string.Empty;
+
+            // Hide the portrait until the first line sets it, for the same reason.
+            m_dialogPane.ClearPortrait();
         }
         #endregion
 

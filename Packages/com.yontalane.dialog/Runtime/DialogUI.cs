@@ -291,6 +291,20 @@ namespace Yontalane.Dialog
             {
                 m_responseContainer.gameObject.SetActive(false);
             }
+
+            // Clear any placeholder text left over from editing in the Inspector, so nothing is
+            // shown before the first line is initiated (e.g. if dialog is paused before it starts).
+            m_textField.text = string.Empty;
+            if (m_speakerField != null)
+            {
+                m_speakerField.text = string.Empty;
+            }
+
+            // Hide the portrait until the first line sets it, for the same reason.
+            if (m_portraitContainer != null)
+            {
+                m_portraitContainer.gameObject.SetActive(false);
+            }
         }
         #endregion
 
