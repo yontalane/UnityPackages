@@ -87,6 +87,8 @@ namespace Yontalane.Dialog
         private UnityAction m_exitDialogCode = null;
         private readonly List<IDialogResponder> m_responders = new();
         private LineData m_tempLineData = null;
+        private static bool s_isPaused = false;
+        private Action m_pendingResume = null;
         #endregion
 
         #region Serialized Fields
@@ -144,6 +146,32 @@ namespace Yontalane.Dialog
         /// Gets a value indicating whether the dialog processor is currently active.
         /// </summary>
         public static bool IsActive => Instance != null && Instance.m_isActive;
+
+        /// <summary>
+        /// Gets or sets whether dialog is paused. Dialog can only pause before it starts or between lines;
+        /// setting this to true does not interrupt a line that is already being displayed.
+        /// While paused, initiating a dialog or advancing to the next line is deferred until this is set back to false.
+        /// </summary>
+        public static bool IsPaused
+        {
+            get => s_isPaused;
+            set
+            {
+                if (s_isPaused == value)
+                {
+                    return;
+                }
+
+                s_isPaused = value;
+
+                if (!value && Instance != null && Instance.m_pendingResume != null)
+                {
+                    Action pendingResume = Instance.m_pendingResume;
+                    Instance.m_pendingResume = null;
+                    pendingResume.Invoke();
+                }
+            }
+        }
         #endregion
 
         #region Unity Lifecycle
@@ -484,6 +512,13 @@ namespace Yontalane.Dialog
                 return;
             }
 
+            // If dialog is paused, defer initiating this dialog until IsPaused is set back to false.
+            if (s_isPaused)
+            {
+                Instance.m_pendingResume = () => InitiateDialog(dialogAgent, onExitDialog);
+                return;
+            }
+
             NodeData nodeData = null;
             Instance.m_nodeHistory.Clear();
 
@@ -534,6 +569,13 @@ namespace Yontalane.Dialog
             if (Instance == null)
             {
                 Debug.LogError($"{nameof(DialogProcessor)} could not be found.");
+                return;
+            }
+
+            // If dialog is paused, defer initiating this dialog until IsPaused is set back to false.
+            if (s_isPaused)
+            {
+                Instance.m_pendingResume = () => InitiateDialogAt(dialogAgent, nodeName, lineIndex, onExitDialog);
                 return;
             }
 
@@ -1080,6 +1122,13 @@ namespace Yontalane.Dialog
         /// </summary>
         private void RunLine()
         {
+            // If dialog is paused, defer running this line until IsPaused is set back to false.
+            if (s_isPaused)
+            {
+                m_pendingResume = RunLine;
+                return;
+            }
+
             // If the temp line data is not null, display that, then set it to null and exit early.
             if (m_tempLineData != null)
             {

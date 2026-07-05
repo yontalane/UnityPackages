@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.unity.2d.aseprite": {
-      "version": "3.0.1",
+      "version": "3.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "12.0.1",
+        "com.unity.2d.common": "12.0.3",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.2d.tilemap": "1.0.0",
         "com.unity.mathematics": "1.2.6",
@@ -14,7 +14,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "12.0.2",
+      "version": "12.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -44,7 +44,7 @@
       }
     },
     "com.unity.ai.navigation": {
-      "version": "2.0.12",
+      "version": "2.0.13",
       "depth": 0,
       "source": "registry",
       "dependencies": {

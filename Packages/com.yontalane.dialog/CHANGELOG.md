@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.108] - 2026.07.05
+
+### Added
+
+- DialogProcessor.IsPaused pauses/resumes dialog before it starts or between lines
+
 ## [1.0.107] - 2026.04.16
 
 ### Added

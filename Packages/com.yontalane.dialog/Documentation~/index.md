@@ -192,3 +192,7 @@ It looks like this:
 Dialog variables from `ifVar`, `setVar`, and `ifDialogCount` are stored behind the scenes by the DataStorage static class. These variables are universal; this means that if you `setVar` in one DialogAgent's dialog, and then check `ifVar` on the same variable name in another DialogAgent's dialog, you will get the result set in the initial script.
 
 If you want to save and load the dialog state, use `DataStorage.ExportToJson()` and `DataStorage.ImportFromJson(string json)`.
+
+## Pausing Dialog
+
+Set `DialogProcessor.IsPaused` to `true` to pause dialog, and back to `false` to resume it. Dialog can only pause before it starts or between lines: setting `IsPaused` to `true` does not interrupt a line that is already being displayed, and any dialog line that is already typing out will finish typing normally (the typing effect itself lives in the `com.yontalane.dialogugui`/`com.yontalane.dialogielements` packages, not here). While paused, initiating a new dialog or advancing to the next line is deferred until `IsPaused` is set back to `false`, at which point the dialog resumes exactly where it left off.
