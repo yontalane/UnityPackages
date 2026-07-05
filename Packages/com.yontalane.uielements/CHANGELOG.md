@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.53] - 2026.07.05
+
+### Fixed
+
+- ScrollViewAuto navigation and auto-scroll no longer land on non-focusable children (e.g. section-header labels)
+
 ## [1.0.52] - 2026.04.11
 
 ### Added

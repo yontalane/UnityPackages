@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -54,10 +53,8 @@ namespace Yontalane.UIElements
                 return;
             }
 
-            // Get all children of the container, the index of the current element, and the total child count.
+            // Get the index of the current element.
             int index = m_registeredChildren.IndexOf(element);
-            int count = ChildCount;
-            VisualElement target = null;
 
             // Check if the element is a child of the container; if not, exit early.
             if (index == -1)
@@ -71,30 +68,21 @@ namespace Yontalane.UIElements
                 }
             }
 
-            // Handle navigation in the Up direction: wrap to last if at the top, otherwise move to previous.
-            if (e.direction == NavigationMoveEvent.Direction.Up)
+            // Determine step direction: -1 for Up, 1 for Down. Any other direction is not handled here.
+            int direction = e.direction switch
             {
-                if (index == 0)
-                {
-                    target = m_registeredChildren.Last();
-                }
-                else
-                {
-                    target = m_registeredChildren.ElementAt(index - 1);
-                }
-            }
-            // Handle navigation in the Down direction: wrap to first if at the bottom, otherwise move to next.
-            else if (e.direction == NavigationMoveEvent.Direction.Down)
+                NavigationMoveEvent.Direction.Up => -1,
+                NavigationMoveEvent.Direction.Down => 1,
+                _ => 0
+            };
+
+            if (direction == 0)
             {
-                if (index == count - 1)
-                {
-                    target = m_registeredChildren.First();
-                }
-                else
-                {
-                    target = m_registeredChildren.ElementAt(index + 1);
-                }
+                return;
             }
+
+            // Find the nearest focusable sibling in that direction, wrapping around the ends of the list.
+            VisualElement target = GetNextFocusableChild(index, direction);
 
             // If no valid target was found, exit early.
             if (target == null)
@@ -105,6 +93,38 @@ namespace Yontalane.UIElements
             // Move focus to the target element and scroll it into view.
             target.Focus();
             ScrollToChild(target);
+        }
+
+        /// <summary>
+        /// Starting adjacent to <paramref name="startIndex"/>, steps through <see cref="m_registeredChildren"/> in
+        /// <paramref name="direction"/> (+1 or -1), wrapping around either end, until a focusable child is found.
+        /// Non-focusable children (e.g. section-header labels) are skipped so navigation and auto-scroll never
+        /// land on them.
+        /// </summary>
+        /// <param name="startIndex">The index to step away from.</param>
+        /// <param name="direction">+1 to search forward, -1 to search backward.</param>
+        /// <returns>The nearest focusable child, or null if none of the registered children are focusable.</returns>
+        private VisualElement GetNextFocusableChild(int startIndex, int direction)
+        {
+            int count = m_registeredChildren.Count;
+
+            if (count == 0)
+            {
+                return null;
+            }
+
+            for (int step = 1; step <= count; step++)
+            {
+                int index = ((startIndex + direction * step) % count + count) % count;
+                VisualElement candidate = m_registeredChildren[index];
+
+                if (candidate.focusable)
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
