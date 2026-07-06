@@ -195,4 +195,4 @@ If you want to save and load the dialog state, use `DataStorage.ExportToJson()` 
 
 ## Pausing Dialog
 
-Set `DialogProcessor.IsPaused` to `true` to pause dialog, and back to `false` to resume it. Dialog can only pause before it starts or between lines: setting `IsPaused` to `true` does not interrupt a line that is already being displayed, and any dialog line that is already typing out will finish typing normally (the typing effect itself lives in the `com.yontalane.dialogugui`/`com.yontalane.dialogielements` packages, not here). While paused, initiating a new dialog or advancing to the next line is deferred until `IsPaused` is set back to `false`, at which point the dialog resumes exactly where it left off.
+Pausing dialog is controlled at the UI level. See the documentation for the `com.yontalane.dialogugui` or `com.yontalane.dialoguielements` package, depending on which one you're using.

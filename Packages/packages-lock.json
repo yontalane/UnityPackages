@@ -203,7 +203,7 @@
       "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.40",
-        "com.yontalane.dialog": "1.0.85",
+        "com.yontalane.dialog": "1.0.109",
         "com.yontalane.queryugui": "1.0.2"
       }
     },
@@ -214,7 +214,7 @@
       "dependencies": {
         "com.unity.ugui": "2.0.0",
         "com.yontalane.core": "1.0.40",
-        "com.yontalane.dialog": "1.0.85",
+        "com.yontalane.dialog": "1.0.109",
         "com.yontalane.query": "1.0.19",
         "com.yontalane.uielements": "1.0.40"
       }

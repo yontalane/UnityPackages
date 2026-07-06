@@ -79,6 +79,8 @@ namespace Yontalane.DialogUIElements
         private bool m_writingInProgress = false;
         private Action<string> m_lineCompleteCallback = null;
         private bool m_canUseContinueHandler = true;
+        private bool m_skipButtonInteractableBeforePause = true;
+        private bool m_continueButtonInteractableBeforePause = true;
 
         private DialogPane m_dialogPane;
         #endregion
@@ -119,6 +121,12 @@ namespace Yontalane.DialogUIElements
         [Tooltip("Whether to continue onto the next line immediately after finishing the current. Otherwise, wait for player input.")]
         [SerializeField]
         private bool m_autoContinue = false;
+
+        [Header("Pausing")]
+
+        [Tooltip("Whether to disable interaction with the skip and continue buttons while dialog is paused.")]
+        [SerializeField]
+        private bool m_disableInteractionWhenPaused = true;
 
         [Header("Scene UI")]
 
@@ -261,7 +269,38 @@ namespace Yontalane.DialogUIElements
             get => m_typeCharacterInterval;
             set => m_typeCharacterInterval = value;
         }
-        
+
+        /// <summary>
+        /// Gets or sets whether dialog is paused. Setting this to true also pauses the typing effect if a line
+        /// is in the middle of being typed out; setting it back to false resumes exactly where it left off.
+        /// </summary>
+        public bool IsPaused
+        {
+            get => DialogProcessor.IsPaused;
+            set
+            {
+                DialogProcessor.IsPaused = value;
+
+                if (!m_disableInteractionWhenPaused)
+                {
+                    return;
+                }
+
+                if (value)
+                {
+                    m_skipButtonInteractableBeforePause = m_dialogPane.SkipButtonInteractable;
+                    m_continueButtonInteractableBeforePause = m_dialogPane.ContinueButtonInteractable;
+                    m_dialogPane.SkipButtonInteractable = false;
+                    m_dialogPane.ContinueButtonInteractable = false;
+                }
+                else
+                {
+                    m_dialogPane.SkipButtonInteractable = m_skipButtonInteractableBeforePause;
+                    m_dialogPane.ContinueButtonInteractable = m_continueButtonInteractableBeforePause;
+                }
+            }
+        }
+
         #endregion
         
         #region Unity Lifecycle
@@ -652,6 +691,19 @@ namespace Yontalane.DialogUIElements
             // Loop through each character in the parsed text to create a typewriter effect
             for (int currentIndex = 0; currentIndex < parsedTextLength; currentIndex++)
             {
+                // If dialog is paused, hold at the current character and pause the typing loop sound until resumed.
+                if (DialogProcessor.IsPaused)
+                {
+                    ClickLoopAudioSource.Pause();
+
+                    while (DialogProcessor.IsPaused)
+                    {
+                        yield return null;
+                    }
+
+                    ClickLoopAudioSource.UnPause();
+                }
+
                 // Reveal one more character in the dialog pane
                 m_dialogPane.MaxVisibleCharacters = currentIndex + 1;
 

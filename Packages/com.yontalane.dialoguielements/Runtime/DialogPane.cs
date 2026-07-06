@@ -351,6 +351,17 @@ namespace Yontalane.DialogUIElements
         }
 
         /// <summary>
+        /// Whether the skip button is interactable.
+        /// </summary>
+        [Tooltip("Whether the skip button is interactable.")]
+        [UxmlAttribute]
+        public bool SkipButtonInteractable
+        {
+            get => m_skipButton.enabledSelf;
+            set => m_skipButton.SetEnabled(value);
+        }
+
+        /// <summary>
         /// The style class that, when applied to the <see cref="DialogPane"/>, causes it to be visible. If left blank, visibility will be controlled by <see cref="DisplayStyle"/>.
         /// </summary>
         [Tooltip("The style class that, when applied to the DialogPane, causes it to be visible. If left blank, visibility will be controlled by DisplayStyle.")]

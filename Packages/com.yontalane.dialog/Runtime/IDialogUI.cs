@@ -8,6 +8,13 @@ namespace Yontalane.Dialog
     public interface IDialogUI
     {
         /// <summary>
+        /// Gets or sets whether dialog is paused. Setting this to true also pauses the typing effect if a line
+        /// is in the middle of being typed out; setting it back to false resumes exactly where it left off.
+        /// While paused, initiating a dialog or advancing to the next line is deferred until this is set back to false.
+        /// </summary>
+        public bool IsPaused { get; set; }
+
+        /// <summary>
         /// Initializes the dialog UI with the given line data.
         /// </summary>
         /// <param name="line">The line data to initialize the dialog UI with.</param>

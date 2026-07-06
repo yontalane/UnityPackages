@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.110] - 2026.07.05
+
+### Changed
+
+- DialogProcessor.IsPaused is now internal; pausing dialog is now controlled via IsPaused on your IDialogUI implementation (e.g. DialogUI in the DialogUGUI/DialogUIElements packages)
+
 ## [1.0.109] - 2026.07.05
 
 ### Added

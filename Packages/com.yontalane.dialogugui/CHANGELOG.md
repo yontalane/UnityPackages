@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.16] - 2026.07.05
+
+### Added
+
+- DialogUI.IsPaused pauses/resumes dialog, including the typing effect (and its looping typing sound) if a line is mid-type
+- DialogUI.Disable Interaction When Paused option to disable the skip/continue buttons while paused
+
+### Changed
+
+- Requires latest version of Dialog package
+
 ## [1.0.15] - 2026.07.05
 
 ### Added

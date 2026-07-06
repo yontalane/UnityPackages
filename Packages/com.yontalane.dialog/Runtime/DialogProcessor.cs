@@ -148,11 +148,11 @@ namespace Yontalane.Dialog
         public static bool IsActive => Instance != null && Instance.m_isActive;
 
         /// <summary>
-        /// Gets or sets whether dialog is paused. Dialog can only pause before it starts or between lines;
-        /// setting this to true does not interrupt a line that is already being displayed.
-        /// While paused, initiating a dialog or advancing to the next line is deferred until this is set back to false.
+        /// Gets or sets whether dialog is paused. While paused, initiating a dialog or advancing to the next line
+        /// is deferred until this is set back to false.
+        /// This is internal; use the IsPaused property on your IDialogUI implementation (e.g. DialogUI) instead.
         /// </summary>
-        public static bool IsPaused
+        internal static bool IsPaused
         {
             get => s_isPaused;
             set
