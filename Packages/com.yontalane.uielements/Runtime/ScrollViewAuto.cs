@@ -104,8 +104,9 @@ namespace Yontalane.UIElements
         /// <summary>
         /// Starting adjacent to <paramref name="startIndex"/>, steps through <see cref="m_registeredChildren"/> in
         /// <paramref name="direction"/> (+1 or -1), wrapping around either end, until a focusable child is found.
-        /// Non-focusable children (e.g. section-header labels) are skipped so navigation and auto-scroll never
-        /// land on them.
+        /// Non-focusable children (e.g. section-header labels) and children that are currently hidden
+        /// (e.g. <c>display: none</c> via conditional visibility) are skipped, since <c>focusable</c> alone
+        /// only reflects authored intent, not whether the element can actually receive focus right now.
         /// </summary>
         /// <param name="startIndex">The index to step away from.</param>
         /// <param name="direction">+1 to search forward, -1 to search backward.</param>
@@ -124,7 +125,7 @@ namespace Yontalane.UIElements
                 int index = ((startIndex + direction * step) % count + count) % count;
                 VisualElement candidate = m_registeredChildren[index];
 
-                if (candidate.focusable)
+                if (candidate.canGrabFocus)
                 {
                     return candidate;
                 }

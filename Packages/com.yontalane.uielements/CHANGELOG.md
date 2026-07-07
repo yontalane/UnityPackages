@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.55] - 2026.07.07
+
+### Fixed
+
+- ScrollViewAuto navigation now checks canGrabFocus instead of focusable when searching for the next child, so children hidden via conditional visibility (e.g. display: none) are correctly skipped instead of receiving focus while invisible
+
 ## [1.0.54] - 2026.07.07
 
 ### Fixed
