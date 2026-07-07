@@ -878,7 +878,10 @@ namespace Yontalane.UIElements
             List<VisualElement> children = root.Query<VisualElement>().ToList();
             for (int i = 0; i < children.Count; i++)
             {
-                if (children[i].focusable && children[i].canGrabFocus)
+                // Skip a ScrollView's internal Scroller elements (always present regardless of content,
+                // e.g. the RepeatButtons and drag Slider) so auto-focus lands on real menu content instead
+                // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.
+                if (children[i].focusable && children[i].canGrabFocus && !IsInsideScroller(children[i], root))
                 {
                     m_ignoreFocus = true;
                     children[i].Focus();

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.59] - 2026.07.07
+
+### Fixed
+
+- DelayedFocusElement's auto-focus-on-menu-entry search now excludes a ScrollView's internal Scroller elements (same exclusion HasInteractiveDescendant already used), so entering a menu whose content is entirely inside a ScrollViewAuto focuses the first real control instead of an invisible scrollbar element
+
 ## [1.0.58] - 2026.07.07
 
 ### Added
