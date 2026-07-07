@@ -441,6 +441,19 @@ namespace Yontalane.UIElements
             {
                 RegisterBindableNavigation(menu, bindable);
             }
+
+            // A dynamically added element means this menu is no longer "empty" -- recompute the
+            // empty-menu fallback focusable state directly rather than relying on AttachToPanelEvent
+            // bubbling from RegisterEmptyMenuFallback, which doesn't reliably reach this root when the
+            // element is added deep inside e.g. a ScrollViewAuto's content container.
+            if (menu.name != m_globalMenu.menu.name)
+            {
+                VisualElement root = Root.Q<VisualElement>(menu.name);
+                if (root != null)
+                {
+                    root.focusable = !HasInteractiveDescendant(root);
+                }
+            }
         }
 
         /// <summary>

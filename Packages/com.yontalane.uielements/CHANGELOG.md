@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.61] - 2026.07.07
+
+### Fixed
+
+- RegisterDynamicElement now explicitly recomputes the empty-menu fallback's root.focusable state after registering a dynamically added element, instead of relying solely on AttachToPanelEvent bubbling (confirmed via [NavDiag] logging: root.focusable was staying true even after 31 real controls were added to a ScrollViewAuto, causing DelayedFocusElement to auto-focus the menu root itself instead of any real content -- Query<VisualElement>() on a menu's root includes the root as its own first result).
+
 ## [1.0.60] - 2026.07.07
 
 ### Debug
