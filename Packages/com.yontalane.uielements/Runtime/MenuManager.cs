@@ -390,6 +390,77 @@ namespace Yontalane.UIElements
                     }
                 });
             }
+
+            // Let the menu's root stand in as the cancel target whenever the menu currently has no
+            // interactive elements to catch focus, so the cancel shortcut still works in that case.
+            if (menu.name != m_globalMenu.menu.name)
+            {
+                RegisterEmptyMenuFallback(menu, root);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the given VisualElement's subtree contains any Button or BindableElement
+        /// (e.g. Toggle, TextField, etc.) other than the root itself.
+        /// </summary>
+        private static bool HasInteractiveDescendant(VisualElement root)
+        {
+            List<VisualElement> elements = root.Query<VisualElement>().ToList();
+            foreach (VisualElement element in elements)
+            {
+                if (element == root)
+                {
+                    continue;
+                }
+                if (element is Button || element is BindableElement)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Allows a menu with no focusable items to still respond to the cancel shortcut and to be
+        /// skipped as a navigation target once it gains items. Makes the menu's root VisualElement
+        /// focusable only while the menu has no interactive descendants, and keeps that in sync as
+        /// items are added or removed at runtime (via the package's own APIs or by any other means),
+        /// by tracking panel attach/detach events on the menu's subtree rather than deciding once.
+        /// Note: each attach/detach re-queries the whole subtree, and a bulk removal (e.g. Clear())
+        /// fires one detach event per removed element, so a large addable list will re-query itself
+        /// that many times in a row. Fine at typical menu sizes; worth batching if that ever shows up
+        /// in a profile for very large lists.
+        /// </summary>
+        /// <param name="menu">The menu being registered.</param>
+        /// <param name="root">The root VisualElement of the menu.</param>
+        private void RegisterEmptyMenuFallback(Menu menu, VisualElement root)
+        {
+            void UpdateFocusable()
+            {
+                root.focusable = !HasInteractiveDescendant(root);
+            }
+
+            UpdateFocusable();
+
+            root.RegisterCallback((AttachToPanelEvent _) => UpdateFocusable());
+            root.RegisterCallback((DetachFromPanelEvent _) => UpdateFocusable());
+
+            root.RegisterCallback((NavigationCancelEvent e) =>
+            {
+                // Only act when the root itself is the focused element. If a real item is focused
+                // instead, let the event proceed to that item's own cancel handler.
+                if (e.target != root)
+                {
+                    return;
+                }
+
+                OnCancelInternal(menu, string.Empty, out bool blockEvent);
+                if (blockEvent)
+                {
+                    e.StopPropagation();
+                    root.focusController.IgnoreEvent(e);
+                }
+            }, TrickleDown.TrickleDown);
         }
 
         private void RegisterClick(Menu menu, VisualElement buttonOrToggle)
@@ -750,6 +821,14 @@ namespace Yontalane.UIElements
                     children[i].Focus();
                     yield break;
                 }
+            }
+
+            // No focusable child was found (e.g. a menu with no items). Fall back to focusing the
+            // menu's own root, which RegisterEmptyMenuCancel makes focusable for exactly this case.
+            if (root.focusable && root.canGrabFocus)
+            {
+                m_ignoreFocus = true;
+                root.Focus();
             }
         }
 

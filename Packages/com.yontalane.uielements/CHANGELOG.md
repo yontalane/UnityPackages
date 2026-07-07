@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.56] - 2026.07.07
+
+### Added
+
+- Menus with no focusable items now respond to the cancel shortcut, by making the menu's root VisualElement the fallback focus/cancel target only while the menu has no interactive descendants, kept in sync at runtime as items are added or removed so the root never lingers as a phantom cancel or navigation target
+
 ## [1.0.55] - 2026.07.07
 
 ### Fixed
