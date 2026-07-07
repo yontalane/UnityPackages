@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.46] - 2026.07.06
+
+### Added
+
+- Animation Fixer editor window (Window > Yontalane > Animation Fixer) for fixing broken AnimationClip property paths, automatically or via manual search/replace/prepend.
+
 ## [1.0.45] - 2026.04.29
 
 ### Added

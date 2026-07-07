@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="root" class="animation-fixer__root">
+        <ui:Button name="automatic-fix-button" text="Automatic Fix" tooltip="Attempt to automatically detect and fix broken property paths in the targeted clip by matching them against the hierarchy of the object currently targeted by the Animation window." class="animation-fixer__full-row-button" />
+        <ui:VisualElement name="section-break" class="animation-fixer__separator" />
+        <ui:TextField name="find-field" label="Find" tooltip="Text to search for within each curve's property path." class="animation-fixer__field" />
+        <ui:TextField name="new-field" label="New" tooltip="Replacement text used by Replace, or the text prepended to each property path by Prepend." class="animation-fixer__field" />
+        <ui:VisualElement name="button-row" class="animation-fixer__button-row">
+            <ui:Button name="replace-button" text="Replace" tooltip="Replace every occurrence of the Find text with the New text in the targeted clip(s)' property paths." class="animation-fixer__row-button" />
+            <ui:Button name="prepend-button" text="Prepend" tooltip="Insert the New text at the very start of every property path in the targeted clip(s), ignoring the Find text." class="animation-fixer__row-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -246,3 +246,19 @@ Add this to an object to allow other objects to listen for its collision events.
 | **onChangeSelection** | Trigger this event when the Selectable is selected. |
 | **clip**              | Play this sound when the Selectable is selected.    |
 | **volume**            | If playing a sound, use this volume.                |
+
+## Animation Fixer
+
+Editor window for fixing broken property paths in AnimationClips. Open it via **Window > Yontalane > Animation Fixer**.
+
+If the Animation window is open and targeting a clip, Animation Fixer operates on that clip. Otherwise, it operates on all AnimationClips currently selected in the Project pane. If neither applies, its controls are disabled.
+
+### Controls
+
+| Name | Description |
+| --- | ---|
+| **Automatic Fix** | Attempts to resolve broken property paths by matching them against the hierarchy of the object targeted by the Animation window. Only enabled when the Animation window is targeting a clip on a live GameObject; paths with no unambiguous match are left untouched. |
+| **Find** | Text to search for within each curve's property path. |
+| **New** | Replacement text used by Replace, or the text prepended by Prepend. |
+| **Replace** | Replaces every occurrence of Find with New in the targeted clip(s)' property paths. |
+| **Prepend** | Inserts New at the very start of every property path in the targeted clip(s), ignoring Find. |

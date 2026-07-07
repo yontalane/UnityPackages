@@ -1,0 +1,29 @@
+.animation-fixer__root {
+    padding: 8px;
+}
+
+.animation-fixer__full-row-button {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.animation-fixer__separator {
+    height: 1px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.animation-fixer__field {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.animation-fixer__button-row {
+    flex-direction: row;
+    margin-top: 4px;
+}
+
+.animation-fixer__row-button {
+    flex-grow: 1;
+}
