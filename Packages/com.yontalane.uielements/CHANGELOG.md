@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.54] - 2026.07.07
+
+### Fixed
+
+- ScrollViewAuto.NavigationMoveListener no longer lets handled navigation events fall through to the panel's default (geometry-based) navigation, which could hijack focus away from the intended target, especially at wrap-around list boundaries
+
 ## [1.0.53] - 2026.07.05
 
 ### Fixed

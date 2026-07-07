@@ -93,6 +93,12 @@ namespace Yontalane.UIElements
             // Move focus to the target element and scroll it into view.
             target.Focus();
             ScrollToChild(target);
+
+            // Stop this event from also reaching the panel's default (geometry-based) navigation, which
+            // can hijack focus away from the list-relative target we just picked -- especially at the
+            // wrap-around boundaries where there's no sensible "nearest" candidate in the given direction.
+            e.StopPropagation();
+            target.focusController?.IgnoreEvent(e);
         }
 
         /// <summary>
