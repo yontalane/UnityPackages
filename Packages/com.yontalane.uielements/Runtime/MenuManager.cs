@@ -401,18 +401,37 @@ namespace Yontalane.UIElements
 
         /// <summary>
         /// Returns true if the given VisualElement's subtree contains any Button or BindableElement
-        /// (e.g. Toggle, TextField, etc.) other than the root itself.
+        /// (e.g. Toggle, TextField, etc.) other than the root itself, excluding elements that can't
+        /// currently receive focus (e.g. explicitly non-focusable items) and elements that belong to
+        /// a ScrollView's internal Scroller (which always exists in the hierarchy regardless of the
+        /// scroll view's actual content, and shouldn't count as authored menu content).
         /// </summary>
         private static bool HasInteractiveDescendant(VisualElement root)
         {
             List<VisualElement> elements = root.Query<VisualElement>().ToList();
             foreach (VisualElement element in elements)
             {
-                if (element == root)
+                if (element == root || !element.focusable)
                 {
                     continue;
                 }
-                if (element is Button || element is BindableElement)
+                if ((element is Button || element is BindableElement) && !IsInsideScroller(element, root))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if <paramref name="element"/> has a <see cref="Scroller"/> as an ancestor,
+        /// stopping the search at <paramref name="root"/>.
+        /// </summary>
+        private static bool IsInsideScroller(VisualElement element, VisualElement root)
+        {
+            for (VisualElement ancestor = element.parent; ancestor != null && ancestor != root; ancestor = ancestor.parent)
+            {
+                if (ancestor is Scroller)
                 {
                     return true;
                 }

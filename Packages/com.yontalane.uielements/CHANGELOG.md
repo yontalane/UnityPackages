@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.57] - 2026.07.07
+
+### Fixed
+
+- HasInteractiveDescendant now also requires a candidate element to be focusable and to not belong to a ScrollView's internal Scroller, so a menu containing only non-focusable items (e.g. a Back button meant to be reached only via cancel) or only a ScrollViewAuto's always-present scrollbar internals is still correctly treated as empty for the cancel/focus fallback
+
 ## [1.0.56] - 2026.07.07
 
 ### Added
