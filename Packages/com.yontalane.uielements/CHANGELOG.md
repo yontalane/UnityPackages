@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.62] - 2026.07.07
+
+### Removed
+
+- Temporary [NavDiag] diagnostic logging from DelayedFocusElement, added in 1.0.60 to track down the root-focus bug fixed in 1.0.61
+
 ## [1.0.61] - 2026.07.07
 
 ### Fixed
