@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.60] - 2026.07.07
+
+### Debug
+
+- Temporary [NavDiag] logging in DelayedFocusElement to diagnose why menus with dynamically-added ScrollViewAuto content aren't receiving auto-focus on entry. To be removed once the root cause is confirmed.
+
 ## [1.0.59] - 2026.07.07
 
 ### Fixed

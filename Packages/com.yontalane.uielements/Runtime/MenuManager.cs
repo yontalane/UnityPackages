@@ -876,18 +876,27 @@ namespace Yontalane.UIElements
             }
 
             List<VisualElement> children = root.Query<VisualElement>().ToList();
+            Debug.Log($"[NavDiag] DelayedFocusElement menu={menu.name} children.Count={children.Count}");
             for (int i = 0; i < children.Count; i++)
             {
+                if (children[i].focusable)
+                {
+                    Debug.Log($"[NavDiag]   [{i}] type={children[i].GetType().Name} name=\"{children[i].name}\" focusable={children[i].focusable} canGrabFocus={children[i].canGrabFocus} insideScroller={IsInsideScroller(children[i], root)}");
+                }
+
                 // Skip a ScrollView's internal Scroller elements (always present regardless of content,
                 // e.g. the RepeatButtons and drag Slider) so auto-focus lands on real menu content instead
                 // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.
                 if (children[i].focusable && children[i].canGrabFocus && !IsInsideScroller(children[i], root))
                 {
+                    Debug.Log($"[NavDiag]   FOCUSING [{i}] type={children[i].GetType().Name} name=\"{children[i].name}\"");
                     m_ignoreFocus = true;
                     children[i].Focus();
                     yield break;
                 }
             }
+
+            Debug.Log($"[NavDiag] No candidate found. root.focusable={root.focusable} root.canGrabFocus={root.canGrabFocus}");
 
             // No focusable child was found (e.g. a menu with no items). Fall back to focusing the
             // menu's own root, which RegisterEmptyMenuCancel makes focusable for exactly this case.
