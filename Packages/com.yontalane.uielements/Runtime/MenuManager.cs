@@ -366,29 +366,7 @@ namespace Yontalane.UIElements
                 {
                     continue;
                 }
-                // Register a callback for NavigationCancelEvent to handle cancel actions.
-                item.RegisterCallback((NavigationCancelEvent e) =>
-                {
-                    OnCancelInternal(menu, item.name, out bool blockEvent);
-                    if (blockEvent)
-                    {
-                        e.StopPropagation();
-                        item.focusController.IgnoreEvent(e);
-                    }
-                });
-                // Register a callback for NavigationMoveEvent to handle left/right navigation.
-                item.RegisterCallback((NavigationMoveEvent e) =>
-                {
-                    if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
-                    {
-                        OnSideNavigationInternal(menu, item.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
-                        if (blockEvent)
-                        {
-                            e.StopPropagation();
-                            item.focusController.IgnoreEvent(e);
-                        }
-                    }
-                });
+                RegisterBindableNavigation(menu, item);
             }
 
             // Let the menu's root stand in as the cancel target whenever the menu currently has no
@@ -396,6 +374,72 @@ namespace Yontalane.UIElements
             if (menu.name != m_globalMenu.menu.name)
             {
                 RegisterEmptyMenuFallback(menu, root);
+            }
+        }
+
+        /// <summary>
+        /// Registers cancel and left/right navigation handling for a single non-Button BindableElement
+        /// (e.g. Toggle, DropdownField, FloatField, Slider). Factored out of <see cref="RegisterClick(Menu)"/>
+        /// so it can also be called for elements added to a menu after that initial registration pass,
+        /// via <see cref="RegisterDynamicElement"/>.
+        /// </summary>
+        /// <param name="menu">The menu the element belongs to.</param>
+        /// <param name="item">The element to register.</param>
+        private void RegisterBindableNavigation(Menu menu, BindableElement item)
+        {
+            // Register a callback for NavigationCancelEvent to handle cancel actions.
+            item.RegisterCallback((NavigationCancelEvent e) =>
+            {
+                OnCancelInternal(menu, item.name, out bool blockEvent);
+                if (blockEvent)
+                {
+                    e.StopPropagation();
+                    item.focusController.IgnoreEvent(e);
+                }
+            });
+            // Register a callback for NavigationMoveEvent to handle left/right navigation.
+            item.RegisterCallback((NavigationMoveEvent e) =>
+            {
+                if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
+                {
+                    OnSideNavigationInternal(menu, item.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
+                    if (blockEvent)
+                    {
+                        e.StopPropagation();
+                        item.focusController.IgnoreEvent(e);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Registers click/cancel/side-navigation handling for a single VisualElement that was added to
+        /// a menu dynamically (e.g. via code, after the game has started), so it participates in the same
+        /// navigation behavior as elements present when the menu was first registered at Awake time.
+        /// Only registers <paramref name="element"/> itself -- safe to call once per newly added element
+        /// without affecting or duplicating registration on elements already covered by the menu's initial
+        /// pass. Does not need to be called for elements added via <see cref="ScrollViewAuto"/>'s own
+        /// Add/Insert/CloneTreeAsset methods for up/down list navigation -- those register themselves
+        /// immediately regardless of timing; this covers the separate click/cancel/left-right handling
+        /// that MenuManager itself wires up.
+        /// </summary>
+        /// <param name="menuName">The name of the menu <paramref name="element"/> was added to.</param>
+        /// <param name="element">The newly added Button, Toggle, or other BindableElement.</param>
+        public void RegisterDynamicElement(string menuName, VisualElement element)
+        {
+            if (!TryGetMenu(menuName, out Menu menu))
+            {
+                Logger.LogWarning($"Could not find menu \"{menuName}\" to register a dynamic element.");
+                return;
+            }
+
+            if (element is Button || element is Toggle)
+            {
+                RegisterClick(menu, element);
+            }
+            else if (element is BindableElement bindable)
+            {
+                RegisterBindableNavigation(menu, bindable);
             }
         }
 

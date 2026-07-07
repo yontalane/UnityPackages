@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.58] - 2026.07.07
+
+### Added
+
+- Public MenuManager.RegisterDynamicElement(menuName, element), registering click/cancel/left-right navigation for a single element added to a menu after Awake-time registration already ran (e.g. UI built at runtime from game code). Factored the existing per-BindableElement cancel/left-right registration out of RegisterClick(Menu) into a shared RegisterBindableNavigation helper so both paths use identical logic.
+
 ## [1.0.57] - 2026.07.07
 
 ### Fixed
