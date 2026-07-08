@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.63] - 2026.07.07
+
+### Added
+
+- Added method to mute audio 
+
 ## [1.0.62] - 2026.07.07
 
 ### Removed

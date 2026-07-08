@@ -1429,6 +1429,15 @@ namespace Yontalane.UIElements
             }
         }
         #endregion
+        
+        #region Audio
+
+        public void SetMute(bool value)
+        {
+            m_sounds.mute = value;
+        }
+        
+        #endregion
 
         #region Navigation Override
         private void OnNavigation(InputAction.CallbackContext callbackContext)
