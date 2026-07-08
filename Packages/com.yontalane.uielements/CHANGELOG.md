@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.67] - 2026.07.08
+
+### Fixed
+
+- DelayedFocusElement now bails out immediately if its own menu root is no longer displayed by the time it resumes (e.g. a later SetMenu call in the same frame, such as ReturnToPreviousMenu firing right after Activate's own SetMenu, hides it first). Previously the child-search loop only checked each child's own canGrabFocus, which doesn't account for an ancestor's display:none, so it could still find and focus an invisible child -- confirmed via [NavDiag] logging, which caught it focusing a button with a zeroed-out layout rect. That stray focus call could also trigger the focused element's own focus-driven side effects (e.g. Getaway's HookUpButtonPreview calling StopAllCoroutines), silently killing a second DelayedFocusElement coroutine already queued to focus the menu actually on screen.
+
+## [1.0.66] - 2026.07.07
+
+### Removed
+
+- Temporary [NavDiag] diagnostic logging added in 1.0.65. The [NavDiag] trace showed m_ignoreFocus was already True at every FocusInEvent during the menu-appearance sound, proving the sound wasn't coming from this package's navigation-sound path at all -- root cause was in game code (a Toggle.value assignment during settings initialization firing an unguarded click sound). The 1.0.64 focus-guard fix is still correct and stays in place.
+
 ## [1.0.65] - 2026.07.07
 
 ### Debug
