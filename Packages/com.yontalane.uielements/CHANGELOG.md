@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.64] - 2026.07.07
+
+### Fixed
+
+- A menu's auto-focus on first appearing no longer plays the navigation sound. DelayedFocusElement and SetFocus now set the ignore-focus guard before calling EventSystem.SetSelectedGameObject (which could itself trigger a real focus change) instead of only around the explicit Focus() call after it, and clear the guard explicitly afterward instead of relying on the first FocusInEvent to consume it, so a second real focus event in the same programmatic pass can't slip through unguarded.
+
 ## [1.0.63] - 2026.07.07
 
 ### Added

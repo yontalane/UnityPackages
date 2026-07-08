@@ -310,21 +310,23 @@ namespace Yontalane.UIElements
                 // Register a callback for the FocusInEvent on each element.
                 element.RegisterCallback((FocusInEvent _) =>
                 {
-                    // If focus events are not being ignored, play the navigation sound and invoke the navigation listener.
-                    if (!m_ignoreFocus)
+                    // Focus changes made programmatically (e.g. when a menu first appears) set
+                    // m_ignoreFocus for the duration of that whole operation and clear it themselves
+                    // afterward -- see DelayedFocusElement and SetFocus -- so we just no-op here
+                    // rather than clearing it, since a single programmatic focus pass can trigger
+                    // more than one real FocusInEvent (for example via EventSystem.SetSelectedGameObject)
+                    // and clearing on the first would let a later one in the same pass play a sound.
+                    if (m_ignoreFocus)
                     {
-                        if (!m_sounds.mute)
-                        {
-                            SoundPlayer.Play(m_sounds.navigation);
-                        }
+                        return;
+                    }
 
-                        m_listeners.onNavigation?.Invoke();
-                    }
-                    // If focus events are being ignored, reset the ignore flag.
-                    else
+                    if (!m_sounds.mute)
                     {
-                        m_ignoreFocus = false;
+                        SoundPlayer.Play(m_sounds.navigation);
                     }
+
+                    m_listeners.onNavigation?.Invoke();
                 }, TrickleDown.TrickleDown);
             });
         }
@@ -872,6 +874,14 @@ namespace Yontalane.UIElements
 
             yield return new WaitForEndOfFrame();
 
+            // Guard the entire programmatic focus sequence below -- including SetSelectedGameObject,
+            // which can itself trigger a real UI Toolkit focus change on whatever element the panel
+            // considers default -- so that a menu simply appearing never plays the navigation sound.
+            // Cleared explicitly once we're done rather than left for a FocusInEvent handler to consume,
+            // since this sequence can trigger zero, one, or two real focus events depending on what
+            // SetSelectedGameObject does, and consume-on-first-event would leave a second one unguarded.
+            m_ignoreFocus = true;
+
             if (EventSystem.current != null)
             {
                 EventSystem.current.SetSelectedGameObject(m_document.gameObject);
@@ -882,8 +892,8 @@ namespace Yontalane.UIElements
                 VisualElement focusItem = root.Q<VisualElement>(menu.focusItem);
                 if (focusItem != null)
                 {
-                    m_ignoreFocus = true;
                     focusItem.Focus();
+                    m_ignoreFocus = false;
                     yield break;
                 }
             }
@@ -896,8 +906,8 @@ namespace Yontalane.UIElements
                 // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.
                 if (children[i].focusable && children[i].canGrabFocus && !IsInsideScroller(children[i], root))
                 {
-                    m_ignoreFocus = true;
                     children[i].Focus();
+                    m_ignoreFocus = false;
                     yield break;
                 }
             }
@@ -906,9 +916,10 @@ namespace Yontalane.UIElements
             // menu's own root, which RegisterEmptyMenuCancel makes focusable for exactly this case.
             if (root.focusable && root.canGrabFocus)
             {
-                m_ignoreFocus = true;
                 root.Focus();
             }
+
+            m_ignoreFocus = false;
         }
 
         /// <summary>
@@ -1207,13 +1218,17 @@ namespace Yontalane.UIElements
                 return;
             }
 
+            // See DelayedFocusElement for why the guard has to wrap SetSelectedGameObject too, and why
+            // it's cleared explicitly afterward instead of by the FocusInEvent handler.
+            m_ignoreFocus = true;
+
             if (EventSystem.current != null)
             {
                 EventSystem.current.SetSelectedGameObject(m_document.gameObject);
             }
 
-            m_ignoreFocus = true;
             element.Focus();
+            m_ignoreFocus = false;
         }
         #endregion
 
@@ -1436,7 +1451,7 @@ namespace Yontalane.UIElements
         {
             m_sounds.mute = value;
         }
-        
+
         #endregion
 
         #region Navigation Override
