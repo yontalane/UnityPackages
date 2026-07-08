@@ -99,6 +99,8 @@ namespace Yontalane.UIElements
 
         protected virtual void Awake()
         {
+            Debug.Log($"[NavDiag] ===== Awake {GetType().Name} instance={GetInstanceID()} frame={Time.frameCount} =====");
+
             // Find and assign the UIDocument component in the scene. Log an error if not found.
             m_document = FindAnyObjectByType<UIDocument>();
             if (m_document == null)
@@ -308,8 +310,10 @@ namespace Yontalane.UIElements
             root.Query<T>().ForEach((element) =>
             {
                 // Register a callback for the FocusInEvent on each element.
-                element.RegisterCallback((FocusInEvent _) =>
+                element.RegisterCallback((FocusInEvent evt) =>
                 {
+                    Debug.Log($"[NavDiag] FocusInEvent target={evt.target} ignoreFocus={m_ignoreFocus} frame={Time.frameCount} instance={GetInstanceID()}");
+
                     // Focus changes made programmatically (e.g. when a menu first appears) set
                     // m_ignoreFocus for the duration of that whole operation and clear it themselves
                     // afterward -- see DelayedFocusElement and SetFocus -- so we just no-op here
@@ -771,6 +775,8 @@ namespace Yontalane.UIElements
         /// <param name="menu">The name of the menu to activate.</param>
         protected void SetMenu(string menu)
         {
+            Debug.Log($"[NavDiag] SetMenu called target={menu} frame={Time.frameCount} instance={GetInstanceID()}");
+
             bool sourceIsGlobal = m_sourceIsGlobal;
             m_sourceIsGlobal = false;
 
@@ -867,12 +873,17 @@ namespace Yontalane.UIElements
 
         private IEnumerator DelayedFocusElement(Menu menu, VisualElement root)
         {
+            Debug.Log($"[NavDiag] DelayedFocusElement START menu={menu.name} root={(root == null ? "null" : root.name)} frame={Time.frameCount} instance={GetInstanceID()}");
+
             if (root == null)
             {
+                Debug.Log($"[NavDiag] DelayedFocusElement EXIT (null root) menu={menu.name} instance={GetInstanceID()}");
                 yield break;
             }
 
             yield return new WaitForEndOfFrame();
+
+            Debug.Log($"[NavDiag] DelayedFocusElement RESUMED menu={menu.name} rootDisplay={root.resolvedStyle.display} rootCanGrabFocus={root.canGrabFocus} frame={Time.frameCount} instance={GetInstanceID()} priorSelected={(EventSystem.current != null ? (object)EventSystem.current.currentSelectedGameObject : "no EventSystem")}");
 
             // Guard the entire programmatic focus sequence below -- including SetSelectedGameObject,
             // which can itself trigger a real UI Toolkit focus change on whatever element the panel
@@ -884,7 +895,9 @@ namespace Yontalane.UIElements
 
             if (EventSystem.current != null)
             {
+                Debug.Log($"[NavDiag] DelayedFocusElement calling SetSelectedGameObject menu={menu.name} instance={GetInstanceID()}");
                 EventSystem.current.SetSelectedGameObject(m_document.gameObject);
+                Debug.Log($"[NavDiag] DelayedFocusElement after SetSelectedGameObject menu={menu.name} focusedElement={root.panel?.focusController?.focusedElement} instance={GetInstanceID()}");
             }
 
             if (!string.IsNullOrEmpty(menu.focusItem))
@@ -892,8 +905,10 @@ namespace Yontalane.UIElements
                 VisualElement focusItem = root.Q<VisualElement>(menu.focusItem);
                 if (focusItem != null)
                 {
+                    Debug.Log($"[NavDiag] DelayedFocusElement focusing remembered focusItem={menu.focusItem} menu={menu.name} instance={GetInstanceID()}");
                     focusItem.Focus();
                     m_ignoreFocus = false;
+                    Debug.Log($"[NavDiag] DelayedFocusElement EXIT (focusItem) menu={menu.name} instance={GetInstanceID()}");
                     yield break;
                 }
             }
@@ -906,8 +921,10 @@ namespace Yontalane.UIElements
                 // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.
                 if (children[i].focusable && children[i].canGrabFocus && !IsInsideScroller(children[i], root))
                 {
+                    Debug.Log($"[NavDiag] DelayedFocusElement focusing first focusable child={children[i].name} menu={menu.name} instance={GetInstanceID()}");
                     children[i].Focus();
                     m_ignoreFocus = false;
+                    Debug.Log($"[NavDiag] DelayedFocusElement EXIT (child) menu={menu.name} instance={GetInstanceID()}");
                     yield break;
                 }
             }
@@ -916,10 +933,16 @@ namespace Yontalane.UIElements
             // menu's own root, which RegisterEmptyMenuCancel makes focusable for exactly this case.
             if (root.focusable && root.canGrabFocus)
             {
+                Debug.Log($"[NavDiag] DelayedFocusElement focusing root fallback menu={menu.name} instance={GetInstanceID()}");
                 root.Focus();
+            }
+            else
+            {
+                Debug.Log($"[NavDiag] DelayedFocusElement found nothing to focus menu={menu.name} instance={GetInstanceID()}");
             }
 
             m_ignoreFocus = false;
+            Debug.Log($"[NavDiag] DelayedFocusElement EXIT (root/none) menu={menu.name} instance={GetInstanceID()}");
         }
 
         /// <summary>

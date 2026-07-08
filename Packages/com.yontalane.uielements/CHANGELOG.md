@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.65] - 2026.07.07
+
+### Debug
+
+- Temporary [NavDiag] logging around Awake, SetMenu, DelayedFocusElement, and the navigation FocusInEvent handler, to find the source of a menu-appearance navigation sound that survived the 1.0.64 fix. To be removed once the root cause is confirmed.
+
 ## [1.0.64] - 2026.07.07
 
 ### Fixed
