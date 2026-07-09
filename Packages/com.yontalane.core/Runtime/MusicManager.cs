@@ -40,6 +40,12 @@ namespace Yontalane
         private readonly AudioSource[] m_audioSources = new AudioSource[2];
 
         /// <summary>
+        /// The running fade coroutine (if any) for each slot in <see cref="m_audioSources"/>.
+        /// Tracked so a stale fade can't finish after its slot has been reassigned to a new clip.
+        /// </summary>
+        private readonly Coroutine[] m_fadeCoroutines = new Coroutine[2];
+
+        /// <summary>
         /// Index of the currently active <see cref="AudioSource"/>s.
         /// </summary>
         private int m_currentActive = 0;
@@ -271,19 +277,24 @@ namespace Yontalane
             // Get or create instance.
             MusicManager instance = GetInstance();
 
+            // The slot we're about to (re)use. Cancel any fade still running on it so a stale
+            // fade-out coroutine can't stop/clear this slot after we assign the new clip to it.
+            int index = instance.m_currentActive;
+            instance.CancelFade(index);
+
             // Set up current audio source for playback.
             instance.CurrentAudioSource.name = clip.name;
             instance.CurrentAudioSource.clip = clip;
             CurrentClip = clip;
             CurrentSource = source;
-            
+
             // Record the volume scale.
             Instance.m_musicVolume = volumeScale;
 
             // Start fade-in coroutine if requested, else play instantly.
             if (fadeIn)
             {
-                instance.StartCoroutine(FadeIn(instance.CurrentAudioSource, CurrentVolume));
+                instance.m_fadeCoroutines[index] = instance.StartCoroutine(instance.FadeIn(index, CurrentVolume));
             }
             else
             {
@@ -360,10 +371,14 @@ namespace Yontalane
                 return;
             }
 
+            // Cancel any fade already running on the active slot before starting a new one.
+            int index = instance.m_currentActive;
+            instance.CancelFade(index);
+
             // Fade out or stop current audio source accordingly.
             if (fadeOut)
             {
-                instance.StartCoroutine(FadeOut(instance.CurrentAudioSource));
+                instance.m_fadeCoroutines[index] = instance.StartCoroutine(instance.FadeOut(index));
             }
             else
             {
@@ -389,17 +404,36 @@ namespace Yontalane
             m_currentActive = 1 - m_currentActive;
         }
 
+        /// <summary>
+        /// Stops whatever fade coroutine is currently running on the given <see cref="m_audioSources"/> slot, if any.
+        /// Must be called before that slot is reassigned to a new clip, otherwise a stale fade-out can
+        /// stop and clear the slot's clip after the new clip has already been assigned to it.
+        /// </summary>
+        /// <param name="index">The audio source slot to clear a fade from.</param>
+        private void CancelFade(int index)
+        {
+            if (m_fadeCoroutines[index] == null)
+            {
+                return;
+            }
+
+            StopCoroutine(m_fadeCoroutines[index]);
+            m_fadeCoroutines[index] = null;
+        }
+
         #endregion
 
         #region Fading Coroutines
 
         /// <summary>
-        /// Smoothly fades in an <see cref="AudioSource"/> to the specified volume.
+        /// Smoothly fades in the <see cref="AudioSource"/> at the given slot to the specified volume.
         /// </summary>
-        /// <param name="audioSource">The <see cref="AudioSource"/> to fade in.</param>
+        /// <param name="index">The slot, in <see cref="m_audioSources"/>, of the <see cref="AudioSource"/> to fade in.</param>
         /// <param name="volumeScale">Target volume after fade.</param>
-        private static IEnumerator FadeIn(AudioSource audioSource, float volumeScale)
+        private IEnumerator FadeIn(int index, float volumeScale)
         {
+            AudioSource audioSource = m_audioSources[index];
+
             // Abort if source is null.
             if (audioSource == null)
             {
@@ -411,14 +445,19 @@ namespace Yontalane
 
             // Fade up to the desired volume.
             yield return Fade(audioSource, volumeScale);
+
+            // This coroutine finished on its own; nothing left to cancel for this slot.
+            m_fadeCoroutines[index] = null;
         }
 
         /// <summary>
-        /// Smoothly fades out an <see cref="AudioSource"/>, then stops and cleans up.
+        /// Smoothly fades out the <see cref="AudioSource"/> at the given slot, then stops and cleans it up.
         /// </summary>
-        /// <param name="audioSource">The <see cref="AudioSource"/> to fade out.</param>
-        private static IEnumerator FadeOut(AudioSource audioSource)
+        /// <param name="index">The slot, in <see cref="m_audioSources"/>, of the <see cref="AudioSource"/> to fade out.</param>
+        private IEnumerator FadeOut(int index)
         {
+            AudioSource audioSource = m_audioSources[index];
+
             // Abort if source is null.
             if (audioSource == null)
             {
@@ -432,6 +471,9 @@ namespace Yontalane
             audioSource.Stop();
             audioSource.name = STOPPED_NAME;
             audioSource.clip = null;
+
+            // This coroutine finished on its own; nothing left to cancel for this slot.
+            m_fadeCoroutines[index] = null;
         }
 
         /// <summary>

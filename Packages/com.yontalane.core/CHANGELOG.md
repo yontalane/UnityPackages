@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.47] - 2026.07.09
+
+### Fixed
+
+- MusicManager: fixed a race condition where a stale fade-out/fade-in coroutine could stop and clear an AudioSource slot after it had already been reassigned to a new clip, causing music to silently fail to play when Play Music was triggered multiple times in quick succession (faster than the 1-second crossfade). Fade coroutines are now tracked per audio source slot and cancelled before that slot is reused.
+
 ## [1.0.46] - 2026.07.06
 
 ### Added
