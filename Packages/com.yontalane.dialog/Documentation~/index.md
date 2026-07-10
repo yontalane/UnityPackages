@@ -6,7 +6,7 @@ A dialog system. This incorporates branching dialog functionality; dialog displa
 
 For the dialog system to work, you need two singletons in your scene: DialogProcessor and DialogUI. DialogProcessor manages the overall flow; it handles on-the-fly changes to dialog text, it manages branching dialog and stored variables, it manages player response input, and it provides callbacks to external functions depending on the state of your dialog tree. DialogUI handles the visual representation of the dialog: It works with an Animator to show and hide your text box, it plays sounds, it allows you to control whether letters type out in sequence or display all at once, et cetera.
 
-(As mentioned above, note that **dialog display UI is handloed through a separate package**.)
+(As mentioned above, note that **dialog display UI is handled through a separate package**.)
 
 You also need one or more DialogAgent objects. The DialogAgent initiates dialog, and it stores the dialog's text script, formatted as a DialogData object. If you're making an RPG and you can talk to various NPCs, each NPC might contain a DialogAgent component. Alternatively, you might have a singleton DialogAgent and switch its script on the fly.
 
@@ -16,7 +16,7 @@ Another DialogResponder feature is the ability to replace pieces of text with in
 
 ## Dialog Script Format
 
-There are two types of DialogAgent: DialogAgent, that inherits from MonoBehaviour, and SerializedDialogAgent, that inherits from SerializedObject. You can use either in your project; both contain the same methods and functionality.
+There are two types of DialogAgent: DialogAgent, that inherits from MonoBehaviour, and ScriptableDialogAgent, that inherits from ScriptableObject. You can use either in your project; both contain the same methods and functionality. (DialogDataContainer is a ScriptableDialogAgent subclass that also exposes its DialogData as a serialized field, so a dialog script can be authored and shared as its own asset.)
 
 Each DialogAgent has a DialogData object. DialogData, which is read in as JSON, is composed of multiple nodes that form together to establish a branching dialog tree. Each node has text data and information for which node to go to next. For example, in its first node, an NPC might ask you for your fish ("May I please have a fish?"). The DialogProcessor checks first if you have fish on you, and if you do, gives you an opportunity to respond "Yes" or "No." So you might have three nodes in total:
 
@@ -55,8 +55,10 @@ LineData contains the following data for displaying dialog:
 LineData is sometimes purely functional, almost acting as lines of code. Functional LineData won't use `speaker` or `text`, but instead will make use of the following:
 
 * string **ifDialogCount**: If you have spoken to this DialogAgent *x* times. The value of this string takes the format [operator][number], e.g. `>2`.
+* string **setDialogCount**: Assigns a new value to this DialogAgent's dialog count, e.g. `3`.
+* string **addDialogCount**: Adds to this DialogAgent's dialog count, e.g. `1` or `-1`.
 * string **ifFunction**: Send a query to all your IDialogResponder objects. Takes the format [query name]::[parameter]=[desired result], e.g. `Possesses::Apple=true`.
-  * `ifFunction` also supports basic mathematical comparisons. For example, you can say: `Compare::AppleCount>3=true`. Either operand (in this case `AppleCount` and `3`) can be a defined variable or a literal value. Accepted operators are `==`, `!=`, `<=`, `>=`, `<`. and `>`. You can call `Compare` for float values and `CompareInt` for integer values.
+  * `ifFunction` also supports basic mathematical comparisons. For example, you can say: `Compare::AppleCount>3=true`. Either operand (in this case `AppleCount` and `3`) can be a defined variable or a literal value. Accepted operators are `==`, `!=`, `<=`, `>=`, `<`. and `>`. You can call `Compare` for float values and `CompareInt` for integer values. (`CompareFloat`/`CompareF`/`Comparef` are aliases for `Compare`; `CompareI`/`Comparei` are aliases for `CompareInt`.)
   * When creating the code for `ifFunction` in a DialogResponder, note that `DialogFunction()` returns true if it can process the request and false if it cannot. If `DialogFunction()` is able to process a request and determines that the result is false, then `result` will be set to false, but the function will return true. See the example below.
   
 
@@ -81,10 +83,11 @@ public bool DialogFunction(string call, string parameter, out string result)
 * bool **endIf**: Setting this to true makes a LineData object act purely as an "end if" line in code, ignoring all other LineData fields. Must follow an `if` or `elseIf` LineData object.
 * bool **exit**: Setting this to true exits the dialog as soon as this line is reached. Other LineData fields are ignored.
 * VarData **setVar**: VarData contains a **key** string and a **value** string. Have the DialogProcessor store a value.
-* QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt) and a ResponseData array called **responses**.
+* QueryData **query**: Displays a modal input dialog to the player. QueryData contains a **text** string (the input box's prompt), an optional **description** string (shown underneath the prompt), a ResponseData array called **responses**, and an **initialSelection** int (the index of the response highlighted by default).
 * string **callFunction**: Calls a function in your IDialogResponder objects. Takes the format [function name]::[parameter], e.g. `GiveToPlayer::Apple`.
-  * `callFunction` also supports basic arithmetic. For example, you can say: `Math::AppleCount=AppleCount+3`. The item on the left side of the equal sign (`AppleCount`) is a variable. The two operands on the right side of the equal sign (`AppleCount` and `3`) can be defined variables or literal values. Accepted operators are `+`, `-`, `*`, `/`. `^`. and `%`. You can call `Math` for float values and `MathInt` for integer values.
+  * `callFunction` also supports basic arithmetic. For example, you can say: `Math::AppleCount=AppleCount+3`. The item on the left side of the equal sign (`AppleCount`) is a variable. The two operands on the right side of the equal sign (`AppleCount` and `3`) can be defined variables or literal values. Accepted operators are `+`, `-`, `*`, `/`. `^`. and `%`. You can call `Math` for float values and `MathInt` for integer values. (`MathFloat`/`MathF`/`Mathf` are aliases for `Math`; `MathI`/`Mathi` are aliases for `MathInt`.)
   * The example above also supports the notation `Math::AppleCount+=3`. All operators are accepted.
+  * `callFunction` also recognizes one function built into the DialogProcessor itself: `DisableDialog`, which disables the current DialogAgent (sets its `enabled` to `false`).
 
 * string **lineBuilderFunction**: Calls a function in your IDialogResponder objects. The IDialogResponder can build and return new LineData, thus changing the script on the fly.
 
@@ -187,11 +190,23 @@ It looks like this:
   Arm Dude: G'day.
 ```
 
+A few additional pieces of Simple Text Format syntax aren't shown in the example above:
+
+* `SET COUNT: value` (or `SETCOUNT: value`) is equivalent to `setDialogCount`.
+* `ADD COUNT: value` (or `ADDCOUNT: value`) is equivalent to `addDialogCount`.
+* `IF FUNCTION:` can also be written as `IF FUNC:` or `IFF:`.
+* `DO:` can also be written as `!:`.
+* `LINE: function name` sets the `lineBuilderFunction` of the line that follows it.
+
 ## Data Storage
 
 Dialog variables from `ifVar`, `setVar`, and `ifDialogCount` are stored behind the scenes by the DataStorage static class. These variables are universal; this means that if you `setVar` in one DialogAgent's dialog, and then check `ifVar` on the same variable name in another DialogAgent's dialog, you will get the result set in the initial script.
 
 If you want to save and load the dialog state, use `DataStorage.ExportToJson()` and `DataStorage.ImportFromJson(string json)`.
+
+## Deprecated DialogUI
+
+This package contains a legacy `DialogUI` MonoBehaviour (a UGUI implementation of `IDialogUI`). It is marked `Obsolete` and will be removed from this package in a future update. For a UGUI dialog UI, use the `com.yontalane.dialogugui` package's `DialogUI` instead; for UI Toolkit, use `com.yontalane.dialoguielements`.
 
 ## Pausing Dialog
 
