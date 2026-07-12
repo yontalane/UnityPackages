@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.9] - 2026.07.12
+
+### Changed
+
+- Documentation rewritten with a package overview and a full API reference table; removed docs for wall/step-validation pathing, which is currently non-functional
+- Added a code comment on GridNavigator noting the current flood-fill approach and that step validation is disabled
+- package.json description no longer claims A* (the implementation is a flood-fill search, not A*)
+
 ## [1.0.8] - 2025.12.04
 
 ### Added

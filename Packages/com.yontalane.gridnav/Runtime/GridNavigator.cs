@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Yontalane.GridNav
 {
+    // Current implementation is a brute-force flood-fill (BFS/wavefront) from the start node: SetDistance()
+    // labels every reachable cell with its step-distance from start, then SetPath() backtracks from the end
+    // node along decreasing distance. It's correct but O(V^2)-ish, since it rescans the whole grid at every
+    // step with no early exit. Consider switching to A* for better performance, especially on larger maps.
+    //
+    // Note: step validation (i.e. disallowing movement between two adjacent, individually-pathable nodes —
+    // "walls between cells") is currently disabled. m_stepIsValid is accepted and stored but never invoked;
+    // see the commented-out calls in TestDirection().
     /// <summary>
     /// Provides pathfinding functionality on a 2D grid, allowing navigation from a start to an end coordinate
     /// using customizable node and step validation logic.

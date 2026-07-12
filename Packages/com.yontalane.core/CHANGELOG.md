@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.48] - 2026.07.12
+
+### Added
+
+- Documented previously-undocumented features: AnimationEventBroadcaster, AnimationSoundPlayer, AudioPack, AudioPackPlayer, Singleton, OptionalSingleton, MusicManager, MusicSource, RemoteMusicPlayer, RemoteMusicPlayerTrack, LayerAttribute, TagAttribute, ListExtensions, and Utility.LayerCount
+- Overview text for every documented feature, plus sample code for property attributes
+
+### Fixed
+
+- IntRange's documentation listed the wrong constructor name
+- LeashTransform documentation was missing the Rigidbody, useBounds, and bounds properties
+
 ## [1.0.47] - 2026.07.09
 
 ### Fixed

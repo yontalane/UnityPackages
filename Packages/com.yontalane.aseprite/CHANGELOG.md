@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.44] - 2026.07.12
+
+### Added
+
+- Documented Motion Trees (AsepriteAnimationExtra, MotionTree), Sprite Object Info metadata (SpriteObjectInfo, SpriteObjectAnimationInfo, ActivationPeriod, AnimationLengthInfo, AsepriteExtensions), and Settings (Debug Settings, Gizmo Info)
+- Filled in previously undocumented AsepriteAnimationBridge properties and methods
+
 ## [1.0.43] - 2026.01.18
 
 ### Fixed
