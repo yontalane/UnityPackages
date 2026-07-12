@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.10] - 2026.07.12
+
+### Added
+
+- Documented Interactor, Interactable, InteractionBase, InteractionInfo, InteractionSimple, and InteractionCarry
+
+### Fixed
+
+- Interactor could stop tracking a valid nearby interactable when a farther one was detected first in the same frame's raycast sweep
+- Interactable.IgnoreCollision() ignored its targetRoot parameter when restoring collision, instead relying on a stale cached collider list from the previous call
+
 ## [1.0.9] - 2025.12.04
 
 ### Added

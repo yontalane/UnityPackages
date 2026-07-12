@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.28] - 2026.07.12
+
+### Added
+
+- Documented MapBuilder, MapData, TileData, EntityData, TileDataCollection, MapEntity, MapProperties, MapPropertyDictionary, MapPropertyValue, PersistentObject, MapUtilities, and Settings (LayoutTilemapSettings, MapEntityData, NamedMapEntityData)
+
+### Fixed
+
+- MapBuilder.LoadMap()'s XML doc comment referenced a mapToLoad parameter on the overload that doesn't have one
+
 ## [1.0.27] - 2025.12.04
 
 ### Added

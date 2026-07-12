@@ -91,76 +91,93 @@ namespace Yontalane.Interaction
             {
                 return;
             }
-            foreach(float y in m_origins)
+
+            Interactable closestInteractable = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (float y in m_origins)
             {
                 if (TryCheckFromOrigin(transform.position + y * Vector3.up, out Interactable interactable))
                 {
-                    if (m_currentInteractable == interactable)
+                    float distance = Vector3.Distance(transform.position, interactable.transform.position);
+                    if (distance < closestDistance)
                     {
-                        return;
-                    }
-                    else if (m_currentInteractable == null || (m_currentInteractable != interactable && Vector3.Distance(transform.position, interactable.transform.position) < Vector3.Distance(transform.position, m_currentInteractable.transform.position)))
-                    {
-                        m_currentInteractable = interactable;
-                        if (m_highlightInteractables)
-                        {
-                            m_currentInteractable.SetHighlightOn();
-                        }
-                        OnInteractableEnter?.Invoke(m_currentInteractable);
-                        return;
+                        closestInteractable = interactable;
+                        closestDistance = distance;
                     }
                 }
             }
+
+            if (closestInteractable == m_currentInteractable)
+            {
+                return;
+            }
+
             if (m_currentInteractable != null)
             {
                 m_currentInteractable.SetHighlightOff();
                 OnInteractableExit?.Invoke(m_currentInteractable);
-                m_currentInteractable = null;
+            }
+
+            m_currentInteractable = closestInteractable;
+
+            if (m_currentInteractable != null)
+            {
+                if (m_highlightInteractables)
+                {
+                    m_currentInteractable.SetHighlightOn();
+                }
+                OnInteractableEnter?.Invoke(m_currentInteractable);
             }
         }
 
         /// <summary>
-        /// Project a spread of raycasts from a single point. If they hit an interactable, return it.
+        /// Project a spread of raycasts from a single point. Returns the closest interactable hit, if any.
         /// </summary>
         private bool TryCheckFromOrigin(Vector3 origin, out Interactable interactable)
         {
+            interactable = null;
+            float closestDistance = Mathf.Infinity;
+
             Vector3 angle;
             for (int i = 0; i < RAY_COUNT; i++)
             {
                 angle = Quaternion.Euler(0f, -(i * (m_angle / (RAY_COUNT - 1))), 0f) * transform.forward;
-                if (TryCheckRay(new Ray(origin, angle.normalized), out interactable))
+                if (TryCheckRay(new Ray(origin, angle.normalized), out Interactable rayInteractable, out float rayDistance) && rayDistance < closestDistance)
                 {
-                    return true;
+                    interactable = rayInteractable;
+                    closestDistance = rayDistance;
                 }
             }
             for (int i = 1; i < RAY_COUNT; i++)
             {
                 angle = Quaternion.Euler(0f, i * (m_angle / (RAY_COUNT - 1)), 0f) * transform.forward;
-                if (TryCheckRay(new Ray(origin, angle.normalized), out interactable))
+                if (TryCheckRay(new Ray(origin, angle.normalized), out Interactable rayInteractable, out float rayDistance) && rayDistance < closestDistance)
                 {
-                    return true;
+                    interactable = rayInteractable;
+                    closestDistance = rayDistance;
                 }
             }
-            interactable = null;
-            return false;
+
+            return interactable != null;
         }
 
         /// <summary>
-        /// Project a single raycast. If it hits an interactable, return it.
+        /// Project a single raycast. If it hits one or more interactables, return the closest one.
         /// </summary>
-        private bool TryCheckRay(Ray ray, out Interactable interactable)
+        private bool TryCheckRay(Ray ray, out Interactable interactable, out float distance)
         {
             RaycastHit[] hits = Physics.RaycastAll(ray, m_distance, m_targetLayer.value);
-            float closestDistance = Mathf.Infinity;
+            distance = Mathf.Infinity;
             interactable = null;
             foreach(RaycastHit hit in hits)
             {
                 if (hit.collider.TryGetComponent(out Interactable testInteractable))
                 {
-                    float distance = Vector3.Distance(ray.origin, hit.collider.transform.position);
-                    if (distance < closestDistance)
+                    float hitDistance = Vector3.Distance(ray.origin, hit.collider.transform.position);
+                    if (hitDistance < distance)
                     {
-                        closestDistance = distance;
+                        distance = hitDistance;
                         interactable = testInteractable;
                     }
                 }

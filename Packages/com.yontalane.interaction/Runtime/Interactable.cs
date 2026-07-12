@@ -59,7 +59,6 @@ namespace Yontalane.Interaction
         #region Private variables
         private InteractionBase[] m_interactions = null;
         private List<Collider> m_colliders = new List<Collider>();
-        private List<Collider> m_targetColliders = new List<Collider>();
         private bool m_isHighlightVisible = true;
         #endregion
 
@@ -152,34 +151,26 @@ namespace Yontalane.Interaction
         /// </summary>
         public void IgnoreCollision(GameObject targetRoot = null, bool ignore = true)
         {
-            if (ignore)
+            if (targetRoot == null)
             {
-                m_targetColliders = targetRoot.GetComponentsInChildren<Collider>().ToList();
-                for (int i = m_targetColliders.Count - 1; i >= 0; i--)
+                return;
+            }
+
+            List<Collider> targetColliders = targetRoot.GetComponentsInChildren<Collider>().ToList();
+            for (int i = targetColliders.Count - 1; i >= 0; i--)
+            {
+                if (targetColliders[i].isTrigger)
                 {
-                    if (m_targetColliders[i].isTrigger)
-                    {
-                        m_targetColliders.RemoveAt(i);
-                    }
-                }
-                for (int i = 0; i < m_colliders.Count; i++)
-                {
-                    for (int j = 0; j < m_targetColliders.Count; j++)
-                    {
-                        Physics.IgnoreCollision(m_colliders[i], m_targetColliders[j], true);
-                    }
+                    targetColliders.RemoveAt(i);
                 }
             }
-            else
+
+            for (int i = 0; i < m_colliders.Count; i++)
             {
-                for (int i = 0; i < m_colliders.Count; i++)
+                for (int j = 0; j < targetColliders.Count; j++)
                 {
-                    for (int j = 0; j < m_targetColliders.Count; j++)
-                    {
-                        Physics.IgnoreCollision(m_colliders[i], m_targetColliders[j], false);
-                    }
+                    Physics.IgnoreCollision(m_colliders[i], targetColliders[j], ignore);
                 }
-                m_targetColliders.Clear();
             }
         }
 

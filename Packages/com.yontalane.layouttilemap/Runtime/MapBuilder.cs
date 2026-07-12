@@ -314,7 +314,6 @@ namespace Yontalane.LayoutTilemap
         /// This method loads a UnityEngine.Tilemap. It scrapes through all Tiles and Entities within the map, replaces them with instantiated prefabs, and then deletes the Tilemap. In other words, you can use this method to build a 3D level using a 2D Tilemap as your blueprint.
         /// </summary>
         /// <param name="callback">Invoke this action when the map has finished loading.</param>
-        /// <param name="mapToLoad">The name of the Tilemap to load from Resources. If this parameter is left blank, MapBuilder will fall back on <c>mapToLoad</c>.</param>
         public void LoadMap(Action<MapData> callback) => LoadMap(callback, m_mapToLoad);
 
         /// <summary>
