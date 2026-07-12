@@ -510,6 +510,31 @@ namespace Yontalane.Aseprite
             return false;
         }
 
+        /// <summary>
+        /// Checks whether the specified animation name resolves to a sub-clip of any <see cref="MotionTree"/> in the assigned extras,
+        /// regardless of which motion tree (or which state) it belongs to.
+        /// </summary>
+        /// <param name="animationName">The name of the animation clip to check for.</param>
+        /// <returns>True if the animation name matches a sub-clip of any motion tree, false otherwise.</returns>
+        public bool IsMotionTreeClip(string animationName)
+        {
+            foreach (AsepriteAnimationExtra extra in m_extras)
+            {
+                foreach (MotionTree tree in extra.motionTrees)
+                {
+                    for (int i = 0; i < tree.Count; i++)
+                    {
+                        if (tree.TryGet(i, Animator, out AnimationClip clip) && clip != null && clip.name == animationName)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region Animation Playback

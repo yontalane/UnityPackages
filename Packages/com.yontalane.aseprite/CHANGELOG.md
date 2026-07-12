@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.45] - 2026.07.12
+
+### Added
+
+- AsepriteAnimationBridge.IsMotionTreeClip(), to check whether an animation name resolves to a sub-clip of any assigned MotionTree
+
 ## [1.0.44] - 2026.07.12
 
 ### Added
