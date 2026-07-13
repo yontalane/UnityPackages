@@ -17,6 +17,13 @@ namespace Yontalane.UIElements
         #region Constants
         protected const string GLOBAL_MENU = "GLOBAL";
         protected const string CANCEL_EVENT = "CANCEL";
+
+        /// <summary>
+        /// Pixels to move a plain ScrollView's scrollOffset per directional navigation input, when
+        /// it's being scrolled directly via <see cref="RegisterScrollViewKeyScrolling"/> because it
+        /// has no focusable children of its own to step between (e.g. a static block of text).
+        /// </summary>
+        private const float SCROLL_VIEW_KEY_STEP = 40f;
         #endregion
 
         #region Private Variables
@@ -265,9 +272,10 @@ namespace Yontalane.UIElements
             // Register navigation events for ScrollView elements in the menu.
             RegisterNavigationEvent<ScrollView>(root);
 
-            // Let Cancel/Back work even if a Scroller ends up focused (see the fallback focus
-            // target in DelayedFocusElement, for menus with nothing else focusable to land on).
-            RegisterScrollerCancel(menu, root);
+            // Let a plain ScrollView with no focusable children of its own (e.g. a static block of
+            // text) be scrolled directly by directional input, for when it ends up focused as the
+            // fallback target in DelayedFocusElement.
+            RegisterScrollViewKeyScrolling(menu, root);
 
             // Register navigation events for common UI controls.
             RegisterNavigationEvent<Button>(root);
@@ -336,26 +344,70 @@ namespace Yontalane.UIElements
         }
 
         /// <summary>
-        /// Registers a Cancel handler on each Scroller in the menu, so Cancel/Back still works on the
-        /// rare occasion a Scroller ends up focused (see the last-resort fallback in
-        /// <see cref="DelayedFocusElement"/> for menus with no other focusable content). A real
-        /// NavigationCancelEvent originates on the Scroller's focused internal control and bubbles up
-        /// to the Scroller itself, so registering here (default bubble phase) is sufficient without
-        /// needing to touch the menu root's own trickle-down cancel handler.
+        /// Registers directional-scroll and Cancel handling on every plain ScrollView in the menu
+        /// (explicitly excluding ScrollViewAuto, which already has its own up/down behavior of
+        /// stepping focus between its real child controls -- see
+        /// <see cref="ScrollViewAuto.NavigationMoveListener"/>). A plain ScrollView with nothing
+        /// focusable inside it (e.g. a static block of text) can still end up as the menu's fallback
+        /// focus target -- see <see cref="DelayedFocusElement"/> -- and Unity's ScrollView does not
+        /// scroll itself in response to focus plus directional input, so that has to be done by hand
+        /// here. Both handlers only act when the ScrollView itself is the event's target, so they
+        /// never interfere with a focusable element nested inside a different kind of ScrollView.
         /// </summary>
-        /// <param name="menu">The menu the Scroller belongs to.</param>
-        /// <param name="root">The root VisualElement to search for Scroller elements.</param>
-        private void RegisterScrollerCancel(Menu menu, VisualElement root)
+        /// <param name="menu">The menu the ScrollView belongs to.</param>
+        /// <param name="root">The root VisualElement to search for ScrollView elements.</param>
+        private void RegisterScrollViewKeyScrolling(Menu menu, VisualElement root)
         {
-            root.Query<Scroller>().ForEach((scroller) =>
+            root.Query<ScrollView>().ForEach((scrollView) =>
             {
-                scroller.RegisterCallback((NavigationCancelEvent e) =>
+                if (scrollView.GetType() != typeof(ScrollView))
                 {
+                    return;
+                }
+
+                scrollView.RegisterCallback((NavigationMoveEvent e) =>
+                {
+                    if (e.target != scrollView)
+                    {
+                        return;
+                    }
+
+                    Vector2 offset = scrollView.scrollOffset;
+                    switch (e.direction)
+                    {
+                        case NavigationMoveEvent.Direction.Up:
+                            offset.y -= SCROLL_VIEW_KEY_STEP;
+                            break;
+                        case NavigationMoveEvent.Direction.Down:
+                            offset.y += SCROLL_VIEW_KEY_STEP;
+                            break;
+                        case NavigationMoveEvent.Direction.Left:
+                            offset.x -= SCROLL_VIEW_KEY_STEP;
+                            break;
+                        case NavigationMoveEvent.Direction.Right:
+                            offset.x += SCROLL_VIEW_KEY_STEP;
+                            break;
+                        default:
+                            return;
+                    }
+                    scrollView.scrollOffset = offset;
+
+                    e.StopPropagation();
+                    scrollView.focusController.IgnoreEvent(e);
+                });
+
+                scrollView.RegisterCallback((NavigationCancelEvent e) =>
+                {
+                    if (e.target != scrollView)
+                    {
+                        return;
+                    }
+
                     OnCancelInternal(menu, string.Empty, out bool blockEvent);
                     if (blockEvent)
                     {
                         e.StopPropagation();
-                        scroller.focusController.IgnoreEvent(e);
+                        scrollView.focusController.IgnoreEvent(e);
                     }
                 });
             });
@@ -958,22 +1010,39 @@ namespace Yontalane.UIElements
 
             // No regular focusable content exists (e.g. a screen that's just a block of scrollable
             // text, like an About screen, with no buttons or fields of its own). As a last resort
-            // before giving up on navigation entirely, focus a Scroller's own focusable part so
-            // directional input can still scroll it by hand -- canGrabFocus is false when the
-            // Scroller itself is hidden (e.g. content that fits without scrolling), so this only
-            // fires when there's actually something to scroll. This loop only runs when the first
-            // pass above found nothing, so it never fires on a menu that has real focusable content
-            // alongside a ScrollViewAuto -- that case is handled by focus stepping between the list's
-            // own items (see ScrollViewAuto.NavigationMoveListener), and the scrollbar itself is
-            // never a candidate there.
-            for (int i = 0; i < children.Count; i++)
+            // before giving up on navigation entirely, focus a plain ScrollView directly -- forcing
+            // it focusable here rather than requiring that be authored in UXML, since a ScrollView
+            // and everything inside its Scroller (RepeatButtons, drag thumb) default to
+            // focusable="false" in this project's UI templates, so there'd otherwise be nothing to
+            // find here at all. RegisterScrollViewKeyScrolling handles the resulting directional
+            // input by moving scrollOffset directly, since UI Toolkit's ScrollView doesn't do that on
+            // its own just by being focused. This loop only runs when the first pass above found
+            // nothing, so it never fires on a menu that has real focusable content alongside a
+            // ScrollViewAuto -- that case is handled by focus stepping between the list's own items
+            // (see ScrollViewAuto.NavigationMoveListener), and a ScrollViewAuto is deliberately
+            // skipped below since it isn't a plain ScrollView.
+            List<ScrollView> scrollViews = root.Query<ScrollView>().ToList();
+            foreach (ScrollView scrollView in scrollViews)
             {
-                if (children[i].focusable && children[i].canGrabFocus && IsInsideScroller(children[i], root))
+                if (scrollView.GetType() != typeof(ScrollView))
                 {
-                    children[i].Focus();
-                    m_ignoreFocus = false;
-                    yield break;
+                    continue;
                 }
+
+                // Only worth focusing if there's actually overflow to scroll through -- mirrors
+                // Unity's own overflow determination, so it respects each scroller's configured
+                // visibility mode (Auto/AlwaysVisible/Hidden) instead of re-deriving it from layout.
+                bool hasOverflow = scrollView.verticalScroller.resolvedStyle.display != DisplayStyle.None
+                    || scrollView.horizontalScroller.resolvedStyle.display != DisplayStyle.None;
+                if (!hasOverflow)
+                {
+                    continue;
+                }
+
+                scrollView.focusable = true;
+                scrollView.Focus();
+                m_ignoreFocus = false;
+                yield break;
             }
 
             // No focusable child was found (e.g. a menu with no items). Fall back to focusing the

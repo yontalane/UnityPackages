@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.69] - 2026.07.12
+
+### Fixed
+
+- Corrected the 1.0.68 fallback: focusing a ScrollView's Scroller didn't actually work, since in this project's UI templates the Scroller and everything inside it (RepeatButtons, drag thumb) are focusable="false" by default, and UI Toolkit's ScrollView doesn't scroll itself in response to focus plus directional input regardless. DelayedFocusElement's last-resort fallback now focuses the plain ScrollView itself instead (forcing it focusable at runtime rather than requiring UXML changes), only when it actually has overflow to scroll. A new RegisterScrollViewKeyScrolling moves scrollOffset directly in response to NavigationMoveEvent and handles Cancel/Back, mirrored from the previous Scroller-focused version. Still only engages when a menu has no other focusable content, and still leaves ScrollViewAuto's existing focus-stepping-between-list-items behavior untouched.
+
 ## [1.0.68] - 2026.07.12
 
 ### Added
