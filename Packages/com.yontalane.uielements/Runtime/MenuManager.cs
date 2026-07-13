@@ -1205,6 +1205,11 @@ namespace Yontalane.UIElements
             for (int i = 0; i < m_menus.menus.Length; i++)
             {
                 root = Root.Q<VisualElement>(m_menus.menus[i].name);
+                if (root == null)
+                {
+                    Logger.LogWarning($"Could not find menu \"{m_menus.menus[i].name}.\"");
+                    continue;
+                }
                 if (root.style.display == DisplayStyle.None)
                 {
                     continue;

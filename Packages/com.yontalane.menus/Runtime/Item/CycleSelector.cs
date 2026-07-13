@@ -53,7 +53,7 @@ namespace Yontalane.Menus.Item
                 m_items = value;
                 if (m_items != null && m_items.Length > 0)
                 {
-                    m_index = Mathf.Clamp(m_index, 0, value.Length);
+                    m_index = Mathf.Clamp(m_index, 0, value.Length - 1);
                 }
                 else
                 {
@@ -104,12 +104,26 @@ namespace Yontalane.Menus.Item
         {
             get
             {
-                return m_previousButton.interactable;
+                if (m_previousButton != null)
+                {
+                    return m_previousButton.interactable;
+                }
+                else if (m_nextButton != null)
+                {
+                    return m_nextButton.interactable;
+                }
+                return true;
             }
             set
             {
-                m_previousButton.interactable = value;
-                m_nextButton.interactable = value;
+                if (m_previousButton != null)
+                {
+                    m_previousButton.interactable = value;
+                }
+                if (m_nextButton != null)
+                {
+                    m_nextButton.interactable = value;
+                }
             }
         }
         #endregion

@@ -173,8 +173,9 @@ namespace Yontalane.UIElements
         /// </summary>
         private void RefreshIconSize()
         {
-            // Calculate the size to use for the icon UI element.
-            Vector2 size = !m_iconUI.style.backgroundImage.value.IsEmpty() ? m_iconSize : m_iconSize;
+            // Calculate the size to use for the icon UI element. Collapse to zero when there's no
+            // icon assigned, so a text-only button doesn't reserve layout space for it.
+            Vector2 size = !m_iconUI.style.backgroundImage.value.IsEmpty() ? m_iconSize : Vector2.zero;
 
             // Set the width and height of the icon UI element.
             m_iconUI.style.width = new(new Length(size.x, LengthUnit.Pixel));

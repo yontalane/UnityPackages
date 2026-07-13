@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.71] - 2026.07.12
+
+### Added
+
+- Rewrote documentation to match the pattern used by Core and Aseprite: prose overview per class, plus Properties/Delegates/Public Methods tables
+
+### Fixed
+
+- IconButton.RefreshIconSize's ternary always evaluated to the same value regardless of whether an icon was assigned, so a text-only button still reserved layout space for its (invisible) icon
+- MenuManager.IndexOfActiveMenu threw a NullReferenceException instead of logging a warning when a Menu's name didn't match any element in the UXML tree
+
 ## [1.0.70] - 2026.07.12
 
 ### Fixed

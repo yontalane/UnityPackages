@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.23] - 2026.07.12
+
+### Added
+
+- Rewrote documentation to match the pattern used by Core and Aseprite: prose overview per class, plus Properties/Delegates/Public Methods tables
+
+### Fixed
+
+- CycleSelector.Items clamped its index against value.Length instead of value.Length - 1, allowing Index to be set one past the last valid entry
+- CycleSelector.CycleInteractable's getter and setter threw a NullReferenceException if PreviousButton or NextButton was left unassigned, despite both being documented as optional
+
 ## [1.0.22] - 2025.12.04
 
 ### Added
