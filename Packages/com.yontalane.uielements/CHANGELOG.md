@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.68] - 2026.07.12
+
+### Added
+
+- Menus with no focusable content of their own (e.g. a screen that's just a block of scrollable text, with no buttons or fields) now fall back to focusing a ScrollView's Scroller as a last resort in DelayedFocusElement, so directional/controller navigation can still scroll it. Previously the Scroller was unconditionally excluded from auto-focus (to keep it from stealing focus away from real content), which left such screens with nothing focusable at all -- only mouse-dragging the scrollbar worked. Also registers a Cancel handler on each Scroller so Back still works if it ends up focused this way.
+
 ## [1.0.67] - 2026.07.08
 
 ### Fixed

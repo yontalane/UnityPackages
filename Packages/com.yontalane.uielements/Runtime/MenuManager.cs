@@ -265,6 +265,10 @@ namespace Yontalane.UIElements
             // Register navigation events for ScrollView elements in the menu.
             RegisterNavigationEvent<ScrollView>(root);
 
+            // Let Cancel/Back work even if a Scroller ends up focused (see the fallback focus
+            // target in DelayedFocusElement, for menus with nothing else focusable to land on).
+            RegisterScrollerCancel(menu, root);
+
             // Register navigation events for common UI controls.
             RegisterNavigationEvent<Button>(root);
             RegisterNavigationEvent<Toggle>(root);
@@ -328,6 +332,32 @@ namespace Yontalane.UIElements
 
                     m_listeners.onNavigation?.Invoke();
                 }, TrickleDown.TrickleDown);
+            });
+        }
+
+        /// <summary>
+        /// Registers a Cancel handler on each Scroller in the menu, so Cancel/Back still works on the
+        /// rare occasion a Scroller ends up focused (see the last-resort fallback in
+        /// <see cref="DelayedFocusElement"/> for menus with no other focusable content). A real
+        /// NavigationCancelEvent originates on the Scroller's focused internal control and bubbles up
+        /// to the Scroller itself, so registering here (default bubble phase) is sufficient without
+        /// needing to touch the menu root's own trickle-down cancel handler.
+        /// </summary>
+        /// <param name="menu">The menu the Scroller belongs to.</param>
+        /// <param name="root">The root VisualElement to search for Scroller elements.</param>
+        private void RegisterScrollerCancel(Menu menu, VisualElement root)
+        {
+            root.Query<Scroller>().ForEach((scroller) =>
+            {
+                scroller.RegisterCallback((NavigationCancelEvent e) =>
+                {
+                    OnCancelInternal(menu, string.Empty, out bool blockEvent);
+                    if (blockEvent)
+                    {
+                        e.StopPropagation();
+                        scroller.focusController.IgnoreEvent(e);
+                    }
+                });
             });
         }
         #endregion
@@ -919,6 +949,26 @@ namespace Yontalane.UIElements
                 // e.g. the RepeatButtons and drag Slider) so auto-focus lands on real menu content instead
                 // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.
                 if (children[i].focusable && children[i].canGrabFocus && !IsInsideScroller(children[i], root))
+                {
+                    children[i].Focus();
+                    m_ignoreFocus = false;
+                    yield break;
+                }
+            }
+
+            // No regular focusable content exists (e.g. a screen that's just a block of scrollable
+            // text, like an About screen, with no buttons or fields of its own). As a last resort
+            // before giving up on navigation entirely, focus a Scroller's own focusable part so
+            // directional input can still scroll it by hand -- canGrabFocus is false when the
+            // Scroller itself is hidden (e.g. content that fits without scrolling), so this only
+            // fires when there's actually something to scroll. This loop only runs when the first
+            // pass above found nothing, so it never fires on a menu that has real focusable content
+            // alongside a ScrollViewAuto -- that case is handled by focus stepping between the list's
+            // own items (see ScrollViewAuto.NavigationMoveListener), and the scrollbar itself is
+            // never a candidate there.
+            for (int i = 0; i < children.Count; i++)
+            {
+                if (children[i].focusable && children[i].canGrabFocus && IsInsideScroller(children[i], root))
                 {
                     children[i].Focus();
                     m_ignoreFocus = false;
