@@ -997,6 +997,16 @@ namespace Yontalane.UIElements
             List<VisualElement> children = root.Query<VisualElement>().ToList();
             for (int i = 0; i < children.Count; i++)
             {
+                // Query<VisualElement>() on a menu's root includes the root itself as its own first
+                // result (see the same gotcha noted in RegisterDynamicElement) -- skip it here so it
+                // can't preempt this search. The root's own focusable flag is only meant to be used as
+                // the very last resort below, once every other option (including a scrollable
+                // ScrollView further down) has already come up empty.
+                if (children[i] == root)
+                {
+                    continue;
+                }
+
                 // Skip a ScrollView's internal Scroller elements (always present regardless of content,
                 // e.g. the RepeatButtons and drag Slider) so auto-focus lands on real menu content instead
                 // of an invisible scrollbar control -- see HasInteractiveDescendant for the same exclusion.

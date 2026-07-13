@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.70] - 2026.07.12
+
+### Fixed
+
+- Found the actual root cause the 1.0.68/1.0.69 fallbacks never reached: `root.Query<VisualElement>()` in DelayedFocusElement's child search includes the menu's own root as its first result (the same gotcha already called out in RegisterDynamicElement's docs), and for a menu with no other interactive descendants RegisterEmptyMenuFallback has already made that root focusable by the time this search runs. So the loop matched and focused the root at its very first iteration, every time, before ever reaching a real child or either ScrollView-focused fallback -- toggling the ScrollView's focusable in UXML could never have mattered, since the search never got that far. The loop now explicitly skips the root itself, so the 1.0.69 ScrollView fallback (and RegisterScrollViewKeyScrolling) can finally run when appropriate.
+
 ## [1.0.69] - 2026.07.12
 
 ### Fixed
