@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.72] - 2026.07.18
+
+### Fixed
+
+- MenuManager uses a copy of InputActions so that it doesn't put a lock on input schemes (gamepad/keyboard/etc), which would potentially lock out other players in a local multiplayer setup.
+
 ## [1.0.71] - 2026.07.12
 
 ### Added

@@ -106,6 +106,20 @@ namespace Yontalane.UIElements
 
         protected virtual void Awake()
         {
+            // Use a private copy of the actions asset. If a PlayerInput elsewhere in the scene
+            // references this same asset instance, activating its control scheme sets a
+            // bindingMask on the whole asset (not just its own map), which would silently filter
+            // out this menu's own bindings whenever that player's scheme doesn't
+            // match. A private copy keeps this menu's input immune to that.
+            // For example, if there are two PlayerInputs (one using gamepad and one using
+            // keyboard), the moment the first player takes an action, the PlayerInput is locked
+            // into its input mode (thus disabling the second player's input). Therefore, the
+            // players shouldn't use a shared set of actions.
+            if (m_input.actions != null)
+            {
+                m_input.actions = Instantiate(m_input.actions);
+            }
+
             // Find and assign the UIDocument component in the scene. Log an error if not found.
             m_document = FindAnyObjectByType<UIDocument>();
             if (m_document == null)
