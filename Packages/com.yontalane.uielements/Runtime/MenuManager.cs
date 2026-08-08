@@ -446,10 +446,13 @@ namespace Yontalane.UIElements
             }
 
             // Find all VisualElements in the menu and register click handlers for Buttons and Toggles.
+            // CycleSelector's own previous/next buttons are excluded here -- they're an internal
+            // implementation detail of the control, not independent menu items. CycleSelector itself
+            // is registered separately below.
             List<VisualElement> elements = root.Query<VisualElement>().ToList();
             foreach (VisualElement element in elements)
             {
-                if (element is Button || element is Toggle)
+                if ((element is Button || element is Toggle) && !IsInsideCycleSelector(element, root))
                 {
                     RegisterClick(menu, element);
                 }
@@ -465,6 +468,13 @@ namespace Yontalane.UIElements
                     continue;
                 }
                 RegisterBindableNavigation(menu, item);
+            }
+
+            // Find all CycleSelectors in the menu and register cancel/side-navigation handling.
+            List<CycleSelector> cycleSelectors = root.Query<CycleSelector>().ToList();
+            foreach (CycleSelector cycleSelector in cycleSelectors)
+            {
+                RegisterCycleSelectorNavigation(menu, cycleSelector);
             }
 
             // Let the menu's root stand in as the cancel target whenever the menu currently has no
@@ -511,6 +521,46 @@ namespace Yontalane.UIElements
         }
 
         /// <summary>
+        /// Registers cancel and (conditionally) left/right navigation handling for a single
+        /// CycleSelector. Cancel is always forwarded, the same as any other menu item. Left/right
+        /// navigation is only forwarded to <see cref="OnSideNavigationInternal"/> when the
+        /// CycleSelector's own <c>LeftRightNav</c> is off -- when it's on, CycleSelector already owns
+        /// left/right cycling itself, and forwarding it here too would double-handle the input.
+        /// </summary>
+        /// <param name="menu">The menu the element belongs to.</param>
+        /// <param name="cycleSelector">The CycleSelector to register.</param>
+        private void RegisterCycleSelectorNavigation(Menu menu, CycleSelector cycleSelector)
+        {
+            cycleSelector.RegisterCallback((NavigationCancelEvent e) =>
+            {
+                OnCancelInternal(menu, cycleSelector.name, out bool blockEvent);
+                if (blockEvent)
+                {
+                    e.StopPropagation();
+                    cycleSelector.focusController.IgnoreEvent(e);
+                }
+            });
+
+            cycleSelector.RegisterCallback((NavigationMoveEvent e) =>
+            {
+                if (cycleSelector.LeftRightNav)
+                {
+                    return;
+                }
+
+                if (e.direction == NavigationMoveEvent.Direction.Left || e.direction == NavigationMoveEvent.Direction.Right)
+                {
+                    OnSideNavigationInternal(menu, cycleSelector.name, e.direction == NavigationMoveEvent.Direction.Right, out bool blockEvent);
+                    if (blockEvent)
+                    {
+                        e.StopPropagation();
+                        cycleSelector.focusController.IgnoreEvent(e);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
         /// Registers click/cancel/side-navigation handling for a single VisualElement that was added to
         /// a menu dynamically (e.g. via code, after the game has started), so it participates in the same
         /// navigation behavior as elements present when the menu was first registered at Awake time.
@@ -522,7 +572,7 @@ namespace Yontalane.UIElements
         /// that MenuManager itself wires up.
         /// </summary>
         /// <param name="menuName">The name of the menu <paramref name="element"/> was added to.</param>
-        /// <param name="element">The newly added Button, Toggle, or other BindableElement.</param>
+        /// <param name="element">The newly added Button, Toggle, CycleSelector, or other BindableElement.</param>
         public void RegisterDynamicElement(string menuName, VisualElement element)
         {
             if (!TryGetMenu(menuName, out Menu menu))
@@ -534,6 +584,10 @@ namespace Yontalane.UIElements
             if (element is Button || element is Toggle)
             {
                 RegisterClick(menu, element);
+            }
+            else if (element is CycleSelector cycleSelector)
+            {
+                RegisterCycleSelectorNavigation(menu, cycleSelector);
             }
             else if (element is BindableElement bindable)
             {
@@ -555,11 +609,14 @@ namespace Yontalane.UIElements
         }
 
         /// <summary>
-        /// Returns true if the given VisualElement's subtree contains any Button or BindableElement
-        /// (e.g. Toggle, TextField, etc.) other than the root itself, excluding elements that can't
-        /// currently receive focus (e.g. explicitly non-focusable items) and elements that belong to
-        /// a ScrollView's internal Scroller (which always exists in the hierarchy regardless of the
-        /// scroll view's actual content, and shouldn't count as authored menu content).
+        /// Returns true if the given VisualElement's subtree contains any Button, BindableElement
+        /// (e.g. Toggle, TextField, etc.), or CycleSelector other than the root itself, excluding
+        /// elements that can't currently receive focus (e.g. explicitly non-focusable items) and
+        /// elements that belong to a ScrollView's internal Scroller (which always exists in the
+        /// hierarchy regardless of the scroll view's actual content, and shouldn't count as authored
+        /// menu content) or to a CycleSelector's internal previous/next buttons (an implementation
+        /// detail of the control, not independent menu content -- the CycleSelector itself already
+        /// counts).
         /// </summary>
         private static bool HasInteractiveDescendant(VisualElement root)
         {
@@ -570,7 +627,8 @@ namespace Yontalane.UIElements
                 {
                     continue;
                 }
-                if ((element is Button || element is BindableElement) && !IsInsideScroller(element, root))
+                if ((element is Button || element is BindableElement || element is CycleSelector)
+                    && !IsInsideScroller(element, root) && !IsInsideCycleSelector(element, root))
                 {
                     return true;
                 }
@@ -587,6 +645,26 @@ namespace Yontalane.UIElements
             for (VisualElement ancestor = element.parent; ancestor != null && ancestor != root; ancestor = ancestor.parent)
             {
                 if (ancestor is Scroller)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if <paramref name="element"/> has a <see cref="CycleSelector"/> as an ancestor,
+        /// stopping the search at <paramref name="root"/>. CycleSelector's internal previous/next
+        /// buttons are an implementation detail of the control rather than independent menu items, so
+        /// they're excluded from the generic per-Button registration in <see cref="RegisterClick(Menu)"/>
+        /// and from <see cref="HasInteractiveDescendant"/> -- CycleSelector itself is registered
+        /// separately via <see cref="RegisterCycleSelectorNavigation"/>.
+        /// </summary>
+        private static bool IsInsideCycleSelector(VisualElement element, VisualElement root)
+        {
+            for (VisualElement ancestor = element.parent; ancestor != null && ancestor != root; ancestor = ancestor.parent)
+            {
+                if (ancestor is CycleSelector)
                 {
                     return true;
                 }

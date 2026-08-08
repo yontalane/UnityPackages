@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.74] - 2026.08.08
+
+### Added
+
+- MenuManager now treats CycleSelector as a first-class menu item: it registers cancel handling (so pressing Back/Cancel while a CycleSelector has focus backs out of the menu, same as any other item) and forwards left/right navigation to OnSideNavigation only when the CycleSelector's own LeftRightNav is off, so a CycleSelector with LeftRightNav on (the default) doesn't get its self-contained cycling double-handled. A menu containing only a CycleSelector is also now correctly recognized as non-empty by the empty-menu-fallback logic, and CycleSelector's internal previous/next buttons are excluded from the generic per-Button click registration so clicking them no longer also fires a spurious menu-item click for an internal implementation detail. RegisterDynamicElement also recognizes CycleSelector for elements added to a menu at runtime.
+
 ## [1.0.73] - 2026.08.08
 
 ### Added

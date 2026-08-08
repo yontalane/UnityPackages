@@ -6,7 +6,7 @@ A library of menu, dialog, and control components built on Unity's UI Toolkit (`
 
 Abstract base class for managing a UIDocument's menus: navigation, focus, sound and event feedback, and dynamically added ("addable") items. Subclass it and implement **OnClick** to react to menu item clicks — or use Simple Menu Manager if you'd rather wire everything up through UnityEvents in the Inspector instead of subclassing.
 
-On Awake, Menu Manager finds the scene's UIDocument (via `FindAnyObjectByType`), validates its configured subordinates and menu items, and — for every Menu in **Menus** — finds that Menu's root VisualElement by name (its UXML id) and registers click, cancel, and left/right-navigation handling for every Button, Toggle, and other bindable control inside it. On Start, it calls **Activate** automatically unless **ActivateOnStart** is overridden to return false.
+On Awake, Menu Manager finds the scene's UIDocument (via `FindAnyObjectByType`), validates its configured subordinates and menu items, and — for every Menu in **Menus** — finds that Menu's root VisualElement by name (its UXML id) and registers click, cancel, and left/right-navigation handling for every Button, Toggle, Cycle Selector, and other bindable control inside it. On Start, it calls **Activate** automatically unless **ActivateOnStart** is overridden to return false.
 
 A Menu Manager can have **subordinate** Menu Managers (for example, a HUD manager with a pause menu subordinate to it). A menu item's **Menu Item Type** determines what selecting it does: a `Normal` item switches to another menu within the same Menu Manager; a `Subordinate` item switches to a menu within one of this Menu Manager's subordinates; a `Dominant` item switches to a menu within the Menu Manager this one is subordinate to.
 
@@ -33,7 +33,7 @@ When switching menus, Menu Manager also handles focus automatically: it remember
 | Name                      | Description                                                  |
 | -------------------------- | ------------------------------------------------------------ |
 | **Activate**               | Hides all subordinate Menu Managers' menus, then displays this Menu Manager's first menu (per Menu Collection's **firstMenu**). |
-| **RegisterDynamicElement** | Registers click/cancel/navigation handling for a Button, Toggle, or other bindable element added to a menu at runtime, so it behaves the same as elements present when the menu was first registered at Awake. |
+| **RegisterDynamicElement** | Registers click/cancel/navigation handling for a Button, Toggle, Cycle Selector, or other bindable element added to a menu at runtime, so it behaves the same as elements present when the menu was first registered at Awake. |
 | **GetMenus**               | Returns the array of menus managed by this Menu Manager.       |
 | **TryGetMenu**             | Attempts to retrieve a Menu by name — optionally also its root VisualElement and (for addable items) its container VisualElement. |
 | **TryGetContainer**        | Attempts to retrieve the addable-item container VisualElement for a menu by name. |
