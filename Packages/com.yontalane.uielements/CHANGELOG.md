@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.73] - 2026.08.08
+
+### Added
+
+- CycleSelector: a new UI Toolkit control mirroring DropdownField's API (choices, index, value, text, SetValueWithoutNotify, RegisterValueChangedCallback) but displayed as a value label flanked by previous/next arrow buttons instead of a dropdown menu, with an optional static label to its left. Loopable controls whether cycling wraps at the ends; LeftRightNav controls whether the control itself owns left/right navigation (excluding the arrow buttons from the tab order) or leaves the arrow buttons individually focusable for the developer to wire up manually. Also adds SetChoices(IReadOnlyList<string>) for populating choices from code.
+
 ## [1.0.72] - 2026.07.18
 
 ### Fixed

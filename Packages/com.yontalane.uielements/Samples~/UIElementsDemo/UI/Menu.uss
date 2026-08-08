@@ -99,6 +99,11 @@
     border-radius: 6px;
 }
 
+.menu CycleSelector {
+    position: relative;
+    width: 50%;
+}
+
 .menu Toggle:hover {
     color: rgb(255, 255, 255);
     background-color: rgb(34, 34, 34);

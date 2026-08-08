@@ -16,6 +16,7 @@
         <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" />
         <ui:DropdownField label="Presets" index="1" choices="Ultra,High,Medium,Low" name="Presets" />
         <ui:DropdownField label="Resolution" index="0" choices="1920x1080,1024x768,640x480" name="Resolution" />
+        <Yontalane.UIElements.CycleSelector label="Quality" choices="Ultra,High,Medium,Low" index="1" name="Quality" />
         <ui:Toggle label="Screen Shake" value="true" name="ScreenShake" />
     </ui:VisualElement>
     <ui:VisualElement name="SettingsAudio" picking-mode="Ignore" class="menu">

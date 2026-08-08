@@ -1,0 +1,50 @@
+.yontalane-cycle-selector {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+
+#yontalane-cycle-selector-label {
+    color: #FFF;
+    margin-right: 8px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+#yontalane-cycle-selector-control {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#yontalane-cycle-selector-value-label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    color: #FFF;
+    background-color: transparent;
+    padding: 4px 8px 4px 8px;
+    border-radius: 4px;
+}
+
+#yontalane-cycle-selector-value-label.focused {
+    background-color: #0AA;
+}
+
+.yontalane-cycle-selector-previous-button,
+.yontalane-cycle-selector-next-button {
+    flex-shrink: 0;
+    padding: 4px 8px 4px 8px;
+}
+
+.yontalane-cycle-selector-previous-button:disabled,
+.yontalane-cycle-selector-next-button:disabled {
+    opacity: 0.35;
+}
+
+.yontalane-cycle-selector-previous-button #icon {
+    scale: -1 1;
+}

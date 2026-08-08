@@ -1,0 +1,333 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Yontalane.UIElements
+{
+    /// <summary>
+    /// A custom UIElements control that displays a static label, a value label, and left/right arrow buttons
+    /// for cycling through a list of string choices. Mirrors the public API of <see cref="DropdownField"/>.
+    /// </summary>
+    [UxmlElement]
+    public partial class CycleSelector : VisualElement, INotifyValueChanged<string>
+    {
+        private const string STYLESHEET_RESOURCE = "YontalaneCycleSelector";
+        private const string ICON_RESOURCE = "RightArrow";
+        private const string FOCUSED_STYLE_CLASS = "focused";
+
+        #region Private Fields
+
+        private readonly Label m_labelElement;
+        private readonly IconButton m_previousButton;
+        private readonly Label m_valueLabel;
+        private readonly IconButton m_nextButton;
+
+        private List<string> m_choices = new();
+        private int m_index = -1;
+        private bool m_loopable = true;
+        private bool m_leftRightNav = true;
+
+        #endregion
+
+        #region Uxml Attributes
+
+        /// <summary>
+        /// The optional static text label displayed to the left of the control.
+        /// </summary>
+        [Tooltip("The optional static text label displayed to the left of the control.")]
+        [UxmlAttribute]
+        public string label
+        {
+            get => m_labelElement.text;
+            set
+            {
+                m_labelElement.text = value;
+                m_labelElement.style.display = !string.IsNullOrEmpty(value) ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+
+        /// <summary>
+        /// The list of choices to cycle through.
+        /// </summary>
+        [Tooltip("The list of choices to cycle through.")]
+        [UxmlAttribute]
+        public List<string> choices
+        {
+            get => m_choices;
+            set
+            {
+                m_choices = value ?? new List<string>();
+                m_index = m_choices.Count > 0 ? Mathf.Clamp(m_index, 0, m_choices.Count - 1) : -1;
+                RefreshLabel();
+                RefreshInteractable();
+            }
+        }
+
+        /// <summary>
+        /// Whether cycling loops from the last choice back to the first (and vice versa).
+        /// </summary>
+        [Tooltip("Whether cycling loops from the last choice back to the first (and vice versa).")]
+        [UxmlAttribute]
+        public bool Loopable
+        {
+            get => m_loopable;
+            set
+            {
+                m_loopable = value;
+                RefreshInteractable();
+            }
+        }
+
+        /// <summary>
+        /// Whether the CycleSelector itself listens for left/right navigation input. When true, the arrow
+        /// buttons are excluded from the tab order. When false, the arrow buttons are individually focusable
+        /// and it's up to the developer to set up their own navigation.
+        /// </summary>
+        [Tooltip("Whether the CycleSelector itself listens for left/right navigation input. When true, the arrow buttons are excluded from the tab order. When false, the arrow buttons are individually focusable and it's up to the developer to set up their own navigation.")]
+        [UxmlAttribute]
+        public bool LeftRightNav
+        {
+            get => m_leftRightNav;
+            set
+            {
+                m_leftRightNav = value;
+                m_previousButton.focusable = !value;
+                m_nextButton.focusable = !value;
+            }
+        }
+
+        /// <summary>
+        /// The index of the currently selected choice, or -1 if there are no choices.
+        /// </summary>
+        [Tooltip("The index of the currently selected choice, or -1 if there are no choices.")]
+        [UxmlAttribute]
+        public int index
+        {
+            get => m_index;
+            set
+            {
+                int clamped = m_choices.Count > 0 ? Mathf.Clamp(value, 0, m_choices.Count - 1) : -1;
+                if (clamped == m_index)
+                {
+                    return;
+                }
+
+                string previousValue = this.value;
+                SetIndexWithoutNotify(clamped);
+
+                using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, this.value);
+                evt.target = this;
+                SendEvent(evt);
+            }
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// The currently selected choice.
+        /// </summary>
+        public string value
+        {
+            get => m_index >= 0 && m_index < m_choices.Count ? m_choices[m_index] : string.Empty;
+            set
+            {
+                int newIndex = m_choices.IndexOf(value);
+                if (newIndex < 0)
+                {
+                    return;
+                }
+                index = newIndex;
+            }
+        }
+
+        /// <summary>
+        /// The text currently displayed by the control. Mirrors <see cref="value"/>.
+        /// </summary>
+        public string text => value;
+
+        #endregion
+
+        #region Constructor
+
+        public CycleSelector()
+        {
+            AddToClassList("yontalane-cycle-selector");
+            focusable = true;
+
+            m_labelElement = new()
+            {
+                name = "yontalane-cycle-selector-label",
+                focusable = false,
+                pickingMode = PickingMode.Ignore,
+            };
+            Add(m_labelElement);
+
+            VisualElement control = new()
+            {
+                name = "yontalane-cycle-selector-control",
+                focusable = false,
+                pickingMode = PickingMode.Ignore,
+            };
+            Add(control);
+
+            m_previousButton = new()
+            {
+                name = "yontalane-cycle-selector-previous-button",
+                focusable = !m_leftRightNav,
+            };
+            m_previousButton.AddToClassList("yontalane-cycle-selector-previous-button");
+            m_previousButton.Icon = Resources.Load<Sprite>(ICON_RESOURCE);
+            m_previousButton.clicked += SelectPrevious;
+            control.Add(m_previousButton);
+
+            m_valueLabel = new()
+            {
+                name = "yontalane-cycle-selector-value-label",
+                focusable = false,
+                pickingMode = PickingMode.Ignore,
+            };
+            control.Add(m_valueLabel);
+
+            m_nextButton = new()
+            {
+                name = "yontalane-cycle-selector-next-button",
+                focusable = !m_leftRightNav,
+            };
+            m_nextButton.AddToClassList("yontalane-cycle-selector-next-button");
+            m_nextButton.Icon = Resources.Load<Sprite>(ICON_RESOURCE);
+            m_nextButton.clicked += SelectNext;
+            control.Add(m_nextButton);
+
+            RegisterCallback<FocusInEvent>(OnFocusIn);
+            RegisterCallback<FocusOutEvent>(OnFocusOut);
+            RegisterCallback<NavigationMoveEvent>(OnNavigationMove);
+
+            styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
+
+            label = string.Empty;
+            RefreshLabel();
+            RefreshInteractable();
+        }
+
+        #endregion
+
+        #region Choices Management
+
+        /// <summary>
+        /// Sets the list of choices to cycle through.
+        /// </summary>
+        /// <param name="newChoices">The new choices.</param>
+        public void SetChoices(IReadOnlyList<string> newChoices)
+        {
+            choices = newChoices != null ? new List<string>(newChoices) : new List<string>();
+        }
+
+        #endregion
+
+        #region Value Management
+
+        /// <summary>
+        /// Sets the currently selected choice without invoking the value-changed callback.
+        /// </summary>
+        /// <param name="newValue">The new value.</param>
+        public void SetValueWithoutNotify(string newValue)
+        {
+            int newIndex = m_choices.IndexOf(newValue);
+            if (newIndex < 0)
+            {
+                return;
+            }
+            SetIndexWithoutNotify(newIndex);
+        }
+
+        private void SetIndexWithoutNotify(int newIndex)
+        {
+            m_index = newIndex;
+            RefreshLabel();
+            RefreshInteractable();
+        }
+
+        /// <summary>
+        /// Selects the previous choice, looping to the last choice if <see cref="Loopable"/> is true.
+        /// </summary>
+        public void SelectPrevious()
+        {
+            if (!CanSelectPrevious)
+            {
+                return;
+            }
+
+            int newIndex = m_index - 1;
+            if (newIndex < 0)
+            {
+                newIndex = m_choices.Count - 1;
+            }
+            index = newIndex;
+        }
+
+        /// <summary>
+        /// Selects the next choice, looping to the first choice if <see cref="Loopable"/> is true.
+        /// </summary>
+        public void SelectNext()
+        {
+            if (!CanSelectNext)
+            {
+                return;
+            }
+
+            int newIndex = m_index + 1;
+            if (newIndex >= m_choices.Count)
+            {
+                newIndex = 0;
+            }
+            index = newIndex;
+        }
+
+        private bool CanSelectPrevious => m_choices.Count > 1 && (m_loopable || m_index > 0);
+
+        private bool CanSelectNext => m_choices.Count > 1 && (m_loopable || m_index < m_choices.Count - 1);
+
+        private void RefreshLabel() => m_valueLabel.text = value;
+
+        private void RefreshInteractable()
+        {
+            m_previousButton.SetEnabled(CanSelectPrevious);
+            m_nextButton.SetEnabled(CanSelectNext);
+        }
+
+        #endregion
+
+        #region Focus and Navigation
+
+        private void OnFocusIn(FocusInEvent _) => m_valueLabel.AddToClassList(FOCUSED_STYLE_CLASS);
+
+        private void OnFocusOut(FocusOutEvent _) => m_valueLabel.RemoveFromClassList(FOCUSED_STYLE_CLASS);
+
+        private void OnNavigationMove(NavigationMoveEvent e)
+        {
+            if (!m_leftRightNav)
+            {
+                return;
+            }
+
+            switch (e.direction)
+            {
+                case NavigationMoveEvent.Direction.Left:
+                    SelectPrevious();
+                    break;
+                case NavigationMoveEvent.Direction.Right:
+                    SelectNext();
+                    break;
+                default:
+                    return;
+            }
+
+            e.StopPropagation();
+            focusController.IgnoreEvent(e);
+        }
+
+        #endregion
+    }
+}

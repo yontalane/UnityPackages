@@ -1,6 +1,6 @@
 # UI Elements
 
-A library of menu, dialog, and control components built on Unity's UI Toolkit (`UnityEngine.UIElements`). Where the `com.yontalane.menus` package drives `UnityEngine.UI` (uGUI) menus, this package serves the same purpose for UI Toolkit projects: interconnected menus with controller/keyboard navigation, laid out in UXML and wired up by subclassing an abstract Menu Manager. It also includes a handful of standalone controls (Selectable Button, Icon Button, Toggle Button, Scroll View Auto) and overlay elements (Notification, Query) usable on their own, without the menu system.
+A library of menu, dialog, and control components built on Unity's UI Toolkit (`UnityEngine.UIElements`). Where the `com.yontalane.menus` package drives `UnityEngine.UI` (uGUI) menus, this package serves the same purpose for UI Toolkit projects: interconnected menus with controller/keyboard navigation, laid out in UXML and wired up by subclassing an abstract Menu Manager. It also includes a handful of standalone controls (Selectable Button, Icon Button, Toggle Button, Cycle Selector, Scroll View Auto) and overlay elements (Notification, Query) usable on their own, without the menu system.
 
 ## Menu Manager
 
@@ -325,6 +325,32 @@ Passed to Toggle Button's **OnChange** delegate.
 | **oldValue**  | The value of the toggle before the change occurred.    |
 | **newValue**  | The value of the toggle after the change occurred.     |
 | **target**    | The Toggle Button that triggered the change event.      |
+
+## Cycle Selector
+
+A control that mirrors Dropdown Field's API — **choices**, **index**, **value**, **text**, **SetValueWithoutNotify**, **RegisterValueChangedCallback** — but displays a value label flanked by previous/next arrow buttons instead of a dropdown menu, with an optional static label to its left. Clicking an arrow button steps to the adjacent choice.
+
+### Properties
+
+| Name             | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| **label**         | The optional static text label displayed to the left of the control. |
+| **choices**       | The list of choices to cycle through.                          |
+| **index**         | The index of the currently selected choice, or -1 if there are no choices. |
+| **value**         | The currently selected choice.                                  |
+| **text**          | The text currently displayed by the control. Mirrors **value**. |
+| **Loopable**      | Whether cycling loops from the last choice back to the first (and vice versa). Defaults to true. |
+| **LeftRightNav**  | Whether the control itself listens for left/right navigation input, excluding the arrow buttons from the tab order. When false, the arrow buttons are individually focusable and it's up to the developer to set up their own navigation. Defaults to true. |
+
+### Public Methods
+
+| Name                              | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| **SetChoices**                     | Sets **choices** from an `IReadOnlyList<string>` (e.g. an array or List). |
+| **SetValueWithoutNotify**          | Sets **value** without invoking the value-changed callback.    |
+| **SelectPrevious**                 | Selects the previous choice, looping to the last if **Loopable** is true. |
+| **SelectNext**                     | Selects the next choice, looping to the first if **Loopable** is true. |
+| **RegisterValueChangedCallback**   | Registers a callback invoked whenever **value** changes.       |
 
 ## Scroll View Auto
 
