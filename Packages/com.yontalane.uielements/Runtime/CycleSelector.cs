@@ -57,9 +57,7 @@ namespace Yontalane.UIElements
             set
             {
                 m_choices = value ?? new List<string>();
-                m_index = m_choices.Count > 0 ? Mathf.Clamp(m_index, 0, m_choices.Count - 1) : -1;
-                RefreshLabel();
-                RefreshInteractable();
+                RefreshAfterChoicesChanged();
             }
         }
 
@@ -216,12 +214,99 @@ namespace Yontalane.UIElements
         #region Choices Management
 
         /// <summary>
+        /// The number of choices currently in <see cref="choices"/>.
+        /// </summary>
+        public int ChoiceCount => m_choices.Count;
+
+        /// <summary>
         /// Sets the list of choices to cycle through.
         /// </summary>
         /// <param name="newChoices">The new choices.</param>
         public void SetChoices(IReadOnlyList<string> newChoices)
         {
             choices = newChoices != null ? new List<string>(newChoices) : new List<string>();
+        }
+
+        /// <summary>
+        /// Adds a single choice to the end of <see cref="choices"/>.
+        /// </summary>
+        /// <param name="s">The choice to add.</param>
+        public void AddChoice(string s)
+        {
+            m_choices.Add(s);
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Adds a range of choices to the end of <see cref="choices"/>.
+        /// </summary>
+        /// <param name="s">The choices to add.</param>
+        public void AddChoiceRange(IReadOnlyList<string> s)
+        {
+            if (s == null)
+            {
+                return;
+            }
+            m_choices.AddRange(s);
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Removes all choices from <see cref="choices"/>.
+        /// </summary>
+        public void ClearChoices()
+        {
+            m_choices.Clear();
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Inserts a choice into <see cref="choices"/> at the given index.
+        /// </summary>
+        /// <param name="i">The index to insert at.</param>
+        /// <param name="s">The choice to insert.</param>
+        public void InsertChoice(int i, string s)
+        {
+            m_choices.Insert(i, s);
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a choice from <see cref="choices"/>, if present.
+        /// </summary>
+        /// <param name="s">The choice to remove.</param>
+        public void RemoveChoice(string s)
+        {
+            m_choices.Remove(s);
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Removes the choice at the given index from <see cref="choices"/>.
+        /// </summary>
+        /// <param name="i">The index to remove.</param>
+        public void RemoveChoiceAt(int i)
+        {
+            m_choices.RemoveAt(i);
+            RefreshAfterChoicesChanged();
+        }
+
+        /// <summary>
+        /// Returns the index of a choice within <see cref="choices"/>, or -1 if it isn't present.
+        /// </summary>
+        /// <param name="s">The choice to look up.</param>
+        public int IndexOfChoice(string s) => m_choices.IndexOf(s);
+
+        /// <summary>
+        /// Re-clamps the selected index against the current choice count and refreshes the displayed
+        /// label and button enabled-state. Called after any change to the contents of <see cref="choices"/>,
+        /// whether via that property's setter or one of the incremental mutation methods above.
+        /// </summary>
+        private void RefreshAfterChoicesChanged()
+        {
+            m_index = m_choices.Count > 0 ? Mathf.Clamp(m_index, 0, m_choices.Count - 1) : -1;
+            RefreshLabel();
+            RefreshInteractable();
         }
 
         #endregion

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.75] - 2026.08.08
+
+### Added
+
+- CycleSelector gains incremental choices-mutation methods matching DropdownField's underlying List<string>.Add/Clear/etc. functionality that isn't otherwise reachable through the choices property alone (since a plain List<string> can't notify CycleSelector when it's mutated directly): AddChoice, AddChoiceRange, ClearChoices, InsertChoice, RemoveChoice, RemoveChoiceAt, IndexOfChoice, and ChoiceCount. Each one re-clamps the selected index and refreshes the displayed label and button enabled-state immediately, the same as assigning a whole new list to choices already did.
+
 ## [1.0.74] - 2026.08.08
 
 ### Added

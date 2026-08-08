@@ -341,12 +341,22 @@ A control that mirrors Dropdown Field's API — **choices**, **index**, **value*
 | **text**          | The text currently displayed by the control. Mirrors **value**. |
 | **Loopable**      | Whether cycling loops from the last choice back to the first (and vice versa). Defaults to true. |
 | **LeftRightNav**  | Whether the control itself listens for left/right navigation input, excluding the arrow buttons from the tab order. When false, the arrow buttons are individually focusable and it's up to the developer to set up their own navigation. Defaults to true. |
+| **ChoiceCount**   | The number of choices currently in **choices**.                |
+
+A plain `List<string>` can't notify CycleSelector when it's mutated directly (e.g. calling `.Add()` on the list returned by **choices**), so the methods below mutate **choices** and immediately refresh the displayed value and button enabled-state, rather than relying on the list to announce its own changes.
 
 ### Public Methods
 
 | Name                              | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
 | **SetChoices**                     | Sets **choices** from an `IReadOnlyList<string>` (e.g. an array or List). |
+| **AddChoice**                      | Adds a single choice to the end of **choices**.                 |
+| **AddChoiceRange**                 | Adds a range of choices to the end of **choices**.              |
+| **ClearChoices**                   | Removes all choices from **choices**.                           |
+| **InsertChoice**                   | Inserts a choice into **choices** at a given index.             |
+| **RemoveChoice**                   | Removes the first occurrence of a choice from **choices**, if present. |
+| **RemoveChoiceAt**                 | Removes the choice at a given index from **choices**.          |
+| **IndexOfChoice**                  | Returns the index of a choice within **choices**, or -1 if it isn't present. |
 | **SetValueWithoutNotify**          | Sets **value** without invoking the value-changed callback.    |
 | **SelectPrevious**                 | Selects the previous choice, looping to the last if **Loopable** is true. |
 | **SelectNext**                     | Selects the next choice, looping to the first if **Loopable** is true. |
