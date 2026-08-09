@@ -126,6 +126,12 @@ namespace Yontalane.UIElements
                     return;
                 }
 
+                // TEMPORARY [NavDiag4] diagnostic -- full stack trace on every real invocation of this
+                // setter, to identify what's calling it automatically on menu open with no user input.
+                // Remove once the caller is confirmed.
+                Debug.Log($"[NavDiag4] CycleSelector({name}) index setter invoked: {m_index} -> {clamped}, " +
+                    $"ChoiceCount={m_choices.Count}, panel={(panel != null)}\n{UnityEngine.StackTraceUtility.ExtractStackTrace()}");
+
                 string previousValue = this.value;
                 SetIndexWithoutNotify(clamped);
                 string newValue = this.value;

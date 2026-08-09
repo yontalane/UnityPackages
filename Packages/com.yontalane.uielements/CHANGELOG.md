@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.80] - 2026.08.09
+
+### Debug
+
+- Temporary [NavDiag4] stack-trace logging in CycleSelector's index setter, to identify what's calling it automatically -- with no user input -- immediately after a menu containing CycleSelectors is displayed. 1.0.78/1.0.79 addressed real but insufficient causes; a project reproducing this consistently found every CycleSelector in a freshly-opened menu firing a spurious value-changed event with zero user interaction, which for two of its three CycleSelectors happened to carry a real (if unintended) value and for the third came back empty. To be removed once the root cause is confirmed.
+
 ## [1.0.79] - 2026.08.09
 
 ### Fixed
