@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.78] - 2026.08.09
+
+### Fixed
+
+- CycleSelector's index setter could SendEvent a ChangeEvent<string> while a panel-less element was still mid-construction (applying the index UXML attribute triggers this same setter). A panel-less SendEvent can still get queued by Unity's dispatcher instead of dispatching immediately, so the setter's `using` block disposed and recycled the pooled event before it was actually delivered; whatever later reused that same pooled slot corrupted it, and consuming projects could see it resurface much later -- once a real listener was finally registered -- with a stale, unrelated previousValue and an empty newValue. The setter now skips SendEvent entirely when `panel == null`, since no listener could have been registered at construction time regardless.
+
 ## [1.0.77] - 2026.08.09
 
 ### Fixed

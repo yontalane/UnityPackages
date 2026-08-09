@@ -129,6 +129,19 @@ namespace Yontalane.UIElements
                 string previousValue = this.value;
                 SetIndexWithoutNotify(clamped);
 
+                // Applying the index UXML attribute during initial construction (before this element
+                // has a panel) hits this same setter, and SendEvent-ing at that point isn't safe: a
+                // panel-less SendEvent can still get queued rather than dispatched, so the using block
+                // below disposes and recycles the pooled ChangeEvent before it's actually delivered.
+                // Whatever later reuses that same pooled slot corrupts it, and it can still surface much
+                // later -- once a real listener is registered -- with stale, unrelated previousValue/
+                // newValue data. No listener could have been registered yet at construction time anyway,
+                // so there's nothing to notify.
+                if (panel == null)
+                {
+                    return;
+                }
+
                 using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, this.value);
                 evt.target = this;
                 SendEvent(evt);
