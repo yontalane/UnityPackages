@@ -128,23 +128,35 @@ namespace Yontalane.UIElements
 
                 string previousValue = this.value;
                 SetIndexWithoutNotify(clamped);
+                string newValue = this.value;
 
-                // Applying the index UXML attribute during initial construction (before this element
-                // has a panel) hits this same setter, and SendEvent-ing at that point isn't safe: a
-                // panel-less SendEvent can still get queued rather than dispatched, so the using block
-                // below disposes and recycles the pooled ChangeEvent before it's actually delivered.
-                // Whatever later reuses that same pooled slot corrupts it, and it can still surface much
-                // later -- once a real listener is registered -- with stale, unrelated previousValue/
-                // newValue data. No listener could have been registered yet at construction time anyway,
-                // so there's nothing to notify.
+                // No panel means this is the index UXML attribute applying during initial construction,
+                // before any listener could exist -- nothing to notify.
                 if (panel == null)
                 {
                     return;
                 }
 
-                using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, this.value);
-                evt.target = this;
-                SendEvent(evt);
+                // Deferred to escape the caller's own dispatch context. Both real triggers for this
+                // setter -- OnNavigationMove and the arrow buttons' clicked callbacks -- run from inside
+                // an already-active event dispatch (a NavigationMoveEvent or a pointer event), so calling
+                // SendEvent here directly would itself be a reentrant dispatch. Unity's dispatcher can
+                // queue a reentrant SendEvent instead of delivering it immediately, but disposing the
+                // pooled ChangeEvent right after (via the using block) doesn't wait for that -- so a
+                // later, unrelated ChangeEvent<string>.GetPooled call elsewhere (this pool is shared
+                // across every string-valued control) can grab and overwrite that same recycled slot
+                // before the original queued delivery happens, corrupting it by the time a real listener
+                // sees it. Confirmed via a project reproducing delivery with an empty newValue, a stale
+                // unrelated previousValue, and a target that wasn't even this element. Scheduling this
+                // makes the SendEvent call below a top-level, non-reentrant dispatch, which Unity
+                // delivers immediately and safely -- matching how this same package already defers other
+                // actions (DelayedFocusElement, DropdownPopupWidthFix) to escape same-frame timing hazards.
+                schedule.Execute(() =>
+                {
+                    using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, newValue);
+                    evt.target = this;
+                    SendEvent(evt);
+                });
             }
         }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.79] - 2026.08.09
+
+### Fixed
+
+- 1.0.78 only guarded the index setter's SendEvent against the panel-less UXML-construction-time case, but the same pooled-event corruption hazard applies far more broadly: both real triggers for a user-driven value change (OnNavigationMove, and the arrow buttons' clicked callbacks) run from inside an already-active event dispatch, so the index setter's own SendEvent call is itself reentrant every time. Unity's dispatcher can queue a reentrant SendEvent instead of delivering it immediately, but disposing the pooled ChangeEvent right after (via the setter's using block) doesn't wait for that -- so a later, unrelated ChangeEvent<string>.GetPooled call elsewhere (shared across every string-valued control) can grab and overwrite that same recycled slot before the original queued delivery happens, corrupting it by the time a real listener sees it. Confirmed via a project reproducing delivery with an empty newValue, a stale unrelated previousValue, and a target that wasn't even the CycleSelector whose listener received it. The index setter now defers its SendEvent via schedule.Execute, making it a top-level, non-reentrant dispatch -- the same escape-same-frame-timing-hazard idiom this package already uses in DelayedFocusElement and DropdownPopupWidthFix.
+
 ## [1.0.78] - 2026.08.09
 
 ### Fixed
