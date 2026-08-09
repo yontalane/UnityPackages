@@ -343,6 +343,12 @@ A control that mirrors Dropdown Field's API — **choices**, **index**, **value*
 | **LeftRightNav**  | Whether the control itself listens for left/right navigation input, excluding the arrow buttons from the tab order. When false, the arrow buttons are individually focusable and it's up to the developer to set up their own navigation. Defaults to true. |
 | **ChoiceCount**   | The number of choices currently in **choices**.                |
 
+### Delegates
+
+| Name                | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| **OnValueSelected**  | Invoked only for genuine user interaction (a pointer click on an arrow button, or directional navigation handled via **LeftRightNav**) that changes the selected value -- never for a programmatic change via **value**, **index**, **SetValueWithoutNotify**, **SetChoices**, or the choices-mutation methods below. Safe to use for a selection sound effect without it misfiring while a menu is populated from saved state. |
+
 A plain `List<string>` can't notify CycleSelector when it's mutated directly (e.g. calling `.Add()` on the list returned by **choices**), so the methods below mutate **choices** and immediately refresh the displayed value and button enabled-state, rather than relying on the list to announce its own changes.
 
 ### Public Methods

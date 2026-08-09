@@ -558,6 +558,19 @@ namespace Yontalane.UIElements
                     }
                 }
             });
+
+            // OnValueSelected only fires for genuine user interaction (never for a value set
+            // programmatically while populating the menu), so it's safe to play the click sound here
+            // without it misfiring during setup. Deliberately just the sound, not the full
+            // OnClickInternal pipeline -- cycling a value isn't a menu-item click and shouldn't be able
+            // to trigger menu switching or OnClick/Listeners.onClick.
+            cycleSelector.OnValueSelected += (_) =>
+            {
+                if (!m_sounds.mute)
+                {
+                    SoundPlayer.Play(m_sounds.click);
+                }
+            };
         }
 
         /// <summary>

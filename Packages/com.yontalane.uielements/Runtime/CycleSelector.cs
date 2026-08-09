@@ -11,6 +11,22 @@ namespace Yontalane.UIElements
     [UxmlElement]
     public partial class CycleSelector : VisualElement, INotifyValueChanged<string>
     {
+        #region Events
+
+        public delegate void CycleSelectorValueSelectedHandler(string value);
+
+        /// <summary>
+        /// Invoked only when a genuine user interaction -- a pointer click on an arrow button, or
+        /// directional navigation handled internally via <see cref="LeftRightNav"/> -- changes the
+        /// selected value. Unlike <see cref="RegisterValueChangedCallback"/> (which also fires for
+        /// programmatic changes via <see cref="value"/>, <see cref="index"/>, SetValueWithoutNotify, or
+        /// the choices-mutation methods below), this is safe to use for a selection sound effect without
+        /// it misfiring while a menu is being populated from saved state before the user has touched it.
+        /// </summary>
+        public CycleSelectorValueSelectedHandler OnValueSelected;
+
+        #endregion
+
         private const string STYLESHEET_RESOURCE = "YontalaneCycleSelector";
         private const string ICON_RESOURCE = "RightArrow";
         private const string FOCUSED_STYLE_CLASS = "focused";
@@ -350,6 +366,7 @@ namespace Yontalane.UIElements
                 newIndex = m_choices.Count - 1;
             }
             index = newIndex;
+            OnValueSelected?.Invoke(value);
         }
 
         /// <summary>
@@ -368,6 +385,7 @@ namespace Yontalane.UIElements
                 newIndex = 0;
             }
             index = newIndex;
+            OnValueSelected?.Invoke(value);
         }
 
         private bool CanSelectPrevious => m_choices.Count > 1 && (m_loopable || m_index > 0);

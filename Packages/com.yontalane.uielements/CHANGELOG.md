@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.76] - 2026.08.09
+
+### Added
+
+- CycleSelector.OnValueSelected: a new event that fires only for genuine user interaction (a pointer click on an arrow button, or directional navigation handled via LeftRightNav), never for programmatic changes via value, index, SetValueWithoutNotify, SetChoices, or the choices-mutation methods. Lets consuming code play a selection sound without risking false triggers when a menu is populated from saved state before the user has touched the control -- unlike RegisterValueChangedCallback, which fires for both. MenuManager subscribes to it in RegisterCycleSelectorNavigation to play the same click sound Toggle/Button items already get, without routing through the full OnClickInternal pipeline (cycling a value isn't a menu-item click and shouldn't be able to trigger menu switching).
+
 ## [1.0.75] - 2026.08.08
 
 ### Added
