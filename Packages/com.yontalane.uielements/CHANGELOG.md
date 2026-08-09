@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.77] - 2026.08.09
+
+### Fixed
+
+- CycleSelector was missing from MenuManager's RegisterNavigationEvent<T> list (Button, Toggle, DropdownField, Slider, etc.), so focusing one via keyboard/gamepad/tab never played the menu's navigation sound -- unlike every other control type, which all got it automatically. Added the same one-line registration so CycleSelector's on-focus sound now matches everything else.
+
 ## [1.0.76] - 2026.08.09
 
 ### Added

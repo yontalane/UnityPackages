@@ -301,6 +301,7 @@ namespace Yontalane.UIElements
             RegisterNavigationEvent<SliderInt>(root);
             RegisterNavigationEvent<MinMaxSlider>(root);
             RegisterNavigationEvent<DropdownField>(root);
+            RegisterNavigationEvent<CycleSelector>(root);
             RegisterNavigationEvent<EnumField>(root);
             RegisterNavigationEvent<RadioButton>(root);
 
