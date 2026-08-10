@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.82] - 2026.08.09
+
+### Changed
+
+- Reverted the 1.0.79 schedule.Execute deferral of the index setter's SendEvent call. It was based on a reentrancy theory (OnNavigationMove and the arrow buttons' clicked callbacks both invoke this setter from inside an already-active event dispatch) that was never actually confirmed and turned out not to be the real bug -- 1.0.81's fix (stopping the internal labels' own ChangeEvent<string> from bubbling out) fully explains and resolves what was observed. The deferral added a frame of latency to every value-changed notification for no demonstrated benefit; the index setter now dispatches its ChangeEvent<string> immediately and synchronously again, same as before 1.0.79. The panel == null guard from 1.0.78 stays, since it's independently correct regardless.
+
 ## [1.0.81] - 2026.08.09
 
 ### Fixed

@@ -128,7 +128,6 @@ namespace Yontalane.UIElements
 
                 string previousValue = this.value;
                 SetIndexWithoutNotify(clamped);
-                string newValue = this.value;
 
                 // No panel means this is the index UXML attribute applying during initial construction,
                 // before any listener could exist -- nothing to notify.
@@ -137,26 +136,9 @@ namespace Yontalane.UIElements
                     return;
                 }
 
-                // Deferred to escape the caller's own dispatch context. Both real triggers for this
-                // setter -- OnNavigationMove and the arrow buttons' clicked callbacks -- run from inside
-                // an already-active event dispatch (a NavigationMoveEvent or a pointer event), so calling
-                // SendEvent here directly would itself be a reentrant dispatch. Unity's dispatcher can
-                // queue a reentrant SendEvent instead of delivering it immediately, but disposing the
-                // pooled ChangeEvent right after (via the using block) doesn't wait for that -- so a
-                // later, unrelated ChangeEvent<string>.GetPooled call elsewhere (this pool is shared
-                // across every string-valued control) can grab and overwrite that same recycled slot
-                // before the original queued delivery happens, corrupting it by the time a real listener
-                // sees it. Confirmed via a project reproducing delivery with an empty newValue, a stale
-                // unrelated previousValue, and a target that wasn't even this element. Scheduling this
-                // makes the SendEvent call below a top-level, non-reentrant dispatch, which Unity
-                // delivers immediately and safely -- matching how this same package already defers other
-                // actions (DelayedFocusElement, DropdownPopupWidthFix) to escape same-frame timing hazards.
-                schedule.Execute(() =>
-                {
-                    using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, newValue);
-                    evt.target = this;
-                    SendEvent(evt);
-                });
+                using ChangeEvent<string> evt = ChangeEvent<string>.GetPooled(previousValue, this.value);
+                evt.target = this;
+                SendEvent(evt);
             }
         }
 
