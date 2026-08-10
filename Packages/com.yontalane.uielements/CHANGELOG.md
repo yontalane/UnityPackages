@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.81] - 2026.08.09
+
+### Fixed
+
+- Found the actual root cause the 1.0.78/1.0.79 fixes didn't reach (confirmed via [NavDiag4]/[NavDiag5] diagnostics in a project reproducing this reliably): CycleSelector's own index setter was never the source. RefreshLabel sets the internal value-label's `.text` very frequently (every AddChoice call while populating choices), and setting a Label's `.text` fires Unity's own ChangeEvent<string> for that text property -- unrelated to CycleSelector's own value, but bubbling straight up through it regardless. Unity batches and flushes that notification during the next Submit input processing pass, which (since opening a menu itself typically happens via a Submit press) fires immediately on menu open with no further input, reaching any RegisterCallback<ChangeEvent<string>> listener on the parent CycleSelector and misrepresenting an internal implementation detail as a real selection change -- confirmed by the delivered previousValue/newValue matching the label's own historical text values (e.g. "None" from choices' initial UXML placeholder, or "" from a ClearChoices call) rather than anything resembling a real selection. Both labels now call StopPropagation() on their own ChangeEvent<string> in the constructor, the same way the internal buttons are already excluded from generic click registration, so this can never reach a listener on the parent again regardless of which registration API that listener uses.
+
+### Changed
+
+- Removed the temporary [NavDiag4] stack-trace diagnostic added in 1.0.80, its purpose served.
+
 ## [1.0.80] - 2026.08.09
 
 ### Debug

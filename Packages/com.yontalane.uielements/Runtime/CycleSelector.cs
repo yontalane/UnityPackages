@@ -126,12 +126,6 @@ namespace Yontalane.UIElements
                     return;
                 }
 
-                // TEMPORARY [NavDiag4] diagnostic -- full stack trace on every real invocation of this
-                // setter, to identify what's calling it automatically on menu open with no user input.
-                // Remove once the caller is confirmed.
-                Debug.Log($"[NavDiag4] CycleSelector({name}) index setter invoked: {m_index} -> {clamped}, " +
-                    $"ChoiceCount={m_choices.Count}, panel={(panel != null)}\n{UnityEngine.StackTraceUtility.ExtractStackTrace()}");
-
                 string previousValue = this.value;
                 SetIndexWithoutNotify(clamped);
                 string newValue = this.value;
@@ -248,6 +242,18 @@ namespace Yontalane.UIElements
             RegisterCallback<FocusInEvent>(OnFocusIn);
             RegisterCallback<FocusOutEvent>(OnFocusOut);
             RegisterCallback<NavigationMoveEvent>(OnNavigationMove);
+
+            // Setting a Label's own text fires a ChangeEvent<string> on it that isn't related to this
+            // control's own value -- it's Unity's own TextElement/data-binding notification for the
+            // text property itself, not anything CycleSelector sent. RefreshLabel sets m_valueLabel.text
+            // very frequently (every AddChoice call while populating choices), and Unity batches and
+            // flushes that Label-level notification during the next Submit input processing pass, where
+            // it would otherwise bubble straight through this control to any RegisterCallback<
+            // ChangeEvent<string>> listener on it -- misrepresenting an internal implementation detail
+            // as a real selection change. Stopped at the source so it can never escape, the same way the
+            // internal buttons are already excluded from the generic per-Button click registration.
+            m_labelElement.RegisterCallback<ChangeEvent<string>>((evt) => evt.StopPropagation());
+            m_valueLabel.RegisterCallback<ChangeEvent<string>>((evt) => evt.StopPropagation());
 
             styleSheets.Add(Resources.Load<StyleSheet>(STYLESHEET_RESOURCE));
 
