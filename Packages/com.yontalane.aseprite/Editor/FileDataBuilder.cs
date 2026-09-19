@@ -417,7 +417,8 @@ namespace YontalaneEditor.Aseprite
 
         /// <summary>
         /// Adds an AsepriteAnimationBridge component to the main imported GameObject and populates it
-        /// with references to all colliders, triggers, and points created during the import process.
+        /// with references to all colliders, triggers, and points created during the import process,
+        /// as well as each frame's alpha-bounds rectangle.
         /// </summary>
         internal static void AddAnimationBridge(this ImportFileData fileData)
         {
@@ -434,11 +435,15 @@ namespace YontalaneEditor.Aseprite
             bridge.Colliders ??= new();
             bridge.Triggers ??= new();
             bridge.Points ??= new();
+            bridge.FrameBounds ??= new();
 
             // Add all colliders, triggers, and points collected during import to the bridge
             bridge.Colliders.AddRange(s_colliders);
             bridge.Triggers.AddRange(s_triggers);
             bridge.Points.AddRange(s_points);
+
+            // Add each frame's alpha-bounds rectangle, already computed by GetFrameRects(), to the bridge
+            bridge.FrameBounds.AddRange(fileData.frameRects);
         }
 
         /// <summary>

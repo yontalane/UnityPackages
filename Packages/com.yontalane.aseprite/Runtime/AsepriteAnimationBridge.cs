@@ -27,6 +27,10 @@ namespace Yontalane.Aseprite
         [HideInInspector]
         private List<AnimationLengthInfo> m_animationLengths = null;
 
+        [SerializeField]
+        [HideInInspector]
+        private List<RectInt> m_frameBounds = null;
+
         #endregion
 
         #region Serialized Fields
@@ -221,6 +225,16 @@ namespace Yontalane.Aseprite
         {
             get => m_points;
             set => m_points = value;
+        }
+
+        /// <summary>
+        /// The bounding rectangle, in pixels, of each frame's visible (non-transparent) artwork.
+        /// Indexed by the frame's position among all frames in the Aseprite file (index 0 is the file's first frame).
+        /// </summary>
+        public List<RectInt> FrameBounds
+        {
+            get => m_frameBounds;
+            set => m_frameBounds = value;
         }
 
         /// <summary>

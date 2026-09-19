@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.46] - 2026.09.19
+
+### Added
+
+- Bridge exposes each frame's alpha-bounds rectangle via FrameBounds
+
 ## [1.0.45] - 2026.07.12
 
 ### Added

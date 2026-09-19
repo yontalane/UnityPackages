@@ -67,6 +67,7 @@ The Bridge facilitates interaction between Aseprite animations and Unity's Anima
 | **Colliders**                | The BoxCollider2D components generated from Collision layers. |
 | **Triggers**                 | The BoxCollider2D components generated from Trigger layers.   |
 | **Points**                   | The Transforms generated from Point layers.                   |
+| **FrameBounds**              | The bounding rectangle, in pixels, of each frame's visible (non-transparent) artwork, indexed by the frame's position in the Aseprite file. |
 | **SpriteObjectInfo**         | Metadata about the colliders, triggers, and points defined in Aseprite. See [Sprite Object Info](#sprite-object-info) below. |
 | **AnimationLengths**         | The length, in seconds, of every animation on this GameObject. See [Sprite Object Info](#sprite-object-info) below. |
 | **Extras**                   | Optional AsepriteAnimationExtra assets containing Motion Trees for this GameObject. See [Motion Trees](#motion-trees) below. |
