@@ -291,12 +291,8 @@ namespace YontalaneEditor.Aseprite
                 Vector2Int mostMin = new(int.MaxValue, int.MaxValue);
                 Vector2Int mostMax = new(int.MinValue, int.MinValue);
 
-                // Initialize the rect
-                RectInt rect = new()
-                {
-                    width = 0,
-                    height = 0,
-                };
+                // Track whether any chunk in this frame contributed a rect
+                bool anyRect = false;
 
                 // Iterate through each chunk in the frame
                 for (int chunkIndex = 0; chunkIndex < data.chunkCount; chunkIndex++)
@@ -313,10 +309,16 @@ namespace YontalaneEditor.Aseprite
                         continue;
                     }
 
-                    // Update the rect to the smallest and largest values
-                    rect.min = Vector2Int.Min(r.min, mostMin);
-                    rect.max = Vector2Int.Max(r.max, mostMax);
+                    // Accumulate the smallest and largest values across every chunk in this frame
+                    mostMin = Vector2Int.Min(r.min, mostMin);
+                    mostMax = Vector2Int.Max(r.max, mostMax);
+                    anyRect = true;
                 }
+
+                // Build the rect as the union of every chunk's bounds, or an empty rect if the frame had none
+                RectInt rect = anyRect
+                    ? new RectInt(mostMin.x, mostMin.y, mostMax.x - mostMin.x, mostMax.y - mostMin.y)
+                    : new RectInt(0, 0, 0, 0);
 
                 // Add the rect to the frame rects list
                 fileData.frameRects.Add(rect);
@@ -418,7 +420,7 @@ namespace YontalaneEditor.Aseprite
         /// <summary>
         /// Adds an AsepriteAnimationBridge component to the main imported GameObject and populates it
         /// with references to all colliders, triggers, and points created during the import process,
-        /// as well as each frame's alpha-bounds rectangle.
+        /// as well as each frame's alpha-bounds rectangle (in local space, matching Transform units).
         /// </summary>
         internal static void AddAnimationBridge(this ImportFileData fileData)
         {
@@ -442,8 +444,43 @@ namespace YontalaneEditor.Aseprite
             bridge.Triggers.AddRange(s_triggers);
             bridge.Points.AddRange(s_points);
 
-            // Add each frame's alpha-bounds rectangle, already computed by GetFrameRects(), to the bridge
-            bridge.FrameBounds.AddRange(fileData.frameRects);
+            // Convert each frame's alpha-bounds pixel rectangle, already computed by GetFrameRects(),
+            // into local space (the same space a BoxCollider2D's offset/size would use), and add it to the bridge.
+            Vector2Int fileDimensions = fileData.Size;
+            Vector2 filePivot = fileData.args.GetPivot();
+            float pixelsPerUnit = fileData.args.importer.spritePixelsPerUnit;
+
+            foreach (RectInt pixelRect in fileData.frameRects)
+            {
+                bridge.FrameBounds.Add(pixelRect.ToLocalRect(fileDimensions, filePivot, pixelsPerUnit));
+            }
+        }
+
+        /// <summary>
+        /// Converts a pixel-space rectangle (as produced by <see cref="GetFrameRects"/>, with the origin at the
+        /// canvas's top-left and Y increasing downward) into local space (origin at the imported object's pivot,
+        /// with Y increasing upward and units divided by pixels-per-unit)—the same conversion used for
+        /// Collision and Trigger layer BoxCollider2D offset/size.
+        /// </summary>
+        /// <param name="pixelRect">The pixel-space rectangle to convert.</param>
+        /// <param name="fileDimensions">The width and height, in pixels, of the imported Aseprite file.</param>
+        /// <param name="filePivot">The normalized (0 to 1) pivot of the imported Aseprite file.</param>
+        /// <param name="pixelsPerUnit">The number of pixels per Unity unit for the imported sprites.</param>
+        /// <returns>The equivalent rectangle in local space.</returns>
+        private static Rect ToLocalRect(this RectInt pixelRect, Vector2Int fileDimensions, Vector2 filePivot, float pixelsPerUnit)
+        {
+            Vector2 center = Vector2.Lerp(pixelRect.min, pixelRect.max, 0.5f);
+
+            center.x -= fileDimensions.x * filePivot.x;
+            center.x /= pixelsPerUnit;
+
+            center.y = fileDimensions.y - center.y;
+            center.y -= fileDimensions.y * filePivot.y;
+            center.y /= pixelsPerUnit;
+
+            Vector2 size = (Vector2)pixelRect.size / pixelsPerUnit;
+
+            return new Rect(center - (size * 0.5f), size);
         }
 
         /// <summary>

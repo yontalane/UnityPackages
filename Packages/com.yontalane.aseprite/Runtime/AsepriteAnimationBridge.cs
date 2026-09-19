@@ -29,7 +29,7 @@ namespace Yontalane.Aseprite
 
         [SerializeField]
         [HideInInspector]
-        private List<RectInt> m_frameBounds = null;
+        private List<Rect> m_frameBounds = null;
 
         #endregion
 
@@ -228,10 +228,11 @@ namespace Yontalane.Aseprite
         }
 
         /// <summary>
-        /// The bounding rectangle, in pixels, of each frame's visible (non-transparent) artwork.
+        /// The bounds, in local space (the same space used by this GameObject's Transform, and by <see cref="Colliders"/>'
+        /// and <see cref="Triggers"/>' offset/size), of each frame's visible (non-transparent) artwork.
         /// Indexed by the frame's position among all frames in the Aseprite file (index 0 is the file's first frame).
         /// </summary>
-        public List<RectInt> FrameBounds
+        public List<Rect> FrameBounds
         {
             get => m_frameBounds;
             set => m_frameBounds = value;

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.47] - 2026.09.19
+
+### Changed
+
+- Breaking change: FrameBounds now reports local-space Rects (the same space as Colliders'/Triggers' offset and size) instead of raw pixel-space RectInts, since the pixel-space values weren't usable without also knowing canvas dimensions, pivot, and pixels-per-unit
+
+### Fixed
+
+- GetFrameRects() only reflected the last visible layer processed for a frame instead of the union of all visible layers, so multi-layer frames could report the wrong bounds
+
 ## [1.0.46] - 2026.09.19
 
 ### Added
