@@ -51,6 +51,12 @@ namespace YontalaneEditor.Aseprite
         /// The type of the layer (e.g., Normal, Collision, Trigger, Point, RootMotion).
         /// </summary>
         public LayerType type;
+
+        /// <summary>
+        /// Whether the layer is a guide: a functional layer whose name contains "guide" or begins with "-".
+        /// Guides are measured (for <see cref="SpriteObjectInfo"/>) but never become colliders, triggers, points, or root motion.
+        /// </summary>
+        public bool isGuide;
     }
 
     /// <summary>

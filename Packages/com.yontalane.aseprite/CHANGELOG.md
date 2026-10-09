@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.49] - 2026.10.09
+
+### Added
+
+- Guide layers: a collision, trigger, point, or root layer whose name contains "guide" (case-insensitive) or begins with "-" no longer generates a collider, trigger, point, or root motion, and is not added to the bridge's Colliders, Triggers, or Points. Collision, trigger, and point guides still get a SpriteObjectInfo entry (including firstFrame), marked with the new SpriteObjectInfo.isGuide
+- Import warning when a visible collision, trigger, point, or root layer has more than 5% opacity, since its art will show up in the imported sprite
+
 ## [1.0.48] - 2026.10.09
 
 ### Added

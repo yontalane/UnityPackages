@@ -469,6 +469,13 @@ namespace Yontalane.Aseprite
         public SpriteObjectType type;
 
         /// <summary>
+        /// Whether this entry comes from a guide layer (a functional layer whose name contains "guide" or begins with "-").
+        /// Guides have no corresponding collider, trigger, or point object, so they never appear in the bridge's
+        /// <see cref="AsepriteAnimationBridge.Colliders"/>, <see cref="AsepriteAnimationBridge.Triggers"/>, or <see cref="AsepriteAnimationBridge.Points"/>.
+        /// </summary>
+        public bool isGuide;
+
+        /// <summary>
         /// The list of animation information associated with this object.
         /// </summary>
         public List<SpriteObjectAnimationInfo> animationInfo;

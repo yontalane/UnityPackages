@@ -314,7 +314,8 @@ namespace YontalaneEditor.Aseprite
         /// <param name="lengthInSeconds">The length in seconds of the animation.</param>
         /// <param name="frameOn">The frame index when the object is active.</param>
         /// <param name="timeOn">The time (in seconds) when the object is active.</param>
-        internal static void AddInfo(this List<SpriteObjectInfo> spriteObjectInfo, string name, SpriteObjectType type, string animation, int lengthInFrames, float lengthInSeconds, int frameOn, float timeOn)
+        /// <param name="isGuide">Whether the object comes from a guide layer.</param>
+        internal static void AddInfo(this List<SpriteObjectInfo> spriteObjectInfo, string name, SpriteObjectType type, string animation, int lengthInFrames, float lengthInSeconds, int frameOn, float timeOn, bool isGuide = false)
         {
             // Find the data index of the sprite object with the given name.
             int objectIndex = -1;
@@ -334,6 +335,7 @@ namespace YontalaneEditor.Aseprite
                 {
                     name = name,
                     type = type,
+                    isGuide = isGuide,
                 });
 
                 objectIndex = spriteObjectInfo.Count - 1;

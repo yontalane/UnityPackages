@@ -13,7 +13,19 @@ Adding the following layers in your Aseprite file will affect the import process
 
 Upon import, these layers will be transformed into Unity objects.
 
-Note that the layers **need to be marked visible**. However, their opacity can be set to zero.
+Note that the layers **need to be marked visible**. However, their opacity should be set to zero; the importer logs a warning for any visible layer with more than 5% opacity, since its art would appear in the imported sprite.
+
+## Guide Layers
+
+A collision, trigger, point, or root layer is a **guide** if its name contains "guide" (case-insensitive) or begins with "-", for example `floor point guide` or `-hitbox trigger`. Guides are reference layers: no object is generated for them. They are not added to the bridge's **Colliders**, **Triggers**, or **Points**, and a root guide produces no root motion.
+
+Collision, trigger, and point guides are still recorded in **SpriteObjectInfo**, with **isGuide** set to true. Their **firstFrame** gives their position and size, so you can read a guide's bounds directly, without searching through animations:
+
+```csharp
+FunctionalLayerFrameData floor = bridge.SpriteObjectInfo.GetInfo("floor point guide").firstFrame;
+```
+
+Like all functional layers, guides are only measured on frames that belong to an animation tag. A guide drawn only on untagged frames has no **firstFrame**.
 
 ## Collision
 
@@ -138,6 +150,7 @@ For example, you can ask when, during a given animation, a particular collision 
 | ----------------- | ------------------------------------------------------------ |
 | **name**          | The name of the object (matches its source layer's name).    |
 | **type**          | The type of the attached object (`Collider`, `Trigger`, or `Point`). |
+| **isGuide**       | True if the entry comes from a [guide layer](#guide-layers). Guides have no corresponding object in the bridge's **Colliders**, **Triggers**, or **Points**. |
 | **animationInfo** | The list of per-animation activity data for this object.     |
 | **firstFrame**    | The bounds of the object's art on the first frame of an imported animation in which it has art. See [Functional Layer Frame Data](#functional-layer-frame-data) below. |
 

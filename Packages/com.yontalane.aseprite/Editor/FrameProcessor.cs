@@ -51,6 +51,14 @@ namespace YontalaneEditor.Aseprite
             float currTime = frameData.time;
             float nextTime = frameData.nextTime;
 
+            // A guide has no collider to animate; only record its info and first-frame bounds
+            if (frameData.layerData.isGuide)
+            {
+                spriteObjectInfo.AddInfo(frameData.layerData.name, frameData.layerData.type == LayerType.Collision ? SpriteObjectType.Collider : SpriteObjectType.Trigger, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, frameData.clip.length, currIndex - frameData.animationData.fromFrame + 1, currTime, true);
+                spriteObjectInfo.SetFirstFrame(frameData.layerData.name, frameData.cellRect, frameData.fileDimensions, frameData.filePivot, frameData.pixelsPerUnit);
+                return true;
+            }
+
             // Set the enabled state of the BoxCollider2D to on for the current frame only
             {
                 // Get the binding path for the current layer and enable the BoxCollider2D at the current frame time
@@ -116,6 +124,14 @@ namespace YontalaneEditor.Aseprite
             float currTime = frameData.time;
             float nextTime = frameData.nextTime;
 
+            // A guide has no point object to animate; only record its info and first-frame bounds
+            if (frameData.layerData.isGuide)
+            {
+                spriteObjectInfo.AddInfo(frameData.layerData.name, SpriteObjectType.Point, frameData.animationData.name, frameData.animationData.toFrame - frameData.animationData.fromFrame + 1, frameData.clip.length, currIndex - frameData.animationData.fromFrame + 1, currTime, true);
+                spriteObjectInfo.SetFirstFrame(frameData.layerData.name, frameData.cellRect, frameData.fileDimensions, frameData.filePivot, frameData.pixelsPerUnit);
+                return true;
+            }
+
             // Set the active state of the GameObject to on for the current frame only
             {
                 // Get the binding path for the current layer and activate the point object at the current frame time
@@ -162,8 +178,8 @@ namespace YontalaneEditor.Aseprite
         /// <returns>True if root motion is generated; otherwise, false.</returns>
         internal static bool TryGenerateRootMotion(this ImportFileData fileData, ImportFrameData frameData)
         {
-            // Only process if the layer is of type RootMotion
-            if (frameData.layerData.type != LayerType.RootMotion)
+            // Only process if the layer is of type RootMotion and is not a guide
+            if (frameData.layerData.type != LayerType.RootMotion || frameData.layerData.isGuide)
             {
                 return false;
             }

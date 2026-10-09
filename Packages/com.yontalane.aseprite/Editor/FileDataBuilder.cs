@@ -11,6 +11,11 @@ namespace YontalaneEditor.Aseprite
     /// </summary>
     public static class FileDataBuilder
     {
+        /// <summary>
+        /// Visible functional layers with an opacity above this fraction (0 to 1) trigger an import warning.
+        /// </summary>
+        private const float FUNCTIONAL_LAYER_OPACITY_WARNING_THRESHOLD = 0.05f;
+
         private static readonly List<BoxCollider2D> s_colliders = new();
         private static readonly List<BoxCollider2D> s_triggers = new();
         private static readonly List<Transform> s_points = new();
@@ -262,11 +267,21 @@ namespace YontalaneEditor.Aseprite
                         type = LayerType.Normal;
                     }
 
+                    // A functional layer is a guide if its name contains "guide" or begins with "-"
+                    bool isGuide = type != LayerType.Normal && (layerNameLower.Contains("guide") || layerName.StartsWith("-"));
+
+                    // Warn if a visible functional layer has enough opacity to show up in the imported sprite
+                    if (type != LayerType.Normal && (layerChunk.flags & LayerFlags.Visible) != 0 && layerChunk.opacity / 255f > FUNCTIONAL_LAYER_OPACITY_WARNING_THRESHOLD)
+                    {
+                        Debug.LogWarning($"Aseprite layer \"{layerName}\" in \"{fileData.args.context.assetPath}\" is a visible {type} layer with {layerChunk.opacity / 255f * 100f:0}% opacity, so its art will appear in the imported sprite. Set its opacity to 0 in Aseprite.");
+                    }
+
                     // Create a new layer data object, populate it with the layer name and type, and add it to the layers list
                     LayerData layerData = new()
                     {
                         name = layerName,
                         type = type,
+                        isGuide = isGuide,
                     };
 
                     fileData.layers.Add(layerData);
@@ -349,8 +364,8 @@ namespace YontalaneEditor.Aseprite
             // Iterate through each layer in the layers list
             foreach (LayerData layerData in fileData.layers)
             {
-                // If the layer is not a collision or trigger layer, skip it
-                if (layerData.type != LayerType.Collision && layerData.type != LayerType.Trigger)
+                // If the layer is not a collision or trigger layer, or it is a guide, skip it
+                if ((layerData.type != LayerType.Collision && layerData.type != LayerType.Trigger) || layerData.isGuide)
                 {
                     continue;
                 }
@@ -393,8 +408,8 @@ namespace YontalaneEditor.Aseprite
             // Iterate through each layer in the layers list
             foreach (LayerData layerData in fileData.layers)
             {
-                // If the layer is not a point layer, skip it
-                if (layerData.type != LayerType.Point)
+                // If the layer is not a point layer, or it is a guide, skip it
+                if (layerData.type != LayerType.Point || layerData.isGuide)
                 {
                     continue;
                 }
