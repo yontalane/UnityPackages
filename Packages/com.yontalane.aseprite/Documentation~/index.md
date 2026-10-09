@@ -139,6 +139,20 @@ For example, you can ask when, during a given animation, a particular collision 
 | **name**          | The name of the object (matches its source layer's name).    |
 | **type**          | The type of the attached object (`Collider`, `Trigger`, or `Point`). |
 | **animationInfo** | The list of per-animation activity data for this object.     |
+| **firstFrame**    | The bounds of the object's art on the first frame of an imported animation in which it has art. See [Functional Layer Frame Data](#functional-layer-frame-data) below. |
+
+## Functional Layer Frame Data
+
+The bounds of a Collision, Trigger, or Point layer's art on a single frame. A convenience for reading a layer's bounds without keying into its animation. Uses the same local space as the bridge's **Colliders**, **Points**, and **FrameBounds**, so no conversion is needed.
+
+### Properties
+
+| Name                         | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| **pixelPosition**, **pixelSize** | Bottom-left corner and size, in pixels. The origin is the canvas's bottom-left, with Y increasing upward. |
+| **position**, **size**       | Bottom-left corner and size, in local units. `Center` matches a collider's offset or a point's local position; `size` matches a collider's size. |
+| **PixelMin**, **PixelMax**, **PixelCenter**, **PixelRect** | Derived pixel values. |
+| **Min**, **Max**, **Center**, **Rect** | Derived local-unit values. `Rect` is comparable to **FrameBounds**. |
 
 ## Sprite Object Animation Info
 

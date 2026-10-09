@@ -375,5 +375,39 @@ namespace YontalaneEditor.Aseprite
             spriteObjectInfo[objectIndex].animationInfo[animationIndex].timesOn ??= new();
             spriteObjectInfo[objectIndex].animationInfo[animationIndex].timesOn.Insert(0, timeOn);
         }
+
+        /// <summary>
+        /// Records the bounds of a functional layer's art as the object's first-frame data. Frames are processed last to first,
+        /// so the final call for a given object comes from the earliest frame that has art.
+        /// </summary>
+        /// <param name="spriteObjectInfo">The list of sprite object info to update. The object must already have been added with <see cref="AddInfo"/>.</param>
+        /// <param name="name">The name of the sprite object.</param>
+        /// <param name="cellRect">The cel rectangle in pixels, with the origin at the canvas's top-left and Y increasing downward.</param>
+        /// <param name="fileDimensions">The canvas size in pixels.</param>
+        /// <param name="filePivot">The normalized (0 to 1) pivot of the imported Aseprite file.</param>
+        /// <param name="pixelsPerUnit">The number of pixels per Unity unit for the imported sprites.</param>
+        internal static void SetFirstFrame(this List<SpriteObjectInfo> spriteObjectInfo, string name, RectInt cellRect, Vector2Int fileDimensions, Vector2 filePivot, float pixelsPerUnit)
+        {
+            for (int i = 0; i < spriteObjectInfo.Count; i++)
+            {
+                if (spriteObjectInfo[i].name != name)
+                {
+                    continue;
+                }
+
+                // Flip Y so the origin is the canvas's bottom-left.
+                Vector2Int pixelPosition = new(cellRect.xMin, fileDimensions.y - cellRect.yMax);
+
+                spriteObjectInfo[i].firstFrame = new()
+                {
+                    pixelPosition = pixelPosition,
+                    pixelSize = cellRect.size,
+                    position = new Vector2(pixelPosition.x - fileDimensions.x * filePivot.x, pixelPosition.y - fileDimensions.y * filePivot.y) / pixelsPerUnit,
+                    size = (Vector2)cellRect.size / pixelsPerUnit,
+                };
+
+                return;
+            }
+        }
     }
 }

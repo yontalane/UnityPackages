@@ -231,27 +231,27 @@ namespace Yontalane.Aseprite
         /// Start time in seconds.
         /// </summary>
         public float startTime;
-        
+
         /// <summary>
         /// Duration in seconds.
         /// </summary>
         public float length;
-        
+
         /// <summary>
         /// Start time in frames.
         /// </summary>
         public int startFrame;
-        
+
         /// <summary>
         /// Duration in frames.
         /// </summary>
         public int frameCount;
-        
+
         /// <summary>
         /// End time in seconds.
         /// </summary>
         public readonly float EndTime => startTime + length;
-        
+
         /// <summary>
         /// End time in frames.
         /// </summary>
@@ -288,7 +288,7 @@ namespace Yontalane.Aseprite
         /// The list of times (in seconds) corresponding to when the attached object, such as a collider, is active.
         /// </summary>
         public List<float> timesOn;
-        
+
         /// <summary>
         /// The length in seconds of a single frame.
         /// </summary>
@@ -307,7 +307,7 @@ namespace Yontalane.Aseprite
             {
                 return 0;
             }
-            
+
             // Exit early if the keyframe lists are improperly set up (this shouldn't happen).
             // Also exit early if the keyframe lists are empty.
             if (framesOn.Count == 0 || framesOn.Count != timesOn.Count)
@@ -334,7 +334,7 @@ namespace Yontalane.Aseprite
                 // then increase that period's duration by one frame. 
                 if (periods.Count > 0 && framesOn[i] == periods[^1].startFrame + 1)
                 {
-                    ActivationPeriod  period = periods[^1];
+                    ActivationPeriod period = periods[^1];
                     period.frameCount++;
                     period.length += frameDuration;
                     periods[^1] = period;
@@ -353,7 +353,7 @@ namespace Yontalane.Aseprite
                     count++;
                 }
             }
-            
+
             // Return the number of periods.
             return count;
         }
@@ -386,6 +386,73 @@ namespace Yontalane.Aseprite
     }
 
     /// <summary>
+    /// The bounds of a functional layer's art (the cel rectangle that colliders and triggers are built from) on a single frame, in both pixels and local units.
+    /// </summary>
+    [System.Serializable]
+    public struct FunctionalLayerFrameData
+    {
+        /// <summary>
+        /// The bottom-left corner in pixels of the layer's art. The origin is the canvas's bottom-left and Y increases upward, the same as <see cref="Sprite.rect"/>.
+        /// </summary>
+        public Vector2Int pixelPosition;
+
+        /// <summary>
+        /// The size in pixels of the layer's art. For <see cref="SpriteObjectType.Point"/> layers, this is the size of the point's cel, typically 1x1.
+        /// </summary>
+        public Vector2Int pixelSize;
+
+        /// <summary>
+        /// The bottom-left corner in local units of the layer's art. This is the same space as <see cref="AsepriteAnimationBridge.Colliders"/>' offset, <see cref="AsepriteAnimationBridge.Points"/>' local position, and <see cref="AsepriteAnimationBridge.FrameBounds"/>.
+        /// </summary>
+        public Vector2 position;
+
+        /// <summary>
+        /// The size in local units of the layer's art. This is the same as the size of the corresponding <see cref="AsepriteAnimationBridge.Colliders"/> or <see cref="AsepriteAnimationBridge.Triggers"/> BoxCollider2D.
+        /// </summary>
+        public Vector2 size;
+
+        /// <summary>
+        /// The bottom-left corner in pixels of the layer's art. Same as <see cref="pixelPosition"/>.
+        /// </summary>
+        public readonly Vector2Int PixelMin => pixelPosition;
+
+        /// <summary>
+        /// The top-right corner in pixels of the layer's art.
+        /// </summary>
+        public readonly Vector2Int PixelMax => pixelPosition + pixelSize;
+
+        /// <summary>
+        /// The center in pixels of the layer's art. For <see cref="SpriteObjectType.Point"/> layers, this is where the point's Transform sits.
+        /// </summary>
+        public readonly Vector2 PixelCenter => pixelPosition + 0.5f * new Vector2(pixelSize.x, pixelSize.y);
+
+        /// <summary>
+        /// The layer's art as a rectangle in pixels, comparable to <see cref="Sprite.rect"/>.
+        /// </summary>
+        public readonly RectInt PixelRect => new(pixelPosition, pixelSize);
+
+        /// <summary>
+        /// The bottom-left corner in local units of the layer's art. Same as <see cref="position"/>.
+        /// </summary>
+        public readonly Vector2 Min => position;
+
+        /// <summary>
+        /// The top-right corner in local units of the layer's art.
+        /// </summary>
+        public readonly Vector2 Max => position + size;
+
+        /// <summary>
+        /// The center in local units of the layer's art. This matches a collider's offset and a point's local position.
+        /// </summary>
+        public readonly Vector2 Center => position + 0.5f * size;
+
+        /// <summary>
+        /// The layer's art as a rectangle in local units, comparable to entries in <see cref="AsepriteAnimationBridge.FrameBounds"/>.
+        /// </summary>
+        public readonly UnityEngine.Rect Rect => new(position, size);
+    }
+
+    /// <summary>
     /// Holds information about an object attached to a sprite. This includes the object's name, type, and associated animation data.
     /// </summary>
     [System.Serializable]
@@ -405,6 +472,11 @@ namespace Yontalane.Aseprite
         /// The list of animation information associated with this object.
         /// </summary>
         public List<SpriteObjectAnimationInfo> animationInfo;
+
+        /// <summary>
+        /// The bounds of this object's art on the first frame of an imported animation in which the layer has art.
+        /// </summary>
+        public FunctionalLayerFrameData firstFrame;
     }
 
     /// <summary>
@@ -417,7 +489,7 @@ namespace Yontalane.Aseprite
         /// The name of the animation.
         /// </summary>
         public string name;
-        
+
         /// <summary>
         /// The length of the animation in seconds.
         /// </summary>

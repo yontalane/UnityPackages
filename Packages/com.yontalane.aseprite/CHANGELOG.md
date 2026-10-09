@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.48] - 2026.10.09
+
+### Added
+
+- SpriteObjectInfo.firstFrame (FunctionalLayerFrameData) reports the bounds of each collider, trigger, or point layer's art on its first frame, in both pixels and local units
+
 ## [1.0.47] - 2026.09.19
 
 ### Changed
