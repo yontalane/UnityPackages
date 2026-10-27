@@ -16,6 +16,7 @@
   <Project Path="Yontalane.DialogUIElements.Runtime.csproj" />
   <Project Path="Yontalane.Dialog.Editor.csproj" />
   <Project Path="Yontalane.Aseprite.Runtime.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Yontalane.QueryUGUI.Runtime.csproj" />
   <Project Path="Yontalane.GridNav.Runtime.csproj" />
 </Solution>

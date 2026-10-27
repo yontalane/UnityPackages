@@ -66,7 +66,7 @@ namespace YontalaneEditor.Aseprite
         /// Attempts to extract the bounding rectangle from a CellChunk.
         /// </summary>
         /// <param name="cellChunk">The CellChunk to extract the rectangle from.</param>
-        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold.</param>
+        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold; otherwise, the brightest RGB channel is used.</param>
         /// <param name="rect">The resulting rectangle if successful, otherwise null.</param>
         internal static bool TryGetRect(this CellChunk cellChunk, bool useAlpha, out RectInt rect)
         {
@@ -105,6 +105,18 @@ namespace YontalaneEditor.Aseprite
         }
 
         /// <summary>
+        /// Checks whether a pixel meets the color threshold.
+        /// Functional layers use RGB rather than alpha, because Unity's importer multiplies each pixel's alpha
+        /// by its layer's opacity, and functional layers are typically set to zero opacity.
+        /// </summary>
+        /// <param name="color">The pixel color to check.</param>
+        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold; otherwise, the brightest RGB channel is used.</param>
+        /// <returns>True if the pixel meets the threshold; otherwise, false.</returns>
+        private static bool MeetsThreshold(Color color, bool useAlpha) => useAlpha
+            ? color.a >= PIXEL_COLOR_MIN
+            : color.maxColorComponent >= PIXEL_COLOR_MIN;
+
+        /// <summary>
         /// Attempts to find the minimum point of a collision rectangle in a list of colors.
         /// </summary>
         /// <param name="colors">The list of colors to search through.</param>
@@ -112,7 +124,7 @@ namespace YontalaneEditor.Aseprite
         /// <param name="posY">The y-coordinate of the starting position.</param>
         /// <param name="width">The width of the rectangle.</param>
         /// <param name="height">The height of the rectangle.</param>
-        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold.</param>
+        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold; otherwise, the brightest RGB channel is used.</param>
         /// <param name="value">The resulting minimum point if successful, otherwise null.</param>
         private static bool TryGetMin(IReadOnlyList<Color32> colors, int posX, int posY, int width, int height, bool useAlpha, out Vector2Int value)
         {
@@ -133,8 +145,8 @@ namespace YontalaneEditor.Aseprite
                     int i = (y * width) + x;
                     Color color = colors[i];
 
-                    // Check if the pixel meets the threshold based on alpha or red channel.
-                    if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
+                    // Check if the pixel meets the threshold based on alpha or RGB.
+                    if (MeetsThreshold(color, useAlpha))
                     {
                         a = new(x, y);
                         shouldBreak = true;
@@ -166,8 +178,8 @@ namespace YontalaneEditor.Aseprite
                     int i = (y * width) + x;
                     Color color = colors[i];
 
-                    // Check if the pixel meets the threshold based on alpha or red channel.
-                    if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
+                    // Check if the pixel meets the threshold based on alpha or RGB.
+                    if (MeetsThreshold(color, useAlpha))
                     {
                         b = new(x, y);
                         shouldBreak = true;
@@ -200,7 +212,7 @@ namespace YontalaneEditor.Aseprite
         /// <param name="posY">The y-coordinate of the starting position.</param>
         /// <param name="width">The width of the rectangle.</param>
         /// <param name="height">The height of the rectangle.</param>
-        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold.</param>
+        /// <param name="useAlpha">Whether to use the alpha channel for the color threshold; otherwise, the brightest RGB channel is used.</param>
         /// <param name="value">The resulting maximum point if successful, otherwise null.</param>
         private static bool TryGetMax(IReadOnlyList<Color32> colors, int posX, int posY, int width, int height, bool useAlpha, out Vector2Int value)
         {
@@ -221,8 +233,8 @@ namespace YontalaneEditor.Aseprite
                     int i = (y * width) + x;
                     Color color = colors[i];
 
-                    // Check if the pixel meets the threshold based on alpha or red channel.
-                    if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
+                    // Check if the pixel meets the threshold based on alpha or RGB.
+                    if (MeetsThreshold(color, useAlpha))
                     {
                         a = new(x, y);
                         shouldBreak = true;
@@ -254,8 +266,8 @@ namespace YontalaneEditor.Aseprite
                     int i = (y * width) + x;
                     Color color = colors[i];
 
-                    // Check if the pixel meets the threshold based on alpha or red channel.
-                    if ((useAlpha && color.a >= PIXEL_COLOR_MIN) || (!useAlpha && color.r >= PIXEL_COLOR_MIN))
+                    // Check if the pixel meets the threshold based on alpha or RGB.
+                    if (MeetsThreshold(color, useAlpha))
                     {
                         b = new(x, y);
                         shouldBreak = true;

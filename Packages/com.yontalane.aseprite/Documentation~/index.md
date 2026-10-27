@@ -11,7 +11,7 @@ Adding the following layers in your Aseprite file will affect the import process
 * A layer with "point" in its name.
 * A layer with "root" in its name.
 
-Upon import, these layers will be transformed into Unity objects.
+Upon import, these layers will be transformed into Unity objects. **Draw them in any color except black.**
 
 Note that the layers **need to be marked visible**. However, their opacity should be set to zero; the importer logs a warning for any visible layer with more than 5% opacity, since its art would appear in the imported sprite.
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.50] - 2026.10.27
+
+### Changed
+
+- Collision, trigger, point, and root layer art is detected by its brightest RGB channel instead of only the red channel, so art in colors with little red (e.g. blue, green) is no longer ignored. Black art is still ignored, since alpha can't be used: Unity's importer multiplies it by layer opacity, which is typically zero for these layers
+
 ## [1.0.49] - 2026.10.09
 
 ### Added
