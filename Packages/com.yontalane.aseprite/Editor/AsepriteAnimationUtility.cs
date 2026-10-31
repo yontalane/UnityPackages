@@ -68,6 +68,30 @@ namespace YontalaneEditor.Aseprite
         }
 
         /// <summary>
+        /// Calculates the time, in seconds from the start of the given animation, at which the specified frame begins.
+        /// The time is derived from the Aseprite frame durations (matching how Unity's importer times its keyframes) rather than
+        /// from the clip's sprite curve, because Unity's importer omits sprite keyframes for frames with no visible art.
+        /// </summary>
+        /// <param name="fileData">The import file data containing the frame durations.</param>
+        /// <param name="animationData">The animation the frame belongs to.</param>
+        /// <param name="frameIndex">The index of the frame. May be one past the animation's last frame to get the animation's end time.</param>
+        /// <returns>The time, in seconds, at which the frame begins relative to the start of the animation.</returns>
+        internal static float GetFrameTime(this ImportFileData fileData, AnimationData animationData, int frameIndex)
+        {
+            return GetTimeFromFileStart(fileData, frameIndex) - GetTimeFromFileStart(fileData, animationData.fromFrame);
+
+            static float GetTimeFromFileStart(ImportFileData fileData, int frameIndex)
+            {
+                int milliseconds = 0;
+                for (int i = 0; i < frameIndex; i++)
+                {
+                    milliseconds += fileData.FrameData[i].frameDuration;
+                }
+                return milliseconds / 1000f;
+            }
+        }
+
+        /// <summary>
         /// Attempts to retrieve an AnimationClip with the specified name from the ImportFileData's objects list.
         /// </summary>
         /// <param name="fileData">The ImportFileData containing the list of objects.</param>

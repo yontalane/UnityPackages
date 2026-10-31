@@ -97,23 +97,20 @@ namespace YontalaneEditor.Aseprite
                     layers.RemoveAt(i);
                 }
 
-                // Get the object reference curve for the current animation clip
-                ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(clip, AsepriteAnimationUtility.SpriteBinding);
-
                 // Get the start and end frame indices for the current animation
                 int fromFrame = animationData.fromFrame;
                 int toFrame = animationData.toFrame;
 
                 // Calculate the time in and time out for the current frame/layer/animation
-                time = frames.GetFrameTime(frameDataIndex - fromFrame);
+                time = fileData.GetFrameTime(animationData, frameDataIndex);
 
                 // Calculate the previous frame index and its corresponding time within the animation
                 int previousFrameIndex = Mathf.Max(frameDataIndex - 1, fromFrame);
-                float previousTime = frames.GetFrameTime(previousFrameIndex - fromFrame);
+                float previousTime = fileData.GetFrameTime(animationData, previousFrameIndex);
 
                 // Calculate the next frame index and its corresponding time within the animation
                 int nextFrameIndex = Mathf.Min(frameDataIndex + 1, toFrame);
-                float nextTime = frames.GetFrameTime(nextFrameIndex - fromFrame);
+                float nextTime = fileData.GetFrameTime(animationData, nextFrameIndex);
 
                 // Create ImportFrameData for this frame/layer/animation
                 ImportFrameData frameData = new()

@@ -184,12 +184,6 @@ namespace YontalaneEditor.Aseprite
                 return false;
             }
 
-            // Try to get the sprite for the current frame
-            if (!fileData.TryGetSprite(frameData.frameIndex, out Sprite sprite))
-            {
-                return false;
-            }
-
             // Calculate the center of the cell rectangle in pixel coordinates (from the top-left corner)
             Vector2 rootInPixelsFromCorner = Vector2.Lerp(frameData.cellRect.min, frameData.cellRect.max, 0.5f);
 
@@ -222,15 +216,12 @@ namespace YontalaneEditor.Aseprite
             // Set the root point in world space relative to the Aseprite file's pivot
             frameData.clip.SetPositionKey(AsepriteAnimationUtility.SpriteBinding.path, frameData.time, -root.position, true);
 
-            // Get the object reference curve for the sprite
-            ObjectReferenceKeyframe[] frames = AnimationUtility.GetObjectReferenceCurve(frameData.clip, AsepriteAnimationUtility.SpriteBinding);
-
             // Add an animation event to the clip that will call the OnAsepriteRootMotion method with the calculated root motion vector as a string parameter at the correct frame time.
             frameData.clip.AddAnimationEvent(new()
             {
                 functionName = nameof(AsepriteAnimationBridge.OnAsepriteRootMotion),
                 stringParameter = $"{frameData.frameIndex - frameData.animationData.fromFrame},{rootDelta.x},{rootDelta.y}",
-                time = frames.GetNearestFrameTime(frameData.time),
+                time = frameData.time,
             });
 
             // Return true if the root motion was generated

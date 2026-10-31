@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.51] - 2026.10.31
+
+### Fixed
+
+- Animations whose frames have no visible art (e.g. a teleport made of only a root layer at 0% opacity) imported as zero-length clips with no root motion, because Unity's importer generates no sprite for such frames. Frame times are now derived from Aseprite frame durations instead of the clip's sprite keyframes, root motion no longer requires a sprite on the frame, and each clip is extended to its tag's full duration. This also corrects collision, trigger, and point timing in animations where only some frames have visible art
+
 ## [1.0.50] - 2026.10.27
 
 ### Changed
