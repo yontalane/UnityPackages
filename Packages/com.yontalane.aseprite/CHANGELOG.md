@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.52] - 2026.11.04
+
+### Fixed
+
+- SpriteObjectAnimationInfo.GetKeyframePeriods split any activation of three or more consecutive frames into several periods, because it compared each frame with the period's start frame + 1 instead of its end frame. It also could merge the first frame into a period already in the caller's list when clearList is false
+
 ## [1.0.51] - 2026.10.31
 
 ### Fixed

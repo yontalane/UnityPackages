@@ -330,9 +330,10 @@ namespace Yontalane.Aseprite
             // For each frame in which the component gets activated...
             for (int i = 0; i < framesOn.Count; i++)
             {
-                // If we're looking at the very next frame after the previous activation,
-                // then increase that period's duration by one frame. 
-                if (periods.Count > 0 && framesOn[i] == periods[^1].startFrame + 1)
+                // If we're looking at the very next frame after the end of the previous activation
+                // (one added by this call, not one already in the caller's list),
+                // then increase that period's duration by one frame.
+                if (count > 0 && framesOn[i] == periods[^1].EndFrame)
                 {
                     ActivationPeriod period = periods[^1];
                     period.frameCount++;
