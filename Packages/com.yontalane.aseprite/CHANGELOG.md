@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.53] - 2026.11.17
+
+### Fixed
+
+- AsepriteAnimationBridge.CurrentAnimation was set only by the clip's start event, a time-0 event that Unity skips when a clip is played from a start time past 0. It kept naming the previous clip, so a later TryPlay of a looping clip with that name returned early without playing it (e.g. returning to a looping idle after an attack started part-way froze on the attack's last frame). TryPlay now sets CurrentAnimation when it plays a clip
+
 ## [1.0.52] - 2026.11.04
 
 ### Fixed

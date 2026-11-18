@@ -600,6 +600,10 @@ namespace Yontalane.Aseprite
             m_playingMotionTree = false;
             Animator.Play(clip.name, -1, startTime);
 
+            // Name it current now rather than waiting for the clip's start event: that's a time-0 event, which Unity skips when
+            // the clip starts past 0, and a stale name would make the looping check above skip a later Play.
+            CurrentAnimation = animationName;
+
             foreach (Animator synchronizedAnimator in SynchronizedAnimators)
             {
                 synchronizedAnimator.Play(clip.name, -1, startTime);
