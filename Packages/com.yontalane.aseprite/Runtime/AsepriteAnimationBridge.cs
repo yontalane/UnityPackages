@@ -18,6 +18,7 @@ namespace Yontalane.Aseprite
         private SpriteRenderer m_spriteRenderer = null;
         private bool m_playingMotionTree = false;
         private MotionTree m_currentMotionTree = default;
+        private bool m_manualUpdate = false;
 
         [SerializeField]
         [HideInInspector]
@@ -260,13 +261,116 @@ namespace Yontalane.Aseprite
 
         #endregion
 
+        #region Manual Update
+
+        /// <summary>
+        /// Whether this bridge's animation is advanced by <see cref="Step"/> instead of by Unity.
+        /// When on, this GameObject's Animator and every Animator in <see cref="SynchronizedAnimators"/> are disabled
+        /// (keeping their state), and the bridge stops applying the current Motion Tree in LateUpdate. Use it to run
+        /// animation on a fixed simulation step. Turning it off enables the Animators again.
+        /// </summary>
+        public bool ManualUpdate
+        {
+            get => m_manualUpdate;
+            set
+            {
+                if (m_manualUpdate == value)
+                {
+                    return;
+                }
+
+                m_manualUpdate = value;
+
+                SetUnityUpdates(Animator, !value);
+
+                foreach (Animator synchronizedAnimator in SynchronizedAnimators)
+                {
+                    SetUnityUpdates(synchronizedAnimator, !value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Advances this bridge's animation by <paramref name="deltaTime"/> seconds, while <see cref="ManualUpdate"/> is on:
+        /// applies the current Motion Tree, then updates each Animator in <see cref="SynchronizedAnimators"/>, then this
+        /// GameObject's Animator. Animation events fire during the call. The synchronized Animators go first so that a clip
+        /// change made from this Animator's events (for example, on completion) starts all of them at the same time.
+        /// An Animator added to <see cref="SynchronizedAnimators"/> after <see cref="ManualUpdate"/> was turned on is
+        /// disabled here, on its first step.
+        /// </summary>
+        /// <param name="deltaTime">The time to advance, in seconds. The Animators' own speed still applies.</param>
+        public void Step(float deltaTime)
+        {
+            if (!m_manualUpdate)
+            {
+                DebugUtility.LogWarning($"<b>{name} Step({deltaTime})</b> Called while {nameof(ManualUpdate)} is off; ignored.");
+                return;
+            }
+
+            ApplyMotionTree();
+
+            foreach (Animator synchronizedAnimator in SynchronizedAnimators)
+            {
+                if (synchronizedAnimator == null)
+                {
+                    continue;
+                }
+
+                if (synchronizedAnimator.enabled)
+                {
+                    SetUnityUpdates(synchronizedAnimator, false);
+                }
+
+                synchronizedAnimator.Update(deltaTime);
+            }
+
+            Animator.Update(deltaTime);
+        }
+
+        /// <summary>
+        /// Enables or disables Unity's own updates of an Animator. A disabled Animator keeps its state, still plays clips
+        /// it's told to, and still fires animation events when updated by hand.
+        /// </summary>
+        /// <param name="animator">The Animator.</param>
+        /// <param name="enabled">Whether Unity updates it.</param>
+        private static void SetUnityUpdates(Animator animator, bool enabled)
+        {
+            if (animator == null)
+            {
+                return;
+            }
+
+            if (!enabled)
+            {
+                // Without this, disabling an Animator can reset it, discarding the clip it's playing or was just told to play.
+                animator.keepAnimatorStateOnDisable = true;
+            }
+
+            animator.enabled = enabled;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Applies the current Motion Tree each frame, unless <see cref="ManualUpdate"/> is on (then <see cref="Step"/> does it).
+        /// </summary>
+        private void LateUpdate()
+        {
+            if (m_manualUpdate)
+            {
+                return;
+            }
+
+            ApplyMotionTree();
+        }
+
         /// <summary>
         /// Updates the animation playback based on the current motion tree state.
         /// If a motion tree is active and contains animations, this method determines
         /// which animation clip to play and at what normalized time, based on the value
         /// provided by the OnRequestMotionTreeValue event.
         /// </summary>
-        private void LateUpdate()
+        private void ApplyMotionTree()
         {
             // Check if the motion tree is currently playing and has any animations; if not, exit the method.
             if (!m_playingMotionTree || !MotionTreeHasAnyAnimation(m_currentMotionTree))
@@ -308,7 +412,7 @@ namespace Yontalane.Aseprite
             float animationTime = Mathf.Clamp01(remainder / durationOfSingleClipWithinNormalizedTime);
 
             // Log which animation clip is being played and at what time, for debugging purposes.
-            DebugUtility.Log($"<b>{name} LateUpdate()</b> Playing clip {clip.name} at time {animationTime} from MotionTree {m_currentMotionTree.id}");
+            DebugUtility.Log($"<b>{name} ApplyMotionTree()</b> Playing clip {clip.name} at time {animationTime} from MotionTree {m_currentMotionTree.id}");
 
             // Play the animation clip using the Animator at the calculated normalized time.
             Animator.Play(clip.name, -1, animationTime);

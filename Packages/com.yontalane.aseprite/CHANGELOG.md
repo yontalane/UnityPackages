@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.54] - 2026.11.20
+
+### Added
+
+- AsepriteAnimationBridge.ManualUpdate and Step(deltaTime), to run animation on a clock of the game's own (e.g. a fixed simulation step) instead of once per rendered frame. ManualUpdate disables the bridge's Animator and its SynchronizedAnimators (keeping their state) and stops the Motion Tree from being applied in LateUpdate; Step applies the Motion Tree, then updates the synchronized Animators, then the bridge's own Animator
+
 ## [1.0.53] - 2026.11.17
 
 ### Fixed

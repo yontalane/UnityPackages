@@ -84,6 +84,7 @@ The Bridge facilitates interaction between Aseprite animations and Unity's Anima
 | **AnimationLengths**         | The length, in seconds, of every animation on this GameObject. See [Sprite Object Info](#sprite-object-info) below. |
 | **Extras**                   | Optional AsepriteAnimationExtra assets containing Motion Trees for this GameObject. See [Motion Trees](#motion-trees) below. |
 | **SynchronizedAnimators**    | Additional Animators to play in sync with this GameObject's own Animator. |
+| **ManualUpdate**             | Whether the animation is advanced by `Step` instead of by Unity. See [Manual Update](#manual-update) below. |
 
 ### Methods
 
@@ -98,6 +99,7 @@ The Bridge facilitates interaction between Aseprite animations and Unity's Anima
 | **Play**                | Plays an animation with the specified name.                   |
 | **PlayMotionTree**      | Plays the Motion Tree with the specified name.                |
 | **Stop**                | Stops the current animation playback.                        |
+| **Step**                | Advances the animation by a given time while `ManualUpdate` is on. See [Manual Update](#manual-update) below. |
 
 ## Motion Trees
 
@@ -111,6 +113,16 @@ To use Motion Trees:
 4. Call `PlayMotionTree` (or `Play`/`TryPlay` with the tree's id) to start blending.
 
 While a Motion Tree is playing, `AsepriteAnimationBridge` uses the requested value every frame to pick which clip in the tree to play and how far into it to seek, producing a smoothly blended result driven entirely by your own gameplay value.
+
+## Manual Update
+
+By default Unity advances the Animator once per rendered frame. To run animation on your own clock instead (for example, a game whose logic runs on a fixed 60 Hz step, independent of the frame rate), turn on `ManualUpdate` and call `Step(deltaTime)` yourself:
+
+1. Set `ManualUpdate` to true, ideally before the first `Play`. This disables the GameObject's Animator and every Animator in `SynchronizedAnimators`, with `keepAnimatorStateOnDisable` set so that disabling doesn't reset them. A disabled Animator still plays the clips it's told to, applies its curves, honors its `speed`, and fires animation events when updated by hand.
+2. Call `Step(deltaTime)` once per step of your clock. It applies the current Motion Tree (which `LateUpdate` no longer does), then updates each synchronized Animator, then the GameObject's own Animator, all by `deltaTime`. Root motion, start, and completion events fire during the call.
+3. Several `Step` calls in one frame animate the same as one call per frame, so a slow screen running two steps per frame matches a fast one.
+
+The synchronized Animators are updated first so that a clip change made from the main Animator's events (such as a completion handler that plays the next clip) starts all of them at the same time. An Animator added to `SynchronizedAnimators` after `ManualUpdate` was turned on is disabled on its first `Step`. Turning `ManualUpdate` off enables the Animators again. `Step` does nothing (and logs a warning) while `ManualUpdate` is off.
 
 ## Aseprite Animation Extra
 
